@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg id="Layer_2" data-name="Layer 2" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 369.37 369.37">
+  <defs>
+    <style>
+      .cls-1 {
+        opacity: .5;
+      }
+
+      .cls-1, .cls-2, .cls-3 {
+        fill: #ffc950;
+      }
+
+      .cls-3 {
+        opacity: .3;
+      }
+    </style>
+  </defs>
+  <g id="Layer_1-2" data-name="Layer 1">
+    <g id="sun">
+      <circle class="cls-3" cx="184.68" cy="184.68" r="184.68"/>
+      <circle class="cls-1" cx="184.68" cy="184.68" r="149.55"/>
+      <circle class="cls-2" cx="184.68" cy="184.68" r="116.55"/>
+    </g>
+  </g>
+</svg>

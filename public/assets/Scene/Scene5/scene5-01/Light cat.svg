@@ -1,0 +1,17 @@
+<svg width="530" height="530" viewBox="0 0 530 530" fill="none" xmlns="http://www.w3.org/2000/svg">
+<path style="mix-blend-mode:screen" d="M264.87 529.74C411.154 529.74 529.74 411.154 529.74 264.87C529.74 118.586 411.154 0 264.87 0C118.586 0 0 118.586 0 264.87C0 411.154 118.586 529.74 264.87 529.74Z" fill="url(#paint0_radial_262_2450)"/>
+<defs>
+<radialGradient id="paint0_radial_262_2450" cx="0" cy="0" r="1" gradientUnits="userSpaceOnUse" gradientTransform="translate(264.87 264.87) scale(264.87)">
+<stop stop-color="#F9F9F9"/>
+<stop offset="0.09" stop-color="#C5C5C5"/>
+<stop offset="0.17" stop-color="#969696"/>
+<stop offset="0.26" stop-color="#6E6E6E"/>
+<stop offset="0.35" stop-color="#4C4C4C"/>
+<stop offset="0.45" stop-color="#303030"/>
+<stop offset="0.55" stop-color="#1A1A1A"/>
+<stop offset="0.67" stop-color="#0B0B0B"/>
+<stop offset="0.8" stop-color="#020202"/>
+<stop offset="1"/>
+</radialGradient>
+</defs>
+</svg>

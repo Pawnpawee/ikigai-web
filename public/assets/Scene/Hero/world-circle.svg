@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg id="Layer_2" data-name="Layer 2" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 475.59 475.59">
+  <defs>
+    <style>
+      .cls-1 {
+        fill: url(#radial-gradient);
+        opacity: .7;
+      }
+    </style>
+    <radialGradient id="radial-gradient" cx="237.79" cy="237.79" fx="237.79" fy="237.79" r="237.79" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#38804d"/>
+      <stop offset="1" stop-color="#e1ed30"/>
+    </radialGradient>
+  </defs>
+  <g id="heropage">
+    <g id="ikigai">
+      <circle class="cls-1" cx="237.79" cy="237.79" r="237.79"/>
+    </g>
+  </g>
+</svg>
