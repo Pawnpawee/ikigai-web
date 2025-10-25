@@ -22,6 +22,23 @@ export default function JobApplication2({
     [0, 0.51, 0.51, 1],
     [0, 0, 1, 1]
   );
+
+  // Animation สำหรับ elements หลัง Window - ค่อยๆ ขึ้นมา
+  // Layer 1: Light Window
+  const lightWindowY = useTransform(scrollYProgress, [0.55, 0.65, 1], [100, 0, 0]);
+  const lightWindowOpacity = useTransform(scrollYProgress, [0.55, 0.65, 1], [0, 1, 1]);
+
+  // Layer 2: Moon and Stars
+  const skyElementsY = useTransform(scrollYProgress, [0.6, 0.7, 1], [100, 0, 0]);
+  const skyElementsOpacity = useTransform(scrollYProgress, [0.6, 0.7, 1], [0, 1, 1]);
+
+  // Layer 3: Buildings
+  const buildingsY = useTransform(scrollYProgress, [0.65, 0.75, 1], [100, 0, 0]);
+  const buildingsOpacity = useTransform(scrollYProgress, [0.65, 0.75, 1], [0, 1, 1]);
+
+  // Layer 4: Window Frame and Curtains
+  const windowFrameY = useTransform(scrollYProgress, [0.7, 0.8, 1], [100, 0, 0]);
+  const windowFrameOpacity = useTransform(scrollYProgress, [0.7, 0.8, 1], [0, 1, 1]);
   return (
     <motion.div
       className="
@@ -362,6 +379,8 @@ export default function JobApplication2({
                 bottom: "18.02%", // 194.6 / 1080*100
                 width: "14.89%", // 571.79 / 3840*100
                 height: "62.68%", // 676.97 / 1080*100
+                y: lightWindowY,
+                opacity: lightWindowOpacity,
               }}
             />
 
@@ -375,6 +394,8 @@ export default function JobApplication2({
                 top: "22.06%", // 238.29 / 1080
                 width: "4.34%", // 166.54 / 3840
                 height: "15.42%", // 166.54 / 1080
+                y: skyElementsY,
+                opacity: skyElementsOpacity,
               }}
             />
 
@@ -388,6 +409,8 @@ export default function JobApplication2({
                 top: "33.93%", // 366.44 / 1080
                 width: "8.32%", // 319.39 / 3840
                 height: "7.37%", // 79.55 / 1080
+                y: skyElementsY,
+                opacity: skyElementsOpacity,
               }}
             />
 
@@ -401,6 +424,8 @@ export default function JobApplication2({
                 top: "21.62%", // 233.52 / 1080
                 width: "14.34%", // 550.65 / 3840
                 height: "24.88%", // 268.66 / 1080
+                y: skyElementsY,
+                opacity: skyElementsOpacity,
               }}
             />
 
@@ -414,6 +439,8 @@ export default function JobApplication2({
                 top: "37.61%", // 406.23 / 1080
                 width: "14.89%", // 571.79 / 3840
                 height: "44.37%", // 479.17 / 1080
+                y: buildingsY,
+                opacity: buildingsOpacity,
               }}
             />
 
@@ -427,6 +454,8 @@ export default function JobApplication2({
                 top: "48.01%", // 518.51 / 1080
                 width: "14.89%", // 571.79 / 3840
                 height: "33.97%", // 366.89 / 1080
+                y: buildingsY,
+                opacity: buildingsOpacity,
               }}
             />
 
@@ -440,6 +469,8 @@ export default function JobApplication2({
                 top: "6.22%", // 67.15 / 1080
                 width: "28.1%", // 1078.72 / 3840
                 height: "79.63%", // 860.04 / 1080
+                y: windowFrameY,
+                opacity: windowFrameOpacity,
               }}
             />
 
@@ -453,6 +484,8 @@ export default function JobApplication2({
                 top: "8%", // 86.39 / 1080
                 width: "4.87%", // 187.08 / 3840
                 height: "86.95%", // 939.04 / 1080
+                y: windowFrameY,
+                opacity: windowFrameOpacity,
               }}
             />
             {/* Curtain 1 (Left) */}
@@ -465,6 +498,8 @@ export default function JobApplication2({
                 top: "7.96%", // 86.01 / 1080
                 width: "4.87%", // 187.14 / 3840
                 height: "86.95%", // 939.03 / 1080
+                y: windowFrameY,
+                opacity: windowFrameOpacity,
               }}
             />
           </motion.div>

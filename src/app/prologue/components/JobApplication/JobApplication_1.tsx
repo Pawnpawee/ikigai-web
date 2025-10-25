@@ -20,6 +20,40 @@ export default function JobApplication1({
     [0, 0.51, 0.51, 1],
     [1, 1, 0, 0]
   );
+
+  // Animation สำหรับ elements ต่างๆ ค่อยๆ ขึ้นมา
+  // Layer 1: Background elements (Posters on walls)
+  const posterBackY = useTransform(scrollYProgress, [0, 0.15, 0.51], [100, 0, 0]);
+  const posterBackOpacity = useTransform(scrollYProgress, [0, 0.15, 0.51], [0, 1, 1]);
+
+  // Layer 2: Table and items on table
+  const tableY = useTransform(scrollYProgress, [0.05, 0.2, 0.51], [100, 0, 0]);
+  const tableOpacity = useTransform(scrollYProgress, [0.05, 0.2, 0.51], [0, 1, 1]);
+
+  // Layer 3: Lamp and books
+  const furnitureY = useTransform(scrollYProgress, [0.1, 0.25, 0.51], [100, 0, 0]);
+  const furnitureOpacity = useTransform(scrollYProgress, [0.1, 0.25, 0.51, 0.51], [0, 1, 1, 0]);
+
+  // Layer 4: Computer
+  const computerY = useTransform(scrollYProgress, [0.15, 0.3, 0.51], [100, 0, 0]);
+  const computerOpacity = useTransform(scrollYProgress, [0.15, 0.3, 0.51], [0, 1, 1]);
+
+  // Layer 5: Papers
+  const papersY = useTransform(scrollYProgress, [0.2, 0.35, 0.51], [100, 0, 0]);
+  const papersOpacity = useTransform(scrollYProgress, [0.2, 0.35, 0.51], [0, 1, 1]);
+
+  // Layer 6: Chair
+  const chairY = useTransform(scrollYProgress, [0.25, 0.4, 0.51], [100, 0, 0]);
+  const chairOpacity = useTransform(scrollYProgress, [0.25, 0.4, 0.51], [0, 1, 1]);
+
+  // Layer 7: Human - มีการเคลื่อนไหว
+  const humanY = useTransform(scrollYProgress, [0.3, 0.45, 0.48, 0.51], [100, 0, -5, 0]);
+  const humanOpacity = useTransform(scrollYProgress, [0.3, 0.45, 0.51], [0, 1, 1]);
+  const humanScale = useTransform(scrollYProgress, [0.3, 0.45, 0.48, 0.51], [0.95, 1, 1.02, 1]);
+
+  // Layer 8: Small details (Pen, Pencil Box, Post-it)
+  const detailsY = useTransform(scrollYProgress, [0.35, 0.5, 0.51], [100, 0, 0]);
+  const detailsOpacity = useTransform(scrollYProgress, [0.35, 0.5, 0.51], [0, 1, 1]);
   return (
     <div className="flex justify-center items-center">
       <motion.div
@@ -40,6 +74,8 @@ export default function JobApplication1({
               top: "86.55%", // 1869.53 / 2160
               width: "95.42%", // 1831.96 / 1920
               height: "17.14%", // 370.16 / 2160
+              y: tableY,
+              opacity: tableOpacity,
             }}
           />
 
@@ -53,6 +89,8 @@ export default function JobApplication1({
               top: "29.98%", // 647.66 / 2160
               width: "17.14%", // 329.03 / 1920
               height: "14.52%", // 313.62 / 2160
+              y: posterBackY,
+              opacity: posterBackOpacity,
             }}
           />
 
@@ -66,6 +104,8 @@ export default function JobApplication1({
               top: "38.40%", // 829.49 / 2160
               width: "23.27%", // 446.75 / 1920
               height: "14.52%", // 313.61 / 2160
+              y: posterBackY,
+              opacity: posterBackOpacity,
             }}
           />
 
@@ -79,6 +119,8 @@ export default function JobApplication1({
               top: "18.43%", // 398.11 / 2160
               width: "14.51%", // 278.51 / 1920
               height: "12.61%", // 272.44 / 2160
+              y: posterBackY,
+              opacity: posterBackOpacity,
             }}
           />
 
@@ -92,6 +134,8 @@ export default function JobApplication1({
               top: "10.23%", // 221.05 / 2160
               width: "14.51%", // 278.51 / 1920
               height: "12.62%", // 272.44 / 2160
+              y: posterBackY,
+              opacity: posterBackOpacity,
             }}
           />
 
@@ -105,6 +149,8 @@ export default function JobApplication1({
               top: "-4.17%", // -89.97 / 2160
               width: "12.2%", // 234.34 / 1920
               height: "8.33%", // 179.93 / 2160
+              y: posterBackY,
+              opacity: posterBackOpacity,
             }}
           />
 
@@ -118,6 +164,8 @@ export default function JobApplication1({
               top: "-1.27%", // -27.43 / 2160
               width: "14.51%", // 278.51 / 1920
               height: "12.61%", // 272.44 / 2160
+              y: posterBackY,
+              opacity: posterBackOpacity,
             }}
           />
 
@@ -131,6 +179,8 @@ export default function JobApplication1({
               top: "18.57%", // 401.19 / 2160
               width: "16.98%", // 325.9 / 1920
               height: "14.52%", // 313.61 / 2160
+              y: posterBackY,
+              opacity: posterBackOpacity,
             }}
           />
 
@@ -144,6 +194,8 @@ export default function JobApplication1({
               top: "59.03%", // 1275.12 / 2160
               width: "12.81%", // 245.99 / 1920
               height: "8.82%", // 190.41 / 2160
+              y: posterBackY,
+              opacity: posterBackOpacity,
             }}
           />
 
@@ -157,6 +209,8 @@ export default function JobApplication1({
               top: "72.21%", // 1559.73 / 2160
               width: "10.96%", // 210.42 / 1920
               height: "10.07%", // 217.58 / 2160
+              y: posterBackY,
+              opacity: posterBackOpacity,
             }}
           />
 
@@ -170,6 +224,8 @@ export default function JobApplication1({
               top: "53.79%", // 1161.79 / 2160
               width: "20.9%", // 401.42 / 1920
               height: "13.53%", // 292.31 / 2160
+              y: posterBackY,
+              opacity: posterBackOpacity,
             }}
           />
 
@@ -183,6 +239,8 @@ export default function JobApplication1({
               top: "64.28%", // 1388.41 / 2160
               width: "12.1%", // 209.7 / 1920
               height: "10.46%", // 225.99 / 2160
+              y: posterBackY,
+              opacity: posterBackOpacity,
             }}
           />
 
@@ -196,6 +254,8 @@ export default function JobApplication1({
               top: "54.28%", // 1172.38 / 2160
               width: "15.6%", // 299.42 / 1920
               height: "14.81%", // 320.06 / 2160
+              y: posterBackY,
+              opacity: posterBackOpacity,
             }}
           />
 
@@ -209,6 +269,8 @@ export default function JobApplication1({
               top: "60.52%", // 1307.23 / 2160
               width: "6.8%", // 130.42 / 1920
               height: "7.69%", // 166.06 / 2160
+              y: posterBackY,
+              opacity: posterBackOpacity,
             }}
           />
 
@@ -222,6 +284,8 @@ export default function JobApplication1({
               top: "70.4%", // 1520.62 / 2160
               width: "9.86%", // 189.15 / 1920
               height: "6.22%", // 134.42 / 2160
+              y: posterBackY,
+              opacity: posterBackOpacity,
             }}
           />
 
@@ -235,6 +299,8 @@ export default function JobApplication1({
               top: "74.25%", // 1603.74 / 2160
               width: "8.38%", // 160.88 / 1920
               height: "4.13%", // 89.34 / 2160
+              y: posterBackY,
+              opacity: posterBackOpacity,
             }}
           />
 
@@ -248,6 +314,8 @@ export default function JobApplication1({
               top: "57.14%", // 1234.19 / 2160
               width: "49.88%", // 957.6 / 1920
               height: "35.14%", // 758.98 / 2160
+              y: computerY,
+              opacity: computerOpacity,
             }}
           />
 
@@ -261,6 +329,8 @@ export default function JobApplication1({
               top: "88.62%", // 1914.27 / 2160
               width: "13.8%", // 264.98 / 1920
               height: "4.75%", // 102.65 / 2160
+              y: papersY,
+              opacity: papersOpacity,
             }}
           />
 
@@ -274,6 +344,8 @@ export default function JobApplication1({
               top: "88.91%", // 1920.39 / 2160
               width: "11.4%", // 218.83 / 1920
               height: "4.39%", // 94.89 / 2160
+              y: papersY,
+              opacity: papersOpacity,
             }}
           />
 
@@ -287,6 +359,8 @@ export default function JobApplication1({
               top: "91.14%", // 1968.6 / 2160
               width: "14.29%", // 274.32 / 1920
               height: "4.75%", // 102.65 / 2160
+              y: papersY,
+              opacity: papersOpacity,
             }}
           />
 
@@ -300,6 +374,8 @@ export default function JobApplication1({
               top: "56.03%", // 1210.18 / 2160
               width: "24.92%", // 478.48 / 1920
               height: "33.92%", // 732.76 / 2160
+              y: furnitureY,
+              opacity: furnitureOpacity,
             }}
           />
 
@@ -313,6 +389,8 @@ export default function JobApplication1({
               top: "88.97%", // 1921.65 / 2160
               width: "10.74%", // 206.33 / 1920
               height: "5.75%", // 124.14 / 2160
+              y: furnitureY,
+              opacity: furnitureOpacity,
             }}
           />
 
@@ -326,6 +404,8 @@ export default function JobApplication1({
               top: "84.99%", // 1835.76 / 2160
               width: "12.34%", // 236.87 / 1920
               height: "6.7%", // 144.83 / 2160
+              y: furnitureY,
+              opacity: furnitureOpacity,
             }}
           />
 
@@ -339,6 +419,8 @@ export default function JobApplication1({
               top: "93.13%", // 2011.58 / 2160
               width: "6.4%", // 122.95 / 1920
               height: "1.01%", // 21.81 / 2160
+              y: detailsY,
+              opacity: detailsOpacity,
             }}
           />
 
@@ -352,7 +434,7 @@ export default function JobApplication1({
               top: "61.59%", // 1330.32 / 2160
               width: "51%", // 979.2 / 1920
               height: "29.94%", // 646.8 / 2160
-              opacity: opacity_light
+              opacity: furnitureOpacity
             }}
           />
 
@@ -366,6 +448,8 @@ export default function JobApplication1({
               top: "83.84%", // 1810.87 / 2160
               width: "5.37%", // 103.18 / 1920
               height: "7.69%", // 165.95 / 2160
+              y: detailsY,
+              opacity: detailsOpacity,
             }}
           />
 
@@ -379,6 +463,8 @@ export default function JobApplication1({
               top: "92.53%", // 1998.69 / 2160
               width: "5.22%", // 100.19 / 1920
               height: "2.12%", // 45.75 / 2160
+              y: detailsY,
+              opacity: detailsOpacity,
             }}
           />
 
@@ -392,6 +478,9 @@ export default function JobApplication1({
               top: "65.34%", // 1411.33 / 2160
               width: "43.42%", // 833.69 / 1920
               height: "38.35%", // 828.35 / 2160
+              y: humanY,
+              opacity: humanOpacity,
+              scale: humanScale,
             }}
           />
 
@@ -405,6 +494,8 @@ export default function JobApplication1({
               top: "91.19%", // 1969.59 / 2160
               width: "25.72%", // 493.85 / 1920
               height: "12.54%", // 270.89 / 2160
+              y: chairY,
+              opacity: chairOpacity,
             }}
           />
 
@@ -418,6 +509,8 @@ export default function JobApplication1({
               top: "84.21%", // 1818.9 / 2160
               width: "4.56%", // 87.59 / 1920
               height: "4.02%", // 86.77 / 2160
+              y: papersY,
+              opacity: papersOpacity,
             }}
           />
         </motion.div>
