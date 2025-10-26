@@ -1,27 +1,31 @@
 import { motion } from "framer-motion";
 
 interface Props {
-  label: string;
+  text: string;
   isSelected: boolean;
   onClick: () => void;
+  className?: string;
 }
 
-export default function ChoiceButton({ label, isSelected, onClick }: Props) {
+export default function ChoiceButton({ text, isSelected, onClick, className = "" }: Props) {
   return (
     <motion.button
       onClick={onClick}
       className={`
-        border-2 rounded-full px-4 py-2 text-sm font-medium transition-all 
+        typo-text-h4
+        relative rounded-full px-16 py-4 text-center transition-all
+        border-[3px] border-solid
         ${
           isSelected
-            ? "bg-white text-black border-white "
-            : "bg-transparent border-gray-500 hover:border-white text-white"
+            ? "bg-white text-black border-white"
+            : "bg-transparent border-slate-200 hover:border-white text-white"
         }
+        ${className}
       `}
       whileHover={{ scale: 1.05 }}
       whileTap={{ scale: 0.95 }}
     >
-      {label}
+      {text}
     </motion.button>
   );
 }

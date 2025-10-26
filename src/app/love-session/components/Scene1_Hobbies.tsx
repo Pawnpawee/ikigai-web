@@ -91,7 +91,8 @@ className="typo-h5 text-white"
           {HOBBIES_LIST.map((hobby) => (
             <ChoiceButton
               key={hobby}
-              label={hobby}
+              text={hobby}
+              className="typo-p-md"
               isSelected={selectedHobbies.includes(hobby)}
               onClick={() => handleHobbyToggle(hobby)}
             />

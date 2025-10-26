@@ -4,6 +4,7 @@ import { useRef, useState } from "react";
 import { useRouter } from "next/navigation";
 import IntoDarkNameInput from "./IntoDark_NameInput";
 import IntoDarkChoices from "./IntoDark_Choices";
+import IntoDarkHeard from "./IntoDark_Heard";
 import IntoDarkSubmit from "./IntoDark_Submit";
 import { useLenis } from "lenis/react";
 
@@ -14,6 +15,7 @@ export default function IntoDark() {
 
   const [playerName, setPlayerName] = useState("");
   const [selectedReasons, setSelectedReasons] = useState<number[]>([]);
+  const [hasHeard, setHasHeard] = useState<boolean | null>(null);
   const [isLoading, setIsLoading] = useState(false);
   const [nameError, setNameError] = useState("");
   const [reasonsError, setReasonsError] = useState("");
@@ -53,14 +55,14 @@ export default function IntoDark() {
 
     if (!playerName.trim()) {
       setNameError("กรุณากรอกชื่อของคุณ");
-      scrollToProgress(0.3);
+      scrollToProgress(0.05); // Middle of NameInput section (0-0.1)
       setIsLoading(false);
       return;
     }
 
     if (selectedReasons.length === 0) {
       setReasonsError("กรุณาเลือกเหตุผลอย่างน้อย 1 ข้อ");
-      scrollToProgress(0.6);
+      scrollToProgress(0.4); // Middle of Choices section (0.1-0.7)
       setIsLoading(false);
       return;
     }
@@ -83,28 +85,49 @@ export default function IntoDark() {
     }
   };
 
+  
+
   return (
-    <div ref={ref} className="h-[750vh] w-full relative bg-black">
-      <IntoDarkNameInput
-        scrollYProgress={scrollYProgress}
-        playerName={playerName}
-        setPlayerName={handlePlayerNameChange}
-        nameError={nameError}
-      />
+    <div ref={ref} className="w-full relative bg-black">
 
-      <IntoDarkChoices
-        scrollYProgress={scrollYProgress}
-        playerName={playerName}
-        selectedReasons={selectedReasons}
-        handleReasonToggle={handleReasonToggle}
-        reasonsError={reasonsError}
-      />
+      {/* 100vh */}
+      <div className="h-screen w-full">
+        <IntoDarkNameInput
+          scrollYProgress={scrollYProgress}
+          playerName={playerName}
+          setPlayerName={handlePlayerNameChange}
+          nameError={nameError}
+        />
+      </div>
 
-      <IntoDarkSubmit
-        scrollYProgress={scrollYProgress}
-        isLoading={isLoading}
-        handleSubmit={handleSubmit}
-      />
+      {/* 600vh - เพิ่มความยาวให้ scroll ได้มากขึ้น */}
+      <div className="h-[600vh] w-full">
+        <IntoDarkChoices
+          scrollYProgress={scrollYProgress}
+          playerName={playerName}
+          selectedReasons={selectedReasons}
+          handleReasonToggle={handleReasonToggle}
+          reasonsError={reasonsError}
+        />
+      </div>
+
+      {/* 100vh - Ikigai Explanation */}
+      <div className="h-screen w-full">
+        <IntoDarkHeard
+          scrollYProgress={scrollYProgress}
+          hasHeard={hasHeard}
+          setHasHeard={setHasHeard}
+        />
+      </div>
+
+      {/* 300vh */}
+      <div className="h-[300vh] w-full">
+        <IntoDarkSubmit
+          scrollYProgress={scrollYProgress}
+          isLoading={isLoading}
+          handleSubmit={handleSubmit}
+        />
+      </div>
     </div>
   );
 }

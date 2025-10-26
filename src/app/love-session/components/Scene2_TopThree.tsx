@@ -72,7 +72,8 @@ className="typo-h5 text-white"
             allHobbies.map((hobby) => (
               <ChoiceButton
                 key={hobby}
-                label={hobby}
+                text={hobby}
+                className="typo-p-md"
                 isSelected={topThree.includes(hobby)}
                 onClick={() => handleTopThreeToggle(hobby)}
               />

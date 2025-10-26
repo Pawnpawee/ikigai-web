@@ -13,12 +13,16 @@ export default function IntoDarkSubmit({
   isLoading,
   handleSubmit,
 }: SubmitProps) {
-  const opacity = useTransform(scrollYProgress, [0.63, 0.66, 1], [0, 1, 1]);
-  const zIndex = useTransform(scrollYProgress, [0, 0.66, 1], [-1, 10, 10]);
+  const opacity = useTransform(scrollYProgress, [0.71, 0.727, 1.0], [0, 1, 1]);
+  const zIndex = useTransform(
+    scrollYProgress,
+    [0, 0.727, 0.728, 1.0],
+    [-1, -1, 10, 10]
+  );
 
   const textAnimationProgress = useTransform(
     scrollYProgress,
-    [0.66, 0.9],
+    [0.727, 0.95],
     [0, 1]
   );
   const buttonOpacity = useTransform(textAnimationProgress, [0.9, 1], [0, 1]);

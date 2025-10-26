@@ -103,7 +103,7 @@ className="typo-h5 text-white"
             className="flex flex-wrap justify-center gap-2 sm:gap-3 max-h-[50vh] overflow-y-auto p-3 sm:p-4"
           >
             {HARD_SKILLS_LIST.map((skill) => (
-              <ChoiceButton key={skill} label={skill} isSelected={selectedHardSkills.includes(skill)} onClick={() => handleHardSkillToggle(skill)} />
+              <ChoiceButton className="typo-p-md" key={skill} text={skill} isSelected={selectedHardSkills.includes(skill)} onClick={() => handleHardSkillToggle(skill)} />
             ))}
             {customHardSkills.map((skill) => (
               <CustomSkillInput key={skill.id} skill={skill} onUpdate={(text) => updateCustomSkill(skill.id, text, setCustomHardSkills)} onRemove={() => removeCustomSkill(skill.id, setCustomHardSkills)} />
@@ -134,7 +134,7 @@ className="typo-h5 text-white"
             className="flex flex-wrap justify-center gap-2 sm:gap-3 max-h-[50vh] overflow-y-auto p-3 sm:p-4"
           >
             {SOFT_SKILLS_LIST.map((skill) => (
-              <ChoiceButton key={skill} label={skill} isSelected={selectedSoftSkills.includes(skill)} onClick={() => handleSoftSkillToggle(skill)} />
+              <ChoiceButton className="typo-p-md" key={skill} text={skill} isSelected={selectedSoftSkills.includes(skill)} onClick={() => handleSoftSkillToggle(skill)} />
             ))}
             {customSoftSkills.map((skill) => (
               <CustomSkillInput key={skill.id} skill={skill} onUpdate={(text) => updateCustomSkill(skill.id, text, setCustomSoftSkills)} onRemove={() => removeCustomSkill(skill.id, setCustomSoftSkills)} />

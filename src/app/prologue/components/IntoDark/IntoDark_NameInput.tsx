@@ -19,12 +19,12 @@ export default function IntoDarkNameInput({
 }: NameInputProps) {
   const opacity = useTransform(
     scrollYProgress,
-    [0, 0.05, 0.3, 0.33],
+    [0, 0.02, 0.08, 0.1],
     [0, 1, 1, 0]
   );
   const zIndex = useTransform(
     scrollYProgress,
-    [0, 0.1, 0.32, 0.33],
+    [0, 0.02, 0.09, 0.1],
     [-1, 10, 10, -1]
   );
 

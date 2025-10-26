@@ -64,7 +64,7 @@ export default function JobApplication2({
               className="absolute"
               style={{
                 left: "1.15%", // 44.02 / 3840
-                top: "73.1%", // 789.53 / 1080
+                bottom: "-7.38%", // -79.69 / 1080
                 width: "47.71%", // 1831.96 / 3840
                 height: "34.27%", // 370.16 / 1080
               }}

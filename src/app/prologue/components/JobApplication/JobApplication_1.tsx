@@ -23,39 +23,96 @@ export default function JobApplication1({
 
   // Animation สำหรับ elements ต่างๆ ค่อยๆ ขึ้นมา
   // Layer 1: Background elements (Posters on walls)
-  const posterBackY = useTransform(scrollYProgress, [0, 0.15, 0.51], [100, 0, 0]);
-  const posterBackOpacity = useTransform(scrollYProgress, [0, 0.15, 0.51], [0, 1, 1]);
+  const posterBackY = useTransform(
+    scrollYProgress,
+    [0, 0.15, 0.51],
+    [100, 0, 0]
+  );
+  const posterBackOpacity = useTransform(
+    scrollYProgress,
+    [0, 0.15, 0.51],
+    [0, 1, 1]
+  );
 
   // Layer 2: Table and items on table
   const tableY = useTransform(scrollYProgress, [0.05, 0.2, 0.51], [100, 0, 0]);
-  const tableOpacity = useTransform(scrollYProgress, [0.05, 0.2, 0.51], [0, 1, 1]);
+  const tableOpacity = useTransform(
+    scrollYProgress,
+    [0.05, 0.2, 0.51],
+    [0, 1, 1]
+  );
 
   // Layer 3: Lamp and books
-  const furnitureY = useTransform(scrollYProgress, [0.1, 0.25, 0.51], [100, 0, 0]);
-  const furnitureOpacity = useTransform(scrollYProgress, [0.1, 0.25, 0.51, 0.51], [0, 1, 1, 0]);
+  const furnitureY = useTransform(
+    scrollYProgress,
+    [0.1, 0.25, 0.51],
+    [100, 0, 0]
+  );
+  const furnitureOpacity = useTransform(
+    scrollYProgress,
+    [0.1, 0.25, 0.51, 0.51],
+    [0, 1, 1, 0]
+  );
 
   // Layer 4: Computer
-  const computerY = useTransform(scrollYProgress, [0.15, 0.3, 0.51], [100, 0, 0]);
-  const computerOpacity = useTransform(scrollYProgress, [0.15, 0.3, 0.51], [0, 1, 1]);
+  const computerY = useTransform(
+    scrollYProgress,
+    [0.15, 0.3, 0.51],
+    [100, 0, 0]
+  );
+  const computerOpacity = useTransform(
+    scrollYProgress,
+    [0.15, 0.3, 0.51],
+    [0, 1, 1]
+  );
 
   // Layer 5: Papers
   const papersY = useTransform(scrollYProgress, [0.2, 0.35, 0.51], [100, 0, 0]);
-  const papersOpacity = useTransform(scrollYProgress, [0.2, 0.35, 0.51], [0, 1, 1]);
+  const papersOpacity = useTransform(
+    scrollYProgress,
+    [0.2, 0.35, 0.51],
+    [0, 1, 1]
+  );
 
   // Layer 6: Chair
   const chairY = useTransform(scrollYProgress, [0.25, 0.4, 0.51], [100, 0, 0]);
-  const chairOpacity = useTransform(scrollYProgress, [0.25, 0.4, 0.51], [0, 1, 1]);
+  const chairOpacity = useTransform(
+    scrollYProgress,
+    [0.25, 0.4, 0.51],
+    [0, 1, 1]
+  );
 
   // Layer 7: Human - มีการเคลื่อนไหว
-  const humanY = useTransform(scrollYProgress, [0.3, 0.45, 0.48, 0.51], [100, 0, -5, 0]);
-  const humanOpacity = useTransform(scrollYProgress, [0.3, 0.45, 0.51], [0, 1, 1]);
-  const humanScale = useTransform(scrollYProgress, [0.3, 0.45, 0.48, 0.51], [0.95, 1, 1.02, 1]);
+  const humanY = useTransform(
+    scrollYProgress,
+    [0.3, 0.45, 0.48, 0.51],
+    [100, 0, -5, 0]
+  );
+  const humanOpacity = useTransform(
+    scrollYProgress,
+    [0.3, 0.45, 0.51],
+    [0, 1, 1]
+  );
+  const humanScale = useTransform(
+    scrollYProgress,
+    [0.3, 0.45, 0.48, 0.51],
+    [0.95, 1, 1.02, 1]
+  );
 
   // Layer 8: Small details (Pen, Pencil Box, Post-it)
-  const detailsY = useTransform(scrollYProgress, [0.35, 0.5, 0.51], [100, 0, 0]);
-  const detailsOpacity = useTransform(scrollYProgress, [0.35, 0.5, 0.51], [0, 1, 1]);
+  const detailsY = useTransform(
+    scrollYProgress,
+    [0.35, 0.5, 0.51],
+    [100, 0, 0]
+  );
+  const detailsOpacity = useTransform(
+    scrollYProgress,
+    [0.35, 0.5, 0.51],
+    [0, 1, 1]
+  );
   return (
-    <div className="flex justify-center items-center">
+    <div className="flex justify-center items-center ">
+ 
       <motion.div
         className="relative  w-full"
         style={{
@@ -63,6 +120,7 @@ export default function JobApplication1({
           opacity,
         }}
       >
+       
         <motion.div className="absolute inset-0">
           {/* Table */}
           <motion.img
@@ -71,7 +129,7 @@ export default function JobApplication1({
             className="absolute"
             style={{
               left: "2.29%", // 44.02 / 1920
-              top: "86.55%", // 1869.53 / 2160
+              bottom: "-3.69%", // -79.69 / 2160
               width: "95.42%", // 1831.96 / 1920
               height: "17.14%", // 370.16 / 2160
               y: tableY,
@@ -434,7 +492,7 @@ export default function JobApplication1({
               top: "61.59%", // 1330.32 / 2160
               width: "51%", // 979.2 / 1920
               height: "29.94%", // 646.8 / 2160
-              opacity: furnitureOpacity
+              opacity: furnitureOpacity,
             }}
           />
 

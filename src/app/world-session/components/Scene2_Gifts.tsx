@@ -34,7 +34,7 @@ className="typo-h5 text-white" />
         )}
         <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.5 }} className="flex flex-wrap justify-center gap-3 max-h-[60vh] overflow-y-auto p-4">
           {GIFTS_LIST.map((gift) => (
-            <ChoiceButton key={gift} label={gift} isSelected={selectedGifts.includes(gift)} onClick={() => handleToggle(gift)} />
+            <ChoiceButton className="typo-p-md" key={gift} text={gift} isSelected={selectedGifts.includes(gift)} onClick={() => handleToggle(gift)} />
           ))}
         </motion.div>
       </div>
