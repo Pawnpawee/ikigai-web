@@ -117,7 +117,7 @@ export default function Hero() {
       playTimerRef.current = setTimeout(() => {
         // Lottie
         lottieRef.current?.play();
-        
+
         // เล่นเสียง effect
         playSoundEffect();
 
@@ -132,7 +132,7 @@ export default function Hero() {
         glowTimerRef.current = setTimeout(() => {
           setIsLottieComplete(true);
         }, glowStartTimeInMs);
-        
+
         setHasPlayedOnce(true);
       }, 2000);
     }
@@ -475,43 +475,48 @@ export default function Hero() {
         </motion.div>
       </motion.div>
 
-      {/* Mountain */}
-      <motion.img
-        initial={{ opacity: 0 }}
-        animate={animationsStarted ? { opacity: 1 } : { opacity: 0 }}
-        transition={{ duration: 1.5 }}
-        src="/assets/Scene/Hero/hill-l-f.svg"
-        alt="hill-l-f"
-        className="absolute bottom-0 w-full z-2 object-bottom object-cover"
-        style={{ y: backgroundY }}
-      />
-      <motion.img
-        initial={{ opacity: 0 }}
-        animate={animationsStarted ? { opacity: 1 } : { opacity: 0 }}
-        transition={{ duration: 1.5, delay: 0.5 }}
-        src="/assets/Scene/Hero/hill-r-f.svg"
-        alt="hill-r-f"
-        className="absolute bottom-0 w-full z-2 object-bottom object-cover"
-        style={{ y: backgroundY }}
-      />
-      <motion.img
-        initial={{ opacity: 0 }}
-        animate={animationsStarted ? { opacity: 1 } : { opacity: 0 }}
-        transition={{ duration: 1.5, delay: 2.5 }}
-        src="/assets/Scene/Hero/hill-c-f.svg"
-        alt="hill-c-f"
-        className="absolute bottom-0 z-1 w-full object-bottom object-cover"
-        style={{ y: backgroundY }}
-      />
-      <motion.img
-        initial={{ opacity: 0 }}
-        animate={animationsStarted ? { opacity: 1 } : { opacity: 0 }}
-        transition={{ duration: 1.5, delay: 1.5 }}
-        src="/assets/Scene/Hero/hill-c-b.svg"
-        alt="hill-c-b"
-        className="absolute bottom-0 z-0 w-full object-bottom object-cover"
-        style={{ y: backgroundY }}
-      />
+      <motion.div
+        className="absolute bottom-0 left-0 w-full h-full origin-bottom 
+                   portrait:scale-150 transition-transform duration-500 ease-in-out" // ⭐ แก้ไขตรงนี้
+      >
+        {/* Mountain */}
+        <motion.img
+          initial={{ opacity: 0 }}
+          animate={animationsStarted ? { opacity: 1 } : { opacity: 0 }}
+          transition={{ duration: 1.5 }}
+          src="/assets/Scene/Hero/hill-l-f.svg"
+          alt="hill-l-f"
+          className="absolute bottom-0 w-full z-2 object-bottom object-cover"
+          style={{ y: backgroundY }}
+        />
+        <motion.img
+          initial={{ opacity: 0 }}
+          animate={animationsStarted ? { opacity: 1 } : { opacity: 0 }}
+          transition={{ duration: 1.5, delay: 0.5 }}
+          src="/assets/Scene/Hero/hill-r-f.svg"
+          alt="hill-r-f"
+          className="absolute bottom-0 w-full z-2 object-bottom object-cover"
+          style={{ y: backgroundY }}
+        />
+        <motion.img
+          initial={{ opacity: 0 }}
+          animate={animationsStarted ? { opacity: 1 } : { opacity: 0 }}
+          transition={{ duration: 1.5, delay: 2.5 }}
+          src="/assets/Scene/Hero/hill-c-f.svg"
+          alt="hill-c-f"
+          className="absolute bottom-0 z-1 w-full object-bottom object-cover"
+          style={{ y: backgroundY }}
+        />
+        <motion.img
+          initial={{ opacity: 0 }}
+          animate={animationsStarted ? { opacity: 1 } : { opacity: 0 }}
+          transition={{ duration: 1.5, delay: 1.5 }}
+          src="/assets/Scene/Hero/hill-c-b.svg"
+          alt="hill-c-b"
+          className="absolute bottom-0 z-0 w-full object-bottom object-cover"
+          style={{ y: backgroundY }}
+        />
+      </motion.div>
     </div>
   );
 }

@@ -12,6 +12,7 @@ import { useEffect } from "react";
 import StarryBackground from "./components/star/StarryBackground";
 import Dreaming from "./prologue/components/Dreaming";
 import JobApplication from "./prologue/components/JobApplication/JobApplication";
+import Sleeping from "./prologue/components/Sleeping";
 
 export default function Home() {
   const lenis = useLenis();
@@ -31,19 +32,18 @@ export default function Home() {
 
   return (
     <main className="flex flex-col justify-between h-full">
-      <ReactLenis root options={{ lerp: 0.05 }}>
-        <StarryBackground />
-        
-        <MouseFollower />
-        <Navbar />
-        <ScrollTo opacity={scrollToOpacity} />
+      <StarryBackground />
 
-        <Hero />
-        <Intro />
-        <JobApplication/>
-        <Dreaming />
-        <IntoDark />
-      </ReactLenis>
+      <MouseFollower />
+      <Navbar />
+      <ScrollTo opacity={scrollToOpacity} />
+
+      <Hero />
+      <Intro />
+      <Sleeping />
+      {/* <JobApplication/> */}
+      {/* <Dreaming /> */}
+      {/* <IntoDark /> */}
     </main>
   );
 }
