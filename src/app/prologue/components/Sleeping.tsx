@@ -1,100 +1,144 @@
 "use client";
-import React from "react";
-import { motion, useTransform, useScroll } from "framer-motion";
+import React, { useEffect } from "react";
+import { motion, useTransform, useScroll, useInView } from "framer-motion";
 import { useRef } from "react";
 import Bubble from "@/app/components/ui/Bubble";
 import WordByWordAnimation from "@/app/components/ui/WordByWordAnimation";
+import { useAudio } from "@/app/contexts/AudioContext";
+import { useSoundEffect } from "@/app/hooks/useSoundEffect";
+import { useIsPortrait } from "@/app/hooks/useOrientation";
 
 export default function Sleeping() {
   const ref = useRef<HTMLDivElement>(null);
+  const isInView = useInView(ref, { once: false, amount: 0.1 });
+  const { animationsStarted } = useAudio();
+
+  // ตรวจสอบ orientation โดยใช้ custom hook
+  const isPortrait = useIsPortrait();
+
+  // ใช้ custom hook สำหรับ sound effect - clock ticking loop
+  const { playSoundEffect, stopSoundEffect } = useSoundEffect({
+    soundPath: "/assets/Sound/1-2/clock-ticking.mp3",
+    fadeDurationMs: 500,
+    soundDurationMs: 8000,
+    loop: true,
+  });
+
+  // เล่นเสียงเมื่อเข้า viewport และ loop ตลอด
+  useEffect(() => {
+    if (isInView && animationsStarted) {
+      playSoundEffect();
+    } else {
+      stopSoundEffect();
+    }
+
+    return () => {
+      stopSoundEffect();
+    };
+  }, [isInView, animationsStarted, playSoundEffect, stopSoundEffect]);
 
   const { scrollYProgress } = useScroll({
     target: ref,
     offset: ["start start", "end end"],
   });
 
-  // Background opacity (always visible)
   const bgOpacity = useTransform(scrollYProgress, [0, 0.05], [0, 1]);
 
-  // Layer animations - ให้ขึ้นครบภายใน 300vh (0-0.6 ของ 500vh)
-  // Layer 1: Background elements (tables, books, lamp, clock, note)
-  const table1Y = useTransform(scrollYProgress, [0, 0.2], [100, 0]);
-  const table1Opacity = useTransform(scrollYProgress, [0, 0.2], [0, 1]);
+  // 800vh Animation Timeline (เพิ่มจาก 750vh)
+  // ชุด 1-5 (0-200vh = 0-25%): แต่ละชุด 40vh
+  const set1Y = useTransform(scrollYProgress, [0, 0.05], [100, 0]);
+  const set1Opacity = useTransform(scrollYProgress, [0, 0.05], [0, 1]);
 
-  const table2Y = useTransform(scrollYProgress, [0, 0.2], [100, 0]);
-  const table2Opacity = useTransform(scrollYProgress, [0, 0.2], [0, 1]);
+  const set2Y = useTransform(scrollYProgress, [0.05, 0.1], [100, 0]);
+  const set2Opacity = useTransform(scrollYProgress, [0.05, 0.1], [0, 1]);
 
-  // Layer 2: Items on tables
-  const book1Y = useTransform(scrollYProgress, [0.1, 0.3], [100, 0]);
-  const book1Opacity = useTransform(scrollYProgress, [0.1, 0.3], [0, 1]);
+  const set3Y = useTransform(scrollYProgress, [0.1, 0.15], [100, 0]);
+  const set3Opacity = useTransform(scrollYProgress, [0.1, 0.15], [0, 1]);
 
-  const book2Y = useTransform(scrollYProgress, [0.1, 0.3], [100, 0]);
-  const book2Opacity = useTransform(scrollYProgress, [0.1, 0.3], [0, 1]);
+  const set4Y = useTransform(scrollYProgress, [0.15, 0.2], [100, 0]);
+  const set4Opacity = useTransform(scrollYProgress, [0.15, 0.2], [0, 1]);
 
-  const lampY = useTransform(scrollYProgress, [0.1, 0.3], [100, 0]);
-  const lampOpacity = useTransform(scrollYProgress, [0.1, 0.3], [0, 1]);
+  const set5Y = useTransform(scrollYProgress, [0.2, 0.25], [100, 0]);
+  const set5Opacity = useTransform(scrollYProgress, [0.2, 0.25], [0, 1]);
 
-  const clockY = useTransform(scrollYProgress, [0.1, 0.3], [100, 0]);
-  const clockOpacity = useTransform(scrollYProgress, [0.1, 0.3], [0, 1]);
+  // ชุด 6-9 (200-450vh = 25-56.25%): แต่ละ bubble 50vh
+  // Bubble 1: 200-250vh (25-31.25%)
+  const bubble1Y = useTransform(scrollYProgress, [0.25, 0.3125], [100, 0]);
+  const bubble1Opacity = useTransform(
+    scrollYProgress,
+    [0.25, 0.3125, 0.5, 0.55],
+    [0, 1, 1, 0]
+  ); // ค้างจนถึง 50%, fade out 50-55%
 
-  const noteY = useTransform(scrollYProgress, [0.1, 0.3], [100, 0]);
-  const noteOpacity = useTransform(scrollYProgress, [0.1, 0.3], [0, 1]);
+  // Bubble 2: 250-300vh (31.25-37.5%)
+  const bubble2Y = useTransform(scrollYProgress, [0.3125, 0.375], [100, 0]);
+  const bubble2Opacity = useTransform(
+    scrollYProgress,
+    [0.3125, 0.375, 0.5, 0.55],
+    [0, 1, 1, 0]
+  );
 
-  // Layer 3: Bed
-  const bedY = useTransform(scrollYProgress, [0.2, 0.4], [100, 0]);
-  const bedOpacity = useTransform(scrollYProgress, [0.2, 0.4], [0, 1]);
+  // Bubble 3: 300-350vh (37.5-43.75%)
+  const bubble3Y = useTransform(scrollYProgress, [0.375, 0.4375], [100, 0]);
+  const bubble3Opacity = useTransform(
+    scrollYProgress,
+    [0.375, 0.4375, 0.5, 0.55],
+    [0, 1, 1, 0]
+  );
 
-  // Layer 4: Character (head and body)
-  const headY = useTransform(scrollYProgress, [0.3, 0.5], [100, 0]);
-  const headOpacity = useTransform(scrollYProgress, [0.3, 0.5], [0, 1]);
+  // Bubble 4: 350-400vh (43.75-50%)
+  const bubble4Y = useTransform(scrollYProgress, [0.4375, 0.5], [100, 0]);
+  const bubble4Opacity = useTransform(
+    scrollYProgress,
+    [0.4375, 0.5, 0.5, 0.55],
+    [0, 1, 1, 0]
+  );
+  // ค้าง 400-450vh (50-56.25%): opacity = 1 สำหรับทุก bubble
+  // Bubble fade out: 400-440vh (50-55%)
 
-  const bodyY = useTransform(scrollYProgress, [0.3, 0.5], [100, 0]);
-  const bodyOpacity = useTransform(scrollYProgress, [0.3, 0.5], [0, 1]);
+  // ชุด 10: scale + text (450-600vh = 56.25-75%)
+  const scale = useTransform(scrollYProgress, [0.5625, 0.75], [1, 1.5]);
+  const textOpacity = useTransform(
+    scrollYProgress,
+    [0.5625, 0.65, 0.8, 0.9],
+    [0, 1, 1, 0]
+  ); // ขึ้นที่ 56.25%, ค้างถึง 85%, fade out 85-90%
 
-  // Layer 5: Blanket and phone
-  const blanketY = useTransform(scrollYProgress, [0.4, 0.6], [100, 0]);
-  const blanketOpacity = useTransform(scrollYProgress, [0.4, 0.6], [0, 1]);
+  const blinkOpacity = useTransform(
+    scrollYProgress,
+    [0.6, 0.65, 0.7, 0.8, 0.9, 1],
+    [0, 0.3, 0, 0.5, 0, 1]
+  ); // กระพริบ 3 ครั้ง แล้วค้างดำ
 
-  const phoneY = useTransform(scrollYProgress, [0.4, 0.6], [100, 0]);
-  const phoneOpacity = useTransform(scrollYProgress, [0.4, 0.6], [0, 1]);
-
-  // Layer 6: Slipper
-  const slipperY = useTransform(scrollYProgress, [0.5, 0.6], [100, 0]);
-  const slipperOpacity = useTransform(scrollYProgress, [0.5, 0.6], [0, 1]);
-
-  // Zoom effect - ซูมตอน 300vh (0.6-0.8 ของ 500vh) จาก 1 → 2 เท่า
-  const scale = useTransform(scrollYProgress, [0.6, 0.8], [1, 2]);
-
-  // Bubble opacity - หายไปก่อนซูม (0.55-0.65)
-  const bubbleOpacity = useTransform(scrollYProgress, [0.55, 0.65], [1, 0]);
-
-  // Text animation - แสดงข้อความตอน 70% (0.7 ของ 500vh)
-  const textOpacity = useTransform(scrollYProgress, [0.65, 0.75], [0, 1]);
+  // Scene fade out (96-100%)
+  const sceneFadeOut = useTransform(scrollYProgress, [0.95, 1], [1, 0]);
 
   return (
     <motion.div
       ref={ref}
-      className="relative  w-screen h-[500vh] z-2 "
+      className="relative w-screen h-[800vh] z-2"
       style={{ opacity: bgOpacity }}
     >
       {/* Sticky Container */}
-      <div className=" sticky top-0 w-screen overflow-hidden">
+      <div className="sticky top-0 w-screen h-screen overflow-hidden flex items-center justify-center bg-black">
         <motion.div
-          className="relative w-full aspect-video overflow-hidden"
-          style={{ scale }}
+          className="absolute aspect-video w-full portrait:w-[250%]"
+          style={{
+            scale,
+          }}
         >
           <img
             src="/assets/Scene/Scene2/bg.svg"
             alt="Background"
             className="w-full h-full object-cover"
           />
-          {/* Table 2 (Right) */}
+          {/* ชุด 1: Table 2, Table 1, Bed */}
           <motion.div
             className="absolute"
             style={{
               inset: "15.23% 8.62% 64.38% 72.95%",
-              y: table2Y,
-              opacity: table2Opacity,
+              y: set1Y,
+              opacity: set1Opacity,
             }}
           >
             <img
@@ -104,13 +148,12 @@ export default function Sleeping() {
             />
           </motion.div>
 
-          {/* Table 1 (Left) */}
           <motion.div
             className="absolute"
             style={{
               inset: "14.78% 72.89% 64.83% 8.68%",
-              y: table1Y,
-              opacity: table1Opacity,
+              y: set1Y,
+              opacity: set1Opacity,
             }}
           >
             <img
@@ -120,87 +163,6 @@ export default function Sleeping() {
             />
           </motion.div>
 
-          {/* Book 2 (Left table) */}
-          <motion.div
-            className="absolute"
-            style={{
-              inset: "20.48% 83.61% 69.38% 11.4%",
-              y: book2Y,
-              opacity: book2Opacity,
-            }}
-          >
-            <img
-              src="/assets/Scene/Scene2/book2.svg"
-              alt="book2"
-              className="w-full h-full object-contain"
-            />
-          </motion.div>
-
-          {/* Lamp (Left table) */}
-          <motion.div
-            className="absolute"
-            style={{
-              inset: "17.13% 76.58% 73.09% 17.91%",
-              y: lampY,
-              opacity: lampOpacity,
-            }}
-          >
-            <img
-              src="/assets/Scene/Scene2/lamp.svg"
-              alt="lamp"
-              className="w-full h-full object-contain"
-            />
-          </motion.div>
-
-          {/* Note (Right table) */}
-          <motion.div
-            className="absolute"
-            style={{
-              inset: "22.39% 13.62% 69.53% 82.81%",
-              y: noteY,
-              opacity: noteOpacity,
-            }}
-          >
-            <img
-              src="/assets/Scene/Scene2/note.svg"
-              alt="note"
-              className="w-full h-full object-contain"
-            />
-          </motion.div>
-
-          {/* Clock (Right table) */}
-          <motion.div
-            className="absolute"
-            style={{
-              inset: "21.17% 18.87% 73.1% 74.66%",
-              y: clockY,
-              opacity: clockOpacity,
-            }}
-          >
-            <img
-              src="/assets/Scene/Scene2/clock.svg"
-              alt="clock"
-              className="w-full h-full object-contain"
-            />
-          </motion.div>
-
-          {/* Book 1 (Right table) */}
-          <motion.div
-            className="absolute"
-            style={{
-              inset: "16.34% 9.99% 73.51% 85.03%",
-              y: book1Y,
-              opacity: book1Opacity,
-            }}
-          >
-            <img
-              src="/assets/Scene/Scene2/book1.svg"
-              alt="book1"
-              className="w-full h-full object-contain"
-            />
-          </motion.div>
-
-          {/* Bed */}
           <motion.div
             className="absolute"
             style={{
@@ -208,8 +170,8 @@ export default function Sleeping() {
               left: "24.83%",
               right: "24.77%",
               top: "7.79%",
-              y: bedY,
-              opacity: bedOpacity,
+              y: set1Y,
+              opacity: set1Opacity,
             }}
           >
             <img
@@ -219,77 +181,13 @@ export default function Sleeping() {
             />
           </motion.div>
 
-          {/* Head */}
-          <motion.div
-            className="absolute"
-            style={{
-              inset: "19.11% 41.68% 55.39% 42.31%",
-              y: headY,
-              opacity: headOpacity,
-            }}
-          >
-            <img
-              src="/assets/Scene/Scene2/head.svg"
-              alt="head"
-              className="w-full h-full object-contain"
-            />
-          </motion.div>
-
-          {/* Body */}
-          <motion.div
-            className="absolute"
-            style={{
-              inset: "42.14% 41.44% 21.57% 41.98%",
-              y: bodyY,
-              opacity: bodyOpacity,
-            }}
-          >
-            <img
-              src="/assets/Scene/Scene2/body.svg"
-              alt="body"
-              className="w-full h-full object-contain"
-            />
-          </motion.div>
-
-          {/* Blanket */}
-          <motion.div
-            className="absolute"
-            style={{
-              inset: "47.7% 31.87% 2.8% 31.96%",
-              y: blanketY,
-              opacity: blanketOpacity,
-            }}
-          >
-            <img
-              src="/assets/Scene/Scene2/blanket.svg"
-              alt="blanket"
-              className="w-full h-full object-contain"
-            />
-          </motion.div>
-
-          {/* Phone */}
-          <motion.div
-            className="absolute"
-            style={{
-              inset: "41.65% 34.28% 49.3% 62.2%",
-              y: phoneY,
-              opacity: phoneOpacity,
-            }}
-          >
-            <img
-              src="/assets/Scene/Scene2/phone.svg"
-              alt="phone"
-              className="w-full h-full object-contain"
-            />
-          </motion.div>
-
-          {/* Slipper */}
+          {/* ชุด 2: Slipper, Book 2, Note */}
           <motion.div
             className="absolute"
             style={{
               inset: "46.99% 72.37% 30.53% 17.98%",
-              y: slipperY,
-              opacity: slipperOpacity,
+              y: set2Y,
+              opacity: set2Opacity,
             }}
           >
             <img
@@ -299,75 +197,226 @@ export default function Sleeping() {
             />
           </motion.div>
 
-          {/* Bubbles - with Y animation and fade out */}
           <motion.div
-            className="absolute mix-blend-screen"
+            className="absolute"
             style={{
-              left: "18.94%", // 363.64 / 1920
-              top: "30.87%", // 333.39 / 1080
-              y: useTransform(scrollYProgress, [0, 0.3, 0.6], [50, -20, -30]),
-              opacity: bubbleOpacity,
+              inset: "20.48% 83.61% 69.38% 11.4%",
+              y: set2Y,
+              opacity: set2Opacity,
             }}
           >
-            <Bubble text="จะมีงานทำหรือเปล่า" className="typo-text-h5" />
+            <img
+              src="/assets/Scene/Scene2/book2.svg"
+              alt="book2"
+              className="w-full h-full object-contain"
+            />
           </motion.div>
 
           <motion.div
-            className="absolute mix-blend-screen"
+            className="absolute"
             style={{
-              left: "62.76%", // 1205 / 1920
-              top: "17.22%", // 186 / 1080
-              y: useTransform(scrollYProgress, [0, 0.3, 0.6], [50, -20, -30]),
-              opacity: bubbleOpacity,
+              inset: "22.39% 13.62% 69.53% 82.81%",
+              y: set2Y,
+              opacity: set2Opacity,
             }}
           >
-            <Bubble text="จะทำได้ไหม" className="typo-text-h5"/>
+            <img
+              src="/assets/Scene/Scene2/note.svg"
+              alt="note"
+              className="w-full h-full object-contain"
+            />
+          </motion.div>
+
+          {/* ชุด 3: Lamp, Clock */}
+          <motion.div
+            className="absolute"
+            style={{
+              inset: "17.13% 76.58% 73.09% 17.91%",
+              y: set3Y,
+              opacity: set3Opacity,
+            }}
+          >
+            <img
+              src="/assets/Scene/Scene2/lamp.svg"
+              alt="lamp"
+              className="w-full h-full object-contain"
+            />
           </motion.div>
 
           <motion.div
-            className="absolute mix-blend-screen"
+            className="absolute"
             style={{
-              left: "59.61%", // 1144.51 / 1920
-              top: "52.16%", // 563.3 / 1080
-              y: useTransform(scrollYProgress, [0, 0.3, 0.6], [50, -20, -30]),
-              opacity: bubbleOpacity,
+              inset: "21.17% 18.87% 73.1% 74.66%",
+              y: set3Y,
+              opacity: set3Opacity,
             }}
           >
-            <Bubble text="จะเก่งพอหรือเปล่า" className="typo-text-h5"/>
+            <img
+              src="/assets/Scene/Scene2/clock.svg"
+              alt="clock"
+              className="w-full h-full object-contain"
+            />
+          </motion.div>
+
+          {/* ชุด 4: Book 1, (Head + Body + Blanket) */}
+          <motion.div
+            className="absolute"
+            style={{
+              inset: "16.34% 9.99% 73.51% 85.03%",
+              y: set4Y,
+              opacity: set4Opacity,
+            }}
+          >
+            <img
+              src="/assets/Scene/Scene2/book1.svg"
+              alt="book1"
+              className="w-full h-full object-contain"
+            />
           </motion.div>
 
           <motion.div
-            className="absolute mix-blend-screen"
+            className="absolute"
             style={{
-              left: "26.29%", // 504.7 / 1920
-              top: "67.08%", // 724.44 / 080
-              y: useTransform(scrollYProgress, [0, 0.3, 0.6], [50, -20, -30]),
-              opacity: bubbleOpacity,
+              inset: "19.11% 41.68% 55.39% 42.31%",
+              y: set4Y,
+              opacity: set4Opacity,
             }}
           >
-            <Bubble text="จะเข้ากับคนอื่นได้ไหม" className="typo-text-h5" />
+            <img
+              src="/assets/Scene/Scene2/head.svg"
+              alt="head"
+              className="w-full h-full object-contain"
+            />
           </motion.div>
 
-          
-        </motion.div>
-        {/* Text at bottom - Word by word animation at 70% scroll */}
+          <motion.div
+            className="absolute"
+            style={{
+              inset: "42.14% 41.44% 21.57% 41.98%",
+              y: set4Y,
+              opacity: set4Opacity,
+            }}
+          >
+            <img
+              src="/assets/Scene/Scene2/body.svg"
+              alt="body"
+              className="w-full h-full object-contain"
+            />
+          </motion.div>
+
+          <motion.div
+            className="absolute"
+            style={{
+              inset: "47.7% 31.87% 2.8% 31.96%",
+              y: set5Y,
+              opacity: set5Opacity,
+            }}
+          >
+            <img
+              src="/assets/Scene/Scene2/blanket.svg"
+              alt="blanket"
+              className="w-full h-full object-contain"
+            />
+          </motion.div>
+
+          {/* ชุด 5: Phone */}
+          <motion.div
+            className="absolute"
+            style={{
+              inset: "41.65% 34.28% 49.3% 62.2%",
+              y: set5Y,
+              opacity: set5Opacity,
+            }}
+          >
+            <img
+              src="/assets/Scene/Scene2/phone.svg"
+              alt="phone"
+              className="w-full h-full object-contain"
+            />
+          </motion.div>
+
+          {/* ชุด 10: Text "เห้อนอนดีกว่า" */}
           <motion.div
             className="absolute bottom-[30%] left-0 right-0 flex justify-center"
             style={{ opacity: textOpacity }}
           >
             <WordByWordAnimation
               text="เห้อ นอนดีกว่า"
-              scrollYProgress={scrollYProgress}
+              scrollYProgress={textOpacity}
               as="p"
               className="typo-text-h5 text-white"
             />
           </motion.div>
+        </motion.div>
+
+        {/* ชุด 6: Bubble "จะทำได้ไหม" */}
+        <motion.div
+          className="absolute mix-blend-screen 
+             top-[19.13%] right-[2.5%] w-[180px] aspect-[180/110]
+             landscape:top-[17.22%] landscape:left-[62.76%] landscape:w-[295px] landscape:aspect-[295/176.08]
+             lg:left-[65%] lg:w-[300px] lg:aspect-[300/180]"
+          style={{
+            y: bubble1Y,
+            opacity: bubble1Opacity,
+          }}
+        >
+          <Bubble text="จะทำได้ไหม" className="typo-text-h5" />
+        </motion.div>
+
+        {/* ชุด 7: Bubble "จะมีงานทำหรือเปล่า" */}
+        <motion.div
+          className="absolute mix-blend-screen 
+             top-[7.38%] left-[7.5%] w-[180px] aspect-[180/110]
+             landscape:top-[30.87%] landscape:left-[18.94%] landscape:w-[295px] landscape:aspect-[295/176.08]
+             lg:left-[7%] lg:w-[300px] lg:aspect-[300/180]"
+          style={{
+            y: bubble2Y,
+            opacity: bubble2Opacity,
+          }}
+        >
+          <Bubble text="จะมีงานทำหรือเปล่า" className="typo-text-h5 " />
+        </motion.div>
+
+        {/* ชุด 8: Bubble "จะเก่งพอหรือเปล่า" */}
+        <motion.div
+          className="absolute mix-blend-screen 
+             top-[61.25%] right-[3.5%] w-[180px] aspect-[180/110]
+             landscape:top-[52.16%] landscape:left-[59.61%] landscape:w-[295px] landscape:aspect-[295/176.08]
+             lg:left-[60%] lg:w-[300px] lg:aspect-[300/180]"
+          style={{
+            y: bubble3Y,
+            opacity: bubble3Opacity,
+          }}
+        >
+          <Bubble text="จะเก่งพอหรือเปล่า" className="typo-text-h5" />
+        </motion.div>
+
+        {/* ชุด 9: Bubble "จะเข้ากับคนอื่นได้ไหม" */}
+        <motion.div
+          className="absolute mix-blend-screen 
+             top-[75.38%] left-[8.61%] w-[180px] aspect-[180/110]
+             landscape:top-[67.08%] landscape:left-[26.29%] landscape:w-[295px] landscape:aspect-[295/176.08]
+             lg:left-[10%] lg:w-[300px] lg:aspect-[300/180]"
+          style={{
+            y: bubble4Y,
+            opacity: bubble4Opacity,
+          }}
+        >
+          <Bubble text="จะเข้ากับคนอื่นได้ไหม" className="typo-text-h5" />
+        </motion.div>
+
+        {/* กระพริบตา: Black overlay fade in-out (60-100%) */}
+        <motion.div
+          className="absolute inset-0 bg-black pointer-events-none"
+          style={{ opacity: blinkOpacity }}
+        />
+
+        {/* Scene fade out (96-100%) */}
+        <motion.div
+          className="absolute inset-0 bg-black pointer-events-none"
+          style={{ opacity: useTransform(sceneFadeOut, (v) => 1 - v) }}
+        />
       </div>
-      {/* Light overlay */}
-      <div
-        className="absolute w-screen inset-0 mix-blend-soft-light pointer-events-none"
-        style={{ backgroundColor: "#15237B", opacity: 0.5 }}
-      />
     </motion.div>
   );
 }

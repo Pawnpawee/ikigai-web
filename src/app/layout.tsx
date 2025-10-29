@@ -18,7 +18,6 @@ export const metadata: Metadata = {
   title: "Ikigai - Life Of Journey",
   description:
     '"Ikigai: The Journey of Life" is an AI-powered interactive website designed to help graduating students and first-time job seekers discover their purpose. It combines interactive storytelling with a specialized AI to guide users in finding their "Ikigai," preparing them for a confident and meaningful transition into the working world.',
-  viewport: "width=device-width, initial-scale=1, viewport-fit=cover",
 };
 
 export default function RootLayout({

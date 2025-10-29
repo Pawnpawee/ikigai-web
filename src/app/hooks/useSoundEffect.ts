@@ -5,28 +5,34 @@ interface UseSoundEffectOptions {
   soundPath: string;
   fadeDurationMs?: number;
   soundDurationMs?: number;
+  loop?: boolean;
 }
 
 export function useSoundEffect({
   soundPath,
   fadeDurationMs = 500,
   soundDurationMs = 2500,
+  loop = false,
 }: UseSoundEffectOptions) {
   const { sfxVolume, isMuted } = useAudio();
   const [audio, setAudio] = useState<HTMLAudioElement | null>(null);
   const fadeIntervalRef = useRef<NodeJS.Timeout | null>(null);
   const soundTimerRef = useRef<NodeJS.Timeout | null>(null);
+  const isLoopingRef = useRef<boolean>(false);
 
   // สร้าง audio instance
   useEffect(() => {
     const audioInstance = new Audio(soundPath);
+    if (loop) {
+      audioInstance.loop = true;
+    }
     setAudio(audioInstance);
 
     return () => {
       audioInstance.pause();
       audioInstance.src = "";
     };
-  }, [soundPath]);
+  }, [soundPath, loop]);
 
   // อัพเดท volume เมื่อ sfxVolume เปลี่ยน
   useEffect(() => {
@@ -97,34 +103,56 @@ export function useSoundEffect({
         return;
       }
 
-      const soundStopTimerDelay = Math.max(0, soundDurationMs - fadeDurationMs);
+      isLoopingRef.current = loop;
 
-      fadeAudio(audio, "in");
+      if (loop) {
+        // สำหรับ loop: fade in แล้วเล่นต่อเนื่อง
+        fadeAudio(audio, "in", () => {
+          // เมื่อ fade in เสร็จ เสียงจะเล่นต่อเนื่องเพราะ audio.loop = true
+          onComplete?.();
+        });
+      } else {
+        // สำหรับเล่นครั้งเดียว: fade in แล้ว fade out ตาม duration
+        const soundStopTimerDelay = Math.max(
+          0,
+          soundDurationMs - fadeDurationMs
+        );
 
-      soundTimerRef.current = setTimeout(() => {
-        fadeAudio(audio, "out", onComplete);
-      }, soundStopTimerDelay);
+        fadeAudio(audio, "in");
+
+        soundTimerRef.current = setTimeout(() => {
+          fadeAudio(audio, "out", onComplete);
+        }, soundStopTimerDelay);
+      }
     },
-    [audio, isMuted, soundDurationMs, fadeDurationMs, fadeAudio]
+    [audio, isMuted, soundDurationMs, fadeDurationMs, fadeAudio, loop]
   );
 
-  // ฟังก์ชันหยุดเสียงทันที
+  // ฟังก์ชันหยุดเสียงทันที (สำหรับ loop)
   const stopSoundEffect = useCallback(() => {
     if (soundTimerRef.current) {
       clearTimeout(soundTimerRef.current);
       soundTimerRef.current = null;
     }
 
-    if (fadeIntervalRef.current) {
-      clearInterval(fadeIntervalRef.current);
-      fadeIntervalRef.current = null;
-    }
+    if (audio && isLoopingRef.current) {
+      // สำหรับ loop: fade out ก่อนหยุด
+      fadeAudio(audio, "out", () => {
+        isLoopingRef.current = false;
+      });
+    } else {
+      // หยุดทันที
+      if (fadeIntervalRef.current) {
+        clearInterval(fadeIntervalRef.current);
+        fadeIntervalRef.current = null;
+      }
 
-    if (audio) {
-      audio.pause();
-      audio.currentTime = 0;
+      if (audio) {
+        audio.pause();
+        audio.currentTime = 0;
+      }
     }
-  }, [audio]);
+  }, [audio, fadeAudio]);
 
   return {
     audio,
