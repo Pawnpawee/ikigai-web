@@ -17,25 +17,35 @@ export default function Sleeping() {
   const isPortrait = useIsPortrait();
 
   // ใช้ custom hook สำหรับ sound effect - clock ticking loop
-  const { playSoundEffect, stopSoundEffect } = useSoundEffect({
+  const { playSoundEffect: playClock, stopSoundEffect: stopClock } = useSoundEffect({
     soundPath: "/assets/Sound/1-2/clock-ticking.mp3",
     fadeDurationMs: 500,
     soundDurationMs: 8000,
     loop: true,
   });
 
+  // ใช้ custom hook สำหรับ sound effect - heart beat loop
+  const { playSoundEffect: playHeartBeat, stopSoundEffect: stopHeartBeat } = useSoundEffect({
+    soundPath: "/assets/Sound/1-2/heart-beat.mp3",
+    fadeDurationMs: 500,
+    loop: true,
+  });
+
   // เล่นเสียงเมื่อเข้า viewport และ loop ตลอด
   useEffect(() => {
     if (isInView && animationsStarted) {
-      playSoundEffect();
+      playClock();
+      playHeartBeat();
     } else {
-      stopSoundEffect();
+      stopClock();
+      stopHeartBeat();
     }
 
     return () => {
-      stopSoundEffect();
+      stopClock();
+      stopHeartBeat();
     };
-  }, [isInView, animationsStarted, playSoundEffect, stopSoundEffect]);
+  }, [isInView, animationsStarted, playClock, stopClock, playHeartBeat, stopHeartBeat]);
 
   const { scrollYProgress } = useScroll({
     target: ref,
@@ -424,7 +434,7 @@ export default function Sleeping() {
       {/* Light overlay */}
       <div
         className="absolute w-screen inset-0 mix-blend-soft-light pointer-events-none"
-        style={{ backgroundColor: "var(--color-overlay)", opacity: 0.5 }}
+        style={{ backgroundColor: "var(--color-overlay)", opacity: 0.7 }}
       />
     </motion.div>
   );

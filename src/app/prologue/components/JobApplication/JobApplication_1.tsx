@@ -11,105 +11,220 @@ interface JobApplication1Props {
 export default function JobApplication1({
   scrollYProgress,
 }: JobApplication1Props) {
+  // Overall opacity - hard cut at 0.611 (no fade)
   const opacity = useTransform(
     scrollYProgress,
-    [0, 0.51, 0.55, 1],
+    [0, 0.611, 0.611, 1],
     [1, 1, 0, 0]
   );
 
   const opacity_light = useTransform(
     scrollYProgress,
-    [0, 0.51, 0.51, 1],
-    [1, 1, 0, 0]
-  );
-
-  // Animation สำหรับ elements ต่างๆ ค่อยๆ ขึ้นมา
-  // Layer 1: Background elements (Posters on walls)
-  const posterBackY = useTransform(
-    scrollYProgress,
-    [0, 0.15, 0.51],
-    [100, 0, 0]
-  );
-  const posterBackOpacity = useTransform(
-    scrollYProgress,
-    [0, 0.15, 0.51],
+    [0.35, 0.367, 1],
     [0, 1, 1]
   );
 
-  // Layer 2: Table and items on table
-  const tableY = useTransform(scrollYProgress, [0.05, 0.2, 0.51], [100, 0, 0]);
+  // ชุด 1-5: Posters (150vh = 0-0.167)
+  // ชุด 1: poster11 (0-0.033 = 30vh to appear)
+  const poster11Y = useTransform(scrollYProgress, [0, 0.033, 1], [100, 0, 0]);
+  const poster11Opacity = useTransform(
+    scrollYProgress,
+    [0, 0.033, 1],
+    [0, 1, 1]
+  );
+
+  // ชุด 2: poster9,10 (starts when poster11 opacity=1, 0.033-0.066)
+  const poster9_10Y = useTransform(
+    scrollYProgress,
+    [0.033, 0.066, 1],
+    [100, 0, 0]
+  );
+  const poster9_10Opacity = useTransform(
+    scrollYProgress,
+    [0.033, 0.066, 1],
+    [0, 1, 1]
+  );
+
+  // ชุด 3: poster12 (0.066-0.099)
+  const poster12Y = useTransform(
+    scrollYProgress,
+    [0.066, 0.099, 1],
+    [100, 0, 0]
+  );
+  const poster12Opacity = useTransform(
+    scrollYProgress,
+    [0.066, 0.099, 1],
+    [0, 1, 1]
+  );
+
+  // ชุด 4: poster13,15 (0.099-0.132)
+  const poster13_15Y = useTransform(
+    scrollYProgress,
+    [0.099, 0.132, 1],
+    [100, 0, 0]
+  );
+  const poster13_15Opacity = useTransform(
+    scrollYProgress,
+    [0.099, 0.132, 1],
+    [0, 1, 1]
+  );
+
+  // ชุด 5: poster14 (0.132-0.167)
+  const poster14Y = useTransform(
+    scrollYProgress,
+    [0.132, 0.167, 1],
+    [100, 0, 0]
+  );
+  const poster14Opacity = useTransform(
+    scrollYProgress,
+    [0.132, 0.167, 1],
+    [0, 1, 1]
+  );
+
+  // ชุด 6-9: (100vh = 0.167-0.278)
+  // ชุด 6: poster6,1 (0.167-0.194 = 25vh)
+  const poster6_1Y = useTransform(
+    scrollYProgress,
+    [0.167, 0.194, 1],
+    [100, 0, 0]
+  );
+  const poster6_1Opacity = useTransform(
+    scrollYProgress,
+    [0.167, 0.194, 1],
+    [0, 1, 1]
+  );
+
+  // ชุด 7: poster2,3,4 (0.194-0.222)
+  const poster2_3_4Y = useTransform(
+    scrollYProgress,
+    [0.194, 0.222, 1],
+    [100, 0, 0]
+  );
+  const poster2_3_4Opacity = useTransform(
+    scrollYProgress,
+    [0.194, 0.222, 1],
+    [0, 1, 1]
+  );
+
+  // ชุด 8: poster7 (0.222-0.25)
+  const poster7Y = useTransform(scrollYProgress, [0.222, 0.25, 1], [100, 0, 0]);
+  const poster7Opacity = useTransform(
+    scrollYProgress,
+    [0.222, 0.25, 1],
+    [0, 1, 1]
+  );
+
+  // ชุด 9: poster5,8 (0.25-0.278)
+  const poster5_8Y = useTransform(
+    scrollYProgress,
+    [0.25, 0.278, 1],
+    [100, 0, 0]
+  );
+  const poster5_8Opacity = useTransform(
+    scrollYProgress,
+    [0.25, 0.278, 1],
+    [0, 1, 1]
+  );
+
+  // ชุด 10: table+computer (50vh = 0.278-0.333)
+  const tableY = useTransform(scrollYProgress, [0.278, 0.305, 1], [100, 0, 0]);
   const tableOpacity = useTransform(
     scrollYProgress,
-    [0.05, 0.2, 0.51],
+    [0.278, 0.305, 1],
     [0, 1, 1]
   );
 
-  // Layer 3: Lamp and books
-  const furnitureY = useTransform(
-    scrollYProgress,
-    [0.1, 0.25, 0.51],
-    [100, 0, 0]
-  );
-  const furnitureOpacity = useTransform(
-    scrollYProgress,
-    [0.1, 0.25, 0.51, 0.51],
-    [0, 1, 1, 0]
-  );
-
-  // Layer 4: Computer
   const computerY = useTransform(
     scrollYProgress,
-    [0.15, 0.3, 0.51],
+    [0.305, 0.333, 1],
     [100, 0, 0]
   );
   const computerOpacity = useTransform(
     scrollYProgress,
-    [0.15, 0.3, 0.51],
+    [0.305, 0.333, 1],
     [0, 1, 1]
   );
 
-  // Layer 5: Papers
-  const papersY = useTransform(scrollYProgress, [0.2, 0.35, 0.51], [100, 0, 0]);
-  const papersOpacity = useTransform(
+  // ชุด 11: paper4,lamp,book2 (50vh = 0.333-0.389)
+  const paper4Y = useTransform(scrollYProgress, [0.333, 0.35, 1], [100, 0, 0]);
+  const paper4Opacity = useTransform(
     scrollYProgress,
-    [0.2, 0.35, 0.51],
+    [0.333, 0.35, 1],
     [0, 1, 1]
   );
 
-  // Layer 6: Chair
-  const chairY = useTransform(scrollYProgress, [0.25, 0.4, 0.51], [100, 0, 0]);
-  const chairOpacity = useTransform(
+  const lampY = useTransform(scrollYProgress, [0.35, 0.367, 1], [100, 0, 0]);
+  const lampOpacity = useTransform(
     scrollYProgress,
-    [0.25, 0.4, 0.51],
+    [0.35, 0.367, 1],
     [0, 1, 1]
   );
 
-  // Layer 7: Human - มีการเคลื่อนไหว
+  const book2Y = useTransform(scrollYProgress, [0.367, 0.389, 1], [100, 0, 0]);
+  const book2Opacity = useTransform(
+    scrollYProgress,
+    [0.367, 0.389, 1],
+    [0, 1, 1]
+  );
+
+  // ชุด 12: human (50vh = 0.389-0.444)
   const humanY = useTransform(
     scrollYProgress,
-    [0.3, 0.45, 0.48, 0.51],
+    [0.389, 0.417, 0.43, 0.444],
     [100, 0, -5, 0]
   );
   const humanOpacity = useTransform(
     scrollYProgress,
-    [0.3, 0.45, 0.51],
+    [0.389, 0.444, 1],
     [0, 1, 1]
   );
   const humanScale = useTransform(
     scrollYProgress,
-    [0.3, 0.45, 0.48, 0.51],
+    [0.389, 0.417, 0.43, 0.444],
     [0.95, 1, 1.02, 1]
   );
 
-  // Layer 8: Small details (Pen, Pencil Box, Post-it)
-  const detailsY = useTransform(
+  // ชุด 13: postit,paper3,paper2 (50vh = 0.444-0.5)
+  const postitY = useTransform(scrollYProgress, [0.444, 0.461, 1], [100, 0, 0]);
+  const postitOpacity = useTransform(
     scrollYProgress,
-    [0.35, 0.5, 0.51],
+    [0.444, 0.461, 1],
+    [0, 1, 1]
+  );
+
+  const paper3Y = useTransform(scrollYProgress, [0.461, 0.478, 1], [100, 0, 0]);
+  const paper3Opacity = useTransform(
+    scrollYProgress,
+    [0.461, 0.478, 1],
+    [0, 1, 1]
+  );
+
+  const paper2Y = useTransform(scrollYProgress, [0.478, 0.5, 1], [100, 0, 0]);
+  const paper2Opacity = useTransform(
+    scrollYProgress,
+    [0.478, 0.5, 1],
+    [0, 1, 1]
+  );
+
+  // ชุด 14: pen,pencilbox,book1 (50vh = 0.5-0.556)
+  const penY = useTransform(scrollYProgress, [0.5, 0.517, 1], [100, 0, 0]);
+  const penOpacity = useTransform(scrollYProgress, [0.5, 0.517, 1], [0, 1, 1]);
+
+  const pencilBoxY = useTransform(
+    scrollYProgress,
+    [0.517, 0.537, 1],
     [100, 0, 0]
   );
-  const detailsOpacity = useTransform(
+  const pencilBoxOpacity = useTransform(
     scrollYProgress,
-    [0.35, 0.5, 0.51],
+    [0.517, 0.537, 1],
+    [0, 1, 1]
+  );
+
+  const book1Y = useTransform(scrollYProgress, [0.537, 0.556, 1], [100, 0, 0]);
+  const book1Opacity = useTransform(
+    scrollYProgress,
+    [0.537, 0.556, 1],
     [0, 1, 1]
   );
   return (
@@ -137,68 +252,7 @@ export default function JobApplication1({
             }}
           />
 
-          {/* Layer 2: Posters - Background elements */}
-          {/* Poster 15 */}
-          <motion.img
-            src="/assets/Scene/Scene1/poster15.svg"
-            alt="poster15"
-            className="absolute"
-            style={{
-              left: "11.31%", // 217.14 / 1920
-              top: "29.98%", // 647.66 / 2160
-              width: "17.14%", // 329.03 / 1920
-              height: "14.52%", // 313.62 / 2160
-              y: posterBackY,
-              opacity: posterBackOpacity,
-            }}
-          />
-
-          {/* Poster 14 */}
-          <motion.img
-            src="/assets/Scene/Scene1/poster14.svg"
-            alt="poster14"
-            className="absolute"
-            style={{
-              left: "48.03%", // 922.22 / 1920
-              top: "38.40%", // 829.49 / 2160
-              width: "23.27%", // 446.75 / 1920
-              height: "14.52%", // 313.61 / 2160
-              y: posterBackY,
-              opacity: posterBackOpacity,
-            }}
-          />
-
-          {/* Poster 13 */}
-          <motion.img
-            src="/assets/Scene/Scene1/poster13.svg"
-            alt="poster13"
-            className="absolute"
-            style={{
-              left: "26.49%", // 508.67 / 1920
-              top: "18.43%", // 398.11 / 2160
-              width: "14.51%", // 278.51 / 1920
-              height: "12.61%", // 272.44 / 2160
-              y: posterBackY,
-              opacity: posterBackOpacity,
-            }}
-          />
-
-          {/* Poster 12 */}
-          <motion.img
-            src="/assets/Scene/Scene1/poster12.svg"
-            alt="poster12"
-            className="absolute"
-            style={{
-              left: "50.62%", // 971.95 / 1920
-              top: "10.23%", // 221.05 / 2160
-              width: "14.51%", // 278.51 / 1920
-              height: "12.62%", // 272.44 / 2160
-              y: posterBackY,
-              opacity: posterBackOpacity,
-            }}
-          />
-
-          {/* Poster 11 */}
+          {/* ชุด 1: Poster 11 */}
           <motion.img
             src="/assets/Scene/Scene1/poster11.svg"
             alt="poster11"
@@ -208,27 +262,12 @@ export default function JobApplication1({
               top: "-4.17%", // -89.97 / 2160
               width: "12.2%", // 234.34 / 1920
               height: "8.33%", // 179.93 / 2160
-              y: posterBackY,
-              opacity: posterBackOpacity,
+              y: poster11Y,
+              opacity: poster11Opacity,
             }}
           />
 
-          {/* Poster 10 */}
-          <motion.img
-            src="/assets/Scene/Scene1/poster10.svg"
-            alt="poster10"
-            className="absolute"
-            style={{
-              left: "7.03%", // 135.06 / 1920
-              top: "-1.27%", // -27.43 / 2160
-              width: "14.51%", // 278.51 / 1920
-              height: "12.61%", // 272.44 / 2160
-              y: posterBackY,
-              opacity: posterBackOpacity,
-            }}
-          />
-
-          {/* Poster 9 */}
+          {/* ชุด 2: Poster 9, 10 */}
           <motion.img
             src="/assets/Scene/Scene1/poster9.svg"
             alt="poster9"
@@ -238,27 +277,85 @@ export default function JobApplication1({
               top: "18.57%", // 401.19 / 2160
               width: "16.98%", // 325.9 / 1920
               height: "14.52%", // 313.61 / 2160
-              y: posterBackY,
-              opacity: posterBackOpacity,
+              y: poster9_10Y,
+              opacity: poster9_10Opacity,
             }}
           />
 
-          {/* Poster 7 */}
           <motion.img
-            src="/assets/Scene/Scene1/poster7.svg"
-            alt="poster7"
+            src="/assets/Scene/Scene1/poster10.svg"
+            alt="poster10"
             className="absolute"
             style={{
-              left: "92.36%", // 1773.25 / 1920
-              top: "72.21%", // 1559.73 / 2160
-              width: "10.96%", // 210.42 / 1920
-              height: "10.07%", // 217.58 / 2160
-              y: posterBackY,
-              opacity: posterBackOpacity,
+              left: "7.03%", // 135.06 / 1920
+              top: "-1.27%", // -27.43 / 2160
+              width: "14.51%", // 278.51 / 1920
+              height: "12.61%", // 272.44 / 2160
+              y: poster9_10Y,
+              opacity: poster9_10Opacity,
             }}
           />
 
-          {/* Poster 6 */}
+          {/* ชุด 3: Poster 12 */}
+          <motion.img
+            src="/assets/Scene/Scene1/poster12.svg"
+            alt="poster12"
+            className="absolute"
+            style={{
+              left: "50.62%", // 971.95 / 1920
+              top: "10.23%", // 221.05 / 2160
+              width: "14.51%", // 278.51 / 1920
+              height: "12.62%", // 272.44 / 2160
+              y: poster12Y,
+              opacity: poster12Opacity,
+            }}
+          />
+
+          {/* ชุด 4: Poster 13, 15 */}
+          <motion.img
+            src="/assets/Scene/Scene1/poster13.svg"
+            alt="poster13"
+            className="absolute"
+            style={{
+              left: "26.49%", // 508.67 / 1920
+              top: "18.43%", // 398.11 / 2160
+              width: "14.51%", // 278.51 / 1920
+              height: "12.61%", // 272.44 / 2160
+              y: poster13_15Y,
+              opacity: poster13_15Opacity,
+            }}
+          />
+
+          <motion.img
+            src="/assets/Scene/Scene1/poster15.svg"
+            alt="poster15"
+            className="absolute"
+            style={{
+              left: "11.31%", // 217.14 / 1920
+              top: "29.98%", // 647.66 / 2160
+              width: "17.14%", // 329.03 / 1920
+              height: "14.52%", // 313.62 / 2160
+              y: poster13_15Y,
+              opacity: poster13_15Opacity,
+            }}
+          />
+
+          {/* ชุด 5: Poster 14 */}
+          <motion.img
+            src="/assets/Scene/Scene1/poster14.svg"
+            alt="poster14"
+            className="absolute"
+            style={{
+              left: "48.03%", // 922.22 / 1920
+              top: "38.40%", // 829.49 / 2160
+              width: "23.27%", // 446.75 / 1920
+              height: "14.52%", // 313.61 / 2160
+              y: poster14Y,
+              opacity: poster14Opacity,
+            }}
+          />
+
+          {/* ชุด 6: Poster 6, 1 */}
           <motion.img
             src="/assets/Scene/Scene1/poster6.svg"
             alt="poster6"
@@ -268,72 +365,11 @@ export default function JobApplication1({
               top: "53.79%", // 1161.79 / 2160
               width: "20.9%", // 401.42 / 1920
               height: "13.53%", // 292.31 / 2160
-              y: posterBackY,
-              opacity: posterBackOpacity,
+              y: poster6_1Y,
+              opacity: poster6_1Opacity,
             }}
           />
 
-          {/* Poster 5 */}
-          <motion.img
-            src="/assets/Scene/Scene1/poster5.svg"
-            alt="poster5"
-            className="absolute"
-            style={{
-              left: "-1.51%", // -29.01 / 1920
-              top: "64.28%", // 1388.41 / 2160
-              width: "10.92%", // 209.7 / 1920
-              height: "10.46%", // 225.99 / 2160
-              y: posterBackY,
-              opacity: posterBackOpacity,
-            }}
-          />
-
-          {/* Poster 4 */}
-          <motion.img
-            src="/assets/Scene/Scene1/poster4.svg"
-            alt="poster4"
-            className="absolute"
-            style={{
-              left: "78.33%", // 1504.01 / 1920
-              top: "54.28%", // 1172.38 / 2160
-              width: "15.59%", // 299.42 / 1920
-              height: "14.81%", // 320.06 / 2160
-              y: posterBackY,
-              opacity: posterBackOpacity,
-            }}
-          />
-
-          {/* Poster 3 */}
-          <motion.img
-            src="/assets/Scene/Scene1/poster3.svg"
-            alt="poster3"
-            className="absolute"
-            style={{
-              left: "91.36%", // 1754.16 / 1920
-              top: "60.52%", // 1307.23 / 2160
-              width: "6.79%", // 130.42 / 1920
-              height: "7.69%", // 166.06 / 2160
-              y: posterBackY,
-              opacity: posterBackOpacity,
-            }}
-          />
-
-          {/* Poster 2 */}
-          <motion.img
-            src="/assets/Scene/Scene1/poster2.svg"
-            alt="poster2"
-            className="absolute"
-            style={{
-              left: "13.16%", // 252.75 / 1920
-              top: "70.4%", // 1520.62 / 2160
-              width: "9.85%", // 189.15 / 1920
-              height: "6.22%", // 134.42 / 2160
-              y: posterBackY,
-              opacity: posterBackOpacity,
-            }}
-          />
-
-          {/* Poster 1 */}
           <motion.img
             src="/assets/Scene/Scene1/poster1.svg"
             alt="poster1"
@@ -343,12 +379,100 @@ export default function JobApplication1({
               top: "74.25%", // 1603.74 / 2160
               width: "8.38%", // 160.88 / 1920
               height: "4.13%", // 89.34 / 2160
-              y: posterBackY,
-              opacity: posterBackOpacity,
+              y: poster6_1Y,
+              opacity: poster6_1Opacity,
             }}
           />
 
-          {/* Layer 3: Computer */}
+          {/* ชุด 7: Poster 2, 3, 4 */}
+
+          <motion.img
+            src="/assets/Scene/Scene1/poster2.svg"
+            alt="poster2"
+            className="absolute"
+            style={{
+              left: "13.16%", // 252.75 / 1920
+              top: "70.4%", // 1520.62 / 2160
+              width: "9.85%", // 189.15 / 1920
+              height: "6.22%", // 134.42 / 2160
+              y: poster2_3_4Y,
+              opacity: poster2_3_4Opacity,
+            }}
+          />
+
+          <motion.img
+            src="/assets/Scene/Scene1/poster4.svg"
+            alt="poster4"
+            className="absolute"
+            style={{
+              left: "78.33%", // 1504.01 / 1920
+              top: "54.28%", // 1172.38 / 2160
+              width: "15.59%", // 299.42 / 1920
+              height: "14.81%", // 320.06 / 2160
+              y: poster2_3_4Y,
+              opacity: poster2_3_4Opacity,
+            }}
+          />
+
+          <motion.img
+            src="/assets/Scene/Scene1/poster3.svg"
+            alt="poster3"
+            className="absolute"
+            style={{
+              left: "91.36%", // 1754.16 / 1920
+              top: "60.52%", // 1307.23 / 2160
+              width: "6.79%", // 130.42 / 1920
+              height: "7.69%", // 166.06 / 2160
+              y: poster2_3_4Y,
+              opacity: poster2_3_4Opacity,
+            }}
+          />
+
+          {/* ชุด 8: Poster 7 */}
+          <motion.img
+            src="/assets/Scene/Scene1/poster7.svg"
+            alt="poster7"
+            className="absolute"
+            style={{
+              left: "92.36%", // 1773.25 / 1920
+              top: "72.21%", // 1559.73 / 2160
+              width: "10.96%", // 210.42 / 1920
+              height: "10.07%", // 217.58 / 2160
+              y: poster7Y,
+              opacity: poster7Opacity,
+            }}
+          />
+
+          {/* ชุด 9: Poster 5, 8 */}
+          <motion.img
+            src="/assets/Scene/Scene1/poster5.svg"
+            alt="poster5"
+            className="absolute"
+            style={{
+              left: "-1.51%", // -29.01 / 1920
+              top: "64.28%", // 1388.41 / 2160
+              width: "10.92%", // 209.7 / 1920
+              height: "10.46%", // 225.99 / 2160
+              y: poster5_8Y,
+              opacity: poster5_8Opacity,
+            }}
+          />
+
+          <motion.img
+            src="/assets/Scene/Scene1/poster8.svg"
+            alt="poster8"
+            className="absolute"
+            style={{
+              left: "105.35%",
+              top: "59.03%", // 1275.12 / 2160
+              width: "12.81%", // 245.99 / 1920
+              height: "8.82%", // 190.41 / 2160
+              y: poster5_8Y,
+              opacity: poster5_8Opacity,
+            }}
+          />
+
+          {/* ชุด 10: Computer */}
           <motion.img
             src="/assets/Scene/Scene1/Computer.svg"
             alt="computer"
@@ -363,8 +487,7 @@ export default function JobApplication1({
             }}
           />
 
-          {/* Layer 4: Papers */}
-          {/* Paper 3 */}
+          {/* ชุด 13: Paper 3 */}
           <motion.img
             src="/assets/Scene/Scene1/paper3.svg"
             alt="paper3"
@@ -374,12 +497,12 @@ export default function JobApplication1({
               top: "88.62%", // 1914.27 / 2160
               width: "13.8%", // 264.98 / 1920
               height: "4.75%", // 102.65 / 2160
-              y: papersY,
-              opacity: papersOpacity,
+              y: paper3Y,
+              opacity: paper3Opacity,
             }}
           />
 
-          {/* Paper 2 */}
+          {/* ชุด 13: Paper 2 */}
           <motion.img
             src="/assets/Scene/Scene1/paper2.svg"
             alt="paper2"
@@ -389,12 +512,12 @@ export default function JobApplication1({
               top: "88.91%", // 1920.39 / 2160
               width: "11.39%", // 218.83 / 1920
               height: "4.39%", // 94.89 / 2160
-              y: papersY,
-              opacity: papersOpacity,
+              y: paper2Y,
+              opacity: paper2Opacity,
             }}
           />
 
-          {/* Paper 1 */}
+          {/* Paper 1 - static, not animated */}
           <motion.img
             src="/assets/Scene/Scene1/paper1.svg"
             alt="paper1"
@@ -404,12 +527,12 @@ export default function JobApplication1({
               top: "91.14%", // 1968.6 / 2160
               width: "14.29%", // 274.32 / 1920
               height: "4.75%", // 102.65 / 2160
-              y: papersY,
-              opacity: papersOpacity,
+              y: paper2Y,
+              opacity: paper2Opacity,
             }}
           />
 
-          {/* Layer 5: Lamp */}
+          {/* ชุด 11: Lamp */}
           <motion.img
             src="/assets/Scene/Scene1/lamp.svg"
             alt="lamp"
@@ -419,13 +542,12 @@ export default function JobApplication1({
               top: "56.03%", // 1210.18 / 2160
               width: "24.92%", // 478.48 / 1920
               height: "33.92%", // 732.76 / 2160
-              y: furnitureY,
-              opacity: furnitureOpacity,
+              y: lampY,
+              opacity: lampOpacity,
             }}
           />
 
-          {/* Layer 6: Books */}
-          {/* Book 1 */}
+          {/* ชุด 14: Book 1 */}
           <motion.img
             src="/assets/Scene/Scene1/book1.svg"
             alt="book1"
@@ -435,12 +557,12 @@ export default function JobApplication1({
               top: "88.97%", // 1921.65 / 2160
               width: "10.74%", // 206.33 / 1920
               height: "5.75%", // 124.14 / 2160
-              y: furnitureY,
-              opacity: furnitureOpacity,
+              y: book1Y,
+              opacity: book1Opacity,
             }}
           />
 
-          {/* Book 2 */}
+          {/* ชุด 11: Book 2 */}
           <motion.img
             src="/assets/Scene/Scene1/book2.svg"
             alt="book2"
@@ -450,12 +572,12 @@ export default function JobApplication1({
               top: "84.99%", // 1835.76 / 2160
               width: "12.34%", // 236.87 / 1920
               height: "6.7%", // 144.83 / 2160
-              y: furnitureY,
-              opacity: furnitureOpacity,
+              y: book2Y,
+              opacity: book2Opacity,
             }}
           />
 
-          {/* Layer 7: Pen */}
+          {/* ชุด 14: Pen */}
           <motion.img
             src="/assets/Scene/Scene1/pen.svg"
             alt="pen"
@@ -465,8 +587,8 @@ export default function JobApplication1({
               top: "93.13%", // 2011.58 / 2160
               width: "6.4%", // 122.95 / 1920
               height: "1.01%", // 21.81 / 2160
-              y: detailsY,
-              opacity: detailsOpacity,
+              y: penY,
+              opacity: penOpacity,
             }}
           />
 
@@ -484,7 +606,7 @@ export default function JobApplication1({
             }}
           />
 
-          {/* Layer 9: Pencil Box */}
+          {/* ชุด 14: Pencil Box */}
           <motion.img
             src="/assets/Scene/Scene1/pencil box.svg"
             alt="pencil box"
@@ -494,12 +616,12 @@ export default function JobApplication1({
               top: "83.84%", // 1810.87 / 2160
               width: "5.37%", // 103.18 / 1920
               height: "7.68%", // 165.95 / 2160
-              y: detailsY,
-              opacity: detailsOpacity,
+              y: pencilBoxY,
+              opacity: pencilBoxOpacity,
             }}
           />
 
-          {/* Layer 10: Post-it */}
+          {/* ชุด 13: Post-it */}
           <motion.img
             src="/assets/Scene/Scene1/postit.svg"
             alt="postit"
@@ -509,12 +631,12 @@ export default function JobApplication1({
               top: "92.53%", // 1998.69 / 2160
               width: "5.22%", // 100.19 / 1920
               height: "2.12%", // 45.75 / 2160
-              y: detailsY,
-              opacity: detailsOpacity,
+              y: postitY,
+              opacity: postitOpacity,
             }}
           />
 
-          {/* Layer 11: Paper 4 */}
+          {/* ชุด 11: Paper 4 */}
           <motion.img
             src="/assets/Scene/Scene1/paper4.svg"
             alt="paper4"
@@ -524,8 +646,8 @@ export default function JobApplication1({
               top: "84.21%", // 1818.9 / 2160
               width: "4.56%", // 87.59 / 1920
               height: "4.02%", // 86.77 / 2160
-              y: papersY,
-              opacity: papersOpacity,
+              y: paper4Y,
+              opacity: paper4Opacity,
             }}
           />
 

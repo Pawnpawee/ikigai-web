@@ -19,7 +19,7 @@ export default function Dreaming() {
   // ใช้ custom hook สำหรับ sound effect - egypt jelly dance loop
   const { playSoundEffect, stopSoundEffect } = useSoundEffect({
     soundPath: "/assets/Sound/3-4/egypt-jelly-dance.mp3",
-    fadeDurationMs: 500,
+    fadeDurationMs: 1000,
     soundDurationMs: 203000, // 3 นาที 23 วินาที
     loop: true,
   });

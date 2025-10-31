@@ -4,6 +4,7 @@ import { motion, useTransform, MotionValue } from "framer-motion";
 import Lottie from "lottie-react";
 import humanAnimationData from "../../../../../public/assets/Scene/Scene1/human.json";
 import moonAnimationData from "../../../../../public/assets/Scene/Scene1/moon.json";
+import { useIsPortrait } from "@/app/hooks/useOrientation";
 
 interface JobApplication2Props {
   scrollYProgress: MotionValue<number>;
@@ -12,36 +13,81 @@ interface JobApplication2Props {
 export default function JobApplication2({
   scrollYProgress,
 }: JobApplication2Props) {
+  const isPortrait = useIsPortrait();
   // Transform horizontal movement based on vertical scroll
   // Scene แสดงแบบ horizontal panorama (3840×1080)
   // เมื่อ scroll ภาพจะเลื่อนจากซ้ายไปขวา
   const x = useTransform(
     scrollYProgress,
-    [0, 0.55, 0.9, 1],
-    ["0%", "0%", "-49.5%", "-49.5%"]
+    [0, 0.611, 0.75],
+    ["0%", "0%", `${isPortrait ? "-65%" : "-49.5%"}`]
   );
+
+  // Overall opacity - hard cut at 0.611, นิ่ง 100vh, นิ่ง 50vh, fade out last 50vh (0.947-1.0)
   const opacity = useTransform(
     scrollYProgress,
-    [0, 0.51, 0.51, 1],
-    [0, 0, 1, 1]
+    [0, 0.611, 0.611, 0.97, 1],
+    [0, 0, 1, 1, 0]
   );
 
-  // Animation สำหรับ elements หลัง Window - ค่อยๆ ขึ้นมา
-  // Layer 1: Light Window
-  const lightWindowY = useTransform(scrollYProgress, [0.55, 0.65, 1], [100, 0, 0]);
-  const lightWindowOpacity = useTransform(scrollYProgress, [0.55, 0.65, 1], [0, 1, 1]);
+  // นิ่ง 100vh (0.611-0.722) ไม่มีอนิเมชั่น
 
-  // Layer 2: Moon and Stars
-  const skyElementsY = useTransform(scrollYProgress, [0.6, 0.7, 1], [100, 0, 0]);
-  const skyElementsOpacity = useTransform(scrollYProgress, [0.6, 0.7, 1], [0, 1, 1]);
+  // ชุด 1-3: Window elements (100vh = 0.722-0.833)
+  // ชุด 1: window (0.722-0.755 = 30vh)
+  const windowY = useTransform(scrollYProgress, [0.722, 0.755, 1], [100, 0, 0]);
+  const windowOpacity = useTransform(
+    scrollYProgress,
+    [0.722, 0.755, 1],
+    [0, 1, 1]
+  );
 
-  // Layer 3: Buildings
-  const buildingsY = useTransform(scrollYProgress, [0.65, 0.75, 1], [100, 0, 0]);
-  const buildingsOpacity = useTransform(scrollYProgress, [0.65, 0.75, 1], [0, 1, 1]);
+  // ชุด 2: light window (0.755-0.789)
+  const lightWindowOpacity = useTransform(
+    scrollYProgress,
+    [0.755, 0.789, 1],
+    [0, 1, 1]
+  );
 
-  // Layer 4: Window Frame and Curtains
-  const windowFrameY = useTransform(scrollYProgress, [0.7, 0.8, 1], [100, 0, 0]);
-  const windowFrameOpacity = useTransform(scrollYProgress, [0.7, 0.8, 1], [0, 1, 1]);
+  // ชุด 3: curtain1, curtain2 (0.789-0.833)
+  const curtainY = useTransform(
+    scrollYProgress,
+    [0.789, 0.833, 1],
+    [100, 0, 0]
+  );
+  const curtainOpacity = useTransform(
+    scrollYProgress,
+    [0.789, 0.833, 1],
+    [0, 1, 1]
+  );
+
+  // ชุด 4-6: Outdoor elements (100vh = 0.833-0.944)
+  // ชุด 4: building2, star (0.833-0.867)
+  const building2Y = useTransform(
+    scrollYProgress,
+    [0.833, 0.867, 1],
+    [100, 0, 0]
+  );
+  const building2Opacity = useTransform(
+    scrollYProgress,
+    [0.833, 0.867, 1],
+    [0, 1, 1]
+  );
+
+  // ชุด 5: building1, circle (0.867-0.9)
+  const building1Y = useTransform(
+    scrollYProgress,
+    [0.867, 0.9, 1],
+    [100, 0, 0]
+  );
+  const building1Opacity = useTransform(
+    scrollYProgress,
+    [0.867, 0.9, 1],
+    [0, 1, 1]
+  );
+
+  // ชุด 6: moon (0.9-0.944)
+  const moonY = useTransform(scrollYProgress, [0.9, 0.944, 1], [100, 0, 0]);
+  const moonOpacity = useTransform(scrollYProgress, [0.9, 0.944, 1], [0, 1, 1]);
   return (
     <motion.div
       className="
@@ -84,7 +130,6 @@ export default function JobApplication2({
                 top: "-23.2%", // -250.51 / 1080
                 width: "11.64%", // 446.75 / 3840
                 height: "29.04%", // 313.61 / 1080
-               
               }}
             />
 
@@ -98,7 +143,6 @@ export default function JobApplication2({
                 top: "18.07%", // 195.12 / 1080
                 width: "6.41%", // 245.99 / 3840
                 height: "17.63%", // 190.41 / 1080
-               
               }}
             />
 
@@ -112,7 +156,6 @@ export default function JobApplication2({
                 top: "44.42%", // 479.73 / 1080
                 width: "5.48%", // 210.42 / 3840
                 height: "20.15%", // 217.58 / 1080
-               
               }}
             />
 
@@ -126,7 +169,6 @@ export default function JobApplication2({
                 top: "7.57%", // 81.79 / 1080
                 width: "10.45%", // 401.42 / 3840
                 height: "27.07%", // 292.31 / 1080
-               
               }}
             />
 
@@ -140,7 +182,6 @@ export default function JobApplication2({
                 top: "28.56%", // 308.41 / 1080
                 width: "5.46%", // 209.7 / 3840
                 height: "20.92%", // 225.99 / 1080
-               
               }}
             />
 
@@ -154,7 +195,6 @@ export default function JobApplication2({
                 top: "8.55%", // 92.38 / 1080
                 width: "7.8%", // 299.42 / 3840
                 height: "29.64%", // 320.06 / 1080
-               
               }}
             />
 
@@ -168,7 +208,6 @@ export default function JobApplication2({
                 top: "21.04%", // 227.23 / 1080
                 width: "3.4%", // 130.42 / 3840
                 height: "15.37%", // 166.06 / 1080
-               
               }}
             />
 
@@ -182,7 +221,6 @@ export default function JobApplication2({
                 top: "40.8%", // 440.62 / 1080
                 width: "4.93%", // 189.15 / 3840
                 height: "12.45%", // 134.42 / 1080
-               
               }}
             />
 
@@ -196,7 +234,6 @@ export default function JobApplication2({
                 top: "48.5%", // 523.74 / 1080
                 width: "4.19%", // 160.88 / 3840
                 height: "8.27%", // 89.34 / 1080
-               
               }}
             />
 
@@ -210,7 +247,6 @@ export default function JobApplication2({
                 top: "14.28%", // 154.19 / 1080
                 width: "24.94%", // 957.6 / 3840
                 height: "70.28%", // 758.98 / 1080
-                
               }}
             />
 
@@ -225,7 +261,6 @@ export default function JobApplication2({
                 top: "77.25%", // 834.27 / 1080
                 width: "6.9%", // 264.98 / 3840
                 height: "9.51%", // 102.65 / 1080
-                
               }}
             />
 
@@ -239,7 +274,6 @@ export default function JobApplication2({
                 top: "77.81%", // 840.39 / 1080
                 width: "5.7%", // 218.83 / 3840
                 height: "8.79%", // 94.89 / 1080
-                
               }}
             />
 
@@ -253,7 +287,6 @@ export default function JobApplication2({
                 top: "82.28%", // 888.6 / 1080
                 width: "7.14%", // 274.32 / 3840
                 height: "9.51%", // 102.65 / 1080
-                
               }}
             />
 
@@ -267,7 +300,6 @@ export default function JobApplication2({
                 top: "12.05%", // 130.18 / 1080
                 width: "12.46%", // 478.48 / 3840
                 height: "67.85%", // 732.76 / 1080
-                
               }}
             />
 
@@ -282,7 +314,6 @@ export default function JobApplication2({
                 top: "77.93%", // 841.65 / 1080
                 width: "5.37%", // 206.33 / 3840
                 height: "11.49%", // 124.14 / 1080
-                
               }}
             />
 
@@ -296,7 +327,6 @@ export default function JobApplication2({
                 top: "69.98%", // 755.76 / 1080
                 width: "6.17%", // 236.87 / 3840
                 height: "13.41%", // 144.83 / 1080
-                
               }}
             />
 
@@ -310,7 +340,6 @@ export default function JobApplication2({
                 top: "86.26%", // 931.58 / 1080
                 width: "3.2%", // 122.95 / 3840
                 height: "2.02%", // 21.81 / 1080
-                
               }}
             />
 
@@ -337,7 +366,6 @@ export default function JobApplication2({
                 top: "67.67%", // 730.87 / 1080
                 width: "2.69%", // 103.18 / 3840
                 height: "15.37%", // 165.95 / 1080
-                
               }}
             />
 
@@ -351,7 +379,6 @@ export default function JobApplication2({
                 top: "85.06%", // 918.69 / 1080
                 width: "2.61%", // 100.19 / 3840
                 height: "4.24%", // 45.75 / 1080
-                
               }}
             />
 
@@ -365,7 +392,6 @@ export default function JobApplication2({
                 top: "68.42%", // 738.9 / 1080
                 width: "2.28%", // 87.59 / 3840
                 height: "8.03%", // 86.77 / 1080
-                
               }}
             />
 
@@ -390,7 +416,7 @@ export default function JobApplication2({
               />
             </motion.div>
 
-            {/* Layer 13: Light Window (Window elements start here) */}
+            {/* ชุด 2: Light Window */}
             <motion.img
               src="/assets/Scene/Scene1/light window.svg"
               alt="light window"
@@ -400,12 +426,11 @@ export default function JobApplication2({
                 top: "19.3%", // 208.43 / 1080
                 width: "14.89%", // 571.79 / 3840
                 height: "62.68%", // 676.97 / 1080
-                y: lightWindowY,
                 opacity: lightWindowOpacity,
               }}
             />
 
-            {/* Layer 14: Moon */}
+            {/* ชุด 6: Moon */}
             <motion.div
               className="absolute"
               style={{
@@ -413,8 +438,8 @@ export default function JobApplication2({
                 top: "22.06%", // 238.29 / 1080
                 width: "4.34%", // 166.54 / 3840
                 height: "15.42%", // 166.54 / 1080
-                y: skyElementsY,
-                opacity: skyElementsOpacity,
+                y: moonY,
+                opacity: moonOpacity,
               }}
             >
               <Lottie
@@ -428,7 +453,7 @@ export default function JobApplication2({
               />
             </motion.div>
 
-            {/* Layer 15: Stars */}
+            {/* ชุด 4: Stars */}
             <motion.img
               src="/assets/Scene/Scene1/star.svg"
               alt="stars"
@@ -438,12 +463,12 @@ export default function JobApplication2({
                 top: "33.93%", // 366.44 / 1080
                 width: "8.32%", // 319.39 / 3840
                 height: "7.37%", // 79.55 / 1080
-                y: skyElementsY,
-                opacity: skyElementsOpacity,
+                y: building2Y,
+                opacity: building2Opacity,
               }}
             />
 
-            {/* Layer 16: Circle decorations */}
+            {/* ชุด 5: Circle decorations */}
             <motion.img
               src="/assets/Scene/Scene1/circle.svg"
               alt="circles"
@@ -453,12 +478,12 @@ export default function JobApplication2({
                 top: "21.62%", // 233.52 / 1080
                 width: "14.34%", // 550.65 / 3840
                 height: "24.88%", // 268.66 / 1080
-                y: skyElementsY,
-                opacity: skyElementsOpacity,
+                y: building1Y,
+                opacity: building1Opacity,
               }}
             />
 
-            {/* Layer 17: Building 2 */}
+            {/* ชุด 4: Building 2 */}
             <motion.img
               src="/assets/Scene/Scene1/building2.svg"
               alt="building2"
@@ -468,12 +493,12 @@ export default function JobApplication2({
                 top: "37.61%", // 406.23 / 1080
                 width: "14.89%", // 571.79 / 3840
                 height: "44.37%", // 479.17 / 1080
-                y: buildingsY,
-                opacity: buildingsOpacity,
+                y: building2Y,
+                opacity: building2Opacity,
               }}
             />
 
-            {/* Layer 18: Building 1 */}
+            {/* ชุด 5: Building 1 */}
             <motion.img
               src="/assets/Scene/Scene1/building1.svg"
               alt="building1"
@@ -483,12 +508,12 @@ export default function JobApplication2({
                 top: "48.01%", // 518.51 / 1080
                 width: "14.89%", // 571.79 / 3840
                 height: "33.97%", // 366.89 / 1080
-                y: buildingsY,
-                opacity: buildingsOpacity,
+                y: building1Y,
+                opacity: building1Opacity,
               }}
             />
 
-            {/* Layer 19: Window Frame */}
+            {/* ชุด 1: Window Frame */}
             <motion.img
               src="/assets/Scene/Scene1/window.svg"
               alt="window"
@@ -498,12 +523,12 @@ export default function JobApplication2({
                 top: "6.22%", // 67.15 / 1080
                 width: "28.1%", // 1078.72 / 3840
                 height: "79.63%", // 860.04 / 1080
-                y: windowFrameY,
-                opacity: windowFrameOpacity,
+                y: windowY,
+                opacity: windowOpacity,
               }}
             />
 
-            {/* Layer 20: Curtain 2 (Right) */}
+            {/* ชุด 3: Curtain 2 (Right) */}
             <motion.img
               src="/assets/Scene/Scene1/curtain2.svg"
               alt="curtain2"
@@ -513,12 +538,12 @@ export default function JobApplication2({
                 top: "8%", // 86.39 / 1080
                 width: "4.87%", // 187.08 / 3840
                 height: "86.95%", // 939.04 / 1080
-                y: windowFrameY,
-                opacity: windowFrameOpacity,
+                y: curtainY,
+                opacity: curtainOpacity,
               }}
             />
 
-            {/* Layer 21: Curtain 1 (Left - บนสุด) */}
+            {/* ชุด 3: Curtain 1 (Left - บนสุด) */}
             <motion.img
               src="/assets/Scene/Scene1/curtain1.svg"
               alt="curtain1"
@@ -528,8 +553,8 @@ export default function JobApplication2({
                 top: "7.96%", // 86.01 / 1080
                 width: "4.87%", // 187.14 / 3840
                 height: "86.95%", // 939.03 / 1080
-                y: windowFrameY,
-                opacity: windowFrameOpacity,
+                y: curtainY,
+                opacity: curtainOpacity,
               }}
             />
           </motion.div>
