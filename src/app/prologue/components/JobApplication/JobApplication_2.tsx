@@ -59,7 +59,7 @@ export default function JobApplication2({
           <motion.div className="absolute inset-0 overflow-visible">
             {/* Table */}
             <motion.img
-              src="/assets/Scene/Scene1/scene1-01/table.svg"
+              src="/assets/Scene/Scene1/table.svg"
               alt="table"
               className="absolute"
               style={{
@@ -72,7 +72,7 @@ export default function JobApplication2({
 
             {/* Poster 14 */}
             <motion.img
-              src="/assets/Scene/Scene1/scene1-01/poster14.svg"
+              src="/assets/Scene/Scene1/poster14.svg"
               alt="poster14"
               className="absolute"
               style={{
@@ -85,7 +85,7 @@ export default function JobApplication2({
 
             {/* Poster 8 */}
             <motion.img
-              src="/assets/Scene/Scene1/scene1-02/poster8.svg"
+              src="/assets/Scene/Scene1/poster8.svg"
               alt="poster8"
               className="absolute"
               style={{
@@ -98,7 +98,7 @@ export default function JobApplication2({
 
             {/* Poster 7 */}
             <motion.img
-              src="/assets/Scene/Scene1/scene1-01/poster7.svg"
+              src="/assets/Scene/Scene1/poster7.svg"
               alt="poster7"
               className="absolute"
               style={{
@@ -111,7 +111,7 @@ export default function JobApplication2({
 
             {/* Poster 6 */}
             <motion.img
-              src="/assets/Scene/Scene1/scene1-01/poster6.svg"
+              src="/assets/Scene/Scene1/poster6.svg"
               alt="poster6"
               className="absolute"
               style={{
@@ -124,7 +124,7 @@ export default function JobApplication2({
 
             {/* Poster 5 */}
             <motion.img
-              src="/assets/Scene/Scene1/scene1-01/poster5.svg"
+              src="/assets/Scene/Scene1/poster5.svg"
               alt="poster5"
               className="absolute"
               style={{
@@ -137,7 +137,7 @@ export default function JobApplication2({
 
             {/* Poster 4 */}
             <motion.img
-              src="/assets/Scene/Scene1/scene1-01/poster4.svg"
+              src="/assets/Scene/Scene1/poster4.svg"
               alt="poster4"
               className="absolute"
               style={{
@@ -150,7 +150,7 @@ export default function JobApplication2({
 
             {/* Poster 3 */}
             <motion.img
-              src="/assets/Scene/Scene1/scene1-01/poster3.svg"
+              src="/assets/Scene/Scene1/poster3.svg"
               alt="poster3"
               className="absolute"
               style={{
@@ -163,7 +163,7 @@ export default function JobApplication2({
 
             {/* Poster 2 */}
             <motion.img
-              src="/assets/Scene/Scene1/scene1-01/poster2.svg"
+              src="/assets/Scene/Scene1/poster2.svg"
               alt="poster2"
               className="absolute"
               style={{
@@ -176,7 +176,7 @@ export default function JobApplication2({
 
             {/* Poster 1 */}
             <motion.img
-              src="/assets/Scene/Scene1/scene1-01/poster1.svg"
+              src="/assets/Scene/Scene1/poster1.svg"
               alt="poster1"
               className="absolute"
               style={{
@@ -189,7 +189,7 @@ export default function JobApplication2({
 
             {/* Computer */}
             <motion.img
-              src="/assets/Scene/Scene1/scene1-01/Computer.svg"
+              src="/assets/Scene/Scene1/Computer.svg"
               alt="computer"
               className="absolute"
               style={{
@@ -202,7 +202,7 @@ export default function JobApplication2({
 
             {/* Paper 3 */}
             <motion.img
-              src="/assets/Scene/Scene1/scene1-01/paper3.svg"
+              src="/assets/Scene/Scene1/paper3.svg"
               alt="paper3"
               className="absolute"
               style={{
@@ -215,7 +215,7 @@ export default function JobApplication2({
 
             {/* Paper 2 */}
             <motion.img
-              src="/assets/Scene/Scene1/scene1-01/paper2.svg"
+              src="/assets/Scene/Scene1/paper2.svg"
               alt="paper2"
               className="absolute"
               style={{
@@ -228,7 +228,7 @@ export default function JobApplication2({
 
             {/* Paper 1 */}
             <motion.img
-              src="/assets/Scene/Scene1/scene1-01/paper1.svg"
+              src="/assets/Scene/Scene1/paper1.svg"
               alt="paper1"
               className="absolute"
               style={{
@@ -241,7 +241,7 @@ export default function JobApplication2({
 
             {/* Lamp */}
             <motion.img
-              src="/assets/Scene/Scene1/scene1-01/lamp.svg"
+              src="/assets/Scene/Scene1/lamp.svg"
               alt="lamp"
               className="absolute"
               style={{
@@ -254,7 +254,7 @@ export default function JobApplication2({
 
             {/* Book 1 */}
             <motion.img
-              src="/assets/Scene/Scene1/scene1-01/book1.svg"
+              src="/assets/Scene/Scene1/book1.svg"
               alt="book1"
               className="absolute"
               style={{
@@ -267,7 +267,7 @@ export default function JobApplication2({
 
             {/* Book 2 */}
             <motion.img
-              src="/assets/Scene/Scene1/scene1-01/book2.svg"
+              src="/assets/Scene/Scene1/book2.svg"
               alt="book2"
               className="absolute"
               style={{
@@ -280,7 +280,7 @@ export default function JobApplication2({
 
             {/* Pen */}
             <motion.img
-              src="/assets/Scene/Scene1/scene1-01/pen.svg"
+              src="/assets/Scene/Scene1/pen.svg"
               alt="pen"
               className="absolute"
               style={{
@@ -293,7 +293,7 @@ export default function JobApplication2({
 
             {/* Light (mix-blend-screen) */}
             <motion.img
-              src="/assets/Scene/Scene1/scene1-01/light.svg"
+              src="/assets/Scene/Scene1/light.svg"
               alt="light"
               className="absolute mix-blend-screen"
               style={{
@@ -306,7 +306,7 @@ export default function JobApplication2({
 
             {/* Pencil Box */}
             <motion.img
-              src="/assets/Scene/Scene1/scene1-01/pencil box.svg"
+              src="/assets/Scene/Scene1/pencil box.svg"
               alt="pencil box"
               className="absolute"
               style={{
@@ -319,7 +319,7 @@ export default function JobApplication2({
 
             {/* Post-it */}
             <motion.img
-              src="/assets/Scene/Scene1/scene1-01/postit.svg"
+              src="/assets/Scene/Scene1/postit.svg"
               alt="postit"
               className="absolute"
               style={{
@@ -332,7 +332,7 @@ export default function JobApplication2({
 
             {/* Human */}
             <motion.img
-              src="/assets/Scene/Scene1/scene1-01/human.svg"
+              src="/assets/Scene/Scene1/human.svg"
               alt="human"
               className="absolute"
               style={{
@@ -345,7 +345,7 @@ export default function JobApplication2({
 
             {/* Chair */}
             <motion.img
-              src="/assets/Scene/Scene1/scene1-01/chair.svg"
+              src="/assets/Scene/Scene1/chair.svg"
               alt="chair"
               className="absolute"
               style={{
@@ -358,8 +358,8 @@ export default function JobApplication2({
 
             {/* Paper 4 */}
             <motion.img
-              src="/assets/Scene/Scene1/scene1-01/papar4.svg"
-              alt="papar4"
+              src="/assets/Scene/Scene1/paper4.svg"
+              alt="paper4"
               className="absolute"
               style={{
                 left: "10.65%", // 408.86 / 3840
@@ -371,7 +371,7 @@ export default function JobApplication2({
 
             {/* Light Window */}
             <motion.img
-              src="/assets/Scene/Scene1/scene1-02/light window.svg"
+              src="/assets/Scene/Scene1/light window.svg"
               alt="light window"
               className="absolute"
               style={{
@@ -386,7 +386,7 @@ export default function JobApplication2({
 
             {/* Moon */}
             <motion.img
-              src="/assets/Scene/Scene1/scene1-02/moon.svg"
+              src="/assets/Scene/Scene1/moon.svg"
               alt="moon"
               className="absolute"
               style={{
@@ -401,7 +401,7 @@ export default function JobApplication2({
 
             {/* Stars */}
             <motion.img
-              src="/assets/Scene/Scene1/scene1-02/star.svg"
+              src="/assets/Scene/Scene1/star.svg"
               alt="stars"
               className="absolute"
               style={{
@@ -416,7 +416,7 @@ export default function JobApplication2({
 
             {/* Circle decorations */}
             <motion.img
-              src="/assets/Scene/Scene1/scene1-02/circle.svg"
+              src="/assets/Scene/Scene1/circle.svg"
               alt="circles"
               className="absolute"
               style={{
@@ -431,7 +431,7 @@ export default function JobApplication2({
 
             {/* Building 2 */}
             <motion.img
-              src="/assets/Scene/Scene1/scene1-02/building2.svg"
+              src="/assets/Scene/Scene1/building2.svg"
               alt="building2"
               className="absolute"
               style={{
@@ -446,7 +446,7 @@ export default function JobApplication2({
 
             {/* Building 1 */}
             <motion.img
-              src="/assets/Scene/Scene1/scene1-02/building1.svg"
+              src="/assets/Scene/Scene1/building1.svg"
               alt="building1"
               className="absolute"
               style={{
@@ -461,7 +461,7 @@ export default function JobApplication2({
 
             {/* Window Frame */}
             <motion.img
-              src="/assets/Scene/Scene1/scene1-02/window.svg"
+              src="/assets/Scene/Scene1/window.svg"
               alt="window"
               className="absolute"
               style={{
@@ -476,7 +476,7 @@ export default function JobApplication2({
 
             {/* Curtain 2 (Right) */}
             <motion.img
-              src="/assets/Scene/Scene1/scene1-02/curtain2.svg"
+              src="/assets/Scene/Scene1/curtain2.svg"
               alt="curtain2"
               className="absolute"
               style={{
@@ -490,7 +490,7 @@ export default function JobApplication2({
             />
             {/* Curtain 1 (Left) */}
             <motion.img
-              src="/assets/Scene/Scene1/scene1-02/curtain1.svg"
+              src="/assets/Scene/Scene1/curtain1.svg"
               alt="curtain1"
               className="absolute"
               style={{

@@ -42,7 +42,11 @@ export default function Sleeping() {
     offset: ["start start", "end end"],
   });
 
-  const bgOpacity = useTransform(scrollYProgress, [0, 0.05], [0, 1]);
+  const bgOpacity = useTransform(
+    scrollYProgress,
+    [0, 0.05, 0.95, 1],
+    [0, 1, 1, 0]
+  );
 
   // 800vh Animation Timeline (เพิ่มจาก 750vh)
   // ชุด 1-5 (0-200vh = 0-25%): แต่ละชุด 40vh
@@ -58,8 +62,8 @@ export default function Sleeping() {
   const set4Y = useTransform(scrollYProgress, [0.15, 0.2], [100, 0]);
   const set4Opacity = useTransform(scrollYProgress, [0.15, 0.2], [0, 1]);
 
-  const set5Y = useTransform(scrollYProgress, [0.2, 0.25], [100, 0]);
-  const set5Opacity = useTransform(scrollYProgress, [0.2, 0.25], [0, 1]);
+  const set5Y = useTransform(scrollYProgress, [0.2, 0.25], [80, 0]);
+  const set5Opacity = useTransform(scrollYProgress, [0.2, 0.25], [1, 1]);
 
   // ชุด 6-9 (200-450vh = 25-56.25%): แต่ละ bubble 50vh
   // Bubble 1: 200-250vh (25-31.25%)
@@ -97,7 +101,8 @@ export default function Sleeping() {
   // Bubble fade out: 400-440vh (50-55%)
 
   // ชุด 10: scale + text (450-600vh = 56.25-75%)
-  const scale = useTransform(scrollYProgress, [0.5625, 0.75], [1, 1.5]);
+  const scale = useTransform(scrollYProgress, [0.5625, 0.75], [1, 2]);
+  const top_zoom = useTransform(scrollYProgress, [0.5625, 0.75], ["0%", "25%"]);
   const textOpacity = useTransform(
     scrollYProgress,
     [0.5625, 0.65, 0.8, 0.9],
@@ -125,14 +130,9 @@ export default function Sleeping() {
           className="absolute aspect-video w-full portrait:w-[250%]"
           style={{
             scale,
+            top: isPortrait ? "20%" : top_zoom,
           }}
         >
-          <img
-            src="/assets/Scene/Scene2/bg.svg"
-            alt="Background"
-            className="w-full h-full object-cover"
-          />
-          {/* ชุด 1: Table 2, Table 1, Bed */}
           <motion.div
             className="absolute"
             style={{
@@ -166,6 +166,21 @@ export default function Sleeping() {
           <motion.div
             className="absolute"
             style={{
+              inset: "46.99% 72.37% 30.53% 17.98%",
+              y: set2Y,
+              opacity: set2Opacity,
+            }}
+          >
+            <img
+              src="/assets/Scene/Scene2/slipper.svg"
+              alt="slipper"
+              className="w-full h-full object-contain"
+            />
+          </motion.div>
+
+          <motion.div
+            className="absolute"
+            style={{
               bottom: 0,
               left: "24.83%",
               right: "24.77%",
@@ -177,22 +192,6 @@ export default function Sleeping() {
             <img
               src="/assets/Scene/Scene2/bed.svg"
               alt="bed"
-              className="w-full h-full object-contain"
-            />
-          </motion.div>
-
-          {/* ชุด 2: Slipper, Book 2, Note */}
-          <motion.div
-            className="absolute"
-            style={{
-              inset: "46.99% 72.37% 30.53% 17.98%",
-              y: set2Y,
-              opacity: set2Opacity,
-            }}
-          >
-            <img
-              src="/assets/Scene/Scene2/slipper.svg"
-              alt="slipper"
               className="w-full h-full object-contain"
             />
           </motion.div>
@@ -215,22 +214,6 @@ export default function Sleeping() {
           <motion.div
             className="absolute"
             style={{
-              inset: "22.39% 13.62% 69.53% 82.81%",
-              y: set2Y,
-              opacity: set2Opacity,
-            }}
-          >
-            <img
-              src="/assets/Scene/Scene2/note.svg"
-              alt="note"
-              className="w-full h-full object-contain"
-            />
-          </motion.div>
-
-          {/* ชุด 3: Lamp, Clock */}
-          <motion.div
-            className="absolute"
-            style={{
               inset: "17.13% 76.58% 73.09% 17.91%",
               y: set3Y,
               opacity: set3Opacity,
@@ -239,6 +222,21 @@ export default function Sleeping() {
             <img
               src="/assets/Scene/Scene2/lamp.svg"
               alt="lamp"
+              className="w-full h-full object-contain"
+            />
+          </motion.div>
+
+          <motion.div
+            className="absolute"
+            style={{
+              inset: "22.39% 13.62% 69.53% 82.81%",
+              y: set2Y,
+              opacity: set2Opacity,
+            }}
+          >
+            <img
+              src="/assets/Scene/Scene2/note.svg"
+              alt="note"
               className="w-full h-full object-contain"
             />
           </motion.div>
@@ -258,7 +256,6 @@ export default function Sleeping() {
             />
           </motion.div>
 
-          {/* ชุด 4: Book 1, (Head + Body + Blanket) */}
           <motion.div
             className="absolute"
             style={{
@@ -334,20 +331,13 @@ export default function Sleeping() {
               className="w-full h-full object-contain"
             />
           </motion.div>
-
-          {/* ชุด 10: Text "เห้อนอนดีกว่า" */}
-          <motion.div
-            className="absolute bottom-[30%] left-0 right-0 flex justify-center"
-            style={{ opacity: textOpacity }}
-          >
-            <WordByWordAnimation
-              text="เห้อ นอนดีกว่า"
-              scrollYProgress={textOpacity}
-              as="p"
-              className="typo-text-h5 text-white"
-            />
-          </motion.div>
         </motion.div>
+
+        <img
+          src="/assets/Scene/Scene2/bg.svg"
+          alt="Background"
+          className="w-full object-cover h-screen"
+        />
 
         {/* ชุด 6: Bubble "จะทำได้ไหม" */}
         <motion.div
@@ -405,6 +395,19 @@ export default function Sleeping() {
           <Bubble text="จะเข้ากับคนอื่นได้ไหม" className="typo-text-h5" />
         </motion.div>
 
+        {/* ชุด 10: Text "เห้อนอนดีกว่า" */}
+        <motion.div
+          className="absolute bottom-[15%] left-0 right-0 flex justify-center"
+          style={{ opacity: textOpacity }}
+        >
+          <WordByWordAnimation
+            text="เห้อ นอนดีกว่า"
+            scrollYProgress={textOpacity}
+            as="p"
+            className="typo-text-h5 text-white"
+          />
+        </motion.div>
+
         {/* กระพริบตา: Black overlay fade in-out (60-100%) */}
         <motion.div
           className="absolute inset-0 bg-black pointer-events-none"
@@ -417,6 +420,12 @@ export default function Sleeping() {
           style={{ opacity: useTransform(sceneFadeOut, (v) => 1 - v) }}
         />
       </div>
+
+      {/* Light overlay */}
+      <div
+        className="absolute w-screen inset-0 mix-blend-soft-light pointer-events-none"
+        style={{ backgroundColor: "var(--color-overlay)", opacity: 0.5 }}
+      />
     </motion.div>
   );
 }

@@ -1,6 +1,8 @@
 "use client";
 import React from "react";
 import { motion, useTransform, MotionValue } from "framer-motion";
+import Lottie from "lottie-react";
+import humanAnimationData from "../../../../../public/assets/Scene/Scene1/human.json";
 
 interface JobApplication1Props {
   scrollYProgress: MotionValue<number>;
@@ -112,35 +114,34 @@ export default function JobApplication1({
   );
   return (
     <div className="flex justify-center items-center ">
- 
       <motion.div
-        className="relative  w-full"
+        className="relative w-full"
         style={{
           aspectRatio: "1920 / 2160",
           opacity,
         }}
       >
-       
         <motion.div className="absolute inset-0">
-          {/* Table */}
+          {/* Layer 1: Table (ล่างสุด) */}
           <motion.img
-            src="/assets/Scene/Scene1/scene1-01/table.svg"
+            src="/assets/Scene/Scene1/table.svg"
             alt="table"
             className="absolute"
             style={{
-              left: "2.29%", // 44.02 / 1920
-              bottom: "-3.69%", // -79.69 / 2160
+              left: "2.29%", // 44 / 1920
+              top: "86.53%", // 1869.2 / 2160
               width: "95.42%", // 1831.96 / 1920
-              height: "17.14%", // 370.16 / 2160
+              height: "39.27%", // 848.25 / 2160
               y: tableY,
               opacity: tableOpacity,
             }}
           />
 
+          {/* Layer 2: Posters - Background elements */}
           {/* Poster 15 */}
           <motion.img
-            src="/assets/Scene/Scene1/scene1-01/poster15.svg"
-            alt=""
+            src="/assets/Scene/Scene1/poster15.svg"
+            alt="poster15"
             className="absolute"
             style={{
               left: "11.31%", // 217.14 / 1920
@@ -154,8 +155,8 @@ export default function JobApplication1({
 
           {/* Poster 14 */}
           <motion.img
-            src="/assets/Scene/Scene1/scene1-01/poster14.svg"
-            alt=""
+            src="/assets/Scene/Scene1/poster14.svg"
+            alt="poster14"
             className="absolute"
             style={{
               left: "48.03%", // 922.22 / 1920
@@ -169,8 +170,8 @@ export default function JobApplication1({
 
           {/* Poster 13 */}
           <motion.img
-            src="/assets/Scene/Scene1/scene1-01/poster13.svg"
-            alt=""
+            src="/assets/Scene/Scene1/poster13.svg"
+            alt="poster13"
             className="absolute"
             style={{
               left: "26.49%", // 508.67 / 1920
@@ -184,8 +185,8 @@ export default function JobApplication1({
 
           {/* Poster 12 */}
           <motion.img
-            src="/assets/Scene/Scene1/scene1-01/poster12.svg"
-            alt=""
+            src="/assets/Scene/Scene1/poster12.svg"
+            alt="poster12"
             className="absolute"
             style={{
               left: "50.62%", // 971.95 / 1920
@@ -199,8 +200,8 @@ export default function JobApplication1({
 
           {/* Poster 11 */}
           <motion.img
-            src="/assets/Scene/Scene1/scene1-01/poster11.svg"
-            alt=""
+            src="/assets/Scene/Scene1/poster11.svg"
+            alt="poster11"
             className="absolute"
             style={{
               left: "78.34%", // 1504.1 / 1920
@@ -214,8 +215,8 @@ export default function JobApplication1({
 
           {/* Poster 10 */}
           <motion.img
-            src="/assets/Scene/Scene1/scene1-01/poster10.svg"
-            alt=""
+            src="/assets/Scene/Scene1/poster10.svg"
+            alt="poster10"
             className="absolute"
             style={{
               left: "7.03%", // 135.06 / 1920
@@ -229,8 +230,8 @@ export default function JobApplication1({
 
           {/* Poster 9 */}
           <motion.img
-            src="/assets/Scene/Scene1/scene1-01/poster9.svg"
-            alt=""
+            src="/assets/Scene/Scene1/poster9.svg"
+            alt="poster9"
             className="absolute"
             style={{
               left: "77.56%", // 1489.22 / 1920
@@ -242,25 +243,10 @@ export default function JobApplication1({
             }}
           />
 
-          {/* Poster 8 */}
-          <motion.img
-            src="/assets/Scene/Scene1/scene1-02/poster8.svg"
-            alt="poster8"
-            className="absolute"
-            style={{
-              left: "105.35%",
-              top: "59.03%", // 1275.12 / 2160
-              width: "12.81%", // 245.99 / 1920
-              height: "8.82%", // 190.41 / 2160
-              y: posterBackY,
-              opacity: posterBackOpacity,
-            }}
-          />
-
           {/* Poster 7 */}
           <motion.img
-            src="/assets/Scene/Scene1/scene1-01/poster7.svg"
-            alt=""
+            src="/assets/Scene/Scene1/poster7.svg"
+            alt="poster7"
             className="absolute"
             style={{
               left: "92.36%", // 1773.25 / 1920
@@ -274,8 +260,8 @@ export default function JobApplication1({
 
           {/* Poster 6 */}
           <motion.img
-            src="/assets/Scene/Scene1/scene1-01/poster6.svg"
-            alt=""
+            src="/assets/Scene/Scene1/poster6.svg"
+            alt="poster6"
             className="absolute"
             style={{
               left: "4.14%", // 79.42 / 1920
@@ -289,13 +275,13 @@ export default function JobApplication1({
 
           {/* Poster 5 */}
           <motion.img
-            src="/assets/Scene/Scene1/scene1-01/poster5.svg"
+            src="/assets/Scene/Scene1/poster5.svg"
             alt="poster5"
             className="absolute"
             style={{
               left: "-1.51%", // -29.01 / 1920
               top: "64.28%", // 1388.41 / 2160
-              width: "12.1%", // 209.7 / 1920
+              width: "10.92%", // 209.7 / 1920
               height: "10.46%", // 225.99 / 2160
               y: posterBackY,
               opacity: posterBackOpacity,
@@ -304,13 +290,13 @@ export default function JobApplication1({
 
           {/* Poster 4 */}
           <motion.img
-            src="/assets/Scene/Scene1/scene1-01/poster4.svg"
-            alt=""
+            src="/assets/Scene/Scene1/poster4.svg"
+            alt="poster4"
             className="absolute"
             style={{
               left: "78.33%", // 1504.01 / 1920
               top: "54.28%", // 1172.38 / 2160
-              width: "15.6%", // 299.42 / 1920
+              width: "15.59%", // 299.42 / 1920
               height: "14.81%", // 320.06 / 2160
               y: posterBackY,
               opacity: posterBackOpacity,
@@ -319,13 +305,13 @@ export default function JobApplication1({
 
           {/* Poster 3 */}
           <motion.img
-            src="/assets/Scene/Scene1/scene1-01/poster3.svg"
-            alt=""
+            src="/assets/Scene/Scene1/poster3.svg"
+            alt="poster3"
             className="absolute"
             style={{
               left: "91.36%", // 1754.16 / 1920
               top: "60.52%", // 1307.23 / 2160
-              width: "6.8%", // 130.42 / 1920
+              width: "6.79%", // 130.42 / 1920
               height: "7.69%", // 166.06 / 2160
               y: posterBackY,
               opacity: posterBackOpacity,
@@ -334,13 +320,13 @@ export default function JobApplication1({
 
           {/* Poster 2 */}
           <motion.img
-            src="/assets/Scene/Scene1/scene1-01/poster2.svg"
-            alt=""
+            src="/assets/Scene/Scene1/poster2.svg"
+            alt="poster2"
             className="absolute"
             style={{
               left: "13.16%", // 252.75 / 1920
               top: "70.4%", // 1520.62 / 2160
-              width: "9.86%", // 189.15 / 1920
+              width: "9.85%", // 189.15 / 1920
               height: "6.22%", // 134.42 / 2160
               y: posterBackY,
               opacity: posterBackOpacity,
@@ -349,8 +335,8 @@ export default function JobApplication1({
 
           {/* Poster 1 */}
           <motion.img
-            src="/assets/Scene/Scene1/scene1-01/poster1.svg"
-            alt=""
+            src="/assets/Scene/Scene1/poster1.svg"
+            alt="poster1"
             className="absolute"
             style={{
               left: "79.31%", // 1522.76 / 1920
@@ -362,9 +348,9 @@ export default function JobApplication1({
             }}
           />
 
-          {/* Computer */}
+          {/* Layer 3: Computer */}
           <motion.img
-            src="/assets/Scene/Scene1/scene1-01/Computer.svg"
+            src="/assets/Scene/Scene1/Computer.svg"
             alt="computer"
             className="absolute"
             style={{
@@ -377,9 +363,10 @@ export default function JobApplication1({
             }}
           />
 
+          {/* Layer 4: Papers */}
           {/* Paper 3 */}
           <motion.img
-            src="/assets/Scene/Scene1/scene1-01/paper3.svg"
+            src="/assets/Scene/Scene1/paper3.svg"
             alt="paper3"
             className="absolute"
             style={{
@@ -394,13 +381,13 @@ export default function JobApplication1({
 
           {/* Paper 2 */}
           <motion.img
-            src="/assets/Scene/Scene1/scene1-01/paper2.svg"
+            src="/assets/Scene/Scene1/paper2.svg"
             alt="paper2"
             className="absolute"
             style={{
               left: "3.21%", // 61.66 / 1920
               top: "88.91%", // 1920.39 / 2160
-              width: "11.4%", // 218.83 / 1920
+              width: "11.39%", // 218.83 / 1920
               height: "4.39%", // 94.89 / 2160
               y: papersY,
               opacity: papersOpacity,
@@ -409,7 +396,7 @@ export default function JobApplication1({
 
           {/* Paper 1 */}
           <motion.img
-            src="/assets/Scene/Scene1/scene1-01/paper1.svg"
+            src="/assets/Scene/Scene1/paper1.svg"
             alt="paper1"
             className="absolute"
             style={{
@@ -422,9 +409,9 @@ export default function JobApplication1({
             }}
           />
 
-          {/* Lamp */}
+          {/* Layer 5: Lamp */}
           <motion.img
-            src="/assets/Scene/Scene1/scene1-01/lamp.svg"
+            src="/assets/Scene/Scene1/lamp.svg"
             alt="lamp"
             className="absolute"
             style={{
@@ -437,9 +424,10 @@ export default function JobApplication1({
             }}
           />
 
+          {/* Layer 6: Books */}
           {/* Book 1 */}
           <motion.img
-            src="/assets/Scene/Scene1/scene1-01/book1.svg"
+            src="/assets/Scene/Scene1/book1.svg"
             alt="book1"
             className="absolute"
             style={{
@@ -454,7 +442,7 @@ export default function JobApplication1({
 
           {/* Book 2 */}
           <motion.img
-            src="/assets/Scene/Scene1/scene1-01/book2.svg"
+            src="/assets/Scene/Scene1/book2.svg"
             alt="book2"
             className="absolute"
             style={{
@@ -467,9 +455,9 @@ export default function JobApplication1({
             }}
           />
 
-          {/* Pen */}
+          {/* Layer 7: Pen */}
           <motion.img
-            src="/assets/Scene/Scene1/scene1-01/pen.svg"
+            src="/assets/Scene/Scene1/pen.svg"
             alt="pen"
             className="absolute"
             style={{
@@ -482,9 +470,9 @@ export default function JobApplication1({
             }}
           />
 
-          {/* Light (mix-blend-screen) */}
+          {/* Layer 8: Light (mix-blend-screen) */}
           <motion.img
-            src="/assets/Scene/Scene1/scene1-01/light.svg"
+            src="/assets/Scene/Scene1/light.svg"
             alt="light"
             className="absolute mix-blend-screen"
             style={{
@@ -492,28 +480,28 @@ export default function JobApplication1({
               top: "61.59%", // 1330.32 / 2160
               width: "51%", // 979.2 / 1920
               height: "29.94%", // 646.8 / 2160
-              opacity: furnitureOpacity,
+              opacity: opacity_light,
             }}
           />
 
-          {/* Pencil Box */}
+          {/* Layer 9: Pencil Box */}
           <motion.img
-            src="/assets/Scene/Scene1/scene1-01/pencil box.svg"
+            src="/assets/Scene/Scene1/pencil box.svg"
             alt="pencil box"
             className="absolute"
             style={{
               left: "86.76%", // 1665.59 / 1920
               top: "83.84%", // 1810.87 / 2160
               width: "5.37%", // 103.18 / 1920
-              height: "7.69%", // 165.95 / 2160
+              height: "7.68%", // 165.95 / 2160
               y: detailsY,
               opacity: detailsOpacity,
             }}
           />
 
-          {/* Post-it */}
+          {/* Layer 10: Post-it */}
           <motion.img
-            src="/assets/Scene/Scene1/scene1-01/postit.svg"
+            src="/assets/Scene/Scene1/postit.svg"
             alt="postit"
             className="absolute"
             style={{
@@ -526,41 +514,10 @@ export default function JobApplication1({
             }}
           />
 
-          {/* Human */}
+          {/* Layer 11: Paper 4 */}
           <motion.img
-            src="/assets/Scene/Scene1/scene1-01/human.svg"
-            alt="human"
-            className="absolute"
-            style={{
-              left: "30.3%", // 581.75 / 1920
-              top: "65.34%", // 1411.33 / 2160
-              width: "43.42%", // 833.69 / 1920
-              height: "38.35%", // 828.35 / 2160
-              y: humanY,
-              opacity: humanOpacity,
-              scale: humanScale,
-            }}
-          />
-
-          {/* Chair */}
-          <motion.img
-            src="/assets/Scene/Scene1/scene1-01/chair.svg"
-            alt="chair"
-            className="absolute"
-            style={{
-              left: "37.19%", // 714.02 / 1920
-              top: "91.19%", // 1969.59 / 2160
-              width: "25.72%", // 493.85 / 1920
-              height: "12.54%", // 270.89 / 2160
-              y: chairY,
-              opacity: chairOpacity,
-            }}
-          />
-
-          {/* Paper 4 */}
-          <motion.img
-            src="/assets/Scene/Scene1/scene1-01/papar4.svg"
-            alt="papar4"
+            src="/assets/Scene/Scene1/paper4.svg"
+            alt="paper4"
             className="absolute"
             style={{
               left: "21.29%", // 408.86 / 1920
@@ -571,6 +528,30 @@ export default function JobApplication1({
               opacity: papersOpacity,
             }}
           />
+
+          {/* Layer 12: Human (Lottie Animation - บนสุด) */}
+          <motion.div
+            className="absolute"
+            style={{
+              left: "30.3%", // 581.73 / 1920
+              top: "65.32%", // 1411 / 2160
+              width: "43.41%", // 833.55 / 1920
+              height: "67.03%", // 1447.89 / 2160
+              y: humanY,
+              opacity: humanOpacity,
+              scale: humanScale,
+            }}
+          >
+            <Lottie
+              animationData={humanAnimationData}
+              loop={true}
+              autoplay={true}
+              style={{
+                width: "100%",
+                height: "100%",
+              }}
+            />
+          </motion.div>
         </motion.div>
       </motion.div>
     </div>

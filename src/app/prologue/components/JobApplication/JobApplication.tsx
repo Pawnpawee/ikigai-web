@@ -27,12 +27,12 @@ export default function JobApplication() {
         "
       >
         <JobApplication1 scrollYProgress={scrollYProgress} />
-        <JobApplication2 scrollYProgress={scrollYProgress} />
+        {/* <JobApplication2 scrollYProgress={scrollYProgress} /> */}
       </div>
       {/* Light overlay */}
       <div
         className="absolute w-screen inset-0 mix-blend-soft-light pointer-events-none"
-        style={{ backgroundColor: "#15237B", opacity: 0.5 }}
+        style={{ backgroundColor: "var(--color-overlay)", opacity: 0.5 }}
       />
     </div>
   );

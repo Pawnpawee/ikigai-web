@@ -1,17 +1,52 @@
 "use client";
-import { motion, useScroll, useTransform } from "framer-motion";
+import { motion, useScroll, useTransform, useInView } from "framer-motion";
 import { useEffect, useRef } from "react";
+import Lottie from "lottie-react";
 import WordByWordAnimation from "../../components/ui/WordByWordAnimation";
+import { useIsPortrait } from "@/app/hooks/useOrientation";
+import { useAudio } from "@/app/contexts/AudioContext";
+import { useSoundEffect } from "@/app/hooks/useSoundEffect";
+import skyAnimationData from "../../../../public/assets/Scene/Intro/sky.json";
+import camelAnimationData from "../../../../public/assets/Scene/Intro/camel.json";
+import sunAnimationData from "../../../../public/assets/Scene/Intro/sun.json";
 
 export default function Dreaming() {
   const ref = useRef<HTMLDivElement>(null);
+  const isPortrait = useIsPortrait();
+  const isInView = useInView(ref, { once: false, amount: 0.1 });
+  const { animationsStarted, pauseBgMusic, resumeBgMusic } = useAudio();
+
+  // ใช้ custom hook สำหรับ sound effect - egypt jelly dance loop
+  const { playSoundEffect, stopSoundEffect } = useSoundEffect({
+    soundPath: "/assets/Sound/3-4/egypt-jelly-dance.mp3",
+    fadeDurationMs: 500,
+    soundDurationMs: 203000, // 3 นาที 23 วินาที
+    loop: true,
+  });
+
+  // เล่นเสียง egypt และปิด bg music เมื่อเข้า viewport
+  useEffect(() => {
+    if (isInView && animationsStarted) {
+      pauseBgMusic(); // ปิด bg music
+      playSoundEffect(); // เล่นเสียง egypt
+    } else {
+      stopSoundEffect(); // หยุดเสียง egypt
+      resumeBgMusic(); // เปิด bg music กลับมา
+    }
+
+    return () => {
+      stopSoundEffect();
+      resumeBgMusic();
+    };
+  }, [isInView, animationsStarted, playSoundEffect, stopSoundEffect, pauseBgMusic, resumeBgMusic]);
+  
   const { scrollYProgress } = useScroll({
     target: ref,
     offset: ["start start", "end end"],
-  });
+  });  
 
-  const opacity_bg = useTransform(scrollYProgress, [0, 0.5], [0, 0.2]);
-  const opacity = useTransform(scrollYProgress, [0, 0.5], [0, 1]);
+  // Fade in ตอนเริ่ม section เพื่อเชื่อมจาก Sleeping.tsx
+  const bgOpacity = useTransform(scrollYProgress, [0, 0.3], [0, 1]);
 
   // 1/4: desert3 + sky โผล่ขึ้นมา
   const opacity_first_quarter = useTransform(
@@ -38,89 +73,117 @@ export default function Dreaming() {
   const y_third_quarter = useTransform(scrollYProgress, [0.6, 0.75], [100, 0]);
 
   // 4/4: animal เลื่อนจากขวาไปซ้าย
-  const animal_x = useTransform(scrollYProgress, [0.65, 1], ["100vw", "65vw"]);
+  const animal_right = useTransform(scrollYProgress, [0.3, 1], ["-50%", isPortrait ? "30%" : "3.5%" ]);
 
   // Sun: เคลื่อนที่ตลอดการ scroll
-  const sun_opacity = useTransform(scrollYProgress, [0, 0.5], [0, 1]);
-  const sun_y = useTransform(scrollYProgress, [0, 1], ["0vh", "180vh"]);
-  const sun_x = useTransform(scrollYProgress, [0, 1], ["0vw", "90vw"]);
-
-  const zIndex = useTransform(
-    scrollYProgress,
-    [0, 0.1, 0.99, 1],
-    [-1, 10, 10, -1]
-  );
+  const sun_bottom = useTransform(scrollYProgress, [0, 1], ["70%", isPortrait ? "25%" : "30%" ]);
+  const sun_left = useTransform(scrollYProgress, [0, 1], ["0%", "85%"]);
+  const sun_scale = useTransform(scrollYProgress, [0, 1], [0.5, 1]);
 
   return (
     <motion.div
       ref={ref}
-      className="h-[250vh] w-screen relative"
-      style={{
-        backgroundImage: "url('/assets/Scene/Intro/bg.svg')",
-        backgroundPosition: "center",
-        backgroundRepeat: "no-repeat",
-        backgroundSize: "cover",
-        zIndex,
-        opacity,
-      }}
+      className="relative w-screen h-[600vh] z-2"
+      style={{ opacity: bgOpacity }}
     >
-      <div className="fixed top-0 h-screen w-full flex items-center justify-center z-6 text-center">
-        <motion.div style={{ opacity: opacity_first_quarter }}>
-          <WordByWordAnimation
-            text={`ตำนานอียิปต์เชื่อว่า เมื่อตายไปแล้วจะต้องเดินทางไปยังดินแดนแห่งการพิพากษา
-ภายในห้องโถงแห่งสัจจะ หัวใจจะถูกนำไปชั่งเทียบกับขนนก
-หากหัวใจเบากว่าขนนกก็จะเข้าถึงชีวิตหลังความตายเดินทางสู่ทุ่งแห่งความสุข
-แต่ถ้าหากจิตใจหนักแน่นมักถูกกลืนกินด้วยบางสิ่ง…`}
-            scrollYProgress={scrollYProgress}
-            as="p"
-            className="typo-h5 text-white"
+      {/* Sticky Container */}
+      <div className="sticky top-0 w-screen h-screen overflow-hidden flex items-center justify-center">
+        {/* Background */}
+        <img
+          src="/assets/Scene/Intro/bg.svg"
+          alt="Background"
+          className="absolute inset-0 w-full h-full object-cover"
+        />
+
+        {/* ส่วนบน: เมฆ (top-0) */}
+        <motion.div 
+          className="absolute top-0 left-1/30 w-full portrait:w-[250%] portrait:-left-1/6 portrait:top-1/10"
+          style={{ opacity: opacity_first_quarter }}
+        >
+          <Lottie
+            animationData={skyAnimationData}
+            loop={true}
+            autoplay={true}
+            className="w-full object-cover"
           />
         </motion.div>
+
+        {/* Sun: เคลื่อนที่ตาม animation */}
+        <motion.div
+          className="absolute bottom-0 left-0 w-[20%] portrait:w-[30%]"
+          style={{
+            opacity: 1,
+            bottom: sun_bottom,
+            left: sun_left,
+            scale: sun_scale,
+          }}
+        >
+          <Lottie
+            animationData={sunAnimationData}
+            loop={true}
+            autoplay={true}
+            className="w-full h-full"
+          />
+        </motion.div>
+
+        {/* ส่วนล่าง: desert และ animal (bottom-0) */}
+        <motion.div className="absolute bottom-0 aspect-video w-full portrait:w-[200%]">
+          {/* desert1 */}
+          <motion.img
+            src="/assets/Scene/Intro/desert1.svg"
+            className="absolute w-full bottom-0 left-0 portrait:left-[10%]"
+            style={{ opacity: opacity_third_quarter, y: y_third_quarter }}
+          />
+
+          {/* desert2 */}
+          <motion.img
+            src="/assets/Scene/Intro/desert2.svg"
+            className="absolute w-[67.19%] left-[-13.02%] bottom-[23.15%] portrait:left-[-3%]"
+            style={{ opacity: opacity_second_quarter, y: y_second_quarter }}
+          />
+
+          {/* desert3 */}
+          <motion.img
+            src="/assets/Scene/Intro/desert3.svg"
+            className="absolute w-full bottom-0 left-0"
+            style={{ opacity: opacity_first_quarter, y: y_first_quarter }}
+          />
+
+          {/* animal */}
+          <motion.div
+            className="absolute w-[29.17%] bottom-1/15 portrait:bottom-1/30"
+            style={{ right: animal_right }}
+          >
+            <Lottie
+              animationData={camelAnimationData}
+              loop={true}
+              autoplay={true}
+              className="w-full h-full"
+            />
+          </motion.div>
+        </motion.div>
+
+        {/* Light overlay */}
+        <div
+          className="absolute w-screen inset-0 pointer-events-none"
+          style={{ backgroundColor: "var(--color-black)", opacity: 0.1 }}
+        />
+
+        {/* Text กลางจอ */}
+        <div className="absolute inset-0 flex items-center justify-center  text-center px-4">
+          <motion.div style={{ opacity: opacity_first_quarter }}>
+            <WordByWordAnimation
+              text={`ตำนานอียิปต์เชื่อว่า เมื่อตายไปแล้วจะต้องเดินทางไปยัง 'ดินแดนแห่งการพิพากษา'
+                ภายในห้องโถงแห่งสัจจะ หัวใจจะถูกนำไปชั่งเทียบกับขนนก
+หากหัวใจเบากว่าขนนกก็จะเข้าถึงชีวิตหลังความตายเดินทางสู่ทุ่งแห่งความสุข
+แต่ถ้าหากจิตใจหนักแน่นมักถูกกลืนกินด้วยบางสิ่ง…`}
+              scrollYProgress={scrollYProgress}
+              as="p"
+              className="typo-text-h4 text-white w-80 md:w-140 xl:w-full"
+            />
+          </motion.div>
+        </div>
       </div>
-
-      <motion.div
-        className="h-full w-full z-5 absolute"
-        style={{
-          backgroundColor: "black",
-          opacity: opacity_bg,
-        }}
-      ></motion.div>
-
-      <motion.img
-        src="/assets/Scene/Intro/sky.svg"
-        className="w-full object-cover fixed top-0 left-20"
-        style={{ opacity: opacity_first_quarter }}
-      />
-
-      <motion.img
-        src="/assets/Scene/Intro/animal.svg"
-        className="h-[300px] fixed bottom-0 z-4"
-        style={{ x: animal_x }}
-      />
-      <motion.img
-        src="/assets/Scene/Intro/desert3.svg"
-        className="w-full fixed bottom-0 left-0 z-3"
-        style={{ opacity: opacity_first_quarter, y: y_first_quarter }}
-      />
-      <motion.img
-        src="/assets/Scene/Intro/desert2.svg"
-        className="h-[400px] fixed bottom-[28%] left-[-11%] z-2"
-        style={{ opacity: opacity_second_quarter, y: y_second_quarter }}
-      />
-      <motion.img
-        src="/assets/Scene/Intro/desert1.svg"
-        className="w-full fixed bottom-0 left-0 z-1"
-        style={{ opacity: opacity_third_quarter, y: y_third_quarter }}
-      />
-      <motion.img
-        src="/assets/Scene/Intro/sun.svg"
-        className="w-[370px] absolute z-0"
-        style={{
-          opacity: sun_opacity,
-          y: sun_y,
-          x: sun_x,
-        }}
-      />
     </motion.div>
   );
 }

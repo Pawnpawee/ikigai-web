@@ -14,6 +14,8 @@ interface AudioContextType {
   togglePlay: () => void;
   startAudio: () => void;
   pauseAudio: () => void;
+  pauseBgMusic: () => void;
+  resumeBgMusic: () => void;
 }
 
 const AudioContext = createContext<AudioContextType | undefined>(undefined);
@@ -110,6 +112,58 @@ export function AudioProvider({ children }: { children: React.ReactNode }) {
     }
   };
 
+  const pauseBgMusic = () => {
+    if (audioRef.current && isPlaying) {
+      const audio = audioRef.current;
+      const originalVolume = audio.volume;
+      const fadeDuration = 500; // 500ms fade out
+      const fadeSteps = 20;
+      const volumeStep = originalVolume / fadeSteps;
+      const stepDuration = fadeDuration / fadeSteps;
+
+      let currentStep = 0;
+      const fadeOutInterval = setInterval(() => {
+        currentStep++;
+        audio.volume = Math.max(0, originalVolume - (volumeStep * currentStep));
+        
+        if (currentStep >= fadeSteps) {
+          clearInterval(fadeOutInterval);
+          audio.pause();
+          audio.volume = originalVolume; // คืนค่า volume เดิม
+          console.log("Background music paused with fade out");
+        }
+      }, stepDuration);
+    }
+  };
+
+  const resumeBgMusic = () => {
+    if (audioRef.current && isInitialized && !isMuted) {
+      const audio = audioRef.current;
+      const targetVolume = volume / 100;
+      const fadeDuration = 500; // 500ms fade in
+      const fadeSteps = 20;
+      const volumeStep = targetVolume / fadeSteps;
+      const stepDuration = fadeDuration / fadeSteps;
+
+      audio.volume = 0;
+      audio.play().then(() => {
+        let currentStep = 0;
+        const fadeInInterval = setInterval(() => {
+          currentStep++;
+          audio.volume = Math.min(targetVolume, volumeStep * currentStep);
+          
+          if (currentStep >= fadeSteps) {
+            clearInterval(fadeInInterval);
+            audio.volume = targetVolume;
+            console.log("Background music resumed with fade in");
+          }
+        }, stepDuration);
+      }).catch((error) => {
+        console.log("Resume failed:", error);
+      });
+    }
+  };
+
   return (
     <AudioContext.Provider
       value={{
@@ -125,6 +179,8 @@ export function AudioProvider({ children }: { children: React.ReactNode }) {
         togglePlay,
         startAudio,
         pauseAudio,
+        pauseBgMusic,
+        resumeBgMusic,
       }}
     >
       {children}

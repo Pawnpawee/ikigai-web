@@ -9,6 +9,7 @@
   /* App semantic colors */
   --color-background: var(--color-black);
   --color-foreground: var(--color-white);
+  --color-overlay: #15237B;
 
   /* Orange */
   --color-orange-100: #ffe3de;
