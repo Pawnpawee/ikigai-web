@@ -1,6 +1,9 @@
 "use client";
 import React from "react";
 import { motion, useTransform, MotionValue } from "framer-motion";
+import Lottie from "lottie-react";
+import humanAnimationData from "../../../../../public/assets/Scene/Scene1/human.json";
+import moonAnimationData from "../../../../../public/assets/Scene/Scene1/moon.json";
 
 interface JobApplication2Props {
   scrollYProgress: MotionValue<number>;
@@ -57,19 +60,20 @@ export default function JobApplication2({
           }}
         >
           <motion.div className="absolute inset-0 overflow-visible">
-            {/* Table */}
+            {/* Layer 1: Table (ล่างสุด) */}
             <motion.img
               src="/assets/Scene/Scene1/table.svg"
               alt="table"
               className="absolute"
               style={{
-                left: "1.15%", // 44.02 / 3840
-                bottom: "-7.38%", // -79.69 / 1080
+                left: "1.15%", // 44 / 3840
+                top: "73.07%", // 789.2 / 1080
                 width: "47.71%", // 1831.96 / 3840
-                height: "34.27%", // 370.16 / 1080
+                height: "78.54%", // 848.25 / 1080
               }}
             />
 
+            {/* Layer 2: Posters - Background elements */}
             {/* Poster 14 */}
             <motion.img
               src="/assets/Scene/Scene1/poster14.svg"
@@ -77,9 +81,10 @@ export default function JobApplication2({
               className="absolute"
               style={{
                 left: "24.01%", // 922.22 / 3840
-                top: "-23.2%", // -250.51 / 1080 (ติดขอบบน)
+                top: "-23.2%", // -250.51 / 1080
                 width: "11.64%", // 446.75 / 3840
                 height: "29.04%", // 313.61 / 1080
+               
               }}
             />
 
@@ -93,6 +98,7 @@ export default function JobApplication2({
                 top: "18.07%", // 195.12 / 1080
                 width: "6.41%", // 245.99 / 3840
                 height: "17.63%", // 190.41 / 1080
+               
               }}
             />
 
@@ -106,6 +112,7 @@ export default function JobApplication2({
                 top: "44.42%", // 479.73 / 1080
                 width: "5.48%", // 210.42 / 3840
                 height: "20.15%", // 217.58 / 1080
+               
               }}
             />
 
@@ -119,6 +126,7 @@ export default function JobApplication2({
                 top: "7.57%", // 81.79 / 1080
                 width: "10.45%", // 401.42 / 3840
                 height: "27.07%", // 292.31 / 1080
+               
               }}
             />
 
@@ -128,10 +136,11 @@ export default function JobApplication2({
               alt="poster5"
               className="absolute"
               style={{
-                left: "-0.45%",
+                left: "-0.76%", // -29.01 / 3840
                 top: "28.56%", // 308.41 / 1080
                 width: "5.46%", // 209.7 / 3840
                 height: "20.92%", // 225.99 / 1080
+               
               }}
             />
 
@@ -145,6 +154,7 @@ export default function JobApplication2({
                 top: "8.55%", // 92.38 / 1080
                 width: "7.8%", // 299.42 / 3840
                 height: "29.64%", // 320.06 / 1080
+               
               }}
             />
 
@@ -158,6 +168,7 @@ export default function JobApplication2({
                 top: "21.04%", // 227.23 / 1080
                 width: "3.4%", // 130.42 / 3840
                 height: "15.37%", // 166.06 / 1080
+               
               }}
             />
 
@@ -171,6 +182,7 @@ export default function JobApplication2({
                 top: "40.8%", // 440.62 / 1080
                 width: "4.93%", // 189.15 / 3840
                 height: "12.45%", // 134.42 / 1080
+               
               }}
             />
 
@@ -184,10 +196,11 @@ export default function JobApplication2({
                 top: "48.5%", // 523.74 / 1080
                 width: "4.19%", // 160.88 / 3840
                 height: "8.27%", // 89.34 / 1080
+               
               }}
             />
 
-            {/* Computer */}
+            {/* Layer 3: Computer */}
             <motion.img
               src="/assets/Scene/Scene1/Computer.svg"
               alt="computer"
@@ -197,9 +210,11 @@ export default function JobApplication2({
                 top: "14.28%", // 154.19 / 1080
                 width: "24.94%", // 957.6 / 3840
                 height: "70.28%", // 758.98 / 1080
+                
               }}
             />
 
+            {/* Layer 4: Papers */}
             {/* Paper 3 */}
             <motion.img
               src="/assets/Scene/Scene1/paper3.svg"
@@ -210,6 +225,7 @@ export default function JobApplication2({
                 top: "77.25%", // 834.27 / 1080
                 width: "6.9%", // 264.98 / 3840
                 height: "9.51%", // 102.65 / 1080
+                
               }}
             />
 
@@ -223,6 +239,7 @@ export default function JobApplication2({
                 top: "77.81%", // 840.39 / 1080
                 width: "5.7%", // 218.83 / 3840
                 height: "8.79%", // 94.89 / 1080
+                
               }}
             />
 
@@ -236,10 +253,11 @@ export default function JobApplication2({
                 top: "82.28%", // 888.6 / 1080
                 width: "7.14%", // 274.32 / 3840
                 height: "9.51%", // 102.65 / 1080
+                
               }}
             />
 
-            {/* Lamp */}
+            {/* Layer 5: Lamp */}
             <motion.img
               src="/assets/Scene/Scene1/lamp.svg"
               alt="lamp"
@@ -249,9 +267,11 @@ export default function JobApplication2({
                 top: "12.05%", // 130.18 / 1080
                 width: "12.46%", // 478.48 / 3840
                 height: "67.85%", // 732.76 / 1080
+                
               }}
             />
 
+            {/* Layer 6: Books */}
             {/* Book 1 */}
             <motion.img
               src="/assets/Scene/Scene1/book1.svg"
@@ -262,6 +282,7 @@ export default function JobApplication2({
                 top: "77.93%", // 841.65 / 1080
                 width: "5.37%", // 206.33 / 3840
                 height: "11.49%", // 124.14 / 1080
+                
               }}
             />
 
@@ -275,10 +296,11 @@ export default function JobApplication2({
                 top: "69.98%", // 755.76 / 1080
                 width: "6.17%", // 236.87 / 3840
                 height: "13.41%", // 144.83 / 1080
+                
               }}
             />
 
-            {/* Pen */}
+            {/* Layer 7: Pen */}
             <motion.img
               src="/assets/Scene/Scene1/pen.svg"
               alt="pen"
@@ -288,10 +310,11 @@ export default function JobApplication2({
                 top: "86.26%", // 931.58 / 1080
                 width: "3.2%", // 122.95 / 3840
                 height: "2.02%", // 21.81 / 1080
+                
               }}
             />
 
-            {/* Light (mix-blend-screen) */}
+            {/* Layer 8: Light (mix-blend-screen) */}
             <motion.img
               src="/assets/Scene/Scene1/light.svg"
               alt="light"
@@ -304,7 +327,7 @@ export default function JobApplication2({
               }}
             />
 
-            {/* Pencil Box */}
+            {/* Layer 9: Pencil Box */}
             <motion.img
               src="/assets/Scene/Scene1/pencil box.svg"
               alt="pencil box"
@@ -314,10 +337,11 @@ export default function JobApplication2({
                 top: "67.67%", // 730.87 / 1080
                 width: "2.69%", // 103.18 / 3840
                 height: "15.37%", // 165.95 / 1080
+                
               }}
             />
 
-            {/* Post-it */}
+            {/* Layer 10: Post-it */}
             <motion.img
               src="/assets/Scene/Scene1/postit.svg"
               alt="postit"
@@ -327,36 +351,11 @@ export default function JobApplication2({
                 top: "85.06%", // 918.69 / 1080
                 width: "2.61%", // 100.19 / 3840
                 height: "4.24%", // 45.75 / 1080
+                
               }}
             />
 
-            {/* Human */}
-            <motion.img
-              src="/assets/Scene/Scene1/human.svg"
-              alt="human"
-              className="absolute"
-              style={{
-                left: "15.15%", // 581.75 / 3840
-                top: "30.68%", // 331.33 / 1080
-                width: "21.71%", // 833.69 / 3840
-                height: "76.7%", // 828.35 / 1080
-              }}
-            />
-
-            {/* Chair */}
-            <motion.img
-              src="/assets/Scene/Scene1/chair.svg"
-              alt="chair"
-              className="absolute"
-              style={{
-                left: "18.59%", // 714.02 / 3840
-                top: "82.37%", // 889.59 / 1080
-                width: "12.86%", // 493.85 / 3840
-                height: "25.08%", // 270.89 / 1080
-              }}
-            />
-
-            {/* Paper 4 */}
+            {/* Layer 11: Paper 4 */}
             <motion.img
               src="/assets/Scene/Scene1/paper4.svg"
               alt="paper4"
@@ -366,28 +365,48 @@ export default function JobApplication2({
                 top: "68.42%", // 738.9 / 1080
                 width: "2.28%", // 87.59 / 3840
                 height: "8.03%", // 86.77 / 1080
+                
               }}
             />
 
-            {/* Light Window */}
+            {/* Layer 12: Human (Lottie Animation) */}
+            <motion.div
+              className="absolute"
+              style={{
+                left: "15.15%", // 581.73 / 3840
+                top: "30.65%", // 331 / 1080
+                width: "21.71%", // 833.69 / 3840
+                height: "134.07%", // 1447.89 / 1080
+              }}
+            >
+              <Lottie
+                animationData={humanAnimationData}
+                loop={true}
+                autoplay={true}
+                style={{
+                  width: "100%",
+                  height: "100%",
+                }}
+              />
+            </motion.div>
+
+            {/* Layer 13: Light Window (Window elements start here) */}
             <motion.img
               src="/assets/Scene/Scene1/light window.svg"
               alt="light window"
               className="absolute"
               style={{
-                right: "17.8%", // 683.59 / 3840
-                bottom: "18.02%", // 194.6 / 1080*100
-                width: "14.89%", // 571.79 / 3840*100
-                height: "62.68%", // 676.97 / 1080*100
+                left: "67.31%", // 2584.62 / 3840
+                top: "19.3%", // 208.43 / 1080
+                width: "14.89%", // 571.79 / 3840
+                height: "62.68%", // 676.97 / 1080
                 y: lightWindowY,
                 opacity: lightWindowOpacity,
               }}
             />
 
-            {/* Moon */}
-            <motion.img
-              src="/assets/Scene/Scene1/moon.svg"
-              alt="moon"
+            {/* Layer 14: Moon */}
+            <motion.div
               className="absolute"
               style={{
                 left: "68.64%", // 2635.71 / 3840
@@ -397,9 +416,19 @@ export default function JobApplication2({
                 y: skyElementsY,
                 opacity: skyElementsOpacity,
               }}
-            />
+            >
+              <Lottie
+                animationData={moonAnimationData}
+                loop={true}
+                autoplay={true}
+                style={{
+                  width: "100%",
+                  height: "100%",
+                }}
+              />
+            </motion.div>
 
-            {/* Stars */}
+            {/* Layer 15: Stars */}
             <motion.img
               src="/assets/Scene/Scene1/star.svg"
               alt="stars"
@@ -414,7 +443,7 @@ export default function JobApplication2({
               }}
             />
 
-            {/* Circle decorations */}
+            {/* Layer 16: Circle decorations */}
             <motion.img
               src="/assets/Scene/Scene1/circle.svg"
               alt="circles"
@@ -429,7 +458,7 @@ export default function JobApplication2({
               }}
             />
 
-            {/* Building 2 */}
+            {/* Layer 17: Building 2 */}
             <motion.img
               src="/assets/Scene/Scene1/building2.svg"
               alt="building2"
@@ -444,7 +473,7 @@ export default function JobApplication2({
               }}
             />
 
-            {/* Building 1 */}
+            {/* Layer 18: Building 1 */}
             <motion.img
               src="/assets/Scene/Scene1/building1.svg"
               alt="building1"
@@ -459,7 +488,7 @@ export default function JobApplication2({
               }}
             />
 
-            {/* Window Frame */}
+            {/* Layer 19: Window Frame */}
             <motion.img
               src="/assets/Scene/Scene1/window.svg"
               alt="window"
@@ -474,7 +503,7 @@ export default function JobApplication2({
               }}
             />
 
-            {/* Curtain 2 (Right) */}
+            {/* Layer 20: Curtain 2 (Right) */}
             <motion.img
               src="/assets/Scene/Scene1/curtain2.svg"
               alt="curtain2"
@@ -488,7 +517,8 @@ export default function JobApplication2({
                 opacity: windowFrameOpacity,
               }}
             />
-            {/* Curtain 1 (Left) */}
+
+            {/* Layer 21: Curtain 1 (Left - บนสุด) */}
             <motion.img
               src="/assets/Scene/Scene1/curtain1.svg"
               alt="curtain1"
