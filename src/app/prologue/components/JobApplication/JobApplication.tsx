@@ -111,7 +111,8 @@ export default function JobApplication() {
 
           portrait:fixed
           portrait:w-[150%]
-          portrait:top-[-5%]
+          portrait:md:top-[-45%]
+          portrait:top-[-8%]
           portrait:left-1/5
           
         "

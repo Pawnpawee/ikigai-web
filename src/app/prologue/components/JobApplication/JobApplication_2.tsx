@@ -119,6 +119,82 @@ export default function JobApplication2({
               }}
             />
 
+            {/* ชุด 1: Poster 11 */}
+            <motion.img
+              src="/assets/Scene/Scene1/poster11.svg"
+              alt="poster11"
+              className="absolute"
+              style={{
+                left: "39.17%", // 1504.04 / 3840
+                top: "-108.33%", // -1170 / 1080
+                width: "6.1%", // 234.34 / 3840
+                height: "16.66%", // 179.93 / 1080
+              }}
+            />
+
+            {/* ชุด 2: Poster 9, 10 */}
+            <motion.img
+              src="/assets/Scene/Scene1/poster9.svg"
+              alt="poster9"
+              className="absolute"
+              style={{
+                left: "38.78%", // 1489.16 / 3840
+                top: "-62.86%", // -678.84 / 1080
+                width: "8.49%", // 325.9 / 3840
+                height: "29.04%", // 313.61 / 1080
+              }}
+            />
+
+            <motion.img
+              src="/assets/Scene/Scene1/poster10.svg"
+              alt="poster10"
+              className="absolute"
+              style={{
+                left: "3.52%", // 135 / 3840
+                top: "-102.54%", // -1107.46 / 1080
+                width: "7.25%", // 278.51 / 3840
+                height: "25.23%", // 272.44 / 1080
+              }}
+            />
+
+            {/* ชุด 3: Poster 12 */}
+            <motion.img
+              src="/assets/Scene/Scene1/poster12.svg"
+              alt="poster12"
+              className="absolute"
+              style={{
+                left: "25.31%", // 971.89 / 3840
+                top: "-79.54%", // -858.98 / 1080
+                width: "7.25%", // 278.51 / 3840
+                height: "25.23%", // 272.44 / 1080
+              }}
+            />
+
+            {/* ชุด 4: Poster 13, 15 */}
+            <motion.img
+              src="/assets/Scene/Scene1/poster13.svg"
+              alt="poster13"
+              className="absolute"
+              style={{
+                left: "13.24%", // 508.61 / 3840
+                top: "-63.14%", // -681.92 / 1080
+                width: "7.25%", // 278.51 / 3840
+                height: "25.23%", // 272.44 / 1080
+              }}
+            />
+
+            <motion.img
+              src="/assets/Scene/Scene1/poster15.svg"
+              alt="poster15"
+              className="absolute"
+              style={{
+                left: "5.65%", // 217.08 / 3840
+                top: "-40.03%", // -432.37 / 1080
+                width: "8.57%", // 329.03 / 3840
+                height: "29.04%", // 313.62 / 1080
+              }}
+            />
+
             {/* Layer 2: Posters - Background elements */}
             {/* Poster 14 */}
             <motion.img
@@ -126,8 +202,8 @@ export default function JobApplication2({
               alt="poster14"
               className="absolute"
               style={{
-                left: "24.01%", // 922.22 / 3840
-                top: "-23.2%", // -250.51 / 1080
+                left: "24.01%", // 922.16 / 3840
+                top: "-23.2%", // -250.54 / 1080
                 width: "11.64%", // 446.75 / 3840
                 height: "29.04%", // 313.61 / 1080
               }}
