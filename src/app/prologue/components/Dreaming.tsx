@@ -5,7 +5,7 @@ import Lottie from "lottie-react";
 import WordByWordAnimation from "../../components/ui/WordByWordAnimation";
 import { useIsPortrait } from "@/app/hooks/useOrientation";
 import { useAudio } from "@/app/contexts/AudioContext";
-import { useSoundEffect } from "@/app/hooks/useSoundEffect";
+// import { useSoundEffect } from "@/app/hooks/useSoundEffect";
 import skyAnimationData from "../../../../public/assets/Scene/Intro/sky.json";
 import camelAnimationData from "../../../../public/assets/Scene/Intro/camel.json";
 import sunAnimationData from "../../../../public/assets/Scene/Intro/sun.json";
@@ -16,34 +16,31 @@ export default function Dreaming() {
   const isInView = useInView(ref, { once: false, amount: 0.1 });
   const { animationsStarted, pauseBgMusic, resumeBgMusic } = useAudio();
 
-  // ใช้ custom hook สำหรับ sound effect - egypt jelly dance loop
-  const { playSoundEffect, stopSoundEffect } = useSoundEffect({
-    soundPath: "/assets/Sound/3-4/egypt-jelly-dance.mp3",
-    fadeDurationMs: 1000,
-    soundDurationMs: 203000, // 3 นาที 23 วินาที
-    loop: true,
-  });
 
-  // เล่นเสียง egypt และปิด bg music เมื่อเข้า viewport
+  // ฟังก์ชันเปลี่ยน bg music เป็น egypt jelly dance
+  const { setBgMusic } = useAudio();
+
+
+  // เปลี่ยน bg music เป็น egypt jelly dance เมื่อเข้า viewport
   useEffect(() => {
     if (isInView && animationsStarted) {
-      pauseBgMusic(); // ปิด bg music
-      playSoundEffect(); // เล่นเสียง egypt
+      setBgMusic("/assets/Sound/3-4/egypt-jelly-dance.mp3");
     } else {
-      stopSoundEffect(); // หยุดเสียง egypt
-      resumeBgMusic(); // เปิด bg music กลับมา
+      setBgMusic("/assets/Sound/bg-music.mp3");
     }
+  }, [isInView, animationsStarted, setBgMusic]);
 
+  // คืน bg music เดิมเมื่อออกจากหน้านี้ (unmount)
+  useEffect(() => {
     return () => {
-      stopSoundEffect();
-      resumeBgMusic();
+      setBgMusic("/assets/Sound/bg-music.mp3");
     };
-  }, [isInView, animationsStarted, playSoundEffect, stopSoundEffect, pauseBgMusic, resumeBgMusic]);
-  
+  }, [setBgMusic]);
+
   const { scrollYProgress } = useScroll({
     target: ref,
     offset: ["start start", "end end"],
-  });  
+  });
 
   // Fade in ตอนเริ่ม section เพื่อเชื่อมจาก Sleeping.tsx
   const bgOpacity = useTransform(scrollYProgress, [0, 0.3], [0, 1]);
@@ -73,10 +70,18 @@ export default function Dreaming() {
   const y_third_quarter = useTransform(scrollYProgress, [0.6, 0.75], [100, 0]);
 
   // 4/4: animal เลื่อนจากขวาไปซ้าย
-  const animal_right = useTransform(scrollYProgress, [0.3, 1], ["-50%", isPortrait ? "30%" : "3.5%" ]);
+  const animal_right = useTransform(
+    scrollYProgress,
+    [0.3, 1],
+    ["-50%", isPortrait ? "30%" : "3.5%"]
+  );
 
   // Sun: เคลื่อนที่ตลอดการ scroll
-  const sun_bottom = useTransform(scrollYProgress, [0, 1], ["70%", isPortrait ? "25%" : "30%" ]);
+  const sun_bottom = useTransform(
+    scrollYProgress,
+    [0, 1],
+    ["70%", isPortrait ? "25%" : "30%"]
+  );
   const sun_left = useTransform(scrollYProgress, [0, 1], ["0%", "85%"]);
   const sun_scale = useTransform(scrollYProgress, [0, 1], [0.5, 1]);
 
@@ -96,7 +101,7 @@ export default function Dreaming() {
         />
 
         {/* ส่วนบน: เมฆ (top-0) */}
-        <motion.div 
+        <motion.div
           className="absolute top-0 left-1/30 w-full portrait:w-[250%] portrait:-left-1/6 portrait:top-1/10"
           style={{ opacity: opacity_first_quarter }}
         >
