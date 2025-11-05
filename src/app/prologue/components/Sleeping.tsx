@@ -3,10 +3,11 @@ import React, { useEffect } from "react";
 import { motion, useTransform, useScroll, useInView } from "framer-motion";
 import { useRef } from "react";
 import Bubble from "@/app/components/ui/Bubble";
-import WordByWordAnimation from "@/app/components/ui/WordByWordAnimation";
 import { useAudio } from "@/app/contexts/AudioContext";
+import { useBgMusicTransition } from "@/app/hooks/useBgMusicTransition";
 import { useSoundEffect } from "@/app/hooks/useSoundEffect";
 import { useIsPortrait } from "@/app/hooks/useOrientation";
+import SubtitleScroll from "@/app/components/ui/SubtitleScroll";
 
 export default function Sleeping() {
   const ref = useRef<HTMLDivElement>(null);
@@ -16,20 +17,30 @@ export default function Sleeping() {
   // ตรวจสอบ orientation โดยใช้ custom hook
   const isPortrait = useIsPortrait();
 
-  // ใช้ custom hook สำหรับ sound effect - clock ticking loop
-  const { playSoundEffect: playClock, stopSoundEffect: stopClock } = useSoundEffect({
-    soundPath: "/assets/Sound/1-2/clock-ticking.mp3",
-    fadeDurationMs: 500,
-    soundDurationMs: 8000,
-    loop: true,
+  // จัดการ bg music transition - ให้แน่ใจว่าใช้เพลง default
+  useBgMusicTransition({
+    targetMusic: "/assets/Sound/bg-music.mp3",
+    defaultMusic: "/assets/Sound/bg-music.mp3",
+    fadeDuration: 1000,
+    isInView,
   });
 
+  // ใช้ custom hook สำหรับ sound effect - clock ticking loop
+  const { playSoundEffect: playClock, stopSoundEffect: stopClock } =
+    useSoundEffect({
+      soundPath: "/assets/Sound/1-2/clock-ticking.mp3",
+      fadeDurationMs: 500,
+      soundDurationMs: 8000,
+      loop: true,
+    });
+
   // ใช้ custom hook สำหรับ sound effect - heart beat loop
-  const { playSoundEffect: playHeartBeat, stopSoundEffect: stopHeartBeat } = useSoundEffect({
-    soundPath: "/assets/Sound/1-2/heart-beat.mp3",
-    fadeDurationMs: 500,
-    loop: true,
-  });
+  const { playSoundEffect: playHeartBeat, stopSoundEffect: stopHeartBeat } =
+    useSoundEffect({
+      soundPath: "/assets/Sound/1-2/heart-beat.mp3",
+      fadeDurationMs: 500,
+      loop: true,
+    });
 
   // เล่นเสียงเมื่อเข้า viewport และ loop ตลอด
   useEffect(() => {
@@ -45,7 +56,14 @@ export default function Sleeping() {
       stopClock();
       stopHeartBeat();
     };
-  }, [isInView, animationsStarted, playClock, stopClock, playHeartBeat, stopHeartBeat]);
+  }, [
+    isInView,
+    animationsStarted,
+    playClock,
+    stopClock,
+    playHeartBeat,
+    stopHeartBeat,
+  ]);
 
   const { scrollYProgress } = useScroll({
     target: ref,
@@ -115,18 +133,21 @@ export default function Sleeping() {
   const top_zoom = useTransform(scrollYProgress, [0.5625, 0.75], ["0%", "25%"]);
   const textOpacity = useTransform(
     scrollYProgress,
-    [0.5625, 0.65, 0.8, 0.9],
+    [0.5625, 0.65, 0.7, 0.8],
     [0, 1, 1, 0]
   ); // ขึ้นที่ 56.25%, ค้างถึง 85%, fade out 85-90%
 
-  const blinkOpacity = useTransform(
+  const ry = useTransform(
     scrollYProgress,
-    [0.6, 0.65, 0.7, 0.8, 0.9, 1],
-    [0, 0.3, 0, 0.5, 0, 1]
-  ); // กระพริบ 3 ครั้ง แล้วค้างดำ
+    [0, 0.75, 0.8, 0.85, 0.9, 0.95, 1],
+    [200, 200, 0, 60, 0, 40, 0]
+  );
 
-  // Scene fade out (96-100%)
-  const sceneFadeOut = useTransform(scrollYProgress, [0.95, 1], [1, 0]);
+  const blink_opacity = useTransform(
+    scrollYProgress,
+    [0, 0.75, 0.8, 1],
+    [0, 0, 1, 1]
+  );
 
   return (
     <motion.div
@@ -352,9 +373,9 @@ export default function Sleeping() {
         {/* ชุด 6: Bubble "จะทำได้ไหม" */}
         <motion.div
           className="absolute mix-blend-screen 
-             top-[19.13%] right-[2.5%] w-[180px] aspect-[180/110]
+             top-[19.13%] right-[2.5%] w-[180px] aspect-180/110
              landscape:top-[17.22%] landscape:left-[62.76%] landscape:w-[295px] landscape:aspect-[295/176.08]
-             lg:left-[65%] lg:w-[300px] lg:aspect-[300/180]"
+             lg:left-[65%] lg:w-[300px] lg:aspect-300/180"
           style={{
             y: bubble1Y,
             opacity: bubble1Opacity,
@@ -366,9 +387,9 @@ export default function Sleeping() {
         {/* ชุด 7: Bubble "จะมีงานทำหรือเปล่า" */}
         <motion.div
           className="absolute mix-blend-screen 
-             top-[7.38%] left-[7.5%] w-[180px] aspect-[180/110]
+             top-[7.38%] left-[7.5%] w-[180px] aspect-180/110
              landscape:top-[30.87%] landscape:left-[18.94%] landscape:w-[295px] landscape:aspect-[295/176.08]
-             lg:left-[7%] lg:w-[300px] lg:aspect-[300/180]"
+             lg:left-[7%] lg:w-[300px] lg:aspect-300/180"
           style={{
             y: bubble2Y,
             opacity: bubble2Opacity,
@@ -380,9 +401,9 @@ export default function Sleeping() {
         {/* ชุด 8: Bubble "จะเก่งพอหรือเปล่า" */}
         <motion.div
           className="absolute mix-blend-screen 
-             top-[61.25%] right-[3.5%] w-[180px] aspect-[180/110]
+             top-[61.25%] right-[3.5%] w-[180px] aspect-180/110
              landscape:top-[52.16%] landscape:left-[59.61%] landscape:w-[295px] landscape:aspect-[295/176.08]
-             lg:left-[60%] lg:w-[300px] lg:aspect-[300/180]"
+             lg:left-[60%] lg:w-[300px] lg:aspect-300/180"
           style={{
             y: bubble3Y,
             opacity: bubble3Opacity,
@@ -394,9 +415,9 @@ export default function Sleeping() {
         {/* ชุด 9: Bubble "จะเข้ากับคนอื่นได้ไหม" */}
         <motion.div
           className="absolute mix-blend-screen 
-             top-[75.38%] left-[8.61%] w-[180px] aspect-[180/110]
+             top-[75.38%] left-[8.61%] w-[180px] aspect-180/110
              landscape:top-[67.08%] landscape:left-[26.29%] landscape:w-[295px] landscape:aspect-[295/176.08]
-             lg:left-[10%] lg:w-[300px] lg:aspect-[300/180]"
+             lg:left-[10%] lg:w-[300px] lg:aspect-300/180"
           style={{
             y: bubble4Y,
             opacity: bubble4Opacity,
@@ -407,34 +428,43 @@ export default function Sleeping() {
 
         {/* ชุด 10: Text "เห้อนอนดีกว่า" */}
         <motion.div
-          className="absolute bottom-[15%] left-0 right-0 flex justify-center"
+          className="fixed bottom-[15%] left-0 right-0"
           style={{ opacity: textOpacity }}
         >
-          <WordByWordAnimation
-            text="เห้อ นอนดีกว่า"
+          <SubtitleScroll
+            subtitles={["เห้อ นอนดีกว่า"]}
             scrollYProgress={textOpacity}
-            as="p"
-            className="typo-text-h5 text-white"
+            className="w-full h-full"
           />
         </motion.div>
-
-        {/* กระพริบตา: Black overlay fade in-out (60-100%) */}
-        <motion.div
-          className="absolute inset-0 bg-black pointer-events-none"
-          style={{ opacity: blinkOpacity }}
-        />
-
-        {/* Scene fade out (96-100%) */}
-        <motion.div
-          className="absolute inset-0 bg-black pointer-events-none"
-          style={{ opacity: useTransform(sceneFadeOut, (v) => 1 - v) }}
-        />
       </div>
 
       {/* Light overlay */}
       <div
         className="absolute w-screen inset-0 mix-blend-soft-light pointer-events-none"
         style={{ backgroundColor: "var(--color-overlay)", opacity: 0.7 }}
+      />
+
+      {/* อนิเมชันกระพริบตา POV - พื้นหลังดำกับรูปวงรีตรงกลาง */}
+      <motion.div
+        className="fixed inset-0 bg-black pointer-events-none z-50 w-screen h-screen"
+        style={{
+          maskImage: useTransform(
+            ry,
+            (value) =>
+              `radial-gradient(ellipse 50% ${value}% at 50% 50%, transparent 0%, var(--color-background) 100%)`
+          ),
+          WebkitMaskImage: useTransform(
+            ry,
+            (value) =>
+              `radial-gradient(ellipse 50% ${value}% at 50% 50%, transparent 0%, var(--color-background) 100%)`
+          ),
+          maskRepeat: "no-repeat",
+          WebkitMaskRepeat: "no-repeat",
+          maskPosition: "center",
+          WebkitMaskPosition: "center",
+          opacity: blink_opacity,
+        }}
       />
     </motion.div>
   );

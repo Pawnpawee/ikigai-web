@@ -1,11 +1,10 @@
 "use client";
 import { motion, useScroll, useTransform, useInView } from "framer-motion";
-import { useEffect, useRef } from "react";
+import { useRef } from "react";
 import Lottie from "lottie-react";
 import WordByWordAnimation from "../../components/ui/WordByWordAnimation";
 import { useIsPortrait } from "@/app/hooks/useOrientation";
-import { useAudio } from "@/app/contexts/AudioContext";
-// import { useSoundEffect } from "@/app/hooks/useSoundEffect";
+import { useBgMusicTransition } from "@/app/hooks/useBgMusicTransition";
 import skyAnimationData from "../../../../public/assets/Scene/Intro/sky.json";
 import camelAnimationData from "../../../../public/assets/Scene/Intro/camel.json";
 import sunAnimationData from "../../../../public/assets/Scene/Intro/sun.json";
@@ -14,28 +13,15 @@ export default function Dreaming() {
   const ref = useRef<HTMLDivElement>(null);
   const isPortrait = useIsPortrait();
   const isInView = useInView(ref, { once: false, amount: 0.1 });
-  const { animationsStarted, pauseBgMusic, resumeBgMusic } = useAudio();
 
-
-  // ฟังก์ชันเปลี่ยน bg music เป็น egypt jelly dance
-  const { setBgMusic } = useAudio();
-
-
-  // เปลี่ยน bg music เป็น egypt jelly dance เมื่อเข้า viewport
-  useEffect(() => {
-    if (isInView && animationsStarted) {
-      setBgMusic("/assets/Sound/3-4/egypt-jelly-dance.mp3");
-    } else {
-      setBgMusic("/assets/Sound/bg-music.mp3");
-    }
-  }, [isInView, animationsStarted, setBgMusic]);
-
-  // คืน bg music เดิมเมื่อออกจากหน้านี้ (unmount)
-  useEffect(() => {
-    return () => {
-      setBgMusic("/assets/Sound/bg-music.mp3");
-    };
-  }, [setBgMusic]);
+  // จัดการ bg music transition แบบ fade in/out
+  useBgMusicTransition({
+    targetMusic: "/assets/Sound/3-4/egypt-jelly-dance.mp3",
+    defaultMusic: "/assets/Sound/bg-music.mp3",
+    fadeDuration: 1000,
+    isInView,
+    continueOnExit: true, // ให้เพลงเล่นต่อไปยัง Weighing
+  });
 
   const { scrollYProgress } = useScroll({
     target: ref,
@@ -43,7 +29,11 @@ export default function Dreaming() {
   });
 
   // Fade in ตอนเริ่ม section เพื่อเชื่อมจาก Sleeping.tsx
-  const bgOpacity = useTransform(scrollYProgress, [0, 0.3], [0, 1]);
+  const bgOpacity = useTransform(
+    scrollYProgress,
+    [0, 0.3, 0.95, 1],
+    [0, 1, 1, 0]
+  );
 
   // 1/4: desert3 + sky โผล่ขึ้นมา
   const opacity_first_quarter = useTransform(
@@ -73,7 +63,7 @@ export default function Dreaming() {
   const animal_right = useTransform(
     scrollYProgress,
     [0.3, 1],
-    ["-50%", isPortrait ? "30%" : "3.5%"]
+    ["-50%", isPortrait ? "30%" : "8%"]
   );
 
   // Sun: เคลื่อนที่ตลอดการ scroll
@@ -84,6 +74,7 @@ export default function Dreaming() {
   );
   const sun_left = useTransform(scrollYProgress, [0, 1], ["0%", "85%"]);
   const sun_scale = useTransform(scrollYProgress, [0, 1], [0.5, 1]);
+  const textAnimationProgress = useTransform(scrollYProgress, [0, 0.8], [0, 1]);
 
   return (
     <motion.div
@@ -182,7 +173,7 @@ export default function Dreaming() {
                 ภายในห้องโถงแห่งสัจจะ หัวใจจะถูกนำไปชั่งเทียบกับขนนก
 หากหัวใจเบากว่าขนนกก็จะเข้าถึงชีวิตหลังความตายเดินทางสู่ทุ่งแห่งความสุข
 แต่ถ้าหากจิตใจหนักแน่นมักถูกกลืนกินด้วยบางสิ่ง…`}
-              scrollYProgress={scrollYProgress}
+              scrollYProgress={textAnimationProgress}
               as="p"
               className="typo-text-h4 text-white w-80 md:w-140 xl:w-full"
             />

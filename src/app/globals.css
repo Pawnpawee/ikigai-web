@@ -9,7 +9,7 @@
   /* App semantic colors */
   --color-background: var(--color-black);
   --color-foreground: var(--color-white);
-  --color-overlay: #15237B;
+  --color-overlay: #15237b;
 
   /* Orange */
   --color-orange-100: #ffe3de;
@@ -501,6 +501,20 @@
     #132232 59.37%,
     #0a121b 80.65%,
     #000 99.7%
+  );
+}
+
+@utility bg-s4 {
+  background: linear-gradient(
+    0deg,
+    #3473c3 1.58%,
+    #316cb7 6.64%,
+    #25548a 26.85%,
+    #1b4165 47.06%,
+    #143148 68.54%,
+    #0f2633 88.75%,
+    #0c2027 108.96%,
+    #0b1e23 127.91%
   );
 }
 

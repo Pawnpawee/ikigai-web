@@ -13,6 +13,7 @@ import StarryBackground from "./components/star/StarryBackground";
 import Dreaming from "./prologue/components/Dreaming";
 import JobApplication from "./prologue/components/JobApplication/JobApplication";
 import Sleeping from "./prologue/components/Sleeping";
+import Weighing from "./prologue/components/Weighing";
 
 export default function Home() {
   const lenis = useLenis();
@@ -43,6 +44,7 @@ export default function Home() {
       <JobApplication/>
       <Sleeping />
       <Dreaming />
+      <Weighing />
     
       {/* <IntoDark /> */}
     </main>

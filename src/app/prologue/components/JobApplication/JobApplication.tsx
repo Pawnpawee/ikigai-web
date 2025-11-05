@@ -20,6 +20,7 @@ export default function JobApplication() {
     soundPath: "/assets/Sound/1-2/clock-ticking.mp3",
     fadeDurationMs: 500,
     loop: true,
+    volume: 1,
   });
 
   // Sound effects - alternating sounds
@@ -33,6 +34,7 @@ export default function JobApplication() {
     soundPath: "/assets/Sound/1-2/typing-on-laptop.mp3",
     fadeDurationMs: 200,
     loop: false,
+    volume: 0.4, // ปรับเสียง 40%
   });
 
   // Play loop sounds when in view

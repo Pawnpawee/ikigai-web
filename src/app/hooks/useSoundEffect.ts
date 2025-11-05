@@ -6,6 +6,7 @@ interface UseSoundEffectOptions {
   fadeDurationMs?: number;
   soundDurationMs?: number;
   loop?: boolean;
+  volume?: number; // 0-1, จะคูณกับ sfxVolume
 }
 
 export function useSoundEffect({
@@ -13,6 +14,7 @@ export function useSoundEffect({
   fadeDurationMs = 500,
   soundDurationMs = 2500,
   loop = false,
+  volume = 1, // default 100%
 }: UseSoundEffectOptions) {
   const { sfxVolume, isMuted } = useAudio();
   const [audio, setAudio] = useState<HTMLAudioElement | null>(null);
@@ -37,9 +39,9 @@ export function useSoundEffect({
   // อัพเดท volume เมื่อ sfxVolume เปลี่ยน
   useEffect(() => {
     if (audio && !fadeIntervalRef.current) {
-      audio.volume = sfxVolume / 100;
+      audio.volume = (sfxVolume / 100) * volume;
     }
-  }, [audio, sfxVolume]);
+  }, [audio, sfxVolume, volume]);
 
   // ฟังก์ชัน fade audio
   const fadeAudio = useCallback(
@@ -55,7 +57,7 @@ export function useSoundEffect({
 
       const stepTime = 50;
       const steps = fadeDurationMs / stepTime;
-      const targetVolume = sfxVolume / 100;
+      const targetVolume = (sfxVolume / 100) * volume; // คูณด้วย volume multiplier
       const stepVolume = targetVolume / steps;
 
       if (direction === "in") {
@@ -92,7 +94,7 @@ export function useSoundEffect({
         }, stepTime);
       }
     },
-    [fadeDurationMs, sfxVolume]
+    [fadeDurationMs, sfxVolume, volume]
   );
 
   // ฟังก์ชันเล่นเสียงพร้อม fade in/out

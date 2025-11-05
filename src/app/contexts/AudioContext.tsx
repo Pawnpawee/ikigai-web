@@ -8,6 +8,7 @@ interface AudioContextType {
   isPlaying: boolean;
   userConsented: boolean;
   animationsStarted: boolean;
+  currentBgMusic: string;
   setIsMuted: (muted: boolean) => void;
   setVolume: (volume: number) => void;
   setSfxVolume: (volume: number) => void;
@@ -17,6 +18,7 @@ interface AudioContextType {
   pauseBgMusic: () => void;
   resumeBgMusic: () => void;
   setBgMusic: (src: string) => void;
+  transitionBgMusic: (src: string, fadeDuration?: number) => Promise<void>;
 }
 
 const AudioContext = createContext<AudioContextType | undefined>(undefined);
@@ -30,6 +32,8 @@ export function AudioProvider({ children }: { children: React.ReactNode }) {
   const [isInitialized, setIsInitialized] = useState(false);
   const [userConsented, setUserConsented] = useState(false);
   const [animationsStarted, setAnimationsStarted] = useState(false);
+  const [currentBgMusic, setCurrentBgMusic] = useState("/assets/Sound/bg-music.mp3");
+  const isTransitioningRef = useRef(false);
 
   // สร้าง audio element ครั้งเดียว
   useEffect(() => {
@@ -72,6 +76,7 @@ export function AudioProvider({ children }: { children: React.ReactNode }) {
         // เปลี่ยน src และ load
         audio.src = src;
         audio.load();
+        setCurrentBgMusic(src);
         
         // รอให้ audio พร้อมก่อน play
         if (wasPlaying) {
@@ -90,6 +95,72 @@ export function AudioProvider({ children }: { children: React.ReactNode }) {
       } catch (error) {
         console.error("setBgMusic failed:", error);
       }
+    }
+  };
+
+  // ฟังก์ชันเปลี่ยน bg music แบบ fade in/out
+  const transitionBgMusic = async (src: string, fadeDuration = 1000) => {
+    // ถ้ากำลัง transition อยู่ หรือเป็นเพลงเดียวกัน ไม่ต้องทำอะไร
+    if (isTransitioningRef.current || currentBgMusic === src || !audioRef.current) {
+      return;
+    }
+
+    isTransitioningRef.current = true;
+    const audio = audioRef.current;
+    const wasPlaying = !audio.paused;
+    const targetVolume = volume / 100;
+
+    try {
+      // Fade out เพลงเดิม
+      if (wasPlaying) {
+        const fadeSteps = 20;
+        const stepDuration = fadeDuration / (fadeSteps * 2); // แบ่ง 2 เพราะมีทั้ง fade out และ fade in
+        const volumeStep = targetVolume / fadeSteps;
+
+        for (let i = fadeSteps; i >= 0; i--) {
+          audio.volume = Math.max(0, (i / fadeSteps) * targetVolume);
+          await new Promise(resolve => setTimeout(resolve, stepDuration));
+        }
+        
+        audio.pause();
+      }
+
+      // เปลี่ยนเพลง
+      audio.src = src;
+      audio.load();
+      setCurrentBgMusic(src);
+
+      // รอให้ audio พร้อม
+      if (wasPlaying && isInitialized && !isMuted) {
+        await new Promise<void>((resolve) => {
+          if (audio.readyState >= 2) {
+            resolve();
+          } else {
+            audio.addEventListener('canplay', () => resolve(), { once: true });
+          }
+        });
+
+        // Fade in เพลงใหม่
+        audio.volume = 0;
+        await audio.play();
+
+        const fadeSteps = 20;
+        const stepDuration = fadeDuration / (fadeSteps * 2);
+        const volumeStep = targetVolume / fadeSteps;
+
+        for (let i = 0; i <= fadeSteps; i++) {
+          audio.volume = Math.min(targetVolume, (i / fadeSteps) * targetVolume);
+          await new Promise(resolve => setTimeout(resolve, stepDuration));
+        }
+        
+        audio.volume = targetVolume;
+      }
+
+      console.log("BG music transitioned to:", src);
+    } catch (error) {
+      console.error("transitionBgMusic failed:", error);
+    } finally {
+      isTransitioningRef.current = false;
     }
   };
 
@@ -256,6 +327,7 @@ export function AudioProvider({ children }: { children: React.ReactNode }) {
         isPlaying,
         userConsented,
         animationsStarted,
+        currentBgMusic,
         setIsMuted,
         setVolume,
         setSfxVolume,
@@ -265,6 +337,7 @@ export function AudioProvider({ children }: { children: React.ReactNode }) {
         pauseBgMusic,
         resumeBgMusic,
         setBgMusic,
+        transitionBgMusic,
       }}
     >
       {children}

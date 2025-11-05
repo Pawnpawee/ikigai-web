@@ -32,7 +32,7 @@ export default function AppWrapper({
 
   // 3. สร้าง object options ของคุณ
   const lenisOptions = {
-    wheelMultiplier: 0.7,
+    wheelMultiplier: 0.4,
     duration: 2,
     lerp: 0.05,
   };
