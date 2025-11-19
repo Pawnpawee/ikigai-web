@@ -55,14 +55,14 @@ export default function IntoDark() {
 
     if (!playerName.trim()) {
       setNameError("กรุณากรอกชื่อของคุณ");
-      scrollToProgress(0.05); // Middle of NameInput section (0-0.1)
+      scrollToProgress(0.123); // Middle of NameInput section (0-0.245)
       setIsLoading(false);
       return;
     }
 
     if (selectedReasons.length === 0) {
       setReasonsError("กรุณาเลือกเหตุผลอย่างน้อย 1 ข้อ");
-      scrollToProgress(0.4); // Middle of Choices section (0.1-0.7)
+      scrollToProgress(0.480); // Middle of Choices section (0.245-0.698)
       setIsLoading(false);
       return;
     }
@@ -93,40 +93,40 @@ export default function IntoDark() {
       {/* 100vh */}
       <div className="h-screen w-full">
         <IntoDarkNameInput
-          scrollYProgress={scrollYProgress}
-          playerName={playerName}
-          setPlayerName={handlePlayerNameChange}
-          nameError={nameError}
+        scrollYProgress={scrollYProgress}
+        playerName={playerName}
+        setPlayerName={handlePlayerNameChange}
+        nameError={nameError}
         />
       </div>
 
       {/* 600vh - เพิ่มความยาวให้ scroll ได้มากขึ้น */}
       <div className="h-[600vh] w-full">
-        <IntoDarkChoices
-          scrollYProgress={scrollYProgress}
-          playerName={playerName}
-          selectedReasons={selectedReasons}
-          handleReasonToggle={handleReasonToggle}
-          reasonsError={reasonsError}
-        />
+      <IntoDarkChoices
+        scrollYProgress={scrollYProgress}
+        playerName={playerName}
+        selectedReasons={selectedReasons}
+        handleReasonToggle={handleReasonToggle}
+        reasonsError={reasonsError}
+      />
       </div>
 
       {/* 100vh - Ikigai Explanation */}
       <div className="h-screen w-full">
-        <IntoDarkHeard
-          scrollYProgress={scrollYProgress}
-          hasHeard={hasHeard}
-          setHasHeard={setHasHeard}
-        />
+        {/* <IntoDarkHeard
+        scrollYProgress={scrollYProgress}
+        hasHeard={hasHeard}
+        setHasHeard={setHasHeard}
+      /> */}
       </div>
 
       {/* 300vh */}
       <div className="h-[300vh] w-full">
-        <IntoDarkSubmit
-          scrollYProgress={scrollYProgress}
-          isLoading={isLoading}
-          handleSubmit={handleSubmit}
-        />
+      {/* <IntoDarkSubmit
+        scrollYProgress={scrollYProgress}
+        isLoading={isLoading}
+        handleSubmit={handleSubmit}
+        /> */}
       </div>
     </div>
   );

@@ -2,13 +2,19 @@
 import React from "react";
 import { motion, useTransform, MotionValue } from "framer-motion";
 import Image from "next/image";
+import Lottie from "lottie-react";
 import ChoiceButton from "@/app/components/ui/ChoiceButton";
+import { useIsPortrait } from "@/app/hooks/useOrientation";
+import catAnimationData from "../../../../../public/assets/Scene/Scene5/scene5-02/s-5-2-cat.json";
+import tailAnimationData from "../../../../../public/assets/Scene/Scene5/scene5-02/s5-2-tail.json";
+import starLine1AnimationData from "../../../../../public/assets/Scene/Scene5/scene5-02/starline3.json";
+import starLine2AnimationData from "../../../../../public/assets/Scene/Scene5/scene5-02/starline1.json";
 
 const REASONS = [
   { id: 1, text: "เครียดเรื่องเรียน" },
   { id: 2, text: "กลัวว่าตนเองจะไม่เก่งพอ" },
   { id: 3, text: "กลัวจะไม่มีที่ทำงาน" },
-  { id: 4, text: "กลัวว่าทักษะตัวเองจะไม่เก่งพอสำหรับการทำงาน" },
+  { id: 4, text: "กลัวว่าทักษะตัวเองจะดีไม่พอ สำหรับการทำงาน" },
   { id: 5, text: "กลัวไม่มีรายได้ต่อเนื่อง" },
   { id: 6, text: "กลัวจะเข้ากับคนอื่นไม่ได้" },
 ];
@@ -28,6 +34,91 @@ export default function IntoDarkChoices({
   handleReasonToggle,
   reasonsError,
 }: ChoicesProps) {
+  const isPortrait = useIsPortrait();
+
+  // Position configurations for landscape (1920x2160) and portrait (360x1920)
+  // Portrait based on Figma node 497:3275
+  const positions = {
+    // Background Gradient 1 - Bottom gradient (node-id: 497:3276)
+    bgGradient1: isPortrait
+      ? {
+          bottom: 0,
+          width: "177.77%",
+          height: "19.63%",
+        }
+      : { bottom: 0, left: "0", right: "0", height: "39.28%" },
+
+    // Background Gradient 2 - Top right gradient with screen blend (node-id: 497:3277)
+    // Portrait: inset: 49.81% -98.83% 35.21% 78.96%
+    bgGradient2: isPortrait
+      ? { inset: "49.81% -98.83% 35.21% 78.96%" }
+      : { inset: "2.17% -0.51% 37.9% 33.08%" },
+
+    // Light Cat - Glow effect with screen blend (node-id: 497:3278)
+    // Portrait: inset: 49.81% 17.87% 35.21% 17.5%
+    lightCat: isPortrait
+      ? { inset: "49.81% 17.87% 35.21% 17.5%" }
+      : { inset: "42.72% 35.95% 34.14% 35.95%" },
+
+    // Tail (node-id: 497:3279)
+    tail: isPortrait
+      ? {
+          left: "18.52%",
+          bottom: "21.65%",
+          width: "57.5%",
+          height: "14.375%",
+        }
+      : { left: "36.41%", top: "65.28%", width: "25%", height: "22.22%" },
+
+    // Cat (main character) (node-id: 497:3289)
+    // Portrait: inset: 36.63% 18.87% 36.21% 18.35%
+    cat: isPortrait
+      ? { inset: "36.63% 18.87% 36.21% 18.35%" }
+      : { inset: "22.37% 36.38% 35.68% 36.34%" },
+
+    // Star Line 2 - Left star decorations (node-id: 497:3333)
+    // Portrait: inset: 52.32% 93.81% 43.62% -15.92%
+    starLine2: isPortrait
+      ? { inset: "52.32% 93.81% 43.62% -15.92%" }
+      : { inset: "46.6% 68.94% 47.12% 21.45%" },
+
+    // Star Line 1 - Right star decorations (node-id: 497:3337)
+    // Portrait: inset: 55.79% -32.83% 31.1% 94.93%
+    starLine1: isPortrait
+      ? { inset: "55.79% -32.83% 31.1% 94.93%" }
+      : { inset: "51.96% 13.92% 27.79% 69.61%" },
+
+    // Little Star 3 - Background stars (node-id: 497:3345)
+    // Portrait: inset: 44.89% -52.24% 21.61% -35.98%
+    littleStar3: isPortrait
+      ? { inset: "44.89% -52.24% 21.61% -35.98%" }
+      : { inset: "35.13% 5.49% 13.12% 12.74%" },
+
+    // Little Star 2 - Background stars (node-id: 497:3356)
+    // Portrait: inset: 38.05% -4.1% 19.56% -15.92%
+    littleStar2: isPortrait
+      ? { inset: "38.05% -4.1% 19.56% -15.92%" }
+      : { inset: "24.55% 26.41% 9.96% 21.45%" },
+
+    // Little Star 1 - Background stars (node-id: 497:3360)
+    // Portrait: inset: 30.79% -42.44% 16.88% -45.74%
+    littleStar1: isPortrait
+      ? { inset: "30.79% -42.44% 16.88% -45.74%" }
+      : { inset: "13.34% 9.75% 5.81% 8.5%" },
+
+    // Background Gradient 3 - Top left gradient group (node-id: 497:3455)
+    // Portrait: inset: -26.53% -24.4% 78.61% -19.17%
+    bgGradient3: isPortrait
+      ? { inset: "-26.53% -24.4% 78.61% -19.17%" }
+      : { inset: "-53.42% 30.58% 57.59% -11.34%" },
+
+    // Background Gradient Extra - Inside gradient3 (node-id: 497:3456)
+    // Portrait: inset: -8.58% -0.77% 78.61% -19.11%
+    bgGradientExtra: isPortrait
+      ? { inset: "-8.58% -0.77% 78.61% -19.11%" }
+      : { inset: "-17.53% 43.87% 57.59% -11.3%" },
+  };
+
   // Main container opacity and z-index - ปรับให้ตรงกับ 600vh (0.1-0.7)
   const opacity = useTransform(
     scrollYProgress,
@@ -52,14 +143,6 @@ export default function IntoDarkChoices({
   const starsY = useTransform(scrollYProgress, [0.15, 0.22], [50, 0]);
   const starsOpacity = useTransform(scrollYProgress, [0.15, 0.22], [0, 1]);
 
-  // Background gradient 2 - Layer 3
-  const bgGradient2Y = useTransform(scrollYProgress, [0.18, 0.25], [50, 0]);
-  const bgGradient2Opacity = useTransform(
-    scrollYProgress,
-    [0.18, 0.25],
-    [0, 1]
-  );
-
   // Cat (main character) - Layer 4
   const catY = useTransform(scrollYProgress, [0.2, 0.3], [100, 0]);
   const catOpacity = useTransform(scrollYProgress, [0.2, 0.3], [0, 1]);
@@ -78,8 +161,8 @@ export default function IntoDarkChoices({
   const choicesY = useTransform(scrollYProgress, [0.35, 0.42], [30, 0]);
 
   // Additional text sections
-  const text2Opacity = useTransform(scrollYProgress, [0.45, 0.5], [0, 1]);
-  const text3Opacity = useTransform(scrollYProgress, [0.5, 0.55], [0, 1]);
+  const text2Opacity = useTransform(scrollYProgress, [0.5, 0.6], [0, 1]);
+  const text3Opacity = useTransform(scrollYProgress, [0.55, 0.6], [0, 1]);
   const text4Opacity = useTransform(scrollYProgress, [0.55, 0.6], [0, 1]);
   const text5Opacity = useTransform(scrollYProgress, [0.6, 0.65], [0, 1]);
 
@@ -90,19 +173,15 @@ export default function IntoDarkChoices({
         style={{ opacity, zIndex }}
       >
         <div
-          className="relative w-full pointer-events-auto overflow-hidden"
-          style={{
-            aspectRatio: "1920 / 2160",
-          }}
+          className={`relative w-full pointer-events-auto overflow-hidden ${
+            isPortrait ? "aspect-1080/4320" : "aspect-1920/2160"
+          }`}
         >
           {/* Background Gradient 1 - Bottom */}
           <motion.div
-            className="absolute "
+            className="absolute"
             style={{
-              left: "0%",
-              bottom: "-84.81%",
-              width: "100%",
-              height: "191.65%",
+              ...positions.bgGradient1,
               y: bgGradient1Y,
               opacity: bgGradient1Opacity,
             }}
@@ -116,14 +195,12 @@ export default function IntoDarkChoices({
             />
           </motion.div>
 
+
           {/* Light Cat - Glow Effect */}
           <motion.div
             className="absolute mix-blend-screen"
             style={{
-              left: "35.95%",
-              top: "21.66%",
-              width: "28.1%",
-              height: "23.13%",
+              ...positions.lightCat,
               y: catY,
               opacity: catOpacity,
               scale: catScale,
@@ -137,116 +214,81 @@ export default function IntoDarkChoices({
             />
           </motion.div>
 
-          {/* Background Gradient 2 - Top Right */}
-          <motion.div
-            className="absolute mix-blend-screen"
-            style={{
-              left: "33.08%",
-              top: "2.17%",
-              width: "67.43%",
-              height: "59.93%",
-              y: bgGradient2Y,
-              opacity: bgGradient2Opacity,
-            }}
-          >
-            <Image
-              src="/assets/Scene/Scene5/scene5-02/bggradient2.svg"
-              alt="Background gradient 2"
-              fill
-              className="object-contain"
-            />
-          </motion.div>
-
-          {/* Main Cat */}
+          {/* Cat Tail (Lottie) */}
           <motion.div
             className="absolute"
             style={{
-              left: "36.34%",
-              top: "22.37%",
-              width: "27.28%",
-              height: "63.81%",
+              ...positions.tail,
               y: catY,
               opacity: catOpacity,
               scale: catScale,
             }}
           >
-            <Image
-              src="/assets/Scene/Scene5/scene5-02/cat.svg"
-              alt="Cat"
-              fill
-              className="object-contain"
+            <Lottie
+              animationData={tailAnimationData}
+              loop
+              autoplay
+              style={{ width: "100%", height: "100%" }}
             />
           </motion.div>
 
-          {/* Cat Face */}
+          {/* Main Cat (Lottie) */}
           <motion.div
             className="absolute"
             style={{
-              left: "38.33%",
-              top: "31.93%",
-              width: "23.06%",
-              height: "4.29%",
+              ...positions.cat,
               y: catY,
               opacity: catOpacity,
               scale: catScale,
             }}
           >
-            <Image
-              src="/assets/Scene/Scene5/scene5-02/cat face.svg"
-              alt="Cat face"
-              fill
-              className="object-contain"
+            <Lottie
+              animationData={catAnimationData}
+              loop
+              autoplay
+              style={{ width: "100%", height: "100%" }}
             />
           </motion.div>
 
-          {/* Star Line 2 - Right */}
+          {/* Star Line 2 (Lottie) */}
           <motion.div
             className="absolute mix-blend-screen"
             style={{
-              left: "21.45%",
-              top: "46.6%",
-              width: "9.61%",
-              height: "6.28%",
+              ...positions.starLine2,
               y: starLinesY,
               opacity: starLinesOpacity,
             }}
           >
-            <Image
-              src="/assets/Scene/Scene5/scene5-02/Star line2.svg"
-              alt="Star line 2"
-              fill
-              className="object-contain"
+            <Lottie
+              animationData={starLine2AnimationData}
+              loop
+              autoplay
+              style={{ width: "100%", height: "100%" }}
             />
           </motion.div>
 
-          {/* Star Line 1 - Left */}
+          {/* Star Line 1 (Lottie) */}
           <motion.div
             className="absolute mix-blend-screen"
             style={{
-              left: "69.61%",
-              top: "51.96%",
-              width: "16.47%",
-              height: "20.25%",
+              ...positions.starLine1,
               y: starLinesY,
               opacity: starLinesOpacity,
             }}
           >
-            <Image
-              src="/assets/Scene/Scene5/scene5-02/Star line1.svg"
-              alt="Star line 1"
-              fill
-              className="object-contain"
+            <Lottie
+              animationData={starLine1AnimationData}
+              loop
+              autoplay
+              style={{ width: "100%", height: "100%" }}
             />
           </motion.div>
 
-          {/* Little Star 3 - Top Left */}
+          {/* Little Star 3 */}
           <motion.div
             className="absolute mix-blend-screen"
             style={{
-              left: "5.49%",
-              top: "35.13%",
-              width: "81.77%",
-              height: "51.75%",
+              ...positions.littleStar3,
               y: starsY,
               opacity: starsOpacity,
             }}
@@ -260,14 +302,11 @@ export default function IntoDarkChoices({
             />
           </motion.div>
 
-          {/* Little Star 2 - Top Center */}
+          {/* Little Star 2 */}
           <motion.div
             className="absolute"
             style={{
-              left: "21.45%",
-              top: "24.55%",
-              width: "52.14%",
-              height: "65.49%",
+              ...positions.littleStar2,
               y: starsY,
               opacity: starsOpacity,
             }}
@@ -281,14 +320,11 @@ export default function IntoDarkChoices({
             />
           </motion.div>
 
-          {/* Little Star 1 - Very Top */}
+          {/* Little Star 1 */}
           <motion.div
             className="absolute"
             style={{
-              left: "8.5%",
-              top: "13.34%",
-              width: "81.75%",
-              height: "80.85%",
+              ...positions.littleStar1,
               y: starsY,
               opacity: starsOpacity,
             }}
@@ -306,10 +342,7 @@ export default function IntoDarkChoices({
           <motion.div
             className="absolute mix-blend-screen blur-[3px]"
             style={{
-              left: "-11.34%",
-              top: "-53.42%",
-              width: "111.92%",
-              height: "111.01%",
+              ...positions.bgGradient3,
               y: bgGradient1Y,
               opacity: bgGradient1Opacity,
             }}
@@ -322,140 +355,170 @@ export default function IntoDarkChoices({
             />
           </motion.div>
 
-          {/* Text Content */}
+          {/* Background Gradient Extra */}
           <motion.div
-            className="absolute left-1/2 -translate-x-1/2 text-center"
+            className="absolute mix-blend-screen"
             style={{
-              top: "6.2%",
+              ...positions.bgGradientExtra,
+              y: bgGradient1Y,
+              opacity: bgGradient1Opacity,
+            }}
+          >
+            <Image
+              src="/assets/Scene/Scene5/scene5-02/bggradient.svg"
+              alt="Background gradient"
+              fill
+              className="object-contain"
+            />
+          </motion.div>
+
+          {/* Top Content - Welcome Section (node-id: 497:3458) */}
+          <motion.div
+            className="absolute flex flex-col items-start w-screen"
+            style={{
               y: textY,
               opacity: textOpacity,
             }}
           >
-            <div className="flex flex-col items-center gap-4">
-              <p className="typo-text-h3 text-white">
-                {`ยินดีที่ได้รู้จัก ${
-                  playerName || "(ชื่อผู้เล่น)"
-                } มีหลายชีวิตเหลือเกินที่หลงเข้ามาในที่นี้
-เจ้าตกลงมาที่นี่เพราะเหตุใดละ`}
-              </p>
-              <p className="typo-text-h5 text-white">(ตอบอย่างน้อย 3 ข้อ)</p>
+            {/* Welcome box with padding (node-id: 497:3459) */}
+            <div
+              className={`flex flex-col items-center justify-center text-center text-white w-full gap-4 px-0 ${
+                isPortrait ? "pt-[100px] pb-[30px] lg:pt-[120px] lg:pb-[50px]" : "py-[150px]"
+              }`}
+            >
+              {/* Main welcome text (node-id: 497:3460) */}
+              <div className="typo-text-h3 w-full">
+                {isPortrait ? (
+                  <p className="mb-0">
+                    ยินดีที่ได้รู้จัก
+                    {playerName ? <b> {playerName}</b> : " (ชื่อผู้เล่น)"}{" "}
+                    <br />มีหลายชีวิตเหลือเกินที่หลงเข้ามาในที่นี้
+                  </p>
+                ) : (
+                  <>
+                    <p className="mb-0">
+                    ยินดีที่ได้รู้จัก
+                    {playerName ? <b> {playerName}</b> : " (ชื่อผู้เล่น)"}{" "}
+                    มีหลายชีวิตเหลือเกินที่หลงเข้ามาในที่นี้
+                  </p>
+                  </>
+                )}
+                <p>เจ้าตกลงมาที่นี่เพราะเหตุใดละ</p>
+              </div>
+              {/* Subtitle text (node-id: 497:3461) */}
+              <p className="typo-text-h5 w-full">(ตอบอย่างน้อย 3 ข้อ)</p>
             </div>
-          </motion.div>
 
-          {/* Choice Buttons */}
-          <motion.div
-            className="absolute left-1/2 -translate-x-1/2 pointer-events-auto"
-            style={{
-              top: "19.81%",
-              width: "89.48%",
-              y: choicesY,
-              opacity: choicesOpacity,
-            }}
-          >
-            <div className="flex justify-between items-start pointer-events-auto">
-              {/* Left Column */}
-              <div className="flex flex-col gap-[100px] items-center">
+            {/* Choice Buttons Section (node-id: 497:3462) */}
+            <motion.div
+              className={`flex px-[5%] w-screen ${
+                isPortrait
+                  ? "flex-col justify-center items-center gap-[15px] lg:gap-[50px] "
+                  : "items-start justify-between"
+              }`}
+              style={{
+                y: choicesY,
+                opacity: choicesOpacity,
+              }}
+            >
+              <div className="flex flex-col gap-[100px] portrait:gap-[15px] portrait:lg:gap-[50px]">
+                {/* Choice button 1 (node-id: 478:910) */}
                 <ChoiceButton
                   text={REASONS[0].text}
                   isSelected={selectedReasons.includes(REASONS[0].id)}
                   onClick={() => handleReasonToggle(REASONS[0].id)}
-                  className="max-w-[540px]"
                 />
+                {/* Choice button 3 (node-id: 478:911) */}
                 <ChoiceButton
                   text={REASONS[2].text}
                   isSelected={selectedReasons.includes(REASONS[2].id)}
                   onClick={() => handleReasonToggle(REASONS[2].id)}
-                  className="max-w-[540px]"
                 />
+                {/* Choice button 6 (node-id: 478:912) */}
                 <ChoiceButton
                   text={REASONS[5].text}
                   isSelected={selectedReasons.includes(REASONS[5].id)}
                   onClick={() => handleReasonToggle(REASONS[5].id)}
-                  className="max-w-[540px]"
                 />
               </div>
-
-              {/* Right Column */}
-              <div className="flex flex-col gap-[100px] items-center">
+              <div className="flex flex-col gap-[100px] portrait:gap-[15px] portrait:lg:gap-[50px] items-center">
+                {/* Choice button 2 (node-id: 478:907) */}
                 <ChoiceButton
                   text={REASONS[1].text}
                   isSelected={selectedReasons.includes(REASONS[1].id)}
                   onClick={() => handleReasonToggle(REASONS[1].id)}
-                  className="max-w-[540px]"
                 />
+                {/* Choice button 5 (node-id: 478:908) */}
                 <ChoiceButton
                   text={REASONS[4].text}
                   isSelected={selectedReasons.includes(REASONS[4].id)}
                   onClick={() => handleReasonToggle(REASONS[4].id)}
-                  className="max-w-[540px]"
                 />
+                {/* Choice button 4 (node-id: 478:909) */}
                 <ChoiceButton
                   text={REASONS[3].text}
                   isSelected={selectedReasons.includes(REASONS[3].id)}
                   onClick={() => handleReasonToggle(REASONS[3].id)}
-                  className="max-w-[540px]"
                 />
               </div>
-            </div>
+            </motion.div>
           </motion.div>
 
-          {/* Additional Text Sections - Appearing Later */}
+          {/* End Content Container (node-id: 497:3447) */}
           <motion.div
-            className="absolute left-1/10 text-center"
-            style={{
-              top: "64.4%",
-              opacity: text2Opacity,
-            }}
+            className={`absolute bottom-0 flex w-screen flex-col items-center justify-center ${
+              isPortrait ? "gap-[100px] py-[20%]" : "gap-[150px] py-[8%]"
+            }`}
           >
-            <p className="typo-text-h3 text-white whitespace-pre-line">
-              {`โอ้… ถูกครอบงำจาก
+            {/* Text 2 - First message (node-id: 497:3448, 497:3449) */}
+            <motion.div
+              className="flex items-center justify-start portrait:justify-center self-stretch px-[11.98%]"
+              style={{ opacity: text2Opacity }}
+            >
+              <p className="text-white text-center whitespace-pre-line typo-text-h4">
+                {`โอ้… ถูกครอบงำจาก
 ความกังวลสินะ`}
-            </p>
-          </motion.div>
+              </p>
+            </motion.div>
 
-          <motion.div
-            className="absolute left-1/20 text-center"
-            style={{
-              top: "78.19%",
-              opacity: text3Opacity,
-            }}
-          >
-            <p className="typo-text-h3 text-white whitespace-pre-line">
-              {`ข้าเห็นหลายคนที่ตกลงมาที่นี่ก็
+            {/* Text 3 & 4 Container (node-id: 497:3450) */}
+            <div
+              className={`flex text-white text-center typo-text-h4 ${
+                isPortrait
+                  ? "flex-col gap-[2.31%] w-screen"
+                  : "justify-between items-center w-[84.74%]"
+              }`}
+            >
+              {/* Text 3 (node-id: 497:3451) */}
+              <motion.div style={{ opacity: text3Opacity }}>
+                <p className="mb-0 whitespace-pre-line">
+                  {`ข้าเห็นหลายคนที่ตกลงมาที่นี่ก็
 เพราะเช่นนี้แหละ`}
-            </p>
-          </motion.div>
-
-          <motion.div
-            className="absolute right-1/12 text-center"
-            style={{
-              top: "78.06%",
-              opacity: text4Opacity,
-            }}
-          >
-            <p className="typo-text-h3 text-white whitespace-pre-line">
-              {`ในโลกนี้มีเส้นทางทั้งสี่
+                </p>
+              </motion.div>
+              {/* Text 4 (node-id: 497:3452) */}
+              <motion.div style={{ opacity: text4Opacity }}>
+                <p className="mb-0 whitespace-pre-line">
+                  {`ในโลกนี้มีเส้นทางทั้งสี่
 ที่ร้อยเรียงชีวิตไว้ด้วยกัน`}
-            </p>
-          </motion.div>
+                </p>
+              </motion.div>
+            </div>
 
-          <motion.div
-            className="absolute left-1/2 -translate-x-1/2 text-center"
-            style={{
-              top: "92.5%",
-              opacity: text5Opacity,
-            }}
-          >
-            <p className="typo-text-h3 text-white">…เส้นทางทั้งสี่?</p>
+            {/* Text 5 - Final question (node-id: 497:3453, 497:3454) */}
+            {/* Portrait: text-h3: 48px */}
+            <motion.div
+              className="flex items-center justify-center w-full"
+              style={{ opacity: text5Opacity }}
+            >
+              <p className="typo-text-h4 text-white">…เส้นทางทั้งสี่?</p>
+            </motion.div>
           </motion.div>
 
           {/* Error Message */}
           {reasonsError && (
             <motion.div
-              className="absolute left-1/2 -translate-x-1/2 text-center"
-              style={{
-                top: "50%",
-              }}
+              className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 text-center z-50"
               initial={{ opacity: 0, y: -20 }}
               animate={{ opacity: 1, y: 0 }}
             >

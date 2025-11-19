@@ -257,21 +257,21 @@
 @utility typo-h3 {
   font-family: var(--font-anuphan);
   font-weight: 700;
-  font-size: 24px;
+  font-size: 20px;
   line-height: 1.5;
   letter-spacing: 1.5;
 }
 @utility typo-h3-serif {
   font-family: var(--font-bentham);
   font-weight: 500;
-  font-size: 24px;
+  font-size: 20px;
   line-height: 1.5;
   letter-spacing: 1.5;
 }
 @utility typo-text-h3 {
   font-family: var(--font-anuphan);
   font-weight: 400;
-  font-size: 24px;
+  font-size: 20px;
   line-height: 1.5;
   letter-spacing: 1.5;
 }

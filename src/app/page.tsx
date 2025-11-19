@@ -39,14 +39,15 @@ export default function Home() {
       <Navbar />
       <ScrollTo opacity={scrollToOpacity} />
 
+      {/* Scene Intro */}
       <Hero />
       <Intro />
       <JobApplication/>
       <Sleeping />
       <Dreaming />
       <Weighing />
-    
-      {/* <IntoDark /> */}
+      <IntoDark />
+
     </main>
   );
 }

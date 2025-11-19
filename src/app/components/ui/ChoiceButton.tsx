@@ -11,10 +11,16 @@ export default function ChoiceButton({ text, isSelected, onClick, className = ""
   return (
     <motion.button
       onClick={onClick}
-      className={`
-        typo-text-h4
-        relative rounded-full px-16 py-4 text-center transition-all
+      className={`flex justify-center items-center
+        typo-text-h5
+        relative rounded-full px-10 text-center transition-all
         border-[3px] border-solid
+        
+        max-w-2xs
+        min-h-10
+
+        lg:max-w-md lg:min-w-md
+        lg:min-h-28
         ${
           isSelected
             ? "bg-white text-black border-white"

@@ -91,7 +91,7 @@ export default function JobApplication() {
   return (
     <motion.div
       ref={ref}
-      className="relative h-[950vh] z-2"
+      className="relative h-[950vh]"
       style={{ opacity }}
     >
       {/* bg */}

@@ -79,7 +79,7 @@ export default function Dreaming() {
   return (
     <motion.div
       ref={ref}
-      className="relative w-screen h-[600vh] z-2"
+      className="relative w-screen h-[600vh]"
       style={{ opacity: bgOpacity }}
     >
       {/* Sticky Container */}

@@ -251,7 +251,7 @@ export default function Weighing() {
   return (
     <motion.div
       ref={ref}
-      className="relative h-[750vh] z-2"
+      className="relative h-[750vh]"
       style={{ opacity: mainOpacity }}
     >
       {/* Background */}

@@ -15,45 +15,53 @@ export default function IntoDarkHeard({
   hasHeard,
   setHasHeard,
 }: HeardProps) {
-  // Main container opacity and z-index - ช่วง 0.636-0.727 (100vh out of 1100vh)
+  // Main container opacity and z-index - ช่วง 0.698-0.774 (100vh out of 1325vh)
+  // เดิม: 0.686-0.765 → ใหม่: 0.698-0.774
   const opacity = useTransform(
     scrollYProgress,
-    [0.636, 0.65, 0.71, 0.727],
+    [0.698, 0.712, 0.757, 0.774],
     [0, 1, 1, 0]
   );
   const zIndex = useTransform(
     scrollYProgress,
-    [0, 0.65, 0.72, 0.727],
+    [0.697, 0.698, 0.773, 0.774],
     [-1, 10, 10, -1]
   );
 
   // Background gradient - Layer 1
-  const bgGradientY = useTransform(scrollYProgress, [0.636, 0.66], [50, 0]);
-  const bgGradientOpacity = useTransform(scrollYProgress, [0.636, 0.66], [0, 1]);
+  // เดิม: 0.686-0.710 → ใหม่: 0.698-0.722
+  const bgGradientY = useTransform(scrollYProgress, [0.698, 0.722], [50, 0]);
+  const bgGradientOpacity = useTransform(scrollYProgress, [0.698, 0.722], [0, 1]);
 
   // Cloud - Layer 2
-  const cloudY = useTransform(scrollYProgress, [0.64, 0.665], [30, 0]);
-  const cloudOpacity = useTransform(scrollYProgress, [0.64, 0.665], [0, 1]);
+  // เดิม: 0.690-0.715 → ใหม่: 0.702-0.727
+  const cloudY = useTransform(scrollYProgress, [0.702, 0.727], [30, 0]);
+  const cloudOpacity = useTransform(scrollYProgress, [0.702, 0.727], [0, 1]);
 
   // Stars - Layer 3
-  const starsY = useTransform(scrollYProgress, [0.645, 0.67], [40, 0]);
-  const starsOpacity = useTransform(scrollYProgress, [0.645, 0.67], [0, 1]);
+  // เดิม: 0.695-0.720 → ใหม่: 0.707-0.732
+  const starsY = useTransform(scrollYProgress, [0.707, 0.732], [40, 0]);
+  const starsOpacity = useTransform(scrollYProgress, [0.707, 0.732], [0, 1]);
 
   // Cat and Light Cat - Layer 4
-  const catY = useTransform(scrollYProgress, [0.65, 0.68], [80, 0]);
-  const catOpacity = useTransform(scrollYProgress, [0.65, 0.68], [0, 1]);
+  // เดิม: 0.700-0.730 → ใหม่: 0.712-0.742
+  const catY = useTransform(scrollYProgress, [0.712, 0.742], [80, 0]);
+  const catOpacity = useTransform(scrollYProgress, [0.712, 0.742], [0, 1]);
 
   // Text content - Layer 5
-  const textOpacity = useTransform(scrollYProgress, [0.655, 0.685], [0, 1]);
-  const textY = useTransform(scrollYProgress, [0.655, 0.685], [30, 0]);
+  // เดิม: 0.705-0.735 → ใหม่: 0.717-0.747
+  const textOpacity = useTransform(scrollYProgress, [0.717, 0.747], [0, 1]);
+  const textY = useTransform(scrollYProgress, [0.717, 0.747], [30, 0]);
 
   // Choice buttons - Layer 6
-  const choicesOpacity = useTransform(scrollYProgress, [0.665, 0.695], [0, 1]);
-  const choicesY = useTransform(scrollYProgress, [0.665, 0.695], [20, 0]);
+  // เดิม: 0.715-0.745 → ใหม่: 0.727-0.757
+  const choicesOpacity = useTransform(scrollYProgress, [0.727, 0.757], [0, 1]);
+  const choicesY = useTransform(scrollYProgress, [0.727, 0.757], [20, 0]);
 
   // Additional text - Layer 7
-  const additionalTextOpacity = useTransform(scrollYProgress, [0.675, 0.705], [0, 1]);
-  const additionalTextY = useTransform(scrollYProgress, [0.675, 0.705], [20, 0]);
+  // เดิม: 0.725-0.755 → ใหม่: 0.737-0.767
+  const additionalTextOpacity = useTransform(scrollYProgress, [0.737, 0.767], [0, 1]);
+  const additionalTextY = useTransform(scrollYProgress, [0.737, 0.767], [20, 0]);
 
   return (
     <div className="sticky top-0 w-full pointer-events-none">

@@ -152,7 +152,7 @@ export default function Sleeping() {
   return (
     <motion.div
       ref={ref}
-      className="relative w-screen h-[800vh] z-2"
+      className="relative w-screen h-[800vh] "
       style={{ opacity: bgOpacity }}
     >
       {/* Sticky Container */}

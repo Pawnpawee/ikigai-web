@@ -37,7 +37,7 @@ const WordByWordAnimation: FC<WordByWordAnimationProps> = ({ text, scrollYProgre
       { className, style },
       lines.map((line, lineIndex) => (
         // 3. คอนเทนเนอร์สำหรับแต่ละบรรทัด
-        <span key={lineIndex} className="flex flex-wrap items-center justify-center whitespace-pre-line">
+        <span key={lineIndex} className="flex flex-wrap items-center justify-center whitespace-pre-line select-none">
           {line.split(" ").map((word, wordIndexInLine) => {
             if (word === "") return null;
 
