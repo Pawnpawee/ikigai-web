@@ -180,7 +180,6 @@ export default function LoveSessionContainer() {
       dreamAnswer,
     };
 
-    console.log("Submitting Session 1 Data:", session1Data);
 
     try {
       await new Promise((resolve) => setTimeout(resolve, 1000));

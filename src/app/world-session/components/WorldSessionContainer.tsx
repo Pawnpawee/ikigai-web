@@ -154,7 +154,6 @@ export default function WorldSessionContainer() {
       futureValueAnswer,
     };
 
-    console.log("Submitting Session 3 Data:", session3Data);
     try {
       await new Promise((resolve) => setTimeout(resolve, 1000));
       router.push("/paid-session");

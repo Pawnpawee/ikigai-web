@@ -196,7 +196,7 @@ export default function SkillSessionContainer() {
       useSkillsInNewRole,
     };
 
-    console.log("Submitting Session 2 Data:", session2Data);
+  
 
     try {
       // Replace with your actual API call
