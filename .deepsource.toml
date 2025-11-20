@@ -1,18 +1,17 @@
 version = 1
 
 [[analyzers]]
-name = "test-coverage"
-
-[[analyzers]]
 name = "javascript"
 
   [analyzers.meta]
   plugins = ["react"]
   environment = [
     "browser",
-    "nodejs",
-    "es6"
+    "nodejs"
   ]
 
-[[transformers]]
+[[analyzers]]
+name = "test-coverage"
+
+[[code_formatters]]
 name = "prettier"
