@@ -2,12 +2,12 @@ version = 1
 
 [[analyzers]]
 name = "javascript"
-enabled = true
+enabled = true  
 
-[analyzers.meta]
-plugins = ["react"] 
-environment = ["browser", "nodejs", "es6"]
+  [analyzers.meta]
+  plugins = ["react"]
+  environment = ["browser", "nodejs", "es6"]
 
 [[transformers]]
 name = "prettier"
-enabled = true
+enabled = true  
