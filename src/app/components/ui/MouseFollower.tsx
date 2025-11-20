@@ -77,11 +77,8 @@ const MouseFollower: FC = () => {
 
   return (
     <motion.div
-      className="pointer-events-none fixed left-0 top-0 z-9999"
+      className="pointer-events-none fixed left-0 top-0 z-9999 w-[40px] h-[40px] rounded-full"
       style={{
-        width: 40,
-        height: 40,
-        borderRadius: "50%",
         x: mousePosition.x - 20,
         y: mousePosition.y - 20,
       }}

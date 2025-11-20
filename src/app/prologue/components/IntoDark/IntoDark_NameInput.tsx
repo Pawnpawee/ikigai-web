@@ -300,6 +300,7 @@ export default function IntoDarkNameInput({
               fill
               className="object-contain animate-pulse"
               style={{ animationDuration: "3s" }}
+              priority
             />
           </motion.div>
 

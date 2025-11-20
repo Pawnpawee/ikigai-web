@@ -270,7 +270,8 @@ export default function IntoDarkHeard({
             src="/assets/Scene/Scene5/scene5-03/Light Cat.svg"
             alt="Light Cat"
             fill
-            className="object-contain"
+            className="object-contain animate-pulse"
+            style={{ animationDuration: "2s" }}
           />
         </motion.div>
 

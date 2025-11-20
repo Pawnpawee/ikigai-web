@@ -19,11 +19,11 @@ export default function InputButton({
   const segmenter = new Intl.Segmenter("th", { granularity: "grapheme" });
   const placeholderLength = [...segmenter.segment(placeholder)].length;
   const valueLength = [...segmenter.segment(value)].length;
-  const inputSize = Math.max(valueLength, placeholderLength);
+  const inputSize = Math.max(valueLength, placeholderLength, 1);
 
   return (
     <div
-      className={`flex py-2 lg:py-4 px-6 lg:px-14 justify-center items-center gap-2.5 ${className}`}
+      className={`flex py-2 lg:py-4 px-6 lg:px-14 justify-center items-center gap-2.5 pointer-events-auto ${className}`}
       style={{
         borderRadius: "512px",
         border: "4px solid var(--white-radial)",
@@ -38,10 +38,10 @@ export default function InputButton({
         value={value}
         onChange={(e) => onChange(e.target.value)}
         placeholder={placeholder}
-        className="typo-text-h4 text-center bg-transparent border-none outline-none p-0"
+        className="typo-text-h4 text-center bg-transparent border-none outline-none p-0 pointer-events-auto"
         style={{
           width: `${inputSize}ch`,
-          minWidth: "1ch",
+          minWidth: `${placeholderLength}ch`,
         }}
       />
     </div>
