@@ -1,4 +1,3 @@
-
 import React, { useRef, useEffect, useState } from "react";
 import {
   motion,
@@ -36,7 +35,7 @@ export default function Hero() {
   const backgroundY = useTransform(
     elementScrollYProgress,
     [0, 1],
-    ["0%", "100%"]
+    ["0%", "100%"],
   );
   const opacity = useTransform(elementScrollYProgress, [1, 0], [0, 1]);
 
@@ -64,7 +63,7 @@ export default function Hero() {
   const circle1_rotate = useTransform(
     elementScrollYProgress,
     [0, 1],
-    [-180, 0]
+    [-180, 0],
   );
   const circle2_rotate = useTransform(elementScrollYProgress, [0, 1], [90, 0]);
   const circle3_rotate = useTransform(elementScrollYProgress, [0, 1], [0, 90]);
@@ -126,7 +125,7 @@ export default function Hero() {
           lottieRef.current?.getDuration() || 0;
         const glowStartTimeInMs = Math.max(
           0,
-          animationDurationInSeconds * 1000 - 1200
+          animationDurationInSeconds * 1000 - 1200,
         );
 
         glowTimerRef.current = setTimeout(() => {

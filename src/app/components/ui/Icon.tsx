@@ -1,4 +1,4 @@
-import React from 'react';
+import React from "react";
 
 export interface IconProps {
   src: string;
@@ -9,7 +9,14 @@ export interface IconProps {
   style?: React.CSSProperties;
 }
 
-export default function Icon({ src, alt = '', size = 24, color, className, style }: IconProps) {
+export default function Icon({
+  src,
+  alt = "",
+  size = 24,
+  color,
+  className,
+  style,
+}: IconProps) {
   return (
     <img
       src={src}

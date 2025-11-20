@@ -9,12 +9,21 @@ interface MusicModalProps {
 }
 
 export default function MusicModal({ isOpen, onClose }: MusicModalProps) {
-  const { isMuted, volume, sfxVolume, isPlaying, setVolume, setSfxVolume, togglePlay, setIsMuted } = useAudio();
+  const {
+    isMuted,
+    volume,
+    sfxVolume,
+    isPlaying,
+    setVolume,
+    setSfxVolume,
+    togglePlay,
+    setIsMuted,
+  } = useAudio();
 
   const handleVolumeChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const newVolume = Number(e.target.value);
     setVolume(newVolume);
-    
+
     // ถ้า slider > 0 และกำลัง mute อยู่ → Unmute และเล่นเสียง
     if (newVolume > 0 && isMuted) {
       setIsMuted(false);
@@ -22,7 +31,7 @@ export default function MusicModal({ isOpen, onClose }: MusicModalProps) {
         togglePlay();
       }
     }
-    
+
     // ถ้าทั้ง volume และ sfxVolume เป็น 0 → Mute
     if (newVolume === 0 && sfxVolume === 0) {
       setIsMuted(true);
@@ -30,14 +39,14 @@ export default function MusicModal({ isOpen, onClose }: MusicModalProps) {
         togglePlay();
       }
     }
-    
+
     console.log("Volume changed:", newVolume);
   };
 
   const handleSfxVolumeChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const newVolume = Number(e.target.value);
     setSfxVolume(newVolume);
-    
+
     // ถ้า slider > 0 และกำลัง mute อยู่ → Unmute และเล่นเสียง
     if (newVolume > 0 && isMuted) {
       setIsMuted(false);
@@ -45,7 +54,7 @@ export default function MusicModal({ isOpen, onClose }: MusicModalProps) {
         togglePlay();
       }
     }
-    
+
     // ถ้าทั้ง volume และ sfxVolume เป็น 0 → Mute
     if (volume === 0 && newVolume === 0) {
       setIsMuted(true);
@@ -53,7 +62,7 @@ export default function MusicModal({ isOpen, onClose }: MusicModalProps) {
         togglePlay();
       }
     }
-    
+
     console.log("SFX Volume changed:", newVolume);
   };
 
@@ -137,7 +146,6 @@ export default function MusicModal({ isOpen, onClose }: MusicModalProps) {
                 )}
               </button>
             </div>
-
 
             {/* Volume Control */}
             <div className="space-y-4">

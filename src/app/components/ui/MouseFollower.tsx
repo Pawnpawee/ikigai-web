@@ -2,7 +2,6 @@
 import React, { useState, useEffect, FC } from "react";
 import { motion } from "framer-motion";
 
-
 interface MousePosition {
   x: number;
   y: number;
@@ -46,11 +45,11 @@ const MouseFollower: FC = () => {
       window.removeEventListener("mousemove", handleMouseMove);
       document.documentElement.removeEventListener(
         "mouseenter",
-        handleMouseEnter
+        handleMouseEnter,
       );
       document.documentElement.removeEventListener(
         "mouseleave",
-        handleMouseLeave
+        handleMouseLeave,
       );
     };
   }, []);

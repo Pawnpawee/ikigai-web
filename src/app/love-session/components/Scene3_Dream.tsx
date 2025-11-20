@@ -1,6 +1,5 @@
 import { motion, MotionValue } from "framer-motion";
 
-
 import { DreamAnswer } from "./LoveSessionContainer";
 import WordByWordAnimation from "@/app/components/ui/WordByWordAnimation";
 
@@ -23,7 +22,7 @@ const DREAM_OPTIONS: { value: DreamAnswer; label: string }[] = [
 
 export default function Scene3Dream({
   opacity,
-    zIndex,
+  zIndex,
   textProgress,
   dreamAnswer,
   setDreamAnswer,
@@ -33,15 +32,15 @@ export default function Scene3Dream({
 }: Props) {
   return (
     <motion.div
-      style={{ opacity , zIndex}}
+      style={{ opacity, zIndex }}
       className="fixed top-0 h-screen w-full flex items-center justify-center"
     >
-  <div className="flex flex-col items-center gap-6 sm:gap-8 p-3 sm:p-4 max-w-xl sm:max-w-2xl text-center">
+      <div className="flex flex-col items-center gap-6 sm:gap-8 p-3 sm:p-4 max-w-xl sm:max-w-2xl text-center">
         <WordByWordAnimation
           text="แมว : ดูเหมือนจะเป็นงานอดิเรกที่ดีเลยนะ แล้วสิ่งที่เจ้ารักนี้ช่วยให้เจ้าเดินตามความฝันได้รึเปล่า?"
           scrollYProgress={textProgress}
           as="p"
-className="typo-h5 text-white"
+          className="typo-h5 text-white"
         />
         {errorMessage && (
           <motion.p
@@ -53,7 +52,7 @@ className="typo-h5 text-white"
           </motion.p>
         )}
 
-        <motion.div 
+        <motion.div
           initial={{ opacity: 0, y: 10 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.5 }}
@@ -67,8 +66,8 @@ className="typo-h5 text-white"
                 w-48 p-3 border-2 rounded-lg text-xl transition-all
                 ${
                   dreamAnswer === opt.value
-                    ? 'bg-white text-black border-white'
-                    : 'bg-transparent border-gray-500 hover:border-white text-white'
+                    ? "bg-white text-black border-white"
+                    : "bg-transparent border-gray-500 hover:border-white text-white"
                 }
               `}
               whileHover={{ scale: 1.05 }}
@@ -90,7 +89,7 @@ className="typo-h5 text-white"
             whileHover={{ scale: 1.05 }}
             whileTap={{ scale: 0.95 }}
           >
-            {isLoading ? 'กำลังบันทึก...' : 'บันทึกและเดินทางต่อ'}
+            {isLoading ? "กำลังบันทึก..." : "บันทึกและเดินทางต่อ"}
           </motion.button>
         )}
       </div>

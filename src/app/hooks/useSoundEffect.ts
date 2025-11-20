@@ -48,7 +48,7 @@ export function useSoundEffect({
     (
       audioEl: HTMLAudioElement,
       direction: "in" | "out",
-      onComplete?: () => void
+      onComplete?: () => void,
     ) => {
       if (fadeIntervalRef.current) {
         clearInterval(fadeIntervalRef.current);
@@ -94,7 +94,7 @@ export function useSoundEffect({
         }, stepTime);
       }
     },
-    [fadeDurationMs, sfxVolume, volume]
+    [fadeDurationMs, sfxVolume, volume],
   );
 
   // ฟังก์ชันเล่นเสียงพร้อม fade in/out
@@ -108,14 +108,17 @@ export function useSoundEffect({
       if (loop) {
         fadeAudio(audio, "in", onComplete);
       } else {
-        const soundStopTimerDelay = Math.max(0, soundDurationMs - fadeDurationMs);
+        const soundStopTimerDelay = Math.max(
+          0,
+          soundDurationMs - fadeDurationMs,
+        );
         fadeAudio(audio, "in");
         soundTimerRef.current = setTimeout(() => {
           fadeAudio(audio, "out", onComplete);
         }, soundStopTimerDelay);
       }
     },
-    [audio, isMuted, soundDurationMs, fadeDurationMs, fadeAudio, loop]
+    [audio, isMuted, soundDurationMs, fadeDurationMs, fadeAudio, loop],
   );
 
   // ฟังก์ชันหยุดเสียง (fade out เสมอ)

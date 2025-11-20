@@ -12,7 +12,7 @@ export default function LoveSessionPage() {
     if (lenis) {
       lenis.scrollTo(0, { immediate: true });
     }
-  }, [lenis]); 
+  }, [lenis]);
   return (
     <main>
       <ReactLenis root options={{ lerp: 0.05 }}>

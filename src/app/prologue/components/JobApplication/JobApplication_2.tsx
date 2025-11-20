@@ -20,14 +20,14 @@ export default function JobApplication2({
   const x = useTransform(
     scrollYProgress,
     [0, 0.611, 0.75],
-    ["0%", "0%", `${isPortrait ? "-65%" : "-49.5%"}`]
+    ["0%", "0%", `${isPortrait ? "-65%" : "-49.5%"}`],
   );
 
   // Overall opacity - hard cut at 0.611, นิ่ง 100vh, นิ่ง 50vh, fade out last 50vh (0.947-1.0)
   const opacity = useTransform(
     scrollYProgress,
     [0, 0.611, 0.611, 0.97, 1],
-    [0, 0, 1, 1, 0]
+    [0, 0, 1, 1, 0],
   );
 
   // นิ่ง 100vh (0.611-0.722) ไม่มีอนิเมชั่น
@@ -38,26 +38,26 @@ export default function JobApplication2({
   const windowOpacity = useTransform(
     scrollYProgress,
     [0.722, 0.755, 1],
-    [0, 1, 1]
+    [0, 1, 1],
   );
 
   // ชุด 2: light window (0.755-0.789)
   const lightWindowOpacity = useTransform(
     scrollYProgress,
     [0.755, 0.789, 1],
-    [0, 1, 1]
+    [0, 1, 1],
   );
 
   // ชุด 3: curtain1, curtain2 (0.789-0.833)
   const curtainY = useTransform(
     scrollYProgress,
     [0.789, 0.833, 1],
-    [100, 0, 0]
+    [100, 0, 0],
   );
   const curtainOpacity = useTransform(
     scrollYProgress,
     [0.789, 0.833, 1],
-    [0, 1, 1]
+    [0, 1, 1],
   );
 
   // ชุด 4-6: Outdoor elements (100vh = 0.833-0.944)
@@ -65,24 +65,24 @@ export default function JobApplication2({
   const building2Y = useTransform(
     scrollYProgress,
     [0.833, 0.867, 1],
-    [100, 0, 0]
+    [100, 0, 0],
   );
   const building2Opacity = useTransform(
     scrollYProgress,
     [0.833, 0.867, 1],
-    [0, 1, 1]
+    [0, 1, 1],
   );
 
   // ชุด 5: building1, circle (0.867-0.9)
   const building1Y = useTransform(
     scrollYProgress,
     [0.867, 0.9, 1],
-    [100, 0, 0]
+    [100, 0, 0],
   );
   const building1Opacity = useTransform(
     scrollYProgress,
     [0.867, 0.9, 1],
-    [0, 1, 1]
+    [0, 1, 1],
   );
 
   // ชุด 6: moon (0.9-0.944)
