@@ -1,13 +1,18 @@
 version = 1
 
 [[analyzers]]
+name = "test-coverage"
+
+[[analyzers]]
 name = "javascript"
-enabled = true  
 
   [analyzers.meta]
   plugins = ["react"]
-  environment = ["browser", "nodejs", "es6"]
+  environment = [
+    "browser",
+    "nodejs",
+    "es6"
+  ]
 
 [[transformers]]
 name = "prettier"
-enabled = true  
