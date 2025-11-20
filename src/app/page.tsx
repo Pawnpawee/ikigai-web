@@ -28,7 +28,7 @@ export default function Home() {
   const scrollToOpacity = useTransform(
     scrollYProgress,
     [0, 0.8, 0.95, 1],
-    [1, 1, 0, 0]
+    [1, 1, 0, 0],
   );
 
   return (
@@ -41,13 +41,12 @@ export default function Home() {
 
       {/* Scene Intro */}
       <Hero />
-      <Intro /> 
-      <JobApplication/>
+      <Intro />
+      <JobApplication />
       <Sleeping />
       <Dreaming />
       <Weighing />
       <IntoDark />
-
     </main>
   );
 }

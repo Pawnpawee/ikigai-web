@@ -38,7 +38,7 @@ export default function IntoDark() {
       const scrollableDistance = sectionHeight - viewportHeight;
 
       // 0.150 คือตำแหน่งประมาณ 90% ของ NameInput section (270vh/1800vh)
-      const lockThreshold = scrollStart + scrollableDistance * 0.150;
+      const lockThreshold = scrollStart + scrollableDistance * 0.15;
 
       // ตรวจสอบตำแหน่งปัจจุบัน (e.scroll หรือ e.animatedScroll)
       // ถ้าเกินจุด Lock ให้ดีดกลับไปที่จุด Lock ทันที
@@ -72,7 +72,7 @@ export default function IntoDark() {
       const scrollStart = ref.current.offsetTop;
       const scrollableDistance = ref.current.scrollHeight - window.innerHeight;
       // เลื่อนไปที่ 0.250 (เริ่มของ Choices section + buffer)
-      const target = scrollStart + scrollableDistance * 0.250;
+      const target = scrollStart + scrollableDistance * 0.25;
       lenis.scrollTo(target, { duration: 1.5 });
     }
   };
@@ -83,7 +83,7 @@ export default function IntoDark() {
     setSelectedReasons((prev) =>
       prev.includes(reasonId)
         ? prev.filter((id) => id !== reasonId)
-        : [...prev, reasonId]
+        : [...prev, reasonId],
     );
   };
 
@@ -101,7 +101,7 @@ export default function IntoDark() {
         const scrollableDistance =
           ref.current.scrollHeight - window.innerHeight;
         // กลับไปที่ 0.150 (ตำแหน่ง input - lock position ที่ 90% ของ NameInput section)
-        const target = scrollStart + scrollableDistance * 0.150;
+        const target = scrollStart + scrollableDistance * 0.15;
         lenis.scrollTo(target, { duration: 1.2 });
       }
     }

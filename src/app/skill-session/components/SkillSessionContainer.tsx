@@ -86,41 +86,45 @@ export default function SkillSessionContainer() {
   const scene1Opacity = useTransform(
     scrollYProgress,
     [0, 0.02, 0.23, 0.25],
-    [0, 1, 1, 0]
+    [0, 1, 1, 0],
   );
   const scene1TextProgress = useTransform(
     scrollYProgress,
     [0.02, 0.15],
-    [0, 1]
+    [0, 1],
   );
   const z1 = useTransform(
     scrollYProgress,
     [0, 0.01, 0.24, 0.25],
-    [-1, 10, 10, -1]
+    [-1, 10, 10, -1],
   );
 
   // Scene 2 (0.25 -> 0.5)
   const scene2Opacity = useTransform(
     scrollYProgress,
     [0.25, 0.27, 0.48, 0.5],
-    [0, 1, 1, 0]
+    [0, 1, 1, 0],
   );
   const scene2TextProgress = useTransform(scrollYProgress, [0.27, 0.4], [0, 1]);
   const z2 = useTransform(
     scrollYProgress,
     [0.25, 0.26, 0.49, 0.5],
-    [-1, 10, 10, -1]
+    [-1, 10, 10, -1],
   );
 
   // Scene 3 (0.5 -> 1.0) - Stays visible
-  const scene3Opacity = useTransform(scrollYProgress, [0.5, 0.52, 1], [0, 1, 1]);
+  const scene3Opacity = useTransform(
+    scrollYProgress,
+    [0.5, 0.52, 1],
+    [0, 1, 1],
+  );
   const scene3TextProgress = useTransform(scrollYProgress, [0.52, 0.9], [0, 1]);
   const z3 = useTransform(scrollYProgress, [0.5, 0.51, 1], [-1, 10, 10]);
 
   const scrollToOpacity = useTransform(
     scrollYProgress,
     [0, 0.02, 0.8, 0.85],
-    [0, 1, 1, 0]
+    [0, 1, 1, 0],
   );
 
   // --- Submission Logic ---
@@ -195,8 +199,6 @@ export default function SkillSessionContainer() {
       skillsMatchJob,
       useSkillsInNewRole,
     };
-
-  
 
     try {
       // Replace with your actual API call

@@ -10,8 +10,8 @@ interface UseBgMusicTransitionProps {
   fadeDuration?: number;
   /** สถานะว่าอยู่ใน viewport หรือไม่ */
   isInView: boolean;
-  /** 
-   * ถ้าเป็น true จะไม่ reset เพลงเมื่อออกจาก viewport 
+  /**
+   * ถ้าเป็น true จะไม่ reset เพลงเมื่อออกจาก viewport
    * ใช้สำหรับ section ที่ต้องการให้เพลงเล่นต่อไปยัง section ถัดไป
    */
   continueOnExit?: boolean;
@@ -19,11 +19,11 @@ interface UseBgMusicTransitionProps {
 
 /**
  * Custom hook สำหรับจัดการการเปลี่ยน background music แบบ fade in/out
- * 
+ *
  * @example
  * ```tsx
  * const isInView = useInView(ref, { once: false, amount: 0.1 });
- * 
+ *
  * useBgMusicTransition({
  *   targetMusic: "/assets/Sound/3-4/egypt-jelly-dance.mp3",
  *   defaultMusic: "/assets/Sound/bg-music.mp3",
@@ -50,10 +50,24 @@ export function useBgMusicTransition({
       // เข้า viewport -> เปลี่ยนเป็นเพลงที่ต้องการ
       transitionBgMusic(targetMusic, fadeDuration);
       hasChangedMusicRef.current = true;
-    } else if (!isInView && hasChangedMusicRef.current && !continueOnExit && currentBgMusic === targetMusic) {
+    } else if (
+      !isInView &&
+      hasChangedMusicRef.current &&
+      !continueOnExit &&
+      currentBgMusic === targetMusic
+    ) {
       // ออกจาก viewport -> กลับไปใช้เพลงเดิม (เฉพาะถ้า continueOnExit = false)
       transitionBgMusic(defaultMusic, fadeDuration);
       hasChangedMusicRef.current = false;
     }
-  }, [isInView, animationsStarted, targetMusic, defaultMusic, fadeDuration, transitionBgMusic, currentBgMusic, continueOnExit]);
+  }, [
+    isInView,
+    animationsStarted,
+    targetMusic,
+    defaultMusic,
+    fadeDuration,
+    transitionBgMusic,
+    currentBgMusic,
+    continueOnExit,
+  ]);
 }

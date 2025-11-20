@@ -10,10 +10,9 @@ interface ScrollToProps {
 
 export default function ScrollTo({ opacity }: ScrollToProps) {
   return (
-
     <motion.div
       className="box-border flex flex-col gap-2 items-center justify-center px-8 lg:px-14 py-0 fixed bottom-[env(safe-area-inset-bottom)] z-50 w-screen h-[100px]"
-      style={{ opacity }} 
+      style={{ opacity }}
     >
       <motion.div
         className="flex flex-col gap-2 items-center"
@@ -30,9 +29,7 @@ export default function ScrollTo({ opacity }: ScrollToProps) {
       >
         <div className="flex gap-2 items-center relative shrink-0">
           <Coolshape type="star" index={7} size={20} noise={true} />
-          <p className="typo-p-md text-white">
-            scroll to continue
-          </p>
+          <p className="typo-p-md text-white">scroll to continue</p>
           <Coolshape type="star" index={7} size={20} noise={true} />
         </div>
 

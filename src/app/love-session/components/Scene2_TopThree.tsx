@@ -1,6 +1,5 @@
 import { motion, MotionValue } from "framer-motion";
 
-
 import ChoiceButton from "../../components/ui/ChoiceButton";
 import WordByWordAnimation from "@/app/components/ui/WordByWordAnimation";
 
@@ -16,14 +15,13 @@ interface Props {
 
 export default function Scene2TopThree({
   opacity,
-    zIndex,
+  zIndex,
   textProgress,
   allHobbies,
   topThree,
   setTopThree,
   errorMessage,
 }: Props) {
-  
   const handleTopThreeToggle = (hobby: string) => {
     setTopThree((prev) => {
       if (prev.includes(hobby)) {
@@ -40,7 +38,7 @@ export default function Scene2TopThree({
 
   return (
     <motion.div
-      style={{ opacity , zIndex}}
+      style={{ opacity, zIndex }}
       className="fixed top-0 h-screen w-full flex items-center justify-center"
     >
       <div className="flex flex-col items-center gap-6 p-4 max-w-4xl text-center">
@@ -48,7 +46,7 @@ export default function Scene2TopThree({
           text="แมว: เลือก 3 สิ่งที่เจ้าจะทำมันอยู่ดี แม้ว่าเจ้าจะไม่ได้อะไรตอบแทนเลยก็ตาม?"
           scrollYProgress={textProgress}
           as="p"
-className="typo-h5 text-white"
+          className="typo-h5 text-white"
         />
         {errorMessage && (
           <motion.p
@@ -60,14 +58,16 @@ className="typo-h5 text-white"
           </motion.p>
         )}
 
-        <motion.div 
+        <motion.div
           initial={{ opacity: 0, y: 10 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.5 }}
           className="flex flex-wrap justify-center gap-3 max-h-[50vh] overflow-y-auto p-4"
         >
           {allHobbies.length === 0 ? (
-            <p className="text-gray-400">กรุณากลับไปเลือกสิ่งที่เจ้าชอบในฉากก่อนหน้า...</p>
+            <p className="text-gray-400">
+              กรุณากลับไปเลือกสิ่งที่เจ้าชอบในฉากก่อนหน้า...
+            </p>
           ) : (
             allHobbies.map((hobby) => (
               <ChoiceButton
@@ -80,10 +80,8 @@ className="typo-h5 text-white"
             ))
           )}
         </motion.div>
-        
-        <p className="text-gray-300 text-lg">
-          เลือกแล้ว {topThree.length} / 3
-        </p>
+
+        <p className="text-gray-300 text-lg">เลือกแล้ว {topThree.length} / 3</p>
       </div>
     </motion.div>
   );

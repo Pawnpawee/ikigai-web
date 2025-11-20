@@ -58,11 +58,7 @@ export default function MenuModal({ isOpen, onClose }: MenuModalProps) {
             {/* Menu Items */}
             <nav className="flex flex-col gap-4">
               {/* Privacy Policy Button */}
-              <Link
-                href="/privacy-policy"
-                onClick={onClose}
-                className="group"
-              >
+              <Link href="/privacy-policy" onClick={onClose} className="group">
                 <motion.div
                   whileHover={{ scale: 1.02 }}
                   whileTap={{ scale: 0.98 }}
@@ -112,11 +108,7 @@ export default function MenuModal({ isOpen, onClose }: MenuModalProps) {
               </Link>
 
               {/* About Button */}
-              <Link
-                href="/about"
-                onClick={onClose}
-                className="group"
-              >
+              <Link href="/about" onClick={onClose} className="group">
                 <motion.div
                   whileHover={{ scale: 1.02 }}
                   whileTap={{ scale: 0.98 }}
@@ -145,9 +137,7 @@ export default function MenuModal({ isOpen, onClose }: MenuModalProps) {
                     <h3 className="typo-h6 text-white group-hover:text-purple-400 transition-colors">
                       เกี่ยวกับเรา
                     </h3>
-                    <p className="typo-p-sm text-slate-400">
-                      ข้อมูลและติดต่อ
-                    </p>
+                    <p className="typo-p-sm text-slate-400">ข้อมูลและติดต่อ</p>
                   </div>
                   {/* Arrow */}
                   <svg

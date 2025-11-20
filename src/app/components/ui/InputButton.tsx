@@ -15,7 +15,6 @@ export default function InputButton({
   className = "",
   style = {},
 }: InputButtonProps) {
-
   const segmenter = new Intl.Segmenter("th", { granularity: "grapheme" });
   const placeholderLength = [...segmenter.segment(placeholder)].length;
   const valueLength = [...segmenter.segment(value)].length;

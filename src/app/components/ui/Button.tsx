@@ -5,7 +5,8 @@ type Appearance = "outline" | "solid" | "ghost";
 type Intent = "primary" | "danger" | "neutral";
 type Size = "sm" | "md" | "lg";
 
-export interface ButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
+export interface ButtonProps
+  extends React.ButtonHTMLAttributes<HTMLButtonElement> {
   appearance?: Appearance;
   intent?: Intent;
   size?: Size;
@@ -23,7 +24,8 @@ const sizeClasses: Record<Size, string> = {
 };
 
 function computeClasses(appearance: Appearance, intent: Intent) {
-  const base = "inline-flex items-center justify-center gap-2 rounded-full font-semibold select-none transition-colors disabled:opacity-50 disabled:pointer-events-none";
+  const base =
+    "inline-flex items-center justify-center gap-2 rounded-full font-semibold select-none transition-colors disabled:opacity-50 disabled:pointer-events-none";
 
   const outline =
     "bg-transparent border-4 border-[var(--btn-color)] text-[var(--btn-color)] hover:bg-[var(--btn-color)] hover:text-[var(--color-black)]";
@@ -35,7 +37,8 @@ function computeClasses(appearance: Appearance, intent: Intent) {
     neutral: "bg-[var(--btn-color)]",
   };
 
-  const ghost = "bg-transparent text-[var(--btn-color)] hover:bg-[color:rgba(255,255,255,0.06)]";
+  const ghost =
+    "bg-transparent text-[var(--btn-color)] hover:bg-[color:rgba(255,255,255,0.06)]";
 
   if (appearance === "outline") return `${base} ${outline}`;
   if (appearance === "ghost") return `${base} ${ghost}`;
@@ -47,7 +50,7 @@ function computeClasses(appearance: Appearance, intent: Intent) {
 function intentColorVar(intent: Intent): string {
   switch (intent) {
     case "primary":
-      return "var(--color-blue-500)"; 
+      return "var(--color-blue-500)";
     case "danger":
       return "var(--color-red-500)";
     case "neutral":
@@ -56,7 +59,10 @@ function intentColorVar(intent: Intent): string {
   }
 }
 
-const Button = forwardRef<HTMLButtonElement | HTMLAnchorElement | HTMLDivElement, ButtonProps>(
+const Button = forwardRef<
+  HTMLButtonElement | HTMLAnchorElement | HTMLDivElement,
+  ButtonProps
+>(
   (
     {
       appearance = "outline",
@@ -72,17 +78,31 @@ const Button = forwardRef<HTMLButtonElement | HTMLAnchorElement | HTMLDivElement
       style,
       ...rest
     },
-    ref
+    ref,
   ) => {
-    const classes = [computeClasses(appearance, intent), sizeClasses[size], fullWidth ? "w-full" : "", className]
+    const classes = [
+      computeClasses(appearance, intent),
+      sizeClasses[size],
+      fullWidth ? "w-full" : "",
+      className,
+    ]
       .filter(Boolean)
       .join(" ");
 
-    const styleWithColor = { ...(style || {}), ["--btn-color" as any]: intentColorVar(intent) } as React.CSSProperties;
+    const styleWithColor = {
+      ...(style || {}),
+      ["--btn-color" as any]: intentColorVar(intent),
+    } as React.CSSProperties;
 
     if (as === "a") {
       return (
-        <a ref={ref as any} href={href} className={classes} style={styleWithColor} {...(rest as any)}>
+        <a
+          ref={ref as any}
+          href={href}
+          className={classes}
+          style={styleWithColor}
+          {...(rest as any)}
+        >
           {leftIcon}
           <span>{children}</span>
           {rightIcon}
@@ -92,7 +112,12 @@ const Button = forwardRef<HTMLButtonElement | HTMLAnchorElement | HTMLDivElement
 
     if (as === "div") {
       return (
-        <div ref={ref as any} className={classes} style={styleWithColor} {...(rest as any)}>
+        <div
+          ref={ref as any}
+          className={classes}
+          style={styleWithColor}
+          {...(rest as any)}
+        >
           {leftIcon}
           <span>{children}</span>
           {rightIcon}
@@ -101,13 +126,18 @@ const Button = forwardRef<HTMLButtonElement | HTMLAnchorElement | HTMLDivElement
     }
 
     return (
-      <button ref={ref as any} className={classes} style={styleWithColor} {...rest}>
+      <button
+        ref={ref as any}
+        className={classes}
+        style={styleWithColor}
+        {...rest}
+      >
         {leftIcon}
         <span>{children}</span>
         {rightIcon}
       </button>
     );
-  }
+  },
 );
 
 Button.displayName = "Button";
