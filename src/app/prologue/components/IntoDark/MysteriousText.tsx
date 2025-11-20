@@ -17,44 +17,59 @@ export default function MysteriousText({
   endProgress,
   className = "" 
 }: MysteriousTextProps) {
+  // แยกข้อความตาม \n
+  const lines = text.split('\n');
+  
   // ใช้ Intl.Segmenter เพื่อแบ่ง grapheme clusters ที่ถูกต้อง (รวมสระกับพยัญชนะ)
   const segmenter = new Intl.Segmenter("th", { granularity: "grapheme" });
-  const characters = [...segmenter.segment(text)].map(segment => segment.segment);
-  const totalChars = characters.length;
+  
+  // นับจำนวนตัวอักษรทั้งหมด (รวมทุกบรรทัด)
+  const totalChars = text.replace(/\n/g, '').length;
+  let charIndex = 0;
 
   return (
-    <div className={`select-none ${className}`}>
-      {characters.map((char, index) => {
-        // คำนวณช่วง progress สำหรับแต่ละตัวอักษร
-        const charStart = startProgress + ((endProgress - startProgress) * index / totalChars);
-        const charEnd = startProgress + ((endProgress - startProgress) * (index + 1) / totalChars);
+    <span className={`select-none ${className}`}>
+      {lines.map((line, lineIndex) => {
+        const characters = [...segmenter.segment(line)].map(segment => segment.segment);
         
-        const charOpacity = useTransform(
-          scrollYProgress,
-          [charStart, charEnd],
-          [0, 1]
-        );
-        
-        const charY = useTransform(
-          scrollYProgress,
-          [charStart, charEnd],
-          [20, 0]
-        );
-
         return (
-          <motion.span
-            key={index}
-            style={{ 
-              opacity: charOpacity,
-              y: charY,
-              display: "inline-block", 
-              whiteSpace: char === " " ? "pre" : "normal" 
-            }}
-          >
-            {char === " " ? "\u00A0" : char}
-          </motion.span>
+          <span key={lineIndex}>
+            {characters.map((char, index) => {
+              // คำนวณช่วง progress สำหรับแต่ละตัวอักษรตามลำดับทั้งหมด
+              const charStart = startProgress + ((endProgress - startProgress) * charIndex / totalChars);
+              const charEnd = startProgress + ((endProgress - startProgress) * (charIndex + 1) / totalChars);
+              charIndex++;
+              
+              const charOpacity = useTransform(
+                scrollYProgress,
+                [charStart, charEnd],
+                [0, 1]
+              );
+              
+              const charY = useTransform(
+                scrollYProgress,
+                [charStart, charEnd],
+                [20, 0]
+              );
+
+              return (
+                <motion.span
+                  key={`${lineIndex}-${index}`}
+                  style={{ 
+                    opacity: charOpacity,
+                    y: charY,
+                    display: "inline-block", 
+                    whiteSpace: char === " " ? "pre" : "normal" 
+                  }}
+                >
+                  {char === " " ? "\u00A0" : char}
+                </motion.span>
+              );
+            })}
+            {lineIndex < lines.length - 1 && <br />}
+          </span>
         );
       })}
-    </div>
+    </span>
   );
 }

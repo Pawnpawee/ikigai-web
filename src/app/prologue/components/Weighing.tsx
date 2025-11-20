@@ -285,7 +285,7 @@ export default function Weighing() {
 
           {/* Set 1: Trees (Lottie) */}
           <motion.div
-            className="absolute bottom-0 right-[8%] w-[20%] h-auto"
+            className="absolute bottom-0 right-[8%] w-[20%] h-auto scale-x-[-1]"
             style={{ opacity: opacity_set1, y: y_set1 }}
           >
             <Lottie

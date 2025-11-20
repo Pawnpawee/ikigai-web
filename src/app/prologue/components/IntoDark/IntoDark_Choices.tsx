@@ -4,6 +4,7 @@ import { motion, useTransform, MotionValue } from "framer-motion";
 import Image from "next/image";
 import Lottie from "lottie-react";
 import ChoiceButton from "@/app/components/ui/ChoiceButton";
+import MysteriousText from "./MysteriousText";
 import { useIsPortrait } from "@/app/hooks/useOrientation";
 import catAnimationData from "../../../../../public/assets/Scene/Scene5/scene5-02/s-5-2-cat.json";
 import tailAnimationData from "../../../../../public/assets/Scene/Scene5/scene5-02/s5-2-tail.json";
@@ -119,52 +120,60 @@ export default function IntoDarkChoices({
       : { inset: "-17.53% 43.87% 57.59% -11.3%" },
   };
 
-  // Main container opacity and z-index - ปรับให้ตรงกับ 600vh (0.1-0.7)
+  // Main container opacity and z-index - ปรับให้ตรงกับ 600vh (0.167-0.500)
   const opacity = useTransform(
     scrollYProgress,
-    [0.1, 0.12, 0.5, 0.69, 0.7],
+    [0.167, 0.179, 0.389, 0.7, 0.8],
     [0, 1, 1, 1, 0]
   );
   const zIndex = useTransform(
     scrollYProgress,
-    [0, 0.12, 0.68, 0.7],
-    [-1, 10, 10, -1]
+    [0, 0.168, 0.179, 0.493, 0.500],
+    [-1, -1, 10, 10, -1]
   );
 
   // Background gradients - Layer 1 (earliest)
-  const bgGradient1Y = useTransform(scrollYProgress, [0.12, 0.18], [50, 0]);
+  const bgGradient1Y = useTransform(scrollYProgress, [0.179, 0.213], [50, 0]);
   const bgGradient1Opacity = useTransform(
     scrollYProgress,
-    [0.12, 0.18],
+    [0.179, 0.213],
     [0, 1]
   );
 
   // Stars - Layer 2
-  const starsY = useTransform(scrollYProgress, [0.15, 0.22], [50, 0]);
-  const starsOpacity = useTransform(scrollYProgress, [0.15, 0.22], [0, 1]);
+  const starsY = useTransform(scrollYProgress, [0.196, 0.237], [50, 0]);
+  const starsOpacity = useTransform(scrollYProgress, [0.196, 0.237], [0, 1]);
 
   // Cat (main character) - Layer 4
-  const catY = useTransform(scrollYProgress, [0.2, 0.3], [100, 0]);
-  const catOpacity = useTransform(scrollYProgress, [0.2, 0.3], [0, 1]);
-  const catScale = useTransform(scrollYProgress, [0.2, 0.25, 0.3], [0.9, 1, 1]);
+  const catY = useTransform(scrollYProgress, [0.226, 0.282], [100, 0]);
+  const catOpacity = useTransform(scrollYProgress, [0.226, 0.282], [0, 1]);
+  const catScale = useTransform(
+    scrollYProgress,
+    [0.226, 0.254, 0.282],
+    [0.9, 1, 1]
+  );
 
   // Star lines - Layer 5
-  const starLinesY = useTransform(scrollYProgress, [0.25, 0.35], [50, 0]);
-  const starLinesOpacity = useTransform(scrollYProgress, [0.25, 0.35], [0, 1]);
+  const starLinesY = useTransform(scrollYProgress, [0.254, 0.310], [50, 0]);
+  const starLinesOpacity = useTransform(
+    scrollYProgress,
+    [0.254, 0.310],
+    [0, 1]
+  );
 
   // Text content - Layer 6
-  const textOpacity = useTransform(scrollYProgress, [0.3, 0.38], [0, 1]);
-  const textY = useTransform(scrollYProgress, [0.3, 0.38], [30, 0]);
+  const textOpacity = useTransform(scrollYProgress, [0.282, 0.327], [0, 1]);
+  const textY = useTransform(scrollYProgress, [0.282, 0.327], [30, 0]);
 
   // Choice buttons - Layer 7 (latest)
-  const choicesOpacity = useTransform(scrollYProgress, [0.35, 0.42], [0, 1]);
-  const choicesY = useTransform(scrollYProgress, [0.35, 0.42], [30, 0]);
+  const choicesOpacity = useTransform(scrollYProgress, [0.310, 0.350], [0, 1]);
+  const choicesY = useTransform(scrollYProgress, [0.310, 0.350], [30, 0]);
 
   // Additional text sections
-  const text2Opacity = useTransform(scrollYProgress, [0.5, 0.6], [0, 1]);
-  const text3Opacity = useTransform(scrollYProgress, [0.55, 0.6], [0, 1]);
-  const text4Opacity = useTransform(scrollYProgress, [0.55, 0.6], [0, 1]);
-  const text5Opacity = useTransform(scrollYProgress, [0.6, 0.65], [0, 1]);
+  const text2Opacity = useTransform(scrollYProgress, [0.42, 0.44], [0, 1]);
+  const text3Opacity = useTransform(scrollYProgress, [0.44, 0.46], [0, 1]);
+  const text4Opacity = useTransform(scrollYProgress, [0.46, 0.48], [0, 1]);
+  const text5Opacity = useTransform(scrollYProgress, [0.48, 0.5], [0, 1]);
 
   return (
     <div className="sticky top-0 w-full overflow-y-auto pointer-events-none">
@@ -195,7 +204,6 @@ export default function IntoDarkChoices({
             />
           </motion.div>
 
-
           {/* Light Cat - Glow Effect */}
           <motion.div
             className="absolute mix-blend-screen"
@@ -210,7 +218,8 @@ export default function IntoDarkChoices({
               src="/assets/Scene/Scene5/scene5-02/Light Cat.svg"
               alt="Light Cat"
               fill
-              className="object-contain"
+              className="object-contain animate-pulse"
+              style={{ animationDuration: "2s" }}
             />
           </motion.div>
 
@@ -365,7 +374,7 @@ export default function IntoDarkChoices({
             }}
           >
             <Image
-              src="/assets/Scene/Scene5/scene5-02/bggradient.svg"
+              src="/assets/Scene/Scene5/scene5-02/bggradient2.svg"
               alt="Background gradient"
               fill
               className="object-contain"
@@ -383,30 +392,43 @@ export default function IntoDarkChoices({
             {/* Welcome box with padding (node-id: 497:3459) */}
             <div
               className={`flex flex-col items-center justify-center text-center text-white w-full gap-4 px-0 ${
-                isPortrait ? "pt-[100px] pb-[30px] lg:pt-[120px] lg:pb-[50px]" : "py-[150px]"
+                isPortrait
+                  ? "pt-[100px] pb-[30px] lg:pt-[120px] lg:pb-[50px]"
+                  : "py-[150px]"
               }`}
             >
               {/* Main welcome text (node-id: 497:3460) */}
               <div className="typo-text-h3 w-full">
-                {isPortrait ? (
-                  <p className="mb-0">
-                    ยินดีที่ได้รู้จัก
-                    {playerName ? <b> {playerName}</b> : " (ชื่อผู้เล่น)"}{" "}
-                    <br />มีหลายชีวิตเหลือเกินที่หลงเข้ามาในที่นี้
-                  </p>
-                ) : (
-                  <>
-                    <p className="mb-0">
-                    ยินดีที่ได้รู้จัก
-                    {playerName ? <b> {playerName}</b> : " (ชื่อผู้เล่น)"}{" "}
-                    มีหลายชีวิตเหลือเกินที่หลงเข้ามาในที่นี้
-                  </p>
-                  </>
-                )}
-                <p>เจ้าตกลงมาที่นี่เพราะเหตุใดละ</p>
+                <div className="mb-0">
+                  <MysteriousText
+                    text="ยินดีที่ได้รู้จัก"
+                    scrollYProgress={scrollYProgress}
+                    startProgress={0.282}
+                    endProgress={0.293}
+                  />
+                  {playerName ? <b> {playerName}</b> : " (ชื่อผู้เล่น)"}{" "}
+                  <MysteriousText
+                    text="มีหลายชีวิตเหลือเกินที่หลงเข้ามาในที่นี้"
+                    scrollYProgress={scrollYProgress}
+                    startProgress={0.293}
+                    endProgress={0.305}
+                  />
+                </div>
+                <div>
+                  <MysteriousText
+                    text="เจ้าตกลงมาที่นี่เพราะเหตุใดละ"
+                    scrollYProgress={scrollYProgress}
+                    startProgress={0.305}
+                    endProgress={0.316}
+                  />
+                </div>
               </div>
               {/* Subtitle text (node-id: 497:3461) */}
-              <p className="typo-text-h5 w-full">(ตอบอย่างน้อย 3 ข้อ)</p>
+              <div className="typo-text-h5 w-full">
+                <p>
+                  (ตอบอย่างน้อย 3 ข้อ)
+                </p>
+              </div>
             </div>
 
             {/* Choice Buttons Section (node-id: 497:3462) */}
@@ -475,10 +497,14 @@ export default function IntoDarkChoices({
               className="flex items-center justify-start portrait:justify-center self-stretch px-[11.98%]"
               style={{ opacity: text2Opacity }}
             >
-              <p className="text-white text-center whitespace-pre-line typo-text-h4">
-                {`โอ้… ถูกครอบงำจาก
-ความกังวลสินะ`}
-              </p>
+              <div className="text-white text-center whitespace-pre-line typo-text-h4">
+                <MysteriousText
+                  text={`โอ้… ถูกครอบงำจาก\nความกังวลสินะ`}
+                  scrollYProgress={scrollYProgress}
+                  startProgress={0.372}
+                    endProgress={0.387}
+                />
+              </div>
             </motion.div>
 
             {/* Text 3 & 4 Container (node-id: 497:3450) */}
@@ -491,17 +517,25 @@ export default function IntoDarkChoices({
             >
               {/* Text 3 (node-id: 497:3451) */}
               <motion.div style={{ opacity: text3Opacity }}>
-                <p className="mb-0 whitespace-pre-line">
-                  {`ข้าเห็นหลายคนที่ตกลงมาที่นี่ก็
-เพราะเช่นนี้แหละ`}
-                </p>
+                <div className="mb-0 whitespace-pre-line">
+                  <MysteriousText
+                    text={`ข้าเห็นหลายคนที่ตกลงมาที่นี่ก็\nเพราะเช่นนี้แหละ`}
+                    scrollYProgress={scrollYProgress}
+                    startProgress={0.387}
+                    endProgress={0.402}
+                  />
+                </div>
               </motion.div>
               {/* Text 4 (node-id: 497:3452) */}
               <motion.div style={{ opacity: text4Opacity }}>
-                <p className="mb-0 whitespace-pre-line">
-                  {`ในโลกนี้มีเส้นทางทั้งสี่
-ที่ร้อยเรียงชีวิตไว้ด้วยกัน`}
-                </p>
+                <div className="mb-0 whitespace-pre-line">
+                  <MysteriousText
+                    text={`ในโลกนี้มีเส้นทางทั้งสี่\nที่ร้อยเรียงชีวิตไว้ด้วยกัน`}
+                    scrollYProgress={scrollYProgress}
+                    startProgress={0.402}
+                    endProgress={0.417}
+                  />
+                </div>
               </motion.div>
             </div>
 
@@ -511,7 +545,14 @@ export default function IntoDarkChoices({
               className="flex items-center justify-center w-full"
               style={{ opacity: text5Opacity }}
             >
-              <p className="typo-text-h4 text-white">…เส้นทางทั้งสี่?</p>
+              <div className="typo-text-h4 text-white">
+                <MysteriousText
+                  text="…เส้นทางทั้งสี่?"
+                  scrollYProgress={scrollYProgress}
+                  startProgress={0.417}
+                  endProgress={0.432}
+                />
+              </div>
             </motion.div>
           </motion.div>
 

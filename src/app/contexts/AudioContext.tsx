@@ -43,7 +43,6 @@ export function AudioProvider({ children }: { children: React.ReactNode }) {
     audio.muted = isMuted;
     audioRef.current = audio;
 
-    console.log("Audio initialized:", audio.src);
 
     return () => {
       if (audioRef.current) {
@@ -59,7 +58,7 @@ export function AudioProvider({ children }: { children: React.ReactNode }) {
       const audio = audioRef.current;
       const wasPlaying = !audio.paused;
       
-      try {
+
         // Pause audio ถ้ากำลังเล่นอยู่
         if (wasPlaying) {
           audio.pause();
@@ -91,10 +90,8 @@ export function AudioProvider({ children }: { children: React.ReactNode }) {
           await audio.play();
         }
         
-        console.log("BG music changed to:", src);
-      } catch (error) {
-        console.error("setBgMusic failed:", error);
-      }
+     
+     
     }
   };
 
@@ -156,9 +153,9 @@ export function AudioProvider({ children }: { children: React.ReactNode }) {
         audio.volume = targetVolume;
       }
 
-      console.log("BG music transitioned to:", src);
+
     } catch (error) {
-      console.error("transitionBgMusic failed:", error);
+     
     } finally {
       isTransitioningRef.current = false;
     }
@@ -168,7 +165,7 @@ export function AudioProvider({ children }: { children: React.ReactNode }) {
   useEffect(() => {
     if (audioRef.current) {
       audioRef.current.muted = isMuted;
-      console.log("Muted:", isMuted);
+ 
     }
   }, [isMuted]);
 
@@ -176,20 +173,16 @@ export function AudioProvider({ children }: { children: React.ReactNode }) {
   useEffect(() => {
     if (audioRef.current) {
       audioRef.current.volume = volume / 100;
-      console.log("Volume:", volume);
+  
     }
   }, [volume]);
 
-  // อัพเดท SFX volume
-  useEffect(() => {
-    console.log("SFX Volume:", sfxVolume);
-  }, [sfxVolume]);
 
   const startAudio = async () => {
     if (audioRef.current && !isInitialized) {
-      try {
+   
         const audio = audioRef.current;
-        console.log("Starting audio...");
+
         setIsMuted(false); // ตั้งค่า mute เป็น false เมื่อผู้ใช้เลือกเปิดเสียง
         
         // รอให้ audio พร้อมก่อน play
@@ -205,10 +198,8 @@ export function AudioProvider({ children }: { children: React.ReactNode }) {
         setIsInitialized(true);
         setUserConsented(true);
         setAnimationsStarted(true);
-        console.log("Audio started successfully!");
-      } catch (error) {
-        console.error("Audio start failed:", error);
-      }
+
+   
     }
   };
 
@@ -219,7 +210,7 @@ export function AudioProvider({ children }: { children: React.ReactNode }) {
       setIsMuted(true); // ตั้งค่า mute เป็น true เมื่อผู้ใช้เลือกไม่เปิดเสียง
       setUserConsented(true);
       setAnimationsStarted(true);
-      console.log("Audio muted by user choice");
+
     }
   };
 
@@ -274,7 +265,7 @@ export function AudioProvider({ children }: { children: React.ReactNode }) {
           clearInterval(fadeOutInterval);
           audio.pause();
           audio.volume = originalVolume; // คืนค่า volume เดิม
-          console.log("Background music paused with fade out");
+    
         }
       }, stepDuration);
     }
@@ -289,7 +280,6 @@ export function AudioProvider({ children }: { children: React.ReactNode }) {
       const volumeStep = targetVolume / fadeSteps;
       const stepDuration = fadeDuration / fadeSteps;
 
-      try {
         audio.volume = 0;
         
         // รอให้ audio พร้อมก่อน play
@@ -309,12 +299,10 @@ export function AudioProvider({ children }: { children: React.ReactNode }) {
           if (currentStep >= fadeSteps) {
             clearInterval(fadeInInterval);
             audio.volume = targetVolume;
-            console.log("Background music resumed with fade in");
+
           }
         }, stepDuration);
-      } catch (error) {
-        console.error("Resume failed:", error);
-      }
+  
     }
   };
 

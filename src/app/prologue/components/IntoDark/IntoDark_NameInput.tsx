@@ -1,6 +1,11 @@
 "use client";
 import React, { useLayoutEffect, useState } from "react";
-import { motion, useTransform, MotionValue } from "framer-motion";
+import {
+  motion,
+  useTransform,
+  MotionValue,
+  AnimatePresence,
+} from "framer-motion";
 import Image from "next/image";
 import InputButton from "@/app/components/ui/InputButton";
 import MysteriousText from "./MysteriousText";
@@ -12,12 +17,15 @@ import starLine2AnimationData from "../../../../../public/assets/Scene/Scene5/sc
 import starLine3AnimationData from "../../../../../public/assets/Scene/Scene5/scene5-01/starline3.json";
 import waterAnimationData from "../../../../../public/assets/Scene/Scene5/scene5-01/s-5-1-water.json";
 import { useIsPortrait } from "@/app/hooks/useOrientation";
+import { HiCheck } from "react-icons/hi";
 
 interface NameInputProps {
   scrollYProgress: MotionValue<number>;
   playerName: string;
   setPlayerName: (name: string) => void;
   nameError: string;
+  onConfirm: () => void;
+  isConfirmed: boolean;
 }
 
 export default function IntoDarkNameInput({
@@ -25,6 +33,8 @@ export default function IntoDarkNameInput({
   playerName,
   setPlayerName,
   nameError,
+  onConfirm,
+  isConfirmed,
 }: NameInputProps) {
   const isPortrait = useIsPortrait();
 
@@ -91,77 +101,83 @@ export default function IntoDarkNameInput({
       : { left: "60.42%", top: "35.93%", width: "36.25%", height: "28.15%" }, // Landscape: 1160/1920, 388/1080, 696/1920, 304/1080
   };
 
-  // Total height: 325vh (0-0.245 ของ 1325vh รวม)
-  // ชุด 1: 0-25vh (0-0.019) - bg gradient + little star 2
-  // ชุด 2: 25-50vh (0.019-0.038) - star line 2 + little star 3
-  // ชุด 3: 50-75vh (0.038-0.057) - star line 1
-  // ชุด 4: 75-175vh (0.057-0.132) - star line 3 + little star 1 + cat
-  // ชุด 5: 175-225vh (0.132-0.170) - ข้อความ + water - 50vh
-  // ชุด 6: 225-275vh (0.170-0.208) - input box - 50vh
-  // Fade out: 275-325vh (0.208-0.245) - 50vh
+  // Total height: 300vh (0-0.167 ของ 1800vh รวม)
+  // ชุด 1: 0-25vh (0-0.014) - bg gradient + little star 2
+  // ชุด 2: 25-50vh (0.014-0.028) - star line 2 + little star 3
+  // ชุด 3: 50-75vh (0.028-0.042) - star line 1
+  // ชุด 4: 75-175vh (0.042-0.097) - star line 3 + little star 1 + cat
+  // ชุด 5: 175-225vh (0.097-0.125) - ข้อความ + water - 50vh
+  // ชุด 6: 225-275vh (0.125-0.153) - input box - 50vh
+  // Fade out: 275-300vh (0.153-0.167) - 25vh
 
   const opacity = useTransform(
     scrollYProgress,
-    [0, 0.01, 0.208, 0.245],
+    [0, 0.006, 0.153, 0.167],
     [0, 1, 1, 0]
   );
   const zIndex = useTransform(
     scrollYProgress,
-    [0, 0.01, 0.244, 0.245],
+    [0, 0.006, 0.166, 0.167],
     [10, 10, 10, -1]
   );
 
-  // ชุด 1: Background Gradient + Little star 2 (0-25vh = 0-0.019)
-  const bgOpacity = useTransform(scrollYProgress, [0, 0.01, 0.019], [0, 1, 1]);
+  // ชุด 1: Background Gradient + Little star 2 (0-25vh = 0-0.014)
+  const bgOpacity = useTransform(scrollYProgress, [0, 0.006, 0.014], [0, 1, 1]);
 
-  // ชุด 2: Star line 2 + Little star 3 (25-50vh = 0.019-0.038) - รอชุด 1 opacity = 1
+  // ชุด 2: Star line 2 + Little star 3 (25-50vh = 0.014-0.028) - รอชุด 1 opacity = 1
   const set2Opacity = useTransform(
     scrollYProgress,
-    [0.019, 0.028, 0.038],
+    [0.014, 0.021, 0.028],
     [0, 1, 1]
   );
 
-  // ชุด 3: Star line 1 (50-75vh = 0.038-0.057) - รอชุด 2 opacity = 1
+  // ชุด 3: Star line 1 (50-75vh = 0.028-0.042) - รอชุด 2 opacity = 1
   const set3Opacity = useTransform(
     scrollYProgress,
-    [0.038, 0.047, 0.057],
+    [0.028, 0.035, 0.042],
     [0, 1, 1]
   );
 
-  // ชุด 4: Star line 3 + Little star 1 + Cat (75-175vh = 0.057-0.132) - รอชุด 3 opacity = 1
+  // ชุด 4: Star line 3 + Little star 1 + Cat (75-175vh = 0.042-0.097) - รอชุด 3 opacity = 1
   const set4Opacity = useTransform(
     scrollYProgress,
-    [0.057, 0.067, 0.132],
+    [0.042, 0.049, 0.097],
     [0, 1, 1]
   );
 
   // Cat floating down animation
   const catY = useTransform(
     scrollYProgress,
-    [0.057, 0.14, 0.17],
+    [0.042, 0.103, 0.125],
     [-100, 10, 0]
   );
 
-  // ชุด 5: ข้อความ + Water (175-225vh = 0.132-0.170) - 50vh - รอชุด 4 opacity = 1
+  // ชุด 5: ข้อความ + Water (175-225vh = 0.097-0.125) - 50vh - รอชุด 4 opacity = 1
   const textOpacity = useTransform(
     scrollYProgress,
-    [0.132, 0.151, 0.17],
+    [0.097, 0.111, 0.125],
     [0, 1, 1]
   );
 
   // Water bounce animation (scale) - ย้ายมาชุด 5
   const waterScale = useTransform(
     scrollYProgress,
-    [0.132, 0.14, 0.15, 0.16, 0.17],
+    [0.097, 0.103, 0.111, 0.118, 0.125],
     [0, 1.3, 0.9, 1.1, 1]
   );
 
-  // ชุด 6: Input box (225-275vh = 0.170-0.208) - 50vh - รอชุด 5 opacity = 1
+  // ชุด 6: Input box (225-275vh = 0.125-0.153) - 50vh - รอชุด 5 opacity = 1
   const inputOpacity = useTransform(
     scrollYProgress,
-    [0.17, 0.189, 0.208],
+    [0.125, 0.139, 0.153],
     [0, 1, 1]
   );
+
+  const handleKeyDown = (e: React.KeyboardEvent) => {
+    if (e.key === "Enter" && playerName.trim() && !isConfirmed) {
+      onConfirm();
+    }
+  };
 
   return (
     <motion.div
@@ -284,6 +300,7 @@ export default function IntoDarkNameInput({
               fill
               className="object-contain animate-pulse"
               style={{ animationDuration: "3s" }}
+              priority
             />
           </motion.div>
 
@@ -361,15 +378,14 @@ export default function IntoDarkNameInput({
           style={
             isPortrait
               ? {
-                  paddingTop: "50%", 
-                  paddingBottom: "50%", 
+                  paddingTop: "50%",
+                  paddingBottom: "50%",
                   display: "flex",
                   flexDirection: "column",
                   alignItems: "center",
-                  gap: "3rem", 
-                  alignSelf : "stretch",
+                  gap: "3rem",
+                  alignSelf: "stretch",
                   width: "100%",
-                  
                 }
               : {
                   display: "flex",
@@ -387,37 +403,63 @@ export default function IntoDarkNameInput({
               <MysteriousText
                 text="สวัสดี... ข้าคือผู้นำทางแห่งความมืด"
                 scrollYProgress={scrollYProgress}
-                startProgress={0.132}
-                endProgress={0.151}
+                startProgress={0.097}
+                endProgress={0.111}
               />
+              <br/>
               <MysteriousText
                 text="เจ้าชื่ออะไร"
                 scrollYProgress={scrollYProgress}
-                startProgress={0.151}
-                endProgress={0.17}
+                startProgress={0.111}
+                endProgress={0.125}
               />
             </div>
           </motion.div>
 
-          {/* ชุด 6: Input field */}
-          <motion.div style={{ opacity: inputOpacity }}>
-            <InputButton
-              value={playerName}
-              onChange={setPlayerName}
-              placeholder="พิมพ์ข้อความ..."
-            />
+          <motion.div
+            className="flex items-start gap-5"
+            style={{ opacity: inputOpacity, zIndex }}
+          >
+            <div className="flex flex-col items-center">
+              {/* ⭐ Wrap InputButton เพื่อดักจับ onKeyDown */}
+              <motion.div onKeyDown={handleKeyDown}>
+                <InputButton
+                  value={playerName}
+                  onChange={setPlayerName}
+                  placeholder="พิมพ์ข้อความ..."
+                />
+              </motion.div>
+              {/* Error message */}
+              {nameError && (
+                <motion.p
+                  className="typo-p-md text-red-500 mt-4"
+                  initial={{ opacity: 0, y: -10 }}
+                  animate={{ opacity: 1, y: 0 }}
+                >
+                  {nameError}
+                </motion.p>
+              )}
+            </div>
+            <AnimatePresence>
+              {!isConfirmed && (
+                <motion.button
+                  initial={{ opacity: 0, y: 10, scale: 0 }}
+                  animate={{ opacity: 1, y: 0, scale: 1 }}
+                  exit={{ opacity: 0, y: 10, scale: 0.9 }}
+                  transition={{
+                    duration: 0.3,
+                    ease: "easeIn",
+                  }}
+                  whileHover={{ scale: 1.05 }}
+                  whileTap={{ scale: 0.95 }}
+                  onClick={onConfirm}
+                  className="h-full p-4 border border-white/30 bg-white/10 rounded-full text-white hover:bg-white/20 backdrop-blur-sm transition-all flex items-center cursor-pointer typo-h3 origin-center"
+                >
+                  <HiCheck />
+                </motion.button>
+              )}
+            </AnimatePresence>
           </motion.div>
-
-          {/* Error message */}
-          {nameError && (
-            <motion.p
-              className="typo-p-md text-red-500 mt-4"
-              initial={{ opacity: 0, y: -10 }}
-              animate={{ opacity: 1, y: 0 }}
-            >
-              {nameError}
-            </motion.p>
-          )}
         </div>
       </motion.div>
     </motion.div>

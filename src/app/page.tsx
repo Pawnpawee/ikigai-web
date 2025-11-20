@@ -41,7 +41,7 @@ export default function Home() {
 
       {/* Scene Intro */}
       <Hero />
-      <Intro />
+      <Intro /> 
       <JobApplication/>
       <Sleeping />
       <Dreaming />

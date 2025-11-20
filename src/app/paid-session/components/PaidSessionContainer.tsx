@@ -150,16 +150,16 @@ export default function PaidSessionContainer() {
       monetizableExperience,
     };
 
-    console.log("Submitting Final Session Data:", sessionData);
+
     // TODO: Combine with data from previous sessions (e.g., from Zustand, Context, or local storage)
     // TODO: Send all data to your n8n webhook URL
     try {
       // Example: await fetch('YOUR_N8N_WEBHOOK_URL', { method: 'POST', body: JSON.stringify(allData) });
       await new Promise((resolve) => setTimeout(resolve, 1500));
-      console.log("Data sent successfully!");
+
       // router.push("/results-page"); // Navigate to the results/thank you page
     } catch (error) {
-      console.error("Error submitting data:", error);
+     
     } finally {
       setIsLoading(false);
     }
