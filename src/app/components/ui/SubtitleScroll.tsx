@@ -15,7 +15,7 @@ export default function SubtitleScroll({
   // Calculate scroll ranges for each subtitle
   // Each subtitle gets equal portion of the scroll range
   const totalSubtitles = subtitles.length;
-  
+
   // กรณีพิเศษ: ถ้ามี subtitle เดียว ให้ใช้ scrollYProgress โดยตรง
   if (totalSubtitles === 1) {
     return (
@@ -48,7 +48,7 @@ export default function SubtitleScroll({
         const opacity = useTransform(
           scrollYProgress,
           [startFadeIn, fullyVisible, startFadeOut, endFadeOut],
-          [0, 1, 1, 0]
+          [0, 1, 1, 0],
         );
 
         return (

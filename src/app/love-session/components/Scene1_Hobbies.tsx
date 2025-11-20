@@ -1,11 +1,9 @@
 import { motion, MotionValue } from "framer-motion";
 
-
 import { CustomHobby, HOBBIES_LIST } from "./LoveSessionContainer";
 import ChoiceButton from "../../components/ui/ChoiceButton";
 import WordByWordAnimation from "@/app/components/ui/WordByWordAnimation";
 import { HiOutlinePlusSm } from "react-icons/hi";
-
 
 interface Props {
   opacity: MotionValue<number>;
@@ -28,12 +26,9 @@ export default function Scene1Hobbies({
   setCustomHobbies,
   errorMessage,
 }: Props) {
-  
   const handleHobbyToggle = (hobby: string) => {
     setSelectedHobbies((prev) =>
-      prev.includes(hobby)
-        ? prev.filter((h) => h !== hobby)
-        : [...prev, hobby]
+      prev.includes(hobby) ? prev.filter((h) => h !== hobby) : [...prev, hobby],
     );
   };
 
@@ -45,9 +40,9 @@ export default function Scene1Hobbies({
   };
 
   const updateCustomHobby = (id: string, text: string) => {
-    if (text.length > 50) return; 
+    if (text.length > 50) return;
     setCustomHobbies((prev) =>
-      prev.map((h) => (h.id === id ? { ...h, text } : h))
+      prev.map((h) => (h.id === id ? { ...h, text } : h)),
     );
   };
 
@@ -64,12 +59,12 @@ export default function Scene1Hobbies({
       style={{ opacity, zIndex }}
       className="fixed top-0 h-screen w-full flex items-center justify-center"
     >
-  <div className="flex flex-col items-center gap-5 sm:gap-6 p-3 sm:p-4 max-w-4xl text-center">
+      <div className="flex flex-col items-center gap-5 sm:gap-6 p-3 sm:p-4 max-w-4xl text-center">
         <WordByWordAnimation
           text="แมว : ก่อนจะเดินทางด้วยกัน ข้าอยากรู้ว่าเจ้าเป็นมาอย่างไรนอกจากชื่อเจ้าแล้ว… เลือกสิ่งที่เจ้าทำแล้วรู้สึกไม่เคยเบื่อ หรือทำให้เจ้าใจเต้นเสมอ (ตอบได้หลายข้อ)"
           scrollYProgress={textProgress}
           as="p"
-className="typo-h5 text-white"
+          className="typo-h5 text-white"
         />
         {errorMessage && (
           <motion.p
@@ -82,7 +77,7 @@ className="typo-h5 text-white"
         )}
 
         {/* Hobby Grid */}
-        <motion.div 
+        <motion.div
           initial={{ opacity: 0, y: 10 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.5 }} // หน่วงเวลาให้ text ขึ้นก่อน
@@ -109,12 +104,10 @@ className="typo-h5 text-white"
                 className="w-48 bg-transparent border-2 border-gray-500 rounded-full text-center text-sm px-4 py-2 focus:outline-none focus:border-white transition-colors"
                 maxLength={50}
               />
-              <button 
+              <button
                 onClick={() => removeCustomHobby(hobby.id)}
                 className="absolute right-1 top-1/2 -translate-y-1/2 text-gray-400 hover:text-white"
-              >
-            
-              </button>
+              ></button>
             </div>
           ))}
 

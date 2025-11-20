@@ -73,7 +73,7 @@ export default function Sleeping() {
   const bgOpacity = useTransform(
     scrollYProgress,
     [0, 0.05, 0.95, 1],
-    [0, 1, 1, 0]
+    [0, 1, 1, 0],
   );
 
   // 800vh Animation Timeline (เพิ่มจาก 750vh)
@@ -99,7 +99,7 @@ export default function Sleeping() {
   const bubble1Opacity = useTransform(
     scrollYProgress,
     [0.25, 0.3125, 0.5, 0.55],
-    [0, 1, 1, 0]
+    [0, 1, 1, 0],
   ); // ค้างจนถึง 50%, fade out 50-55%
 
   // Bubble 2: 250-300vh (31.25-37.5%)
@@ -107,7 +107,7 @@ export default function Sleeping() {
   const bubble2Opacity = useTransform(
     scrollYProgress,
     [0.3125, 0.375, 0.5, 0.55],
-    [0, 1, 1, 0]
+    [0, 1, 1, 0],
   );
 
   // Bubble 3: 300-350vh (37.5-43.75%)
@@ -115,7 +115,7 @@ export default function Sleeping() {
   const bubble3Opacity = useTransform(
     scrollYProgress,
     [0.375, 0.4375, 0.5, 0.55],
-    [0, 1, 1, 0]
+    [0, 1, 1, 0],
   );
 
   // Bubble 4: 350-400vh (43.75-50%)
@@ -123,7 +123,7 @@ export default function Sleeping() {
   const bubble4Opacity = useTransform(
     scrollYProgress,
     [0.4375, 0.5, 0.5, 0.55],
-    [0, 1, 1, 0]
+    [0, 1, 1, 0],
   );
   // ค้าง 400-450vh (50-56.25%): opacity = 1 สำหรับทุก bubble
   // Bubble fade out: 400-440vh (50-55%)
@@ -134,19 +134,19 @@ export default function Sleeping() {
   const textOpacity = useTransform(
     scrollYProgress,
     [0.5625, 0.65, 0.7, 0.8],
-    [0, 1, 1, 0]
+    [0, 1, 1, 0],
   ); // ขึ้นที่ 56.25%, ค้างถึง 85%, fade out 85-90%
 
   const ry = useTransform(
     scrollYProgress,
     [0, 0.75, 0.8, 0.85, 0.9, 0.95, 1],
-    [200, 200, 0, 60, 0, 40, 0]
+    [200, 200, 0, 60, 0, 40, 0],
   );
 
   const blink_opacity = useTransform(
     scrollYProgress,
     [0, 0.75, 0.8, 1],
-    [0, 0, 1, 1]
+    [0, 0, 1, 1],
   );
 
   return (
@@ -452,12 +452,12 @@ export default function Sleeping() {
           maskImage: useTransform(
             ry,
             (value) =>
-              `radial-gradient(ellipse 50% ${value}% at 50% 50%, transparent 0%, var(--color-background) 100%)`
+              `radial-gradient(ellipse 50% ${value}% at 50% 50%, transparent 0%, var(--color-background) 100%)`,
           ),
           WebkitMaskImage: useTransform(
             ry,
             (value) =>
-              `radial-gradient(ellipse 50% ${value}% at 50% 50%, transparent 0%, var(--color-background) 100%)`
+              `radial-gradient(ellipse 50% ${value}% at 50% 50%, transparent 0%, var(--color-background) 100%)`,
           ),
           maskRepeat: "no-repeat",
           WebkitMaskRepeat: "no-repeat",

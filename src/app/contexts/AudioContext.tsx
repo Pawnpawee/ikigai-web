@@ -1,5 +1,11 @@
 "use client";
-import React, { createContext, useContext, useEffect, useRef, useState } from "react";
+import React, {
+  createContext,
+  useContext,
+  useEffect,
+  useRef,
+  useState,
+} from "react";
 
 interface AudioContextType {
   isMuted: boolean;
@@ -32,7 +38,9 @@ export function AudioProvider({ children }: { children: React.ReactNode }) {
   const [isInitialized, setIsInitialized] = useState(false);
   const [userConsented, setUserConsented] = useState(false);
   const [animationsStarted, setAnimationsStarted] = useState(false);
-  const [currentBgMusic, setCurrentBgMusic] = useState("/assets/Sound/bg-music.mp3");
+  const [currentBgMusic, setCurrentBgMusic] = useState(
+    "/assets/Sound/bg-music.mp3",
+  );
   const isTransitioningRef = useRef(false);
 
   // สร้าง audio element ครั้งเดียว
@@ -42,7 +50,6 @@ export function AudioProvider({ children }: { children: React.ReactNode }) {
     audio.volume = volume / 100;
     audio.muted = isMuted;
     audioRef.current = audio;
-
 
     return () => {
       if (audioRef.current) {
@@ -57,48 +64,48 @@ export function AudioProvider({ children }: { children: React.ReactNode }) {
     if (audioRef.current) {
       const audio = audioRef.current;
       const wasPlaying = !audio.paused;
-      
 
-        // Pause audio ถ้ากำลังเล่นอยู่
-        if (wasPlaying) {
-          audio.pause();
-          // รอให้ pause จบจริงๆ
-          await new Promise<void>((resolve) => {
-            if (audio.paused) {
-              resolve();
-            } else {
-              audio.addEventListener('pause', () => resolve(), { once: true });
-            }
-          });
-        }
-        
-        // เปลี่ยน src และ load
-        audio.src = src;
-        audio.load();
-        setCurrentBgMusic(src);
-        
-        // รอให้ audio พร้อมก่อน play
-        if (wasPlaying) {
-          await new Promise<void>((resolve) => {
-            if (audio.readyState >= 2) {
-              resolve();
-            } else {
-              audio.addEventListener('canplay', () => resolve(), { once: true });
-            }
-          });
-          
-          await audio.play();
-        }
-        
-     
-     
+      // Pause audio ถ้ากำลังเล่นอยู่
+      if (wasPlaying) {
+        audio.pause();
+        // รอให้ pause จบจริงๆ
+        await new Promise<void>((resolve) => {
+          if (audio.paused) {
+            resolve();
+          } else {
+            audio.addEventListener("pause", () => resolve(), { once: true });
+          }
+        });
+      }
+
+      // เปลี่ยน src และ load
+      audio.src = src;
+      audio.load();
+      setCurrentBgMusic(src);
+
+      // รอให้ audio พร้อมก่อน play
+      if (wasPlaying) {
+        await new Promise<void>((resolve) => {
+          if (audio.readyState >= 2) {
+            resolve();
+          } else {
+            audio.addEventListener("canplay", () => resolve(), { once: true });
+          }
+        });
+
+        await audio.play();
+      }
     }
   };
 
   // ฟังก์ชันเปลี่ยน bg music แบบ fade in/out
   const transitionBgMusic = async (src: string, fadeDuration = 1000) => {
     // ถ้ากำลัง transition อยู่ หรือเป็นเพลงเดียวกัน ไม่ต้องทำอะไร
-    if (isTransitioningRef.current || currentBgMusic === src || !audioRef.current) {
+    if (
+      isTransitioningRef.current ||
+      currentBgMusic === src ||
+      !audioRef.current
+    ) {
       return;
     }
 
@@ -116,9 +123,9 @@ export function AudioProvider({ children }: { children: React.ReactNode }) {
 
         for (let i = fadeSteps; i >= 0; i--) {
           audio.volume = Math.max(0, (i / fadeSteps) * targetVolume);
-          await new Promise(resolve => setTimeout(resolve, stepDuration));
+          await new Promise((resolve) => setTimeout(resolve, stepDuration));
         }
-        
+
         audio.pause();
       }
 
@@ -133,7 +140,7 @@ export function AudioProvider({ children }: { children: React.ReactNode }) {
           if (audio.readyState >= 2) {
             resolve();
           } else {
-            audio.addEventListener('canplay', () => resolve(), { once: true });
+            audio.addEventListener("canplay", () => resolve(), { once: true });
           }
         });
 
@@ -147,15 +154,12 @@ export function AudioProvider({ children }: { children: React.ReactNode }) {
 
         for (let i = 0; i <= fadeSteps; i++) {
           audio.volume = Math.min(targetVolume, (i / fadeSteps) * targetVolume);
-          await new Promise(resolve => setTimeout(resolve, stepDuration));
+          await new Promise((resolve) => setTimeout(resolve, stepDuration));
         }
-        
+
         audio.volume = targetVolume;
       }
-
-
     } catch (error) {
-     
     } finally {
       isTransitioningRef.current = false;
     }
@@ -165,7 +169,6 @@ export function AudioProvider({ children }: { children: React.ReactNode }) {
   useEffect(() => {
     if (audioRef.current) {
       audioRef.current.muted = isMuted;
- 
     }
   }, [isMuted]);
 
@@ -173,33 +176,28 @@ export function AudioProvider({ children }: { children: React.ReactNode }) {
   useEffect(() => {
     if (audioRef.current) {
       audioRef.current.volume = volume / 100;
-  
     }
   }, [volume]);
 
-
   const startAudio = async () => {
     if (audioRef.current && !isInitialized) {
-   
-        const audio = audioRef.current;
+      const audio = audioRef.current;
 
-        setIsMuted(false); // ตั้งค่า mute เป็น false เมื่อผู้ใช้เลือกเปิดเสียง
-        
-        // รอให้ audio พร้อมก่อน play
-        if (audio.readyState < 2) {
-          await new Promise<void>((resolve) => {
-            audio.addEventListener('canplay', () => resolve(), { once: true });
-          });
-        }
-        
-        // Play audio โดยตรง ไม่ต้อง pause ก่อน เพราะยังไม่เคย play
-        await audio.play();
-        setIsPlaying(true);
-        setIsInitialized(true);
-        setUserConsented(true);
-        setAnimationsStarted(true);
+      setIsMuted(false); // ตั้งค่า mute เป็น false เมื่อผู้ใช้เลือกเปิดเสียง
 
-   
+      // รอให้ audio พร้อมก่อน play
+      if (audio.readyState < 2) {
+        await new Promise<void>((resolve) => {
+          audio.addEventListener("canplay", () => resolve(), { once: true });
+        });
+      }
+
+      // Play audio โดยตรง ไม่ต้อง pause ก่อน เพราะยังไม่เคย play
+      await audio.play();
+      setIsPlaying(true);
+      setIsInitialized(true);
+      setUserConsented(true);
+      setAnimationsStarted(true);
     }
   };
 
@@ -210,14 +208,13 @@ export function AudioProvider({ children }: { children: React.ReactNode }) {
       setIsMuted(true); // ตั้งค่า mute เป็น true เมื่อผู้ใช้เลือกไม่เปิดเสียง
       setUserConsented(true);
       setAnimationsStarted(true);
-
     }
   };
 
   const togglePlay = async () => {
     if (audioRef.current) {
       const audio = audioRef.current;
-      
+
       try {
         if (isPlaying) {
           audio.pause();
@@ -226,7 +223,7 @@ export function AudioProvider({ children }: { children: React.ReactNode }) {
             if (audio.paused) {
               resolve();
             } else {
-              audio.addEventListener('pause', () => resolve(), { once: true });
+              audio.addEventListener("pause", () => resolve(), { once: true });
             }
           });
           setIsPlaying(false);
@@ -234,10 +231,12 @@ export function AudioProvider({ children }: { children: React.ReactNode }) {
           // รอให้ audio พร้อมก่อน play
           if (audio.readyState < 2) {
             await new Promise<void>((resolve) => {
-              audio.addEventListener('canplay', () => resolve(), { once: true });
+              audio.addEventListener("canplay", () => resolve(), {
+                once: true,
+              });
             });
           }
-          
+
           await audio.play();
           setIsPlaying(true);
         }
@@ -259,13 +258,12 @@ export function AudioProvider({ children }: { children: React.ReactNode }) {
       let currentStep = 0;
       const fadeOutInterval = setInterval(() => {
         currentStep++;
-        audio.volume = Math.max(0, originalVolume - (volumeStep * currentStep));
-        
+        audio.volume = Math.max(0, originalVolume - volumeStep * currentStep);
+
         if (currentStep >= fadeSteps) {
           clearInterval(fadeOutInterval);
           audio.pause();
           audio.volume = originalVolume; // คืนค่า volume เดิม
-    
         }
       }, stepDuration);
     }
@@ -280,29 +278,27 @@ export function AudioProvider({ children }: { children: React.ReactNode }) {
       const volumeStep = targetVolume / fadeSteps;
       const stepDuration = fadeDuration / fadeSteps;
 
-        audio.volume = 0;
-        
-        // รอให้ audio พร้อมก่อน play
-        if (audio.readyState < 2) {
-          await new Promise<void>((resolve) => {
-            audio.addEventListener('canplay', () => resolve(), { once: true });
-          });
-        }
-        
-        await audio.play();
-        
-        let currentStep = 0;
-        const fadeInInterval = setInterval(() => {
-          currentStep++;
-          audio.volume = Math.min(targetVolume, volumeStep * currentStep);
-          
-          if (currentStep >= fadeSteps) {
-            clearInterval(fadeInInterval);
-            audio.volume = targetVolume;
+      audio.volume = 0;
 
-          }
-        }, stepDuration);
-  
+      // รอให้ audio พร้อมก่อน play
+      if (audio.readyState < 2) {
+        await new Promise<void>((resolve) => {
+          audio.addEventListener("canplay", () => resolve(), { once: true });
+        });
+      }
+
+      await audio.play();
+
+      let currentStep = 0;
+      const fadeInInterval = setInterval(() => {
+        currentStep++;
+        audio.volume = Math.min(targetVolume, volumeStep * currentStep);
+
+        if (currentStep >= fadeSteps) {
+          clearInterval(fadeInInterval);
+          audio.volume = targetVolume;
+        }
+      }, stepDuration);
     }
   };
 

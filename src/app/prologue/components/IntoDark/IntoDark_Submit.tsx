@@ -18,94 +18,94 @@ export default function IntoDarkSubmit({
   const containerOpacity = useTransform(
     scrollYProgress,
     [0.667, 0.676, 0.944, 1.0],
-    [0, 1, 1, 1]
+    [0, 1, 1, 1],
   );
   const zIndex = useTransform(
     scrollYProgress,
     [0, 0.667, 0.668, 1.0],
-    [-1, -1, 10, 10]
+    [-1, -1, 10, 10],
   );
 
   // Layer 1: Background gradients (0.667-0.690)
   const bgGradient1Opacity = useTransform(
     scrollYProgress,
-    [0.667, 0.676, 0.690],
-    [0, 1, 1]
+    [0.667, 0.676, 0.69],
+    [0, 1, 1],
   );
   const bgGradient2Opacity = useTransform(
     scrollYProgress,
     [0.671, 0.683, 0.695],
-    [0, 1, 1]
+    [0, 1, 1],
   );
 
   // Layer 2: Clouds (0.678-0.697)
   const cloudsOpacity = useTransform(
     scrollYProgress,
-    [0.678, 0.690, 0.697],
-    [0, 1, 1]
+    [0.678, 0.69, 0.697],
+    [0, 1, 1],
   );
 
   // Layer 3: Stars (0.683-0.707)
   const starsOpacity = useTransform(
     scrollYProgress,
     [0.683, 0.695, 0.707],
-    [0, 1, 1]
+    [0, 1, 1],
   );
 
   // Layer 4: Cat and Light Cat (0.690-0.723)
   const catOpacity = useTransform(
     scrollYProgress,
-    [0.690, 0.702, 0.723],
-    [0, 1, 1]
+    [0.69, 0.702, 0.723],
+    [0, 1, 1],
   );
 
   // Layer 5: Four circles (0.697-0.746)
   const circlesOpacity = useTransform(
     scrollYProgress,
     [0.697, 0.713, 0.746],
-    [0, 1, 1]
+    [0, 1, 1],
   );
 
   // Layer 6: Ikigai diagram text (0.730-0.779)
   const diagramTextOpacity = useTransform(
     scrollYProgress,
-    [0.730, 0.746, 0.779],
-    [0, 1, 1]
+    [0.73, 0.746, 0.779],
+    [0, 1, 1],
   );
 
   // Layer 7: Top explanation text (0.746-0.796)
   const topTextOpacity = useTransform(
     scrollYProgress,
     [0.746, 0.763, 0.796],
-    [0, 1, 1]
+    [0, 1, 1],
   );
 
   // Layer 8: Middle explanation text (0.763-0.813)
   const middleTextOpacity = useTransform(
     scrollYProgress,
     [0.763, 0.779, 0.813],
-    [0, 1, 1]
+    [0, 1, 1],
   );
 
   // Layer 9: Bottom explanation text (0.779-0.829)
   const bottomTextOpacity = useTransform(
     scrollYProgress,
     [0.779, 0.796, 0.829],
-    [0, 1, 1]
+    [0, 1, 1],
   );
 
   // Layer 10: Final question text (0.813-0.852)
   const finalTextOpacity = useTransform(
     scrollYProgress,
     [0.813, 0.829, 0.852],
-    [0, 1, 1]
+    [0, 1, 1],
   );
 
   // Layer 11: Button (0.863-1.0)
   const buttonOpacity = useTransform(
     scrollYProgress,
-    [0.863, 0.880, 1.0],
-    [0, 1, 1]
+    [0.863, 0.88, 1.0],
+    [0, 1, 1],
   );
 
   return (

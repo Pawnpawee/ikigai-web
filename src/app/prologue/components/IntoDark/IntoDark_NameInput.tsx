@@ -113,12 +113,12 @@ export default function IntoDarkNameInput({
   const opacity = useTransform(
     scrollYProgress,
     [0, 0.006, 0.153, 0.167],
-    [0, 1, 1, 0]
+    [0, 1, 1, 0],
   );
   const zIndex = useTransform(
     scrollYProgress,
     [0, 0.006, 0.166, 0.167],
-    [10, 10, 10, -1]
+    [10, 10, 10, -1],
   );
 
   // ชุด 1: Background Gradient + Little star 2 (0-25vh = 0-0.014)
@@ -128,49 +128,49 @@ export default function IntoDarkNameInput({
   const set2Opacity = useTransform(
     scrollYProgress,
     [0.014, 0.021, 0.028],
-    [0, 1, 1]
+    [0, 1, 1],
   );
 
   // ชุด 3: Star line 1 (50-75vh = 0.028-0.042) - รอชุด 2 opacity = 1
   const set3Opacity = useTransform(
     scrollYProgress,
     [0.028, 0.035, 0.042],
-    [0, 1, 1]
+    [0, 1, 1],
   );
 
   // ชุด 4: Star line 3 + Little star 1 + Cat (75-175vh = 0.042-0.097) - รอชุด 3 opacity = 1
   const set4Opacity = useTransform(
     scrollYProgress,
     [0.042, 0.049, 0.097],
-    [0, 1, 1]
+    [0, 1, 1],
   );
 
   // Cat floating down animation
   const catY = useTransform(
     scrollYProgress,
     [0.042, 0.103, 0.125],
-    [-100, 10, 0]
+    [-100, 10, 0],
   );
 
   // ชุด 5: ข้อความ + Water (175-225vh = 0.097-0.125) - 50vh - รอชุด 4 opacity = 1
   const textOpacity = useTransform(
     scrollYProgress,
     [0.097, 0.111, 0.125],
-    [0, 1, 1]
+    [0, 1, 1],
   );
 
   // Water bounce animation (scale) - ย้ายมาชุด 5
   const waterScale = useTransform(
     scrollYProgress,
     [0.097, 0.103, 0.111, 0.118, 0.125],
-    [0, 1.3, 0.9, 1.1, 1]
+    [0, 1.3, 0.9, 1.1, 1],
   );
 
   // ชุด 6: Input box (225-275vh = 0.125-0.153) - 50vh - รอชุด 5 opacity = 1
   const inputOpacity = useTransform(
     scrollYProgress,
     [0.125, 0.139, 0.153],
-    [0, 1, 1]
+    [0, 1, 1],
   );
 
   const handleKeyDown = (e: React.KeyboardEvent) => {
@@ -406,7 +406,7 @@ export default function IntoDarkNameInput({
                 startProgress={0.097}
                 endProgress={0.111}
               />
-              <br/>
+              <br />
               <MysteriousText
                 text="เจ้าชื่ออะไร"
                 scrollYProgress={scrollYProgress}

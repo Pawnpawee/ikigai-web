@@ -1,7 +1,7 @@
 "use client";
 import React, { useState } from "react";
-import Link from "next/link"; 
-import { motion, MotionProps } from "framer-motion"; 
+import Link from "next/link";
+import { motion, MotionProps } from "framer-motion";
 import Icon from "./Icon";
 import MenuModal from "./MenuModal";
 import MusicModal from "./MusicModal";
@@ -27,23 +27,28 @@ const navItemMotionProps: MotionProps = {
 interface NavbarButtonProps {
   className?: string;
   iconSrc: string;
-  label: string; 
+  label: string;
   onClick?: () => void;
 }
 
-function NavbarIconButton({ className, iconSrc, label, onClick }: NavbarButtonProps) {
+function NavbarIconButton({
+  className,
+  iconSrc,
+  label,
+  onClick,
+}: NavbarButtonProps) {
   return (
     <motion.button
       type="button"
       onClick={onClick}
-      aria-label={label} 
+      aria-label={label}
       className={className}
       data-name={label.toLowerCase().replace(" ", "-")}
-      {...navItemMotionProps} 
+      {...navItemMotionProps}
     >
       <Icon
         src={iconSrc}
-        alt={label} 
+        alt={label}
         size={50}
         className="relative shrink-0 w-10 lg:w-[50px]"
       />
@@ -57,7 +62,7 @@ function Logo({ className }: { className?: string }) {
       <motion.img
         {...navItemMotionProps}
         src="/assets/Icon/logo.svg"
-        alt="Logo - Go to Home" 
+        alt="Logo - Go to Home"
         className={`h-7 lg:h-8 ${className || ""}`}
       />
     </Link>
@@ -81,7 +86,7 @@ export default function Navbar({ className }: NavbarTopProps) {
       <div
         className={`box-border flex items-center justify-between px-8 lg:px-14 py-0 fixed top-0 z-50 w-screen h-[100px] ${
           className || ""
-        }`} 
+        }`}
       >
         <NavbarIconButton
           className="btn"
