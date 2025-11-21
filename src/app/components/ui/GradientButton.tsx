@@ -6,6 +6,7 @@ interface GradientButtonProps {
   isSelected: boolean;
   onClick: () => void;
   className?: string;
+  variant?: "default" | "white";
 }
 
 export default function GradientButton({
@@ -13,27 +14,44 @@ export default function GradientButton({
   isSelected,
   onClick,
   className = "",
+  variant = "default",
 }: GradientButtonProps) {
+  const isWhiteVariant = variant === "white";
+
+  const getButtonStyles = () => {
+    if (isWhiteVariant) {
+      // White variant - similar to InputButton
+      return {
+        border: "4px solid var(--white-radial)",
+        background: "var(--white-linear)",
+        boxShadow: "0 0 60px -20px var(--color-slate-100)",
+      };
+    }
+    // Default variant
+    return {
+      boxShadow: isSelected ? "0 0 60px -10px #CFD5DC" : "none",
+    };
+  };
+
   return (
     <motion.button
       onClick={onClick}
       className={`
         relative
         rounded-full
-        border-4
         px-14 py-4
         typo-text-h4
         transition-all
         ${
-          isSelected
-            ? "bg-linear-to-b from-slate-200 to-slate-100 border-slate-200 text-black"
-            : "bg-linear-to-b from-slate-200/30 to-slate-100/30 border-slate-200/50 text-white"
+          isWhiteVariant
+            ? "text-black"
+            : isSelected
+            ? "bg-linear-to-b from-slate-200 to-slate-100 border-slate-200 text-black border-4"
+            : "bg-linear-to-b from-slate-200/30 to-slate-100/30 border-slate-200/50 text-white border-4"
         }
         ${className}
       `}
-      style={{
-        boxShadow: isSelected ? "0 0 60px -10px #CFD5DC" : "none",
-      }}
+      style={getButtonStyles()}
       whileHover={{ scale: 1.05 }}
       whileTap={{ scale: 0.95 }}
     >

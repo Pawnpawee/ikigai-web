@@ -2,6 +2,7 @@
 import React from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import Link from "next/link";
+import { useAudio } from "@/app/contexts/AudioContext";
 
 interface MenuModalProps {
   isOpen: boolean;
@@ -9,6 +10,17 @@ interface MenuModalProps {
 }
 
 export default function MenuModal({ isOpen, onClose }: MenuModalProps) {
+  const { volume, sfxVolume, setVolume, setSfxVolume } = useAudio();
+
+  const handleVolumeChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const newVolume = Number(e.target.value);
+    setVolume(newVolume);
+  };
+
+  const handleSfxVolumeChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const newVolume = Number(e.target.value);
+    setSfxVolume(newVolume);
+  };
   return (
     <AnimatePresence>
       {isOpen && (
@@ -53,6 +65,158 @@ export default function MenuModal({ isOpen, onClose }: MenuModalProps) {
                   <line x1="6" y1="6" x2="18" y2="18" />
                 </svg>
               </button>
+            </div>
+
+            {/* Volume Controls Section */}
+            <div className="mb-6 space-y-6 pb-6 border-b border-slate-700">
+              {/* Background Music Volume */}
+              <div className="space-y-3">
+                <div className="flex items-center justify-between">
+                  <span className="typo-p-lg text-white">ระดับเสียงประกอบ</span>
+                  <span className="typo-p-lg text-blue-400 font-semibold">
+                    {volume}%
+                  </span>
+                </div>
+
+                <div className="flex items-center gap-4">
+                  {/* Volume Icon Low */}
+                  <svg
+                    width="20"
+                    height="20"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    strokeWidth="2"
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    className="text-slate-400 shrink-0"
+                  >
+                    <polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5" />
+                  </svg>
+
+                  {/* Slider */}
+                  <input
+                    type="range"
+                    min="0"
+                    max="100"
+                    value={volume}
+                    onChange={handleVolumeChange}
+                    className="w-full h-2 bg-slate-700 rounded-lg appearance-none cursor-pointer
+                      [&::-webkit-slider-thumb]:appearance-none
+                      [&::-webkit-slider-thumb]:w-4
+                      [&::-webkit-slider-thumb]:h-4
+                      [&::-webkit-slider-thumb]:rounded-full
+                      [&::-webkit-slider-thumb]:bg-blue-500
+                      [&::-webkit-slider-thumb]:cursor-pointer
+                      [&::-webkit-slider-thumb]:hover:bg-blue-400
+                      [&::-moz-range-thumb]:w-4
+                      [&::-moz-range-thumb]:h-4
+                      [&::-moz-range-thumb]:rounded-full
+                      [&::-moz-range-thumb]:bg-blue-500
+                      [&::-moz-range-thumb]:cursor-pointer
+                      [&::-moz-range-thumb]:border-0
+                      [&::-moz-range-thumb]:hover:bg-blue-400"
+                    style={{
+                      background: `linear-gradient(to right, #3b82f6 0%, #3b82f6 ${volume}%, #334155 ${volume}%, #334155 100%)`,
+                    }}
+                  />
+
+                  {/* Volume Icon High */}
+                  <svg
+                    width="20"
+                    height="20"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    strokeWidth="2"
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    className="text-slate-400 shrink-0"
+                  >
+                    <polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5" />
+                    <path d="M15.54 8.46a5 5 0 0 1 0 7.07" />
+                    <path d="M19.07 4.93a10 10 0 0 1 0 14.14" />
+                  </svg>
+                </div>
+              </div>
+
+              {/* Sound Effect Volume */}
+              <div className="space-y-3">
+                <div className="flex items-center justify-between">
+                  <span className="typo-p-lg text-white">เสียง Effect</span>
+                  <span className="typo-p-lg text-orange-400 font-semibold">
+                    {sfxVolume}%
+                  </span>
+                </div>
+
+                <div className="flex items-center gap-4">
+                  {/* SFX Icon */}
+                  <svg
+                    width="20"
+                    height="20"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    strokeWidth="2"
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    className="text-slate-400 shrink-0"
+                  >
+                    <path d="M9 18V5l12-2v13" />
+                    <circle cx="6" cy="18" r="3" />
+                    <circle cx="18" cy="16" r="3" />
+                  </svg>
+
+                  {/* SFX Slider */}
+                  <input
+                    type="range"
+                    min="0"
+                    max="100"
+                    value={sfxVolume}
+                    onChange={handleSfxVolumeChange}
+                    className="w-full h-2 bg-slate-700 rounded-lg appearance-none cursor-pointer
+                      [&::-webkit-slider-thumb]:appearance-none
+                      [&::-webkit-slider-thumb]:w-4
+                      [&::-webkit-slider-thumb]:h-4
+                      [&::-webkit-slider-thumb]:rounded-full
+                      [&::-webkit-slider-thumb]:bg-orange-500
+                      [&::-webkit-slider-thumb]:cursor-pointer
+                      [&::-webkit-slider-thumb]:hover:bg-orange-400
+                      [&::-moz-range-thumb]:w-4
+                      [&::-moz-range-thumb]:h-4
+                      [&::-moz-range-thumb]:rounded-full
+                      [&::-moz-range-thumb]:bg-orange-500
+                      [&::-moz-range-thumb]:cursor-pointer
+                      [&::-moz-range-thumb]:border-0
+                      [&::-moz-range-thumb]:hover:bg-orange-400"
+                    style={{
+                      background: `linear-gradient(to right, #f97316 0%, #f97316 ${sfxVolume}%, #334155 ${sfxVolume}%, #334155 100%)`,
+                    }}
+                  />
+
+                  {/* Sparkle Icon */}
+                  <svg
+                    width="20"
+                    height="20"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    strokeWidth="2"
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    className="text-slate-400 shrink-0"
+                  >
+                    <path d="M12 2v4" />
+                    <path d="M12 18v4" />
+                    <path d="M4.93 4.93l2.83 2.83" />
+                    <path d="M16.24 16.24l2.83 2.83" />
+                    <path d="M2 12h4" />
+                    <path d="M18 12h4" />
+                    <path d="M4.93 19.07l2.83-2.83" />
+                    <path d="M16.24 7.76l2.83-2.83" />
+                  </svg>
+                </div>
+              </div>
             </div>
 
             {/* Menu Items */}

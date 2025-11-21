@@ -525,20 +525,6 @@ body {
   overflow-x: hidden;
 }
 
-/* Disable pointer events globally except for inputs and buttons */
-* {
-  pointer-events: none;
-}
-
-input,
-button,
-a,
-textarea,
-select,
-[role="button"],
-[onclick] {
-  pointer-events: auto;
-}
 
 p {
   padding: 0;

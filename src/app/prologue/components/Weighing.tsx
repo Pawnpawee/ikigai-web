@@ -10,8 +10,10 @@ import { useRef, useEffect } from "react";
 import { useIsPortrait } from "@/app/hooks/useOrientation";
 import { useBgMusicTransition } from "@/app/hooks/useBgMusicTransition";
 import SubtitleScroll from "@/app/components/ui/SubtitleScroll";
+import { VideoAnimation } from "@/app/components/ui/VideoAnimation";
 import Lottie from "lottie-react";
 import buildingAnimationData from "../../../../public/assets/Scene/Scene4/s4-building.json";
+import humanFallingAnimationData from "../../../../public/assets/Scene/Scene4/human-falling.json";
 import treeLeftAnimationData from "../../../../public/assets/Scene/Scene4/s4-tree.json";
 import treeRightAnimationData from "../../../../public/assets/Scene/Scene4/s4-tree.json";
 import skyAnimationData from "../../../../public/assets/Scene/Scene4/s4-sky.json";
@@ -35,7 +37,7 @@ export default function Weighing() {
     defaultMusic: "/assets/Sound/bg-music.mp3",
     fadeDuration: 1000,
     isInView,
-    continueOnExit: true, 
+    continueOnExit: true,
   });
 
   const { playSoundEffect: playScales } = useSoundEffect({
@@ -59,7 +61,12 @@ export default function Weighing() {
   useEffect(() => {
     const unsubscribe = scrollYProgress.on("change", (value) => {
       // เล่นเสียง metal เมื่อเริ่มช่วง slow movement (scrollYProgress >= 0.6667)
-      if (value >= 0.6667 && !hasPlayedMetalRef.current && animationsStarted && isInView) {
+      if (
+        value >= 0.6667 &&
+        !hasPlayedMetalRef.current &&
+        animationsStarted &&
+        isInView
+      ) {
         playMetal();
         hasPlayedMetalRef.current = true;
       }
@@ -76,7 +83,12 @@ export default function Weighing() {
   useEffect(() => {
     const unsubscribe = scrollYProgress.on("change", (value) => {
       // เล่นเสียงเมื่อถึง 0.8 (80%) ซึ่งเป็นจุดสิ้นสุดของ heartPlateY_fast animation
-      if (value >= 0.8 && !hasPlayedScalesRef.current && animationsStarted && isInView) {
+      if (
+        value >= 0.8 &&
+        !hasPlayedScalesRef.current &&
+        animationsStarted &&
+        isInView
+      ) {
         playScales();
         hasPlayedScalesRef.current = true;
       }
@@ -108,18 +120,18 @@ export default function Weighing() {
     [1, 1, 0]
   );
 
-  // POV falling effect - extended to use additional 50vh (600-750vh = 0.8-1.0)
-  const pov_y = useTransform(scrollYProgress, [0, 0.8, 1], [0, 0, -500]);
+  // POV falling effect - extended to use additional 50vh (600-750vh = 0.6-0.75)
+  const pov_y = useTransform(scrollYProgress, [0, 0.6, 0.75], [0, 0, -500]);
 
-  // Shake effect - rapid oscillation during fall (0.8-1.0)
+  // Shake effect - rapid oscillation during fall (0.6-0.75)
   const pov_shake_x = useTransform(
     scrollYProgress,
-    [0.8, 0.82, 0.84, 0.86, 0.88, 0.9, 0.92, 0.94, 0.96, 0.98, 1],
+    [0.6, 0.615, 0.63, 0.645, 0.66, 0.675, 0.69, 0.705, 0.72, 0.735, 0.75],
     [0, 5, -5, 4, -4, 3, -3, 2, -2, 1, 0]
   );
 
-  // Blur effect - increases during fall (0.8-1.0)
-  const pov_blur = useTransform(scrollYProgress, [0, 0.8, 1], [0, 0, 8]);
+  // Blur effect - increases during fall (0.6-0.75)
+  const pov_blur = useTransform(scrollYProgress, [0, 0.6, 0.75], [0, 0, 8]);
 
   // Set 1: tree right, tree left (0-50vh = 0-0.0667)
   const opacity_set1 = useTransform(scrollYProgress, [0, 0.0667], [0, 1]);
@@ -238,20 +250,27 @@ export default function Weighing() {
 
   const textOpacity = useTransform(
     scrollYProgress,
-    [0, 0.3, 0.9, 1],
+    [0, 0.3, 0.7, 0.75],
     [0, 1, 1, 0]
   );
 
   const textAnimationProgress = useTransform(
     scrollYProgress,
-    [0, 0.3, 1],
+    [0, 0.3, 0.72],
     [0, 0, 1]
+  );
+
+  // ============ VIDEO SECTION (750-1000vh = 0.75-1.0) ============
+  const videoOpacity = useTransform(
+    scrollYProgress,
+    [0.75, 0.77, 0.98, 1],
+    [0, 1, 1, 0]
   );
 
   return (
     <motion.div
       ref={ref}
-      className="relative h-[750vh]"
+      className="relative h-[1000vh]"
       style={{ opacity: mainOpacity }}
     >
       {/* Background */}
@@ -531,6 +550,23 @@ export default function Weighing() {
           opacity: blink_opacity,
         }}
       />
+
+      {/* Video Section (750-1000vh) */}
+      <motion.div
+        className="fixed inset-0 w-screen h-screen flex items-center justify-center pointer-events-none z-0"
+        style={{
+          opacity: videoOpacity,
+          background:
+            "linear-gradient(180deg, #101518 1.07%, #0C1B1F 77.07%, #0B1E23 99.78%)",
+          willChange: "opacity",
+        }}
+      >
+        <VideoAnimation
+          webmSrc="/assets/Scene/Scene4/falling.webm"
+          movSrc="/assets/Scene/Scene4/falling.mov"
+        
+        />
+      </motion.div>
     </motion.div>
   );
 }

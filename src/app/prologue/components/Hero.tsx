@@ -227,8 +227,8 @@ export default function Hero() {
         }
       >
         <motion.div
-          className="relative w-[380px] h-auto"
-          style={{ y: -200 }}
+          className="relative w-[380px] h-auto cursor-pointer"
+          style={{ y: -200, pointerEvents: "auto" }}
           onHoverStart={() => setIsCircle1Hovered(true)}
           onHoverEnd={() => setIsCircle1Hovered(false)}
         >
@@ -297,7 +297,7 @@ export default function Hero() {
       >
         <motion.div
           className="relative w-[380px] h-auto cursor-pointer"
-          style={{ y: -180 }}
+          style={{ y: -180, pointerEvents: "auto" }}
           onHoverStart={() => setIsCircle2Hovered(true)}
           onHoverEnd={() => setIsCircle2Hovered(false)}
         >
@@ -365,7 +365,7 @@ export default function Hero() {
       >
         <motion.div
           className="relative w-[380px] h-auto cursor-pointer"
-          style={{ y: -180 }}
+          style={{ y: -180, pointerEvents: "auto" }}
           onHoverStart={() => setIsCircle3Hovered(true)}
           onHoverEnd={() => setIsCircle3Hovered(false)}
         >
@@ -433,7 +433,7 @@ export default function Hero() {
       >
         <motion.div
           className="relative w-[380px] h-auto cursor-pointer"
-          style={{ y: -180 }}
+          style={{ y: -180, pointerEvents: "auto" }}
           onHoverStart={() => setIsCircle4Hovered(true)}
           onHoverEnd={() => setIsCircle4Hovered(false)}
         >

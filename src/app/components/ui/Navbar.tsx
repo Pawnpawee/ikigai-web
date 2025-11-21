@@ -1,10 +1,9 @@
 "use client";
-import React, { useState } from "react";
-import Link from "next/link"; 
-import { motion, MotionProps } from "framer-motion"; 
+import React, { useEffect, useState } from "react";
+import { motion, MotionProps } from "framer-motion";
 import Icon from "./Icon";
 import MenuModal from "./MenuModal";
-import MusicModal from "./MusicModal";
+import { useAudio } from "@/app/contexts/AudioContext";
 
 export interface NavbarTopProps {
   className?: string;
@@ -27,23 +26,28 @@ const navItemMotionProps: MotionProps = {
 interface NavbarButtonProps {
   className?: string;
   iconSrc: string;
-  label: string; 
+  label: string;
   onClick?: () => void;
 }
 
-function NavbarIconButton({ className, iconSrc, label, onClick }: NavbarButtonProps) {
+function NavbarIconButton({
+  className,
+  iconSrc,
+  label,
+  onClick,
+}: NavbarButtonProps) {
   return (
     <motion.button
       type="button"
       onClick={onClick}
-      aria-label={label} 
+      aria-label={label}
       className={className}
       data-name={label.toLowerCase().replace(" ", "-")}
-      {...navItemMotionProps} 
+      {...navItemMotionProps}
     >
       <Icon
         src={iconSrc}
-        alt={label} 
+        alt={label}
         size={50}
         className="relative shrink-0 w-10 lg:w-[50px]"
       />
@@ -51,25 +55,18 @@ function NavbarIconButton({ className, iconSrc, label, onClick }: NavbarButtonPr
   );
 }
 
-function Logo({ className }: { className?: string }) {
-  return (
-    <Link href="/" aria-label="Go to homepage">
-      <motion.img
-        {...navItemMotionProps}
-        src="/assets/Icon/logo.svg"
-        alt="Logo - Go to Home" 
-        className={`h-7 lg:h-8 ${className || ""}`}
-      />
-    </Link>
-  );
-}
-
 export default function Navbar({ className }: NavbarTopProps) {
-  const [isMusicModalOpen, setIsMusicModalOpen] = useState(false);
   const [isMenuModalOpen, setIsMenuModalOpen] = useState(false);
+  const { isMuted, setIsMuted } = useAudio();
+  const [musicIcon, setMusicIcon] = useState("/assets/Icon/music.svg");
+
+  useEffect(() => {
+    // ถ้า isMuted เป็น true ให้ใช้รูป mute, ถ้า false ให้ใช้รูป music
+    setMusicIcon(isMuted ? "/assets/Icon/mute.svg" : "/assets/Icon/music.svg");
+  }, [isMuted]);
 
   const handleMusicClick = () => {
-    setIsMusicModalOpen(true);
+    setIsMuted(!isMuted);
   };
 
   const handleMenuClick = () => {
@@ -81,28 +78,24 @@ export default function Navbar({ className }: NavbarTopProps) {
       <div
         className={`box-border flex items-center justify-between px-8 lg:px-14 py-0 fixed top-0 z-50 w-screen h-[100px] ${
           className || ""
-        }`} 
+        }`}
       >
         <NavbarIconButton
           className="btn"
-          iconSrc="/assets/Icon/Music.svg"
-          label="Toggle music player"
+          iconSrc={musicIcon}
+          label={isMuted ? "Unmute music" : "Mute music"}
           onClick={handleMusicClick}
         />
-        <Logo className="btn" />
+
         <NavbarIconButton
           className="btn"
-          iconSrc="/assets/Icon/Menu.svg"
+          iconSrc="/assets/Icon/menu.svg"
           label="Open menu"
           onClick={handleMenuClick}
         />
       </div>
 
-      {/* Modals */}
-      <MusicModal
-        isOpen={isMusicModalOpen}
-        onClose={() => setIsMusicModalOpen(false)}
-      />
+      {/* Menu Modal */}
       <MenuModal
         isOpen={isMenuModalOpen}
         onClose={() => setIsMenuModalOpen(false)}

@@ -1,24 +1,22 @@
 "use client";
 import React, { useState, useEffect } from "react";
 import WelcomeSoundModal from "./components/ui/WelcomeSoundModal";
-import { useAudio } from "./contexts/AudioContext";
-// 1. Import 'ReactLenis' (ไม่ใช่ 'Lenis')
-import { ReactLenis } from "lenis/react";
+import { useAudio, AudioProvider } from "./contexts/AudioContext";
+import { AssetLoaderProvider } from "./contexts/AssetLoaderContext";
+import Preloader from "./components/ui/Preloader";
+import ReactLenis from "lenis/react";
 
-export default function AppWrapper({
-  children,
-}: {
-  children: React.ReactNode;
-}) {
+function AppContent({ children }: { children: React.ReactNode }) {
   const [showWelcomeModal, setShowWelcomeModal] = useState(false);
-  const { startAudio, pauseAudio, userConsented } = useAudio();
+  const { startAudio, pauseAudio, userConsented, isInitialized } = useAudio();
 
   useEffect(() => {
-    // แสดง modal เมื่อโหลดหน้าครั้งแรก
-    if (!userConsented) {
-      setShowWelcomeModal(true);
+    if (isInitialized) {
+        if (!userConsented) {
+            setShowWelcomeModal(true);
+        }
     }
-  }, [userConsented]);
+  }, [userConsented, isInitialized]);
 
   const handleAccept = () => {
     setShowWelcomeModal(false);
@@ -30,23 +28,40 @@ export default function AppWrapper({
     pauseAudio();
   };
 
-  // 3. สร้าง object options ของคุณ
-  const lenisOptions = {
-    wheelMultiplier: 0.4,
-    duration: 2,
-    lerp: 0.05,
-  };
-
   return (
-    // 4. ใช้ <ReactLenis> หุ้มทุกอย่าง
-    // และส่ง options เข้าไป
-    <ReactLenis root options={lenisOptions}>
+    <>
+      <Preloader />{" "}
+      {/* Preloader จะเรียก useLenis() ข้างในเพื่อสั่งหยุด scroll */}
       <WelcomeSoundModal
         isOpen={showWelcomeModal}
         onAccept={handleAccept}
         onDecline={handleDecline}
       />
+      {/* เนื้อหาหลักของเว็บ */}
       {children}
-    </ReactLenis>
+    </>
+  );
+}
+
+export default function AppWrapper({
+  children,
+}: {
+  children: React.ReactNode;
+}) {
+  const lenisOptions = {
+    wheelMultiplier: 0.8, // ปรับความเร็วล้อเม้าส์
+    duration: 1.2, // ระยะเวลา animation
+    lerp: 0.1,
+    smoothWheel: true,
+  };
+
+  return (
+    // 1. AssetLoader อยู่บนสุด (โหลดของ)
+    <AssetLoaderProvider>
+      {/* 3. Lenis ครอบทั้งหมดเพื่อให้ทุก Component เข้าถึง lenis instance ได้ */}
+      <ReactLenis root options={lenisOptions}>
+        <AppContent>{children}</AppContent>
+      </ReactLenis>
+    </AssetLoaderProvider>
   );
 }
