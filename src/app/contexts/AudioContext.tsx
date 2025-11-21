@@ -47,7 +47,7 @@ export function AudioProvider({ children }: { children: React.ReactNode }) {
   const [userConsented, setUserConsented] = useState(false);
   const [animationsStarted, setAnimationsStarted] = useState(false);
   const [currentBgMusic, setCurrentBgMusic] = useState(
-    "/assets/Sound/bg-music.mp3"
+    "/assets/Sound/bg-music.mp3",
   );
   const isTransitioningRef = useRef(false);
 
@@ -246,15 +246,15 @@ export function AudioProvider({ children }: { children: React.ReactNode }) {
     if (audioRef.current) {
       const audio = audioRef.current;
       audio.muted = isMuted;
-      
+
       // ถ้า unmute และยัง consent แล้ว → เล่นเสียง
       if (!isMuted && userConsented) {
         if (audio.paused) {
-          audio.play().catch(err => console.error("Play failed:", err));
+          audio.play().catch((err) => console.error("Play failed:", err));
           setIsPlaying(true);
         }
       }
-      
+
       // ถ้า mute → หยุดเล่น
       if (isMuted && !audio.paused) {
         audio.pause();
@@ -271,17 +271,16 @@ export function AudioProvider({ children }: { children: React.ReactNode }) {
     if (audioRef.current) {
       const audio = audioRef.current;
       const targetVolume = volume / 100;
-      
+
       // Safari fix: ต้อง set volume หลายครั้งเพื่อให้มันใช้งานได้
       audio.volume = targetVolume;
-      
+
       // Force update volume หลังจาก 10ms (Safari workaround)
       setTimeout(() => {
         if (audio) {
           audio.volume = targetVolume;
         }
       }, 10);
-      
     }
     saveSettingsToStorage({ volume });
   }, [volume, isInitialized]);
@@ -294,33 +293,33 @@ export function AudioProvider({ children }: { children: React.ReactNode }) {
 
   const startAudio = async () => {
     if (audioRef.current) {
-        const audio = audioRef.current;
-        
-        // 1. Update State UI
-        setIsMuted(false); // เปิดเสียง
-        setUserConsented(true);
-        setAnimationsStarted(true);
+      const audio = audioRef.current;
 
-        // 2. Save Immediately
-        saveSettingsToStorage({ 
-            hasVisited: true, 
-            isMuted: false, 
-            volume: volume 
-        });
+      // 1. Update State UI
+      setIsMuted(false); // เปิดเสียง
+      setUserConsented(true);
+      setAnimationsStarted(true);
 
-        // 3. Play
-        try {
-            if (audio.readyState < 2) {
-                await new Promise<void>((resolve) => {
-                    audio.addEventListener('canplay', () => resolve(), { once: true });
-                });
-            }
-            await audio.play();
-            setIsPlaying(true);
-        } catch (err) {
-            console.error("Start audio failed", err);
-            setIsPlaying(false);
+      // 2. Save Immediately
+      saveSettingsToStorage({
+        hasVisited: true,
+        isMuted: false,
+        volume: volume,
+      });
+
+      // 3. Play
+      try {
+        if (audio.readyState < 2) {
+          await new Promise<void>((resolve) => {
+            audio.addEventListener("canplay", () => resolve(), { once: true });
+          });
         }
+        await audio.play();
+        setIsPlaying(true);
+      } catch (err) {
+        console.error("Start audio failed", err);
+        setIsPlaying(false);
+      }
     }
   };
 
@@ -328,13 +327,13 @@ export function AudioProvider({ children }: { children: React.ReactNode }) {
     if (audioRef.current) {
       audioRef.current.pause();
       setIsPlaying(false);
-      setIsMuted(true); 
+      setIsMuted(true);
       setUserConsented(true);
       setAnimationsStarted(true);
-      
-      saveSettingsToStorage({ 
-        hasVisited: true, 
-        isMuted: true 
+
+      saveSettingsToStorage({
+        hasVisited: true,
+        isMuted: true,
       });
     }
   };
@@ -347,7 +346,7 @@ export function AudioProvider({ children }: { children: React.ReactNode }) {
           audio.pause();
           setIsPlaying(false);
           // ถ้าต้องการให้กด Pause แล้วถือว่า Mute ด้วย ให้เปิดบรรทัดล่างนี้
-          // setIsMuted(true); 
+          // setIsMuted(true);
         } else {
           await audio.play();
           setIsPlaying(true);

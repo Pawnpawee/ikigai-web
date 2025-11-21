@@ -34,9 +34,9 @@ export default function RootLayout({
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
         <LazyMotion features={domAnimation}>
-        <AudioProvider>
-          <AppWrapper>{children}</AppWrapper>
-        </AudioProvider>
+          <AudioProvider>
+            <AppWrapper>{children}</AppWrapper>
+          </AudioProvider>
         </LazyMotion>
       </body>
     </html>
