@@ -97,7 +97,7 @@ export default function MusicModal({ isOpen, onClose }: MusicModalProps) {
                   </svg>
                 </div>
               </div>
-              
+
               <p className="typo-p-lg text-white mb-2">
                 เสียงประกอบกำลัง{isMuted ? "ปิด" : "เปิด"}อยู่
               </p>

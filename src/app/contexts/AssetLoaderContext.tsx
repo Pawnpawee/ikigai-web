@@ -9,7 +9,11 @@ const AssetLoaderContext = createContext({
 
 export const useAssetLoader = () => useContext(AssetLoaderContext);
 
-export const AssetLoaderProvider = ({ children }: { children: React.ReactNode }) => {
+export const AssetLoaderProvider = ({
+  children,
+}: {
+  children: React.ReactNode;
+}) => {
   const [isLoading, setIsLoading] = useState(true);
   const [progress, setProgress] = useState(0);
 

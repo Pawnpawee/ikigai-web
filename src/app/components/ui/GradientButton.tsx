@@ -46,8 +46,8 @@ export default function GradientButton({
           isWhiteVariant
             ? "text-black"
             : isSelected
-            ? "bg-linear-to-b from-slate-200 to-slate-100 border-slate-200 text-black border-4"
-            : "bg-linear-to-b from-slate-200/30 to-slate-100/30 border-slate-200/50 text-white border-4"
+              ? "bg-linear-to-b from-slate-200 to-slate-100 border-slate-200 text-black border-4"
+              : "bg-linear-to-b from-slate-200/30 to-slate-100/30 border-slate-200/50 text-white border-4"
         }
         ${className}
       `}

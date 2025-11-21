@@ -8,7 +8,11 @@ interface VideoAnimationProps {
   className?: string;
 }
 
-export const VideoAnimation = ({ webmSrc, movSrc, className = "" }: VideoAnimationProps) => {
+export const VideoAnimation = ({
+  webmSrc,
+  movSrc,
+  className = "",
+}: VideoAnimationProps) => {
   const videoRef = useRef<HTMLVideoElement>(null);
 
   useEffect(() => {
