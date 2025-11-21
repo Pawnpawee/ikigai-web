@@ -10,8 +10,5 @@ name = "javascript"
     "nodejs"
   ]
 
-[[analyzers]]
-name = "test-coverage"
-
 [[code_formatters]]
 name = "prettier"
