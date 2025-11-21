@@ -35,18 +35,18 @@ export default function Home() {
     <main className="flex flex-col justify-between h-full">
       <StarryBackground />
 
-      <MouseFollower />
+      {/* <MouseFollower />
       <Navbar />
-      <ScrollTo opacity={scrollToOpacity} />
+      <ScrollTo opacity={scrollToOpacity} /> */}
 
       {/* Scene Intro */}
-      <Hero />
+      {/* <Hero />
       <Intro /> 
       <JobApplication/>
       <Sleeping />
       <Dreaming />
       <Weighing />
-      <IntoDark />
+      <IntoDark /> */}
 
     </main>
   );

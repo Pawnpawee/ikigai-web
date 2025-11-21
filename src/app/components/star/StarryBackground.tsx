@@ -1,58 +1,33 @@
-// components/StarryBackground.tsx
 "use client";
-import React, { useState, useEffect } from 'react';
-import Star from './star';
+
+import React from 'react'; 
 import { useAudio } from '@/app/contexts/AudioContext';
+import dynamic from 'next/dynamic';
 
-const NUM_STARS = 500; 
+const DotLottiePlayer = dynamic(
+  () => import('@lottiefiles/dotlottie-react').then((mod) => mod.DotLottieReact),
+  {
+    ssr: false, // Lottie ไม่จำเป็นต้อง Render ฝั่ง Server
+    loading: () => <div className="fixed inset-0 bg-transparent" />,
+  }
+);
 
-interface StarData {
-  id: number;
-  size: number;
-  top: number;
-  left: number;
-  initialDelay: number;
-}
 
 const StarryBackground: React.FC = () => {
-  const [stars, setStars] = useState<StarData[]>([]);
   const { animationsStarted } = useAudio();
-
-  useEffect(() => {
-    if (animationsStarted) {
-      const newStars: StarData[] = Array.from({ length: NUM_STARS }).map((_, i) => ({
-        id: i,
-        size: Math.random() * 2 + 1, 
-        top: Math.random() * 100, 
-        left: Math.random() * 100, 
-        initialDelay: Math.random() * 5,
-      }));
-      setStars(newStars);
-    }
-  }, [animationsStarted]);
 
   return (
     <div
-      style={{
-        position: 'absolute',
-        top: 0,
-        left: 0,
-        width: '100%',
-        height: '1000vh',
-        overflow: 'hidden', 
-        zIndex: 1, 
-        pointerEvents: 'none',
-      }}
+      className="fixed inset-0 w-full h-full pointer-events-none z-1" 
     >
-      {stars.map(star => (
-        <Star
-          key={star.id}
-          size={star.size}
-          initialDelay={star.initialDelay}
-          initialTop={star.top}
-          initialLeft={star.left}
+      {animationsStarted && (
+        <DotLottiePlayer
+            src="/assets/Scene/starry-bg.lottie" 
+            loop
+            autoplay
+            style={{ width: '100%', height: 'auto' }}
         />
-      ))}
+      )}
     </div>
   );
 };

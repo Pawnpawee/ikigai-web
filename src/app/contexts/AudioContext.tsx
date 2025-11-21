@@ -269,7 +269,19 @@ export function AudioProvider({ children }: { children: React.ReactNode }) {
     if (!isInitialized) return;
 
     if (audioRef.current) {
-      audioRef.current.volume = volume / 100;
+      const audio = audioRef.current;
+      const targetVolume = volume / 100;
+      
+      // Safari fix: ต้อง set volume หลายครั้งเพื่อให้มันใช้งานได้
+      audio.volume = targetVolume;
+      
+      // Force update volume หลังจาก 10ms (Safari workaround)
+      setTimeout(() => {
+        if (audio) {
+          audio.volume = targetVolume;
+        }
+      }, 10);
+      
     }
     saveSettingsToStorage({ volume });
   }, [volume, isInitialized]);

@@ -146,7 +146,6 @@ export default function IntoDark() {
         }),
       }); // if (!response.ok) { //   throw new Error('Failed to save data'); // }
 
-      console.log("Data saved successfully!");
       router.push("/love-session");
     } catch (error) {
       console.error("Error submitting data:", error);
