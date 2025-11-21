@@ -1,5 +1,3 @@
-"use client"; // ต้องเป็น Client Component เพื่อใช้ LazyMotion
-
 import { LazyMotion, domAnimation } from "framer-motion";
 import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
