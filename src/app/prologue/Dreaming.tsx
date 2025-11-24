@@ -2,12 +2,12 @@
 import { motion, useScroll, useTransform, useInView } from "framer-motion";
 import { useRef } from "react";
 import Lottie from "lottie-react";
-import WordByWordAnimation from "../../components/ui/WordByWordAnimation";
+import WordByWordAnimation from "../components/ui/WordByWordAnimation";
 import { useIsPortrait } from "@/app/hooks/useOrientation";
 import { useBgMusicTransition } from "@/app/hooks/useBgMusicTransition";
-import skyAnimationData from "../../../../public/assets/Scene/Intro/sky.json";
-import camelAnimationData from "../../../../public/assets/Scene/Intro/camel.json";
-import sunAnimationData from "../../../../public/assets/Scene/Intro/sun.json";
+import skyAnimationData from "../../../public/assets/Scene/Intro/sky.json";
+import camelAnimationData from "../../../public/assets/Scene/Intro/camel.json";
+import sunAnimationData from "../../../public/assets/Scene/Intro/sun.json";
 
 export default function Dreaming() {
   const ref = useRef<HTMLDivElement>(null);

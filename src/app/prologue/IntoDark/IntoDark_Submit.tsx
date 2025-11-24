@@ -5,8 +5,8 @@ import Image from "next/image";
 import Lottie from "lottie-react";
 import GradientButton from "@/app/components/ui/GradientButton";
 import { useIsPortrait } from "@/app/hooks/useOrientation";
-import catAnimationData from "../../../../../public/assets/Scene/Scene5/scene5-04/s5-4-cat.json";
-import tailAnimationData from "../../../../../public/assets/Scene/Scene5/scene5-02/s5-2-tail.json";
+import catAnimationData from "../../../../public/assets/Scene/Scene5/scene5-04/s5-4-cat.json";
+import tailAnimationData from "../../../../public/assets/Scene/Scene5/scene5-02/s5-2-tail.json";
 
 interface SubmitProps {
   scrollYProgress: MotionValue<number>;
