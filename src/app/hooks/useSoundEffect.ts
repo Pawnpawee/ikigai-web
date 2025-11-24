@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState, useCallback } from "react";
+import { useEffect, useRef, useCallback } from "react";
 import { useAudio } from "@/app/contexts/AudioContext";
 
 interface UseSoundEffectOptions {
@@ -17,124 +17,96 @@ export function useSoundEffect({
   volume = 1, // default 100%
 }: UseSoundEffectOptions) {
   const { sfxVolume, isMuted } = useAudio();
-  const [audio, setAudio] = useState<HTMLAudioElement | null>(null);
+  const audioRef = useRef<HTMLAudioElement | null>(null);
   const fadeIntervalRef = useRef<NodeJS.Timeout | null>(null);
   const soundTimerRef = useRef<NodeJS.Timeout | null>(null);
   const isLoopingRef = useRef<boolean>(false);
 
-  // สร้าง audio instance
-  useEffect(() => {
-    const audioInstance = new Audio(soundPath);
-    if (loop) {
-      audioInstance.loop = true;
+  const getAudio = () => {
+    if (!audioRef.current) {
+      const audio = new Audio(soundPath);
+      if (loop) audio.loop = true;
+      audioRef.current = audio;
     }
-    setAudio(audioInstance);
-
-    return () => {
-      audioInstance.pause();
-      audioInstance.src = "";
-    };
-  }, [soundPath, loop]);
-
-  // อัพเดท volume เมื่อ sfxVolume เปลี่ยน
-  useEffect(() => {
-    if (audio && !fadeIntervalRef.current) {
-      audio.volume = (sfxVolume / 100) * volume;
-    }
-  }, [audio, sfxVolume, volume]);
+    return audioRef.current;
+  };
 
   // ฟังก์ชัน fade audio
-  const fadeAudio = useCallback(
-    (
-      audioEl: HTMLAudioElement,
-      direction: "in" | "out",
-      onComplete?: () => void
-    ) => {
-      if (fadeIntervalRef.current) {
-        clearInterval(fadeIntervalRef.current);
-        fadeIntervalRef.current = null;
+  const fadeAudio = useCallback((direction: "in" | "out", onComplete?: () => void) => {
+    const audio = getAudio();
+    if (!audio) return;
+
+    const targetVol = direction === "in" ? sfxVolume * volume : 0;
+    const stepTime = 50;
+    const steps = fadeDurationMs / stepTime;
+    const volStep = (sfxVolume * volume) / steps;
+
+    if (fadeIntervalRef.current) clearInterval(fadeIntervalRef.current);
+
+    if (direction === "in") {
+      audio.volume = 0;
+      audio.play().catch(() => { });
+    }
+
+    fadeIntervalRef.current = setInterval(() => {
+      // แก้ logic ให้ volume ไม่เกิน 0 หรือ 1
+      let newVol = audio.volume + (direction === "in" ? volStep : -volStep);
+      newVol = Math.max(0, Math.min(newVol, sfxVolume * volume));
+
+      audio.volume = newVol;
+
+      if ((direction === "in" && newVol >= targetVol) || (direction === "out" && newVol <= 0)) {
+        if (fadeIntervalRef.current) clearInterval(fadeIntervalRef.current);
+        if (direction === "out") {
+          audio.pause();
+          audio.currentTime = 0;
+          onComplete?.();
+        }
       }
+    }, stepTime);
+  }, [sfxVolume, volume, fadeDurationMs]);
 
-      const stepTime = 50;
-      const steps = fadeDurationMs / stepTime;
-      const targetVolume = (sfxVolume / 100) * volume; // คูณด้วย volume multiplier
-      const stepVolume = targetVolume / steps;
+  const playSoundEffect = useCallback((onComplete?: () => void) => {
+    if (isMuted) {
+      onComplete?.();
+      return;
+    }
 
-      if (direction === "in") {
-        audioEl.volume = 0;
-        audioEl.currentTime = 0;
-        audioEl.play();
+    const audio = getAudio(); // ⭐ Initialize ครั้งแรกที่นี่
+    audio.currentTime = 0; // Reset เวลาเสมอเมื่อเริ่มเล่นใหม่
 
-        fadeIntervalRef.current = setInterval(() => {
-          let newVolume = audioEl.volume + stepVolume;
-          if (newVolume >= targetVolume) {
-            newVolume = targetVolume;
-            if (fadeIntervalRef.current) {
-              clearInterval(fadeIntervalRef.current);
-              fadeIntervalRef.current = null;
-            }
-            onComplete?.();
-          }
-          audioEl.volume = newVolume;
-        }, stepTime);
-      } else if (direction === "out") {
-        fadeIntervalRef.current = setInterval(() => {
-          let newVolume = audioEl.volume - stepVolume;
-          if (newVolume <= 0.0) {
-            newVolume = 0.0;
-            audioEl.pause();
-            audioEl.currentTime = 0;
-            if (fadeIntervalRef.current) {
-              clearInterval(fadeIntervalRef.current);
-              fadeIntervalRef.current = null;
-            }
-            onComplete?.();
-          }
-          audioEl.volume = newVolume;
-        }, stepTime);
-      }
-    },
-    [fadeDurationMs, sfxVolume, volume]
-  );
+    if (loop) {
+      fadeAudio("in", onComplete);
+    } else {
+      fadeAudio("in");
+      // Clear timer เก่าก่อนตั้งใหม่
+      if (soundTimerRef.current) clearTimeout(soundTimerRef.current);
 
-  // ฟังก์ชันเล่นเสียงพร้อม fade in/out
-  const playSoundEffect = useCallback(
-    (onComplete?: () => void) => {
-      if (!audio || isMuted) {
-        onComplete?.();
-        return;
-      }
-      isLoopingRef.current = loop;
-      if (loop) {
-        fadeAudio(audio, "in", onComplete);
-      } else {
-        const soundStopTimerDelay = Math.max(0, soundDurationMs - fadeDurationMs);
-        fadeAudio(audio, "in");
-        soundTimerRef.current = setTimeout(() => {
-          fadeAudio(audio, "out", onComplete);
-        }, soundStopTimerDelay);
-      }
-    },
-    [audio, isMuted, soundDurationMs, fadeDurationMs, fadeAudio, loop]
-  );
+      soundTimerRef.current = setTimeout(() => {
+        fadeAudio("out", onComplete);
+      }, Math.max(0, soundDurationMs - fadeDurationMs));
+    }
+  }, [isMuted, loop, soundDurationMs, fadeDurationMs, fadeAudio]);
 
-  // ฟังก์ชันหยุดเสียง (fade out เสมอ)
   const stopSoundEffect = useCallback(() => {
-    if (soundTimerRef.current) {
-      clearTimeout(soundTimerRef.current);
-      soundTimerRef.current = null;
-    }
-    if (audio) {
-      fadeAudio(audio, "out", () => {
-        isLoopingRef.current = false;
-      });
-    }
-  }, [audio, fadeAudio]);
+    if (soundTimerRef.current) clearTimeout(soundTimerRef.current);
+    fadeAudio("out");
+  }, [fadeAudio]);
 
-  return {
-    audio,
-    playSoundEffect,
-    stopSoundEffect,
-    fadeAudio,
-  };
+  // Cleanup เมื่อ Component unmount
+  useEffect(() => {
+    return () => {
+      if (audioRef.current) {
+        audioRef.current.pause();
+        audioRef.current = null;
+      }
+      if (fadeIntervalRef.current) clearInterval(fadeIntervalRef.current);
+      if (soundTimerRef.current) clearTimeout(soundTimerRef.current);
+    };
+  }, []);
+
+  return { playSoundEffect, stopSoundEffect };
 }
+
+
+

@@ -1,31 +1,27 @@
 "use client";
 import React, { useState, useEffect, FC } from "react";
-import { motion } from "framer-motion";
-
-
-interface MousePosition {
-  x: number;
-  y: number;
-}
+import { motion, useMotionValue, useSpring } from "framer-motion"; 
 
 const MouseFollower: FC = () => {
-  const [mousePosition, setMousePosition] = useState<MousePosition>({
-    x: 0,
-    y: 0,
-  });
+  // ⭐ ใช้ MotionValue เพื่อบายพาส React Render Cycle
+  const mouseX = useMotionValue(0);
+  const mouseY = useMotionValue(0);
 
-  // State 1: สำหรับเช็คว่าเมาส์อยู่ในหน้าจอหรือไม่
+  // ⭐ ใช้ useSpring เพื่อให้เมาส์มีความนุ่มนวล (Smooth) โดยไม่ต้องคำนวณเองใน useEffect
+  const springConfig = { damping: 25, stiffness: 200, mass: 0.5 };
+  const springX = useSpring(mouseX, springConfig);
+  const springY = useSpring(mouseY, springConfig);
+
   const [isVisible, setIsVisible] = useState<boolean>(false);
-
-  // State 2: สำหรับเช็คว่าเมาส์กำลังอยู่บนปุ่มหรือไม่
   const [isHoveringButton, setIsHoveringButton] = useState<boolean>(false);
 
   useEffect(() => {
     const handleMouseMove = (e: MouseEvent) => {
-      // อัปเดตตำแหน่งเมาส์เสมอ
-      setMousePosition({ x: e.clientX, y: e.clientY });
+      
+      // ⭐ อัปเดตค่า MotionValue โดยตรง (Performance สูงมาก)
+      mouseX.set(e.clientX - 20); // ลบ 20 เพื่อจัดกึ่งกลาง (ครึ่งของ width 40)
+      mouseY.set(e.clientY - 20);
 
-      // เช็คว่า target ที่เมาส์ชี้อยู่มีคลาส 'btn' หรือไม่
       const target = e.target as HTMLElement;
       if (target.closest(".btn")) {
         setIsHoveringButton(true);
@@ -37,62 +33,48 @@ const MouseFollower: FC = () => {
     const handleMouseEnter = () => setIsVisible(true);
     const handleMouseLeave = () => setIsVisible(false);
 
-    // เพิ่ม listener สำหรับการขยับ, เข้า, และออกจากหน้าจอ
     window.addEventListener("mousemove", handleMouseMove);
     document.documentElement.addEventListener("mouseenter", handleMouseEnter);
     document.documentElement.addEventListener("mouseleave", handleMouseLeave);
 
     return () => {
       window.removeEventListener("mousemove", handleMouseMove);
-      document.documentElement.removeEventListener(
-        "mouseenter",
-        handleMouseEnter
-      );
-      document.documentElement.removeEventListener(
-        "mouseleave",
-        handleMouseLeave
-      );
+      document.documentElement.removeEventListener("mouseenter", handleMouseEnter);
+      document.documentElement.removeEventListener("mouseleave", handleMouseLeave);
     };
-  }, []);
+  }, [mouseX, mouseY]); // ⭐ เพิ่ม dependencies
 
-  // สร้าง Variants เพื่อควบคุมสถานะต่างๆ ของแอนิเมชัน
   const cursorVariants = {
     visible: {
-      // สถานะปกติ
       opacity: 1,
       scale: 1,
       boxShadow: `0 0 15px 5px var(--color-blue-200)`,
     },
     hidden: {
-      // สถานะเมื่อเมาส์อยู่นอกจอ
       opacity: 0,
       scale: 0,
     },
     onButton: {
-      // สถานะเมื่อเมาส์อยู่บนปุ่ม
-      opacity: 0,
+      opacity: 0, // ซ่อน Cursor เมื่ออยู่บนปุ่ม (ตาม Logic เดิม)
       scale: 0.5,
     },
   };
 
   return (
     <motion.div
-      className="pointer-events-none fixed left-0 top-0 z-9999 w-[40px] h-[40px] rounded-full"
+      className="pointer-events-none fixed left-0 top-0 z-9999" 
       style={{
-        x: mousePosition.x - 20,
-        y: mousePosition.y - 20,
+        width: 40,
+        height: 40,
+        borderRadius: "50%",
+        x: springX, // ⭐ ผูกค่ากับ Spring MotionValue
+        y: springY, // ⭐ ผูกค่ากับ Spring MotionValue
       }}
       variants={cursorVariants}
-      // เลือก variant ที่จะใช้ตามเงื่อนไขของ state
       animate={
         !isVisible ? "hidden" : isHoveringButton ? "onButton" : "visible"
       }
-      transition={{
-        type: "spring",
-        damping: 25,
-        stiffness: 200,
-        mass: 0.5,
-      }}
+
     />
   );
 };

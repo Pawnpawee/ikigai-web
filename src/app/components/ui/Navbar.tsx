@@ -1,5 +1,5 @@
 "use client";
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import { motion, MotionProps } from "framer-motion";
 import Icon from "./Icon";
 import MenuModal from "./MenuModal";
@@ -58,12 +58,9 @@ function NavbarIconButton({
 export default function Navbar({ className }: NavbarTopProps) {
   const [isMenuModalOpen, setIsMenuModalOpen] = useState(false);
   const { isMuted, setIsMuted } = useAudio();
-  const [musicIcon, setMusicIcon] = useState("/assets/Icon/music.svg");
-
-  useEffect(() => {
-    // ถ้า isMuted เป็น true ให้ใช้รูป mute, ถ้า false ให้ใช้รูป music
-    setMusicIcon(isMuted ? "/assets/Icon/mute.svg" : "/assets/Icon/music.svg");
-  }, [isMuted]);
+  const musicIcon = isMuted
+    ? "/assets/Icon/mute.svg"
+    : "/assets/Icon/music.svg";
 
   const handleMusicClick = () => {
     setIsMuted(!isMuted);
@@ -76,23 +73,28 @@ export default function Navbar({ className }: NavbarTopProps) {
   return (
     <>
       <div
-        className={`box-border flex items-center justify-between px-8 lg:px-14 py-0 fixed top-0 z-50 w-screen h-[100px] ${
+        className={`box-border flex items-center justify-between px-8 lg:px-14 py-0 fixed top-0 z-50 w-screen h-[100px] pointer-events-none${
           className || ""
         }`}
       >
-        <NavbarIconButton
-          className="btn"
-          iconSrc={musicIcon}
-          label={isMuted ? "Unmute music" : "Mute music"}
-          onClick={handleMusicClick}
-        />
+        <div className="pointer-events-auto"> 
+            <NavbarIconButton
+            className="btn" 
+            iconSrc={musicIcon}
+            label={isMuted ? "Unmute music" : "Mute music"}
+            onClick={handleMusicClick}
+            />
+        </div>
 
-        <NavbarIconButton
-          className="btn"
-          iconSrc="/assets/Icon/menu.svg"
-          label="Open menu"
-          onClick={handleMenuClick}
-        />
+        {/* Menu Button */}
+        <div className="pointer-events-auto"> 
+            <NavbarIconButton
+            className="btn"
+            iconSrc="/assets/Icon/menu.svg"
+            label="Open menu"
+            onClick={handleMenuClick}
+            />
+        </div>
       </div>
 
       {/* Menu Modal */}

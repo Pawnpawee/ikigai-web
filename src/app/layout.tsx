@@ -1,6 +1,12 @@
 import { LazyMotion, domAnimation } from "framer-motion";
 import type { Metadata } from "next";
-import { Geist, Geist_Mono } from "next/font/google";
+import {
+  Geist,
+  Geist_Mono,
+  Anuphan,
+  Bentham,
+  Luxurious_Script,
+} from "next/font/google";
 import "./globals.css";
 import { AudioProvider } from "./contexts/AudioContext";
 import AppWrapper from "./AppWrapper";
@@ -13,6 +19,26 @@ const geistSans = Geist({
 const geistMono = Geist_Mono({
   variable: "--font-geist-mono",
   subsets: ["latin"],
+});
+
+const anuphan = Anuphan({
+  variable: "--font-anuphan", // ชื่อตัวแปรที่จะไปโผล่ใน CSS
+  subsets: ["thai", "latin"], // โหลดภาษาไทยและอังกฤษ
+  display: "swap",
+});
+
+const bentham = Bentham({
+  variable: "--font-bentham",
+  weight: "400", // Bentham มีแค่ weight 400
+  subsets: ["latin"],
+  display: "swap",
+});
+
+const luxuriousScript = Luxurious_Script({
+  variable: "--font-luxurious-script",
+  weight: "400",
+  subsets: ["latin"],
+  display: "swap",
 });
 
 export const metadata: Metadata = {
@@ -29,12 +55,16 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body
-        className={`${geistSans.variable} ${geistMono.variable} antialiased`}
+        className={`$${geistSans.variable} 
+          ${geistMono.variable} 
+          ${anuphan.variable} 
+          ${bentham.variable} 
+          ${luxuriousScript.variable} antialiased`}
       >
         <LazyMotion features={domAnimation}>
-        <AudioProvider>
-          <AppWrapper>{children}</AppWrapper>
-        </AudioProvider>
+          <AudioProvider>
+            <AppWrapper>{children}</AppWrapper>
+          </AudioProvider>
         </LazyMotion>
       </body>
     </html>

@@ -50,6 +50,8 @@ export function AudioProvider({ children }: { children: React.ReactNode }) {
     "/assets/Sound/bg-music.mp3"
   );
   const isTransitioningRef = useRef(false);
+  const bgMusicRef = useRef<HTMLAudioElement | null>(null);
+  const fadeIntervalRef = useRef<NodeJS.Timeout | null>(null);
 
   // Helper save settings
   const saveSettingsToStorage = (settings: Partial<StoredAudioSettings>) => {
@@ -105,22 +107,29 @@ export function AudioProvider({ children }: { children: React.ReactNode }) {
           setAnimationsStarted(true);
 
           setIsMuted(true);
-          audio.muted = true;
+          if (audioRef.current) {
+            audioRef.current.muted = true;
+          }
           setIsPlaying(false);
         } else {
           // กรณีมาครั้งแรกสุดจริงๆ
           setIsMuted(settings.isMuted ?? true);
-          audio.muted = settings.isMuted ?? true;
+          if (audioRef.current) {
+            audioRef.current.muted = settings.isMuted ?? true;
+          }
         }
-
-        audio.volume = loadedVolume / 100;
+        if (audioRef.current) {
+          audioRef.current.volume = loadedVolume / 100;
+        }
       } catch (e) {
         console.error("Error parsing audio settings", e);
       }
     } else {
       // กรณีไม่มี Storage เลย (ครั้งแรกสุด)
       setIsMuted(true);
-      audio.muted = true;
+      if (audioRef.current) {
+        audioRef.current.muted = true;
+      }
     }
 
     setIsInitialized(true); // Mark as ready
@@ -136,106 +145,100 @@ export function AudioProvider({ children }: { children: React.ReactNode }) {
   // ฟังก์ชันเปลี่ยน bg music
   const setBgMusic = async (src: string) => {
     if (audioRef.current) {
-      const audio = audioRef.current;
-      const wasPlaying = !audio.paused;
+      const wasPlaying = !audioRef.current.paused;
 
       // Pause audio ถ้ากำลังเล่นอยู่
       if (wasPlaying) {
-        audio.pause();
+        audioRef.current.pause();
         // รอให้ pause จบจริงๆ
         await new Promise<void>((resolve) => {
-          if (audio.paused) {
+          if (audioRef.current?.paused) {
             resolve();
           } else {
-            audio.addEventListener("pause", () => resolve(), { once: true });
+            audioRef.current?.addEventListener("pause", () => resolve(), {
+              once: true,
+            });
           }
         });
       }
 
       // เปลี่ยน src และ load
-      audio.src = src;
-      audio.load();
+      audioRef.current.src = src;
+      audioRef.current.load();
       setCurrentBgMusic(src);
 
       // รอให้ audio พร้อมก่อน play
       if (wasPlaying) {
         await new Promise<void>((resolve) => {
-          if (audio.readyState >= 2) {
+          if (audioRef.current && audioRef.current.readyState >= 2) {
             resolve();
           } else {
-            audio.addEventListener("canplay", () => resolve(), { once: true });
+            audioRef.current?.addEventListener("canplay", () => resolve(), {
+              once: true,
+            });
           }
         });
 
-        await audio.play();
+        await audioRef.current.play();
       }
     }
   };
 
   // ฟังก์ชันเปลี่ยน bg music แบบ fade in/out
   const transitionBgMusic = async (src: string, fadeDuration = 1000) => {
-    // ถ้ากำลัง transition อยู่ หรือเป็นเพลงเดียวกัน ไม่ต้องทำอะไร
-    if (
-      isTransitioningRef.current ||
-      currentBgMusic === src ||
-      !audioRef.current
-    ) {
-      return;
+    if (currentBgMusic === src) return; // ถ้าเพลงเดิมไม่ต้องทำอะไร
+
+    // 1. Fade Out เพลงเก่า (ถ้ามี)
+    if (bgMusicRef.current) {
+      const oldAudio = bgMusicRef.current; // เก็บ ref ตัวเก่าไว้จัดการ
+      const steps = 20;
+      const stepTime = fadeDuration / steps;
+      const volStep = oldAudio.volume / steps;
+
+      // Clear interval เก่าถ้ามี
+      if (fadeIntervalRef.current) clearInterval(fadeIntervalRef.current);
+
+      const fadeOut = setInterval(() => {
+        if (oldAudio.volume > volStep) {
+          oldAudio.volume -= volStep;
+        } else {
+          oldAudio.volume = 0;
+          oldAudio.pause();
+          clearInterval(fadeOut);
+        }
+      }, stepTime);
     }
 
-    isTransitioningRef.current = true;
-    const audio = audioRef.current;
-    const wasPlaying = !audio.paused;
-    const targetVolume = volume / 100;
+    // 2. Setup เพลงใหม่
+    setCurrentBgMusic(src);
+    const newAudio = new Audio(src);
+    newAudio.loop = true;
+    newAudio.volume = 0; // เริ่มจาก 0
+    bgMusicRef.current = newAudio; // ⭐ update ref เป็นตัวใหม่ทันที
 
     try {
-      // Fade out เพลงเดิม
-      if (wasPlaying) {
-        const fadeSteps = 20;
-        const stepDuration = fadeDuration / (fadeSteps * 2); // แบ่ง 2 เพราะมีทั้ง fade out และ fade in
-        const volumeStep = targetVolume / fadeSteps;
+        await newAudio.play();
+        // 3. Fade In
+        const steps = 20;
+        const targetVol = isMuted ? 0 : volume; // เช็ค Mute ด้วย
+        const stepTime = fadeDuration / steps;
+        const volStep = targetVol / steps;
 
-        for (let i = fadeSteps; i >= 0; i--) {
-          audio.volume = Math.max(0, (i / fadeSteps) * targetVolume);
-          await new Promise((resolve) => setTimeout(resolve, stepDuration));
-        }
+        // ⭐ เก็บ interval ใหม่ลง ref
+        fadeIntervalRef.current = setInterval(() => {
+            // ต้องเช็คว่า audio นี้ยังเป็น current อยู่ไหม (เผื่อเปลี่ยนเพลงเร็วมาก)
+            if (newAudio !== bgMusicRef.current) return; 
 
-        audio.pause();
-      }
+            if (newAudio.volume < targetVol - volStep) {
+                newAudio.volume += volStep;
+            } else {
+                newAudio.volume = targetVol;
+                if (fadeIntervalRef.current) clearInterval(fadeIntervalRef.current);
+            }
+        }, stepTime);
 
-      // เปลี่ยนเพลง
-      audio.src = src;
-      audio.load();
-      setCurrentBgMusic(src);
-
-      // รอให้ audio พร้อม
-      if (wasPlaying && isInitialized && !isMuted) {
-        await new Promise<void>((resolve) => {
-          if (audio.readyState >= 2) {
-            resolve();
-          } else {
-            audio.addEventListener("canplay", () => resolve(), { once: true });
-          }
-        });
-
-        // Fade in เพลงใหม่
-        audio.volume = 0;
-        await audio.play();
-
-        const fadeSteps = 20;
-        const stepDuration = fadeDuration / (fadeSteps * 2);
-        const volumeStep = targetVolume / fadeSteps;
-
-        for (let i = 0; i <= fadeSteps; i++) {
-          audio.volume = Math.min(targetVolume, (i / fadeSteps) * targetVolume);
-          await new Promise((resolve) => setTimeout(resolve, stepDuration));
-        }
-
-        audio.volume = targetVolume;
-      }
-    } catch (error) {
-    } finally {
-      isTransitioningRef.current = false;
+    } catch (err) {
+        console.error("Audio play failed", err);
     }
   };
 
@@ -244,20 +247,21 @@ export function AudioProvider({ children }: { children: React.ReactNode }) {
     if (!isInitialized) return; // ⭐ ห้ามทำถ้ายังโหลดไม่เสร็จ
 
     if (audioRef.current) {
-      const audio = audioRef.current;
-      audio.muted = isMuted;
-      
+      audioRef.current.muted = isMuted;
+
       // ถ้า unmute และยัง consent แล้ว → เล่นเสียง
       if (!isMuted && userConsented) {
-        if (audio.paused) {
-          audio.play().catch(err => console.error("Play failed:", err));
+        if (audioRef.current.paused) {
+          audioRef.current
+            .play()
+            .catch((err) => console.error("Play failed:", err));
           setIsPlaying(true);
         }
       }
-      
+
       // ถ้า mute → หยุดเล่น
-      if (isMuted && !audio.paused) {
-        audio.pause();
+      if (isMuted && !audioRef.current.paused) {
+        audioRef.current.pause();
         setIsPlaying(false);
       }
     }
@@ -269,19 +273,17 @@ export function AudioProvider({ children }: { children: React.ReactNode }) {
     if (!isInitialized) return;
 
     if (audioRef.current) {
-      const audio = audioRef.current;
       const targetVolume = volume / 100;
-      
+
       // Safari fix: ต้อง set volume หลายครั้งเพื่อให้มันใช้งานได้
-      audio.volume = targetVolume;
-      
+      audioRef.current.volume = targetVolume;
+
       // Force update volume หลังจาก 10ms (Safari workaround)
       setTimeout(() => {
-        if (audio) {
-          audio.volume = targetVolume;
+        if (audioRef.current) {
+          audioRef.current.volume = targetVolume;
         }
       }, 10);
-      
     }
     saveSettingsToStorage({ volume });
   }, [volume, isInitialized]);
@@ -294,33 +296,33 @@ export function AudioProvider({ children }: { children: React.ReactNode }) {
 
   const startAudio = async () => {
     if (audioRef.current) {
-        const audio = audioRef.current;
-        
-        // 1. Update State UI
-        setIsMuted(false); // เปิดเสียง
-        setUserConsented(true);
-        setAnimationsStarted(true);
+      // 1. Update State UI
+      setIsMuted(false); // เปิดเสียง
+      setUserConsented(true);
+      setAnimationsStarted(true);
 
-        // 2. Save Immediately
-        saveSettingsToStorage({ 
-            hasVisited: true, 
-            isMuted: false, 
-            volume: volume 
-        });
+      // 2. Save Immediately
+      saveSettingsToStorage({
+        hasVisited: true,
+        isMuted: false,
+        volume: volume,
+      });
 
-        // 3. Play
-        try {
-            if (audio.readyState < 2) {
-                await new Promise<void>((resolve) => {
-                    audio.addEventListener('canplay', () => resolve(), { once: true });
-                });
-            }
-            await audio.play();
-            setIsPlaying(true);
-        } catch (err) {
-            console.error("Start audio failed", err);
-            setIsPlaying(false);
+      // 3. Play
+      try {
+        if (audioRef.current.readyState < 2) {
+          await new Promise<void>((resolve) => {
+            audioRef.current?.addEventListener("canplay", () => resolve(), {
+              once: true,
+            });
+          });
         }
+        await audioRef.current.play();
+        setIsPlaying(true);
+      } catch (err) {
+        console.error("Start audio failed", err);
+        setIsPlaying(false);
+      }
     }
   };
 
@@ -341,15 +343,14 @@ export function AudioProvider({ children }: { children: React.ReactNode }) {
 
   const togglePlay = async () => {
     if (audioRef.current) {
-      const audio = audioRef.current;
       try {
         if (isPlaying) {
-          audio.pause();
+          audioRef.current.pause();
           setIsPlaying(false);
           // ถ้าต้องการให้กด Pause แล้วถือว่า Mute ด้วย ให้เปิดบรรทัดล่างนี้
-          // setIsMuted(true); 
+          // setIsMuted(true);
         } else {
-          await audio.play();
+          await audioRef.current.play();
           setIsPlaying(true);
           setIsMuted(false); // กด Play ต้องหาย Mute
         }
@@ -361,8 +362,7 @@ export function AudioProvider({ children }: { children: React.ReactNode }) {
 
   const pauseBgMusic = () => {
     if (audioRef.current && isPlaying) {
-      const audio = audioRef.current;
-      const originalVolume = audio.volume;
+      const originalVolume = audioRef.current.volume;
       const fadeDuration = 1000; // 500ms fade out
       const fadeSteps = 20;
       const volumeStep = originalVolume / fadeSteps;
@@ -371,12 +371,17 @@ export function AudioProvider({ children }: { children: React.ReactNode }) {
       let currentStep = 0;
       const fadeOutInterval = setInterval(() => {
         currentStep++;
-        audio.volume = Math.max(0, originalVolume - volumeStep * currentStep);
+        if (audioRef.current) {
+          audioRef.current.volume = Math.max(
+            0,
+            originalVolume - volumeStep * currentStep
+          );
 
-        if (currentStep >= fadeSteps) {
-          clearInterval(fadeOutInterval);
-          audio.pause();
-          audio.volume = originalVolume; // คืนค่า volume เดิม
+          if (currentStep >= fadeSteps) {
+            clearInterval(fadeOutInterval);
+            audioRef.current.pause();
+            audioRef.current.volume = originalVolume; // คืนค่า volume เดิม
+          }
         }
       }, stepDuration);
     }
@@ -384,32 +389,38 @@ export function AudioProvider({ children }: { children: React.ReactNode }) {
 
   const resumeBgMusic = async () => {
     if (audioRef.current && isInitialized && !isMuted) {
-      const audio = audioRef.current;
       const targetVolume = volume / 100;
       const fadeDuration = 1000; // 500ms fade in
       const fadeSteps = 20;
       const volumeStep = targetVolume / fadeSteps;
       const stepDuration = fadeDuration / fadeSteps;
 
-      audio.volume = 0;
+      audioRef.current.volume = 0;
 
       // รอให้ audio พร้อมก่อน play
-      if (audio.readyState < 2) {
+      if (audioRef.current.readyState < 2) {
         await new Promise<void>((resolve) => {
-          audio.addEventListener("canplay", () => resolve(), { once: true });
+          audioRef.current?.addEventListener("canplay", () => resolve(), {
+            once: true,
+          });
         });
       }
 
-      await audio.play();
+      await audioRef.current.play();
 
       let currentStep = 0;
       const fadeInInterval = setInterval(() => {
         currentStep++;
-        audio.volume = Math.min(targetVolume, volumeStep * currentStep);
+        if (audioRef.current) {
+          audioRef.current.volume = Math.min(
+            targetVolume,
+            volumeStep * currentStep
+          );
 
-        if (currentStep >= fadeSteps) {
-          clearInterval(fadeInInterval);
-          audio.volume = targetVolume;
+          if (currentStep >= fadeSteps) {
+            clearInterval(fadeInInterval);
+            audioRef.current.volume = targetVolume;
+          }
         }
       }, stepDuration);
     }
