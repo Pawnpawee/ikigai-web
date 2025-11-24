@@ -131,6 +131,17 @@ export default function Hero() {
     []
   );
 
+  // Memoize mountain transitions
+  const mountainTransitions = useMemo(
+    () => ({
+      mountain1: { duration: 1.5, delay: 1.5 },
+      mountain2: { duration: 1.5, delay: 2.5 },
+      mountain3: { duration: 1.5, delay: 0.5 },
+      mountain4: { duration: 1.5 },
+    }),
+    []
+  );
+
   // Memoize hover handlers
   const handleCircle1HoverStart = useCallback(
     () => setIsCircle1Hovered(true),
@@ -193,6 +204,47 @@ export default function Hero() {
   // Use reusable animation ready hook
   const shouldAnimate = useAnimationReady();
 
+  // Memoize circle animation configs
+  const circleAnimations = useMemo(
+    () => ({
+      circle1: {
+        initial: { opacity: 0, rotate: 0, y: -320 },
+        animate: shouldAnimate
+          ? { opacity: 1, rotate: -180 }
+          : { opacity: 0, rotate: 0 },
+      },
+      circle2: {
+        initial: { opacity: 0, rotate: 0, x: -350 },
+        animate: shouldAnimate
+          ? { opacity: 1, rotate: 90 }
+          : { opacity: 0, rotate: 0 },
+      },
+      circle3: {
+        initial: { opacity: 0, rotate: 90, y: 320 },
+        animate: shouldAnimate
+          ? { opacity: 1, rotate: 0 }
+          : { opacity: 0, rotate: 90 },
+      },
+      circle4: {
+        initial: { opacity: 0, rotate: 0, x: 350 },
+        animate: shouldAnimate
+          ? { opacity: 1, rotate: -90 }
+          : { opacity: 0, rotate: 0 },
+      },
+      transition: {
+        type: "tween" as const,
+        duration: 2,
+        ease: "easeInOut" as const,
+      },
+      circleImgTransition: {
+        type: "tween" as const,
+        duration: 2,
+        ease: "easeInOut" as const,
+      },
+    }),
+    [shouldAnimate]
+  );
+
   return (
     <div
       ref={ref}
@@ -206,7 +258,7 @@ export default function Hero() {
         <motion.div
           initial={{ opacity: 0 }}
           animate={shouldAnimate ? { opacity: 1 } : { opacity: 0 }}
-          transition={{ duration: 1.5, delay: 1.5 }}
+          transition={mountainTransitions.mountain1}
           className="absolute bottom-0 w-full h-full"
         >
           <Image
@@ -222,7 +274,7 @@ export default function Hero() {
         <motion.div
           initial={{ opacity: 0 }}
           animate={shouldAnimate ? { opacity: 1 } : { opacity: 0 }}
-          transition={{ duration: 1.5, delay: 2.5 }}
+          transition={mountainTransitions.mountain2}
           className="absolute bottom-0 w-full h-full"
         >
           <Image
@@ -238,7 +290,7 @@ export default function Hero() {
         <motion.div
           initial={{ opacity: 0 }}
           animate={shouldAnimate ? { opacity: 1 } : { opacity: 0 }}
-          transition={{ duration: 1.5, delay: 0.5 }}
+          transition={mountainTransitions.mountain3}
           className="absolute bottom-0 w-full h-full"
         >
           <Image
@@ -254,7 +306,7 @@ export default function Hero() {
         <motion.div
           initial={{ opacity: 0 }}
           animate={shouldAnimate ? { opacity: 1 } : { opacity: 0 }}
-          transition={{ duration: 1.5 }}
+          transition={mountainTransitions.mountain4}
           className="absolute bottom-0 w-full h-full"
         >
           <Image
@@ -272,17 +324,9 @@ export default function Hero() {
       {/* Circle-World */}
       <motion.div
         className="absolute scale-40 sm:scale-50 md:scale-80 lg:scale-100"
-        initial={{ opacity: 0, rotate: 0, x: 350 }}
-        animate={
-          shouldAnimate
-            ? { opacity: 1, rotate: -90 }
-            : { opacity: 0, rotate: 0 }
-        }
-        transition={{
-          type: "tween",
-          duration: 2,
-          ease: "easeInOut",
-        }}
+        initial={circleAnimations.circle4.initial}
+        animate={circleAnimations.circle4.animate}
+        transition={circleAnimations.transition}
         style={getCircleStyle(circle4_rotate)}
       >
         <motion.div
@@ -296,15 +340,12 @@ export default function Hero() {
             className="w-full h-auto"
             initial={{ opacity: 0 }}
             animate={shouldAnimate ? { opacity: 1 } : { opacity: 0 }}
-            transition={{
-              type: "tween",
-              duration: 2,
-              ease: "easeInOut",
-            }}
+            transition={circleAnimations.circleImgTransition}
           />
           <motion.div
             className="absolute bottom-10 left-1/2 -translate-x-1/2
-                 flex flex-col items-center gap-3 rotate-90"
+                 flex flex-col items-center gap-3"
+            style={{ rotate: 90 }}
             initial="hidden"
             animate={isCircle4Hovered ? "visible" : "hidden"}
             variants={tooltipVariants}
@@ -317,17 +358,9 @@ export default function Hero() {
       {/* Circle-Paid */}
       <motion.div
         className="absolute scale-40 sm:scale-50 md:scale-80 lg:scale-100"
-        initial={{ opacity: 0, rotate: 90, y: 320 }}
-        animate={
-          shouldAnimate
-            ? { opacity: 1, rotate: 0 }
-            : { opacity: 0, rotate: 90 }
-        }
-        transition={{
-          type: "tween",
-          duration: 2,
-          ease: "easeInOut",
-        }}
+        initial={circleAnimations.circle3.initial}
+        animate={circleAnimations.circle3.animate}
+        transition={circleAnimations.transition}
         style={getCircleStyle(circle3_rotate)}
       >
         <motion.div
@@ -341,11 +374,7 @@ export default function Hero() {
             className="w-full h-auto"
             initial={{ opacity: 0 }}
             animate={shouldAnimate ? { opacity: 1 } : { opacity: 0 }}
-            transition={{
-              type: "tween",
-              duration: 2,
-              ease: "easeInOut",
-            }}
+            transition={circleAnimations.circleImgTransition}
           />
           <motion.div
             className="absolute bottom-10 left-1/2 -translate-x-1/2
@@ -362,17 +391,9 @@ export default function Hero() {
       {/* Circle-Skill */}
       <motion.div
         className="absolute scale-40 sm:scale-50 md:scale-80 lg:scale-100"
-        initial={{ opacity: 0, rotate: 0, x: -350 }}
-        animate={
-          shouldAnimate
-            ? { opacity: 1, rotate: 90 }
-            : { opacity: 0, rotate: 0 }
-        }
-        transition={{
-          type: "tween",
-          duration: 2,
-          ease: "easeInOut",
-        }}
+        initial={circleAnimations.circle2.initial}
+        animate={circleAnimations.circle2.animate}
+        transition={circleAnimations.transition}
         style={getCircleStyle(circle2_rotate)}
       >
         <motion.div
@@ -386,15 +407,12 @@ export default function Hero() {
             className="w-full h-auto"
             initial={{ opacity: 0 }}
             animate={shouldAnimate ? { opacity: 1 } : { opacity: 0 }}
-            transition={{
-              type: "tween",
-              duration: 2,
-              ease: "easeInOut",
-            }}
+            transition={circleAnimations.circleImgTransition}
           />
           <motion.div
             className="absolute bottom-10 left-1/2 -translate-x-1/2
-                 flex flex-col items-center gap-3 -rotate-90"
+                 flex flex-col items-center gap-3"
+            style={{ rotate: -90 }}
             initial="hidden"
             animate={isCircle2Hovered ? "visible" : "hidden"}
             variants={tooltipVariants}
@@ -407,17 +425,9 @@ export default function Hero() {
       {/* Circle-Love */}
       <motion.div
         className="absolute scale-40 sm:scale-50 md:scale-80 lg:scale-100"
-        initial={{ opacity: 0, rotate: 0, y: -320 }}
-        animate={
-          shouldAnimate
-            ? { opacity: 1, rotate: -180 }
-            : { opacity: 0, rotate: 0 }
-        }
-        transition={{
-          type: "tween",
-          duration: 2,
-          ease: "easeInOut",
-        }}
+        initial={circleAnimations.circle1.initial}
+        animate={circleAnimations.circle1.animate}
+        transition={circleAnimations.transition}
         style={getCircleStyle(circle1_rotate)}
       >
         <motion.div
@@ -431,16 +441,13 @@ export default function Hero() {
             className="w-full h-auto"
             initial={{ opacity: 0 }}
             animate={shouldAnimate ? { opacity: 1 } : { opacity: 0 }}
-            transition={{
-              type: "tween",
-              duration: 2,
-              ease: "easeInOut",
-            }}
+            transition={circleAnimations.circleImgTransition}
           />
 
           <motion.div
             className="absolute bottom-10 left-1/2 -translate-x-1/2
-                 flex flex-col items-center gap-3 rotate-180"
+                 flex flex-col items-center gap-3"
+            style={{ rotate: 180 }}
             initial="hidden"
             animate={isCircle1Hovered ? "visible" : "hidden"}
             variants={tooltipVariants}
