@@ -217,13 +217,27 @@
   --animate-fade-loop: fade-loop 4s infinite ease-out;
 
   @keyframes bounce-slow {
-    0%, 20%, 80%, 100% { transform: translateY(0); opacity: 0; }
-    40% { transform: translateY(20px); opacity: 1; } /* ปรับทิศทางตามต้องการ */
+    0%,
+    20%,
+    80%,
+    100% {
+      transform: translateY(0);
+      opacity: 0;
+    }
+    40% {
+      transform: translateY(20px);
+      opacity: 1;
+    } /* ปรับทิศทางตามต้องการ */
   }
 
   @keyframes fade-loop {
-    0%, 100% { opacity: 0; }
-    50% { opacity: 1; }
+    0%,
+    100% {
+      opacity: 0;
+    }
+    50% {
+      opacity: 1;
+    }
   }
 }
 

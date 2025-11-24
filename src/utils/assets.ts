@@ -12,7 +12,7 @@ export const ASSETS_TO_PRELOAD = [
   "/assets/Scene/Hero/skill-circle.svg",
   "/assets/Scene/Hero/world-circle.svg",
   "/assets/Scene/Hero/paid-circle.svg",
-  
+
   // Intro Scene
   "/assets/Scene/Intro/bg.svg",
   "/assets/Scene/Intro/animal.svg",
@@ -20,7 +20,7 @@ export const ASSETS_TO_PRELOAD = [
   "/assets/Scene/Intro/desert2.svg",
   "/assets/Scene/Intro/desert3.svg",
   "/assets/Scene/Intro/sun.svg",
-  
+
   // Scene1 (Job Application)
   "/assets/Scene/Scene1/table.svg",
   "/assets/Scene/Scene1/Computer.svg",
@@ -59,7 +59,7 @@ export const ASSETS_TO_PRELOAD = [
   "/assets/Scene/Scene1/poster13.svg",
   "/assets/Scene/Scene1/poster14.svg",
   "/assets/Scene/Scene1/poster15.svg",
-  
+
   // Scene2 (Sleeping)
   "/assets/Scene/Scene2/bg.svg",
   "/assets/Scene/Scene2/bed.svg",
@@ -75,7 +75,7 @@ export const ASSETS_TO_PRELOAD = [
   "/assets/Scene/Scene2/blanket.svg",
   "/assets/Scene/Scene2/phone.svg",
   "/assets/Scene/Scene2/slipper.svg",
-  
+
   // Scene4 (Weighing)
   "/assets/Scene/Scene4/bg.svg",
   "/assets/Scene/Scene4/sky.svg",
@@ -100,7 +100,7 @@ export const ASSETS_TO_PRELOAD = [
   "/assets/Scene/Scene4/feather.svg",
   "/assets/Scene/Scene4/feather-plate.svg",
   "/assets/Scene/Scene4/night mode.svg",
-  
+
   // Scene5-01 (Into Dark - Name Input)
   "/assets/Scene/Scene5/scene5-01/bggradient.svg",
   "/assets/Scene/Scene5/scene5-01/Light cat.svg",
@@ -113,7 +113,7 @@ export const ASSETS_TO_PRELOAD = [
   "/assets/Scene/Scene5/scene5-01/water.svg",
   "/assets/Scene/Scene5/scene5-01/tail.svg",
   "/assets/Scene/Scene5/scene5-01/cat face.svg",
-  
+
   // Scene5-02 (Into Dark - Choices)
   "/assets/Scene/Scene5/scene5-02/bggradient1.svg",
   "/assets/Scene/Scene5/scene5-02/bggradient2.svg",
@@ -126,7 +126,7 @@ export const ASSETS_TO_PRELOAD = [
   "/assets/Scene/Scene5/scene5-02/Little Star3.svg",
   "/assets/Scene/Scene5/scene5-02/Star line1.svg",
   "/assets/Scene/Scene5/scene5-02/Star line2.svg",
-  
+
   // Scene5-03 (Into Dark - Heard)
   "/assets/Scene/Scene5/scene5-03/bggradient.svg",
   "/assets/Scene/Scene5/scene5-03/Light Cat.svg",
@@ -135,7 +135,7 @@ export const ASSETS_TO_PRELOAD = [
   "/assets/Scene/Scene5/scene5-03/Little Star2.svg",
   "/assets/Scene/Scene5/scene5-03/Little Star3.svg",
   "/assets/Scene/Scene5/scene5-03/Star line1.svg",
-  
+
   // Scene5-04 (Into Dark - Submit)
   "/assets/Scene/Scene5/scene5-04/bggradient1.svg",
   "/assets/Scene/Scene5/scene5-04/bggradient2.svg",
@@ -161,6 +161,6 @@ export const ASSETS_TO_PRELOAD = [
 export const getAssetUrl = (path: string): string => {
   // ถ้าไม่ได้ตั้งค่า CDN ก็ให้คืนค่า path เดิม (ใช้ของ Vercel)
   const cdnBase = process.env.NEXT_PUBLIC_CDN_URL || "";
-  const cleanPath = path.startsWith('/') ? path.slice(1) : path;
+  const cleanPath = path.startsWith("/") ? path.slice(1) : path;
   return cdnBase ? `${cdnBase}/${cleanPath}` : `/${cleanPath}`;
 };

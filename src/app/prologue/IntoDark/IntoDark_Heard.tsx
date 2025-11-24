@@ -80,12 +80,12 @@ export default function IntoDarkHeard({
   const opacity = useTransform(
     scrollYProgress,
     [0.5, 0.51, 0.657, 0.667],
-    [0, 1, 1, 0]
+    [0, 1, 1, 0],
   );
   const zIndex = useTransform(
     scrollYProgress,
     [0.497, 0.5, 0.665, 0.667],
-    [-1, 10, 10, -1]
+    [-1, 10, 10, -1],
   );
 
   // Background gradient - แสดงตลอดเวลา
@@ -95,7 +95,7 @@ export default function IntoDarkHeard({
   const set1Opacity = useTransform(
     scrollYProgress,
     [0.5, 0.51, 0.539],
-    [0, 1, 1]
+    [0, 1, 1],
   );
   const set1Y = useTransform(scrollYProgress, [0.5, 0.51], [30, 0]);
 
@@ -103,7 +103,7 @@ export default function IntoDarkHeard({
   const set2Opacity = useTransform(
     scrollYProgress,
     [0.539, 0.548, 0.556],
-    [0, 1, 1]
+    [0, 1, 1],
   );
   const set2Y = useTransform(scrollYProgress, [0.539, 0.548], [20, 0]);
 
@@ -111,7 +111,7 @@ export default function IntoDarkHeard({
   const set3Opacity = useTransform(
     scrollYProgress,
     [0.556, 0.564, 0.611],
-    [0, 1, 1]
+    [0, 1, 1],
   );
   const set3Y = useTransform(scrollYProgress, [0.556, 0.564], [30, 0]);
 
@@ -119,7 +119,7 @@ export default function IntoDarkHeard({
   const set4Opacity = useTransform(
     scrollYProgress,
     [0.611, 0.618, 0.625],
-    [0, 1, 1]
+    [0, 1, 1],
   );
   const set4Y = useTransform(scrollYProgress, [0.611, 0.618], [20, 0]);
 
@@ -127,7 +127,7 @@ export default function IntoDarkHeard({
   const set5Opacity = useTransform(
     scrollYProgress,
     [0.625, 0.631, 0.639],
-    [0, 1, 1]
+    [0, 1, 1],
   );
   const set5Y = useTransform(scrollYProgress, [0.625, 0.631], [50, 0]);
 

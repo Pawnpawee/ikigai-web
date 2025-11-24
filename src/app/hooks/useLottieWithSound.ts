@@ -47,7 +47,7 @@ export function useLottieWithSound({
         // Lottie Glow - ใช้ค่าโดยประมาณสำหรับ DotLottie
         const glowStartTimeInMs = Math.max(
           0,
-          animationDurationInSeconds * 1000 - glowOffsetMs
+          animationDurationInSeconds * 1000 - glowOffsetMs,
         );
 
         glowTimerRef.current = setTimeout(() => {

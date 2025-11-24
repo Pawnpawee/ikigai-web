@@ -85,54 +85,50 @@ export default function LoveSessionContainer() {
   const scrollToOpacity = useTransform(
     scrollYProgress,
     [0, 0.02, 0.8, 0.85],
-    [0, 1, 1, 0]
+    [0, 1, 1, 0],
   );
-  
+
   const scene1Opacity = useTransform(
     scrollYProgress,
     [0, 0.05, 0.2, 0.25],
-    [0, 1, 1, 0]
+    [0, 1, 1, 0],
   );
   const scene1TextProgress = useTransform(
     scrollYProgress,
     [0.05, 0.15],
-    [0, 1]
+    [0, 1],
   );
   const scene2Opacity = useTransform(
     scrollYProgress,
     [0.2, 0.25, 0.45, 0.5],
-    [0, 1, 1, 0]
+    [0, 1, 1, 0],
   );
   const scene2TextProgress = useTransform(
     scrollYProgress,
     [0.25, 0.35],
-    [0, 1]
+    [0, 1],
   );
   // Scene 3 is now the final scene: make it stay visible until end
   const scene3Opacity = useTransform(
     scrollYProgress,
     [0.5, 0.52, 1],
-    [0, 1, 1]
+    [0, 1, 1],
   );
   const scene3TextProgress = useTransform(scrollYProgress, [0.52, 0.8], [0, 1]);
 
   const z1 = useTransform(
     scrollYProgress,
     [0, 0.1, 0.24, 0.25],
-    [-1, 10, 10, -1]
+    [-1, 10, 10, -1],
   );
 
   const z2 = useTransform(
     scrollYProgress,
     [0, 0.26, 0.49, 0.5],
-    [-1, 10, 10, -1]
+    [-1, 10, 10, -1],
   );
 
-  const z3 = useTransform(
-    scrollYProgress,
-    [0, 0.51, 1],
-    [-1, 10, 10]
-  );
+  const z3 = useTransform(scrollYProgress, [0, 0.51, 1], [-1, 10, 10]);
 
   const handleSubmit = async () => {
     if (isLoading) return;
@@ -180,7 +176,6 @@ export default function LoveSessionContainer() {
       dreamAnswer,
     };
 
-
     try {
       await new Promise((resolve) => setTimeout(resolve, 1000));
       router.push("/skill-session");
@@ -196,7 +191,7 @@ export default function LoveSessionContainer() {
   ];
 
   return (
-  <motion.div ref={ref} className="h-[600vh] w-full relative ">
+    <motion.div ref={ref} className="h-[600vh] w-full relative ">
       <Scene1Hobbies
         opacity={scene1Opacity}
         zIndex={z1}

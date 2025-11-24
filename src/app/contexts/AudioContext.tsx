@@ -47,7 +47,7 @@ export function AudioProvider({ children }: { children: React.ReactNode }) {
   const [userConsented, setUserConsented] = useState(false);
   const [animationsStarted, setAnimationsStarted] = useState(false);
   const [currentBgMusic, setCurrentBgMusic] = useState(
-    "/assets/Sound/bg-music.mp3"
+    "/assets/Sound/bg-music.mp3",
   );
   const isTransitioningRef = useRef(false);
   const bgMusicRef = useRef<HTMLAudioElement | null>(null);
@@ -217,28 +217,27 @@ export function AudioProvider({ children }: { children: React.ReactNode }) {
     bgMusicRef.current = newAudio; // ⭐ update ref เป็นตัวใหม่ทันที
 
     try {
-        await newAudio.play();
-        // 3. Fade In
-        const steps = 20;
-        const targetVol = isMuted ? 0 : volume; // เช็ค Mute ด้วย
-        const stepTime = fadeDuration / steps;
-        const volStep = targetVol / steps;
+      await newAudio.play();
+      // 3. Fade In
+      const steps = 20;
+      const targetVol = isMuted ? 0 : volume; // เช็ค Mute ด้วย
+      const stepTime = fadeDuration / steps;
+      const volStep = targetVol / steps;
 
-        // ⭐ เก็บ interval ใหม่ลง ref
-        fadeIntervalRef.current = setInterval(() => {
-            // ต้องเช็คว่า audio นี้ยังเป็น current อยู่ไหม (เผื่อเปลี่ยนเพลงเร็วมาก)
-            if (newAudio !== bgMusicRef.current) return; 
+      // ⭐ เก็บ interval ใหม่ลง ref
+      fadeIntervalRef.current = setInterval(() => {
+        // ต้องเช็คว่า audio นี้ยังเป็น current อยู่ไหม (เผื่อเปลี่ยนเพลงเร็วมาก)
+        if (newAudio !== bgMusicRef.current) return;
 
-            if (newAudio.volume < targetVol - volStep) {
-                newAudio.volume += volStep;
-            } else {
-                newAudio.volume = targetVol;
-                if (fadeIntervalRef.current) clearInterval(fadeIntervalRef.current);
-            }
-        }, stepTime);
-
+        if (newAudio.volume < targetVol - volStep) {
+          newAudio.volume += volStep;
+        } else {
+          newAudio.volume = targetVol;
+          if (fadeIntervalRef.current) clearInterval(fadeIntervalRef.current);
+        }
+      }, stepTime);
     } catch (err) {
-        console.error("Audio play failed", err);
+      console.error("Audio play failed", err);
     }
   };
 
@@ -330,13 +329,13 @@ export function AudioProvider({ children }: { children: React.ReactNode }) {
     if (audioRef.current) {
       audioRef.current.pause();
       setIsPlaying(false);
-      setIsMuted(true); 
+      setIsMuted(true);
       setUserConsented(true);
       setAnimationsStarted(true);
-      
-      saveSettingsToStorage({ 
-        hasVisited: true, 
-        isMuted: true 
+
+      saveSettingsToStorage({
+        hasVisited: true,
+        isMuted: true,
       });
     }
   };
@@ -374,7 +373,7 @@ export function AudioProvider({ children }: { children: React.ReactNode }) {
         if (audioRef.current) {
           audioRef.current.volume = Math.max(
             0,
-            originalVolume - volumeStep * currentStep
+            originalVolume - volumeStep * currentStep,
           );
 
           if (currentStep >= fadeSteps) {
@@ -414,7 +413,7 @@ export function AudioProvider({ children }: { children: React.ReactNode }) {
         if (audioRef.current) {
           audioRef.current.volume = Math.min(
             targetVolume,
-            volumeStep * currentStep
+            volumeStep * currentStep,
           );
 
           if (currentStep >= fadeSteps) {

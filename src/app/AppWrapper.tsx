@@ -12,9 +12,9 @@ function AppContent({ children }: { children: React.ReactNode }) {
 
   useEffect(() => {
     if (isInitialized) {
-        if (!userConsented) {
-            setShowWelcomeModal(true);
-        }
+      if (!userConsented) {
+        setShowWelcomeModal(true);
+      }
     }
   }, [userConsented, isInitialized]);
 

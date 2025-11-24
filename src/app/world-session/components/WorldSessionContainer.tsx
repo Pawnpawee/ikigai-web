@@ -62,34 +62,74 @@ export default function WorldSessionContainer() {
     offset: ["start start", "end end"],
   });
   // Scene 1 (0 -> 0.2)
-  const scene1Opacity = useTransform(scrollYProgress, [0, 0.02, 0.18, 0.2], [0, 1, 1, 0]);
+  const scene1Opacity = useTransform(
+    scrollYProgress,
+    [0, 0.02, 0.18, 0.2],
+    [0, 1, 1, 0],
+  );
   const scene1TextProgress = useTransform(scrollYProgress, [0.02, 0.1], [0, 1]);
-  const z1 = useTransform(scrollYProgress, [0, 0.01, 0.19, 0.2], [-1, 10, 10, -1]);
+  const z1 = useTransform(
+    scrollYProgress,
+    [0, 0.01, 0.19, 0.2],
+    [-1, 10, 10, -1],
+  );
 
   // Scene 2 (0.2 -> 0.4)
-  const scene2Opacity = useTransform(scrollYProgress, [0.2, 0.22, 0.38, 0.4], [0, 1, 1, 0]);
+  const scene2Opacity = useTransform(
+    scrollYProgress,
+    [0.2, 0.22, 0.38, 0.4],
+    [0, 1, 1, 0],
+  );
   const scene2TextProgress = useTransform(scrollYProgress, [0.22, 0.3], [0, 1]);
-  const z2 = useTransform(scrollYProgress, [0.2, 0.21, 0.39, 0.4], [-1, 10, 10, -1]);
+  const z2 = useTransform(
+    scrollYProgress,
+    [0.2, 0.21, 0.39, 0.4],
+    [-1, 10, 10, -1],
+  );
 
   // Scene 3 (0.4 -> 0.6)
-  const scene3Opacity = useTransform(scrollYProgress, [0.4, 0.42, 0.58, 0.6], [0, 1, 1, 0]);
+  const scene3Opacity = useTransform(
+    scrollYProgress,
+    [0.4, 0.42, 0.58, 0.6],
+    [0, 1, 1, 0],
+  );
   const scene3TextProgress = useTransform(scrollYProgress, [0.42, 0.5], [0, 1]);
-  const z3 = useTransform(scrollYProgress, [0.4, 0.41, 0.59, 0.6], [-1, 10, 10, -1]);
+  const z3 = useTransform(
+    scrollYProgress,
+    [0.4, 0.41, 0.59, 0.6],
+    [-1, 10, 10, -1],
+  );
 
   // Scene 4 (0.6 -> 0.8)
-  const scene4Opacity = useTransform(scrollYProgress, [0.6, 0.62, 0.78, 0.8], [0, 1, 1, 0]);
+  const scene4Opacity = useTransform(
+    scrollYProgress,
+    [0.6, 0.62, 0.78, 0.8],
+    [0, 1, 1, 0],
+  );
   const scene4TextProgress = useTransform(scrollYProgress, [0.62, 0.7], [0, 1]);
-  const z4 = useTransform(scrollYProgress, [0.6, 0.61, 0.79, 0.8], [-1, 10, 10, -1]);
+  const z4 = useTransform(
+    scrollYProgress,
+    [0.6, 0.61, 0.79, 0.8],
+    [-1, 10, 10, -1],
+  );
 
   // Scene 5 (0.8 -> 1) - stays visible
-  const scene5Opacity = useTransform(scrollYProgress, [0.8, 0.82, 1], [0, 1, 1]);
-  const scene5TextProgress = useTransform(scrollYProgress, [0.82, 0.95], [0, 1]);
+  const scene5Opacity = useTransform(
+    scrollYProgress,
+    [0.8, 0.82, 1],
+    [0, 1, 1],
+  );
+  const scene5TextProgress = useTransform(
+    scrollYProgress,
+    [0.82, 0.95],
+    [0, 1],
+  );
   const z5 = useTransform(scrollYProgress, [0.8, 0.81, 1], [-1, 10, 10]);
 
   const scrollToOpacity = useTransform(
     scrollYProgress,
     [0, 0.02, 0.8, 0.85],
-    [0, 1, 1, 0]
+    [0, 1, 1, 0],
   );
 
   // --- Submission Logic ---

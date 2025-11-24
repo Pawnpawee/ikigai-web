@@ -20,7 +20,6 @@ export function useOrientation(): Orientation {
       setOrientation(newOrientation);
     };
 
-
     window.addEventListener("resize", handleResize);
     return () => window.removeEventListener("resize", handleResize);
   }, []);
