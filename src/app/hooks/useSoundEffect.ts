@@ -36,10 +36,10 @@ export function useSoundEffect({
     const audio = getAudio();
     if (!audio) return;
 
-    const targetVol = direction === "in" ? sfxVolume * volume : 0;
+    const targetVol = Math.min(sfxVolume * volume, 1); // ป้องกัน target เกิน 1
     const stepTime = 50;
-    const steps = fadeDurationMs / stepTime;
-    const volStep = (sfxVolume * volume) / steps;
+    const steps = Math.max(1, fadeDurationMs / stepTime);
+    const volStep = targetVol / steps;
 
     if (fadeIntervalRef.current) clearInterval(fadeIntervalRef.current);
 
@@ -49,13 +49,14 @@ export function useSoundEffect({
     }
 
     fadeIntervalRef.current = setInterval(() => {
-      // แก้ logic ให้ volume ไม่เกิน 0 หรือ 1
-      let newVol = audio.volume + (direction === "in" ? volStep : -volStep);
-      newVol = Math.max(0, Math.min(newVol, sfxVolume * volume));
+      let newVol = direction === "in" 
+        ? Math.min(audio.volume + volStep, targetVol)
+        : Math.max(audio.volume - volStep, 0);
 
-      audio.volume = newVol;
+      // ป้องกัน volume เกินขอบเขต [0, 1]
+      audio.volume = Math.max(0, Math.min(newVol, 1));
 
-      if ((direction === "in" && newVol >= targetVol) || (direction === "out" && newVol <= 0)) {
+      if ((direction === "in" && audio.volume >= targetVol) || (direction === "out" && audio.volume <= 0)) {
         if (fadeIntervalRef.current) clearInterval(fadeIntervalRef.current);
         if (direction === "out") {
           audio.pause();

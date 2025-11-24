@@ -10,6 +10,7 @@ import ScrollTo from "./components/ui/ScrollTo";
 import { useScroll, useTransform } from "framer-motion";
 import { useEffect } from "react";
 import StarryBackground from "./components/ui/StarryBackground";
+import Preloader from "./components/ui/Preloader";
 import Dreaming from "./prologue//Dreaming";
 import JobApplication from "./prologue//JobApplication/JobApplication";
 import Sleeping from "./prologue//Sleeping";
@@ -32,7 +33,8 @@ export default function Home() {
   );
 
   return (
-    <main className="flex flex-col justify-between h-full">
+    <main className="relative flex flex-col justify-between h-full">
+      <Preloader />
       <StarryBackground />
 
       <MouseFollower />
