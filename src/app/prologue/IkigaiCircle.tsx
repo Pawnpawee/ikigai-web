@@ -52,7 +52,7 @@ const IkigaiCircle = memo(
         hidden: { opacity: 0, transition: { duration: 0.2 } },
         visible: { opacity: 0.8, transition: { duration: 0.3 } },
       }),
-      []
+      [],
     );
 
     return (
@@ -109,7 +109,7 @@ const IkigaiCircle = memo(
         </motion.div>
       </motion.div>
     );
-  }
+  },
 );
 
 IkigaiCircle.displayName = "IkigaiCircle"; // ⭐ Best practice เมื่อใช้ memo
