@@ -19,6 +19,8 @@ import { useSoundEffect } from "@/app/hooks/useSoundEffect";
 import { useAssetLoader } from "@/app/contexts/AssetLoaderContext";
 import { useAnimationReady } from "@/app/hooks/useAnimationReady";
 import { useLottieWithSound } from "@/app/hooks/useLottieWithSound";
+import IkigaiCircle from "./IkigaiCircle";
+
 
 export default function Hero() {
   const ref = useRef<HTMLDivElement>(null);
@@ -93,25 +95,6 @@ export default function Hero() {
   const circle3_rotate = useTransform(elementScrollYProgress, [0, 1], [0, 90]);
   const circle4_rotate = useTransform(elementScrollYProgress, [0, 1], [-90, 0]);
 
-  const tooltipVariants = useMemo(
-    () => ({
-      hidden: {
-        opacity: 0,
-        transition: { duration: 0.2 },
-      },
-      visible: {
-        opacity: 0.8,
-        transition: { duration: 0.3 },
-      },
-    }),
-    []
-  );
-
-  const [isCircle1Hovered, setIsCircle1Hovered] = useState(false);
-  const [isCircle2Hovered, setIsCircle2Hovered] = useState(false);
-  const [isCircle3Hovered, setIsCircle3Hovered] = useState(false);
-  const [isCircle4Hovered, setIsCircle4Hovered] = useState(false);
-
   const lottieGlowVariants: Variants = useMemo(
     () => ({
       initial: {
@@ -142,40 +125,6 @@ export default function Hero() {
     []
   );
 
-  // Memoize hover handlers
-  const handleCircle1HoverStart = useCallback(
-    () => setIsCircle1Hovered(true),
-    []
-  );
-  const handleCircle1HoverEnd = useCallback(
-    () => setIsCircle1Hovered(false),
-    []
-  );
-  const handleCircle2HoverStart = useCallback(
-    () => setIsCircle2Hovered(true),
-    []
-  );
-  const handleCircle2HoverEnd = useCallback(
-    () => setIsCircle2Hovered(false),
-    []
-  );
-  const handleCircle3HoverStart = useCallback(
-    () => setIsCircle3Hovered(true),
-    []
-  );
-  const handleCircle3HoverEnd = useCallback(
-    () => setIsCircle3Hovered(false),
-    []
-  );
-  const handleCircle4HoverStart = useCallback(
-    () => setIsCircle4Hovered(true),
-    []
-  );
-  const handleCircle4HoverEnd = useCallback(
-    () => setIsCircle4Hovered(false),
-    []
-  );
-
   // Memoize animation complete callback
   const handleAnimationComplete = useCallback(() => {
     if (!isInitialAnimationComplete) {
@@ -193,10 +142,10 @@ export default function Hero() {
         return {
           rotate: rotateTransform,
           opacity,
-          willChange: "transform, opacity",
+          willChange: "transform, opacity" as const,
         };
       }
-      return { willChange: "transform, opacity" };
+      return { willChange: "transform, opacity" as const };
     },
     [isInitialAnimationComplete, opacity]
   );
@@ -248,11 +197,11 @@ export default function Hero() {
   return (
     <div
       ref={ref}
-      className="w-screen h-screen overflow-hidden flex flex-col items-center justify-center relative black-linear"
+      className="w-screen h-dvh overflow-hidden flex flex-col items-center justify-center relative black-linear"
     >
       {/* Mountain */}
       <motion.div
-        className="absolute bottom-0 w-screen h-screen"
+        className="absolute bottom-0 w-screen h-screen pointer-events-none"
         style={{ y: backgroundY }}
       >
         <motion.div
@@ -265,7 +214,6 @@ export default function Hero() {
             src="/assets/Scene/Hero/hill-c-b.svg"
             alt=""
             fill
-            priority
             sizes="100vw"
             quality={85}
             className="object-bottom object-cover"
@@ -281,7 +229,6 @@ export default function Hero() {
             src="/assets/Scene/Hero/hill-c-f.svg"
             alt=""
             fill
-            priority
             sizes="100vw"
             quality={85}
             className="object-bottom object-cover"
@@ -297,7 +244,6 @@ export default function Hero() {
             src="/assets/Scene/Hero/hill-r-f.svg"
             alt=""
             fill
-            priority
             sizes="100vw"
             quality={85}
             className="object-bottom object-cover"
@@ -311,7 +257,7 @@ export default function Hero() {
         >
           <Image
             src="/assets/Scene/Hero/hill-l-f.svg"
-            alt=""
+            alt="Mountain Foreground"
             fill
             priority
             sizes="100vw"
@@ -322,141 +268,69 @@ export default function Hero() {
       </motion.div>
 
       {/* Circle-World */}
-      <motion.div
-        className="absolute scale-40 sm:scale-50 md:scale-80 lg:scale-100"
-        initial={circleAnimations.circle4.initial}
-        animate={circleAnimations.circle4.animate}
+      <IkigaiCircle
+        className="scale-40 sm:scale-50 md:scale-80 lg:scale-100"
+        imageSrc="/assets/Scene/Hero/world-circle.svg"
+        iconSrc="/assets/Icon/world.svg"
+        text="สิ่งที่โลกต้องการ"
+        rotateValue={circle4_rotate}
+        initialAnimation={circleAnimations.circle4}
+        shouldAnimate={shouldAnimate}
+        opacity={opacity}
+        tooltipRotate={90}
+        circleImgTransition={circleAnimations.circleImgTransition}
         transition={circleAnimations.transition}
-        style={getCircleStyle(circle4_rotate)}
-      >
-        <motion.div
-          className="relative w-[380px] h-auto cursor-pointer"
-          style={{ y: -180, pointerEvents: "auto" }}
-          onHoverStart={handleCircle4HoverStart}
-          onHoverEnd={handleCircle4HoverEnd}
-        >
-          <motion.img
-            src="/assets/Scene/Hero/world-circle.svg"
-            className="w-full h-auto"
-            initial={{ opacity: 0 }}
-            animate={shouldAnimate ? { opacity: 1 } : { opacity: 0 }}
-            transition={circleAnimations.circleImgTransition}
-          />
-          <motion.div
-            className="absolute bottom-10 left-1/2 -translate-x-1/2
-                 flex flex-col items-center gap-3"
-            style={{ rotate: 90 }}
-            initial="hidden"
-            animate={isCircle4Hovered ? "visible" : "hidden"}
-            variants={tooltipVariants}
-          >
-            <img src="/assets/Icon/world.svg" className="h-15" loading="lazy" alt="" />
-            <p className="typo-h6 text-white">สิ่งที่โลกต้องการ</p>
-          </motion.div>
-        </motion.div>
-      </motion.div>
-      {/* Circle-Paid */}
-      <motion.div
-        className="absolute scale-40 sm:scale-50 md:scale-80 lg:scale-100"
-        initial={circleAnimations.circle3.initial}
-        animate={circleAnimations.circle3.animate}
-        transition={circleAnimations.transition}
-        style={getCircleStyle(circle3_rotate)}
-      >
-        <motion.div
-          className="relative w-[380px] h-auto cursor-pointer"
-          style={{ y: -180, pointerEvents: "auto" }}
-          onHoverStart={handleCircle3HoverStart}
-          onHoverEnd={handleCircle3HoverEnd}
-        >
-          <motion.img
-            src="/assets/Scene/Hero/paid-circle.svg"
-            className="w-full h-auto"
-            initial={{ opacity: 0 }}
-            animate={shouldAnimate ? { opacity: 1 } : { opacity: 0 }}
-            transition={circleAnimations.circleImgTransition}
-          />
-          <motion.div
-            className="absolute bottom-10 left-1/2 -translate-x-1/2
-                 flex flex-col items-center gap-3"
-            initial="hidden"
-            animate={isCircle3Hovered ? "visible" : "hidden"}
-            variants={tooltipVariants}
-          >
-            <img src="/assets/Icon/paid.svg" className="h-15" loading="lazy" alt="" />
-            <p className="typo-h6 text-white">สิ่งที่สร้างรายได้</p>
-          </motion.div>
-        </motion.div>
-      </motion.div>
-      {/* Circle-Skill */}
-      <motion.div
-        className="absolute scale-40 sm:scale-50 md:scale-80 lg:scale-100"
-        initial={circleAnimations.circle2.initial}
-        animate={circleAnimations.circle2.animate}
-        transition={circleAnimations.transition}
-        style={getCircleStyle(circle2_rotate)}
-      >
-        <motion.div
-          className="relative w-[380px] h-auto cursor-pointer"
-          style={{ y: -180, pointerEvents: "auto" }}
-          onHoverStart={handleCircle2HoverStart}
-          onHoverEnd={handleCircle2HoverEnd}
-        >
-          <motion.img
-            src="/assets/Scene/Hero/skill-circle.svg"
-            className="w-full h-auto"
-            initial={{ opacity: 0 }}
-            animate={shouldAnimate ? { opacity: 1 } : { opacity: 0 }}
-            transition={circleAnimations.circleImgTransition}
-          />
-          <motion.div
-            className="absolute bottom-10 left-1/2 -translate-x-1/2
-                 flex flex-col items-center gap-3"
-            style={{ rotate: -90 }}
-            initial="hidden"
-            animate={isCircle2Hovered ? "visible" : "hidden"}
-            variants={tooltipVariants}
-          >
-            <img src="/assets/Icon/skill.svg" className="h-15" loading="lazy" alt="" />
-            <p className="typo-h6 text-white">สิ่งที่ถนัด</p>
-          </motion.div>
-        </motion.div>
-      </motion.div>
-      {/* Circle-Love */}
-      <motion.div
-        className="absolute scale-40 sm:scale-50 md:scale-80 lg:scale-100"
-        initial={circleAnimations.circle1.initial}
-        animate={circleAnimations.circle1.animate}
-        transition={circleAnimations.transition}
-        style={getCircleStyle(circle1_rotate)}
-      >
-        <motion.div
-          className="relative w-[380px] h-auto cursor-pointer"
-          style={{ y: -200, pointerEvents: "auto" }}
-          onHoverStart={handleCircle1HoverStart}
-          onHoverEnd={handleCircle1HoverEnd}
-        >
-          <motion.img
-            src="/assets/Scene/Hero/love-circle.svg"
-            className="w-full h-auto"
-            initial={{ opacity: 0 }}
-            animate={shouldAnimate ? { opacity: 1 } : { opacity: 0 }}
-            transition={circleAnimations.circleImgTransition}
-          />
+        getCircleStyle={getCircleStyle}
+      />
 
-          <motion.div
-            className="absolute bottom-10 left-1/2 -translate-x-1/2
-                 flex flex-col items-center gap-3"
-            style={{ rotate: 180 }}
-            initial="hidden"
-            animate={isCircle1Hovered ? "visible" : "hidden"}
-            variants={tooltipVariants}
-          >
-            <img src="/assets/Icon/love.svg" className="h-15" loading="lazy" alt="" />
-            <p className="typo-h6 text-white">สิ่งที่รัก</p>
-          </motion.div>
-        </motion.div>
-      </motion.div>
+      {/* Circle-Paid */}
+      <IkigaiCircle
+        className="scale-40 sm:scale-50 md:scale-80 lg:scale-100"
+        imageSrc="/assets/Scene/Hero/paid-circle.svg"
+        iconSrc="/assets/Icon/paid.svg"
+        text="สิ่งที่สร้างรายได้"
+        rotateValue={circle3_rotate}
+        initialAnimation={circleAnimations.circle3}
+        shouldAnimate={shouldAnimate}
+        opacity={opacity}
+        tooltipRotate={0}
+        circleImgTransition={circleAnimations.circleImgTransition}
+        transition={circleAnimations.transition}
+        getCircleStyle={getCircleStyle}
+      />
+
+      {/* Circle-Skill */}
+      <IkigaiCircle
+        className="scale-40 sm:scale-50 md:scale-80 lg:scale-100"
+        imageSrc="/assets/Scene/Hero/skill-circle.svg"
+        iconSrc="/assets/Icon/skill.svg"
+        text="สิ่งที่ถนัด"
+        rotateValue={circle2_rotate}
+        initialAnimation={circleAnimations.circle2}
+        shouldAnimate={shouldAnimate}
+        opacity={opacity}
+        tooltipRotate={-90}
+        circleImgTransition={circleAnimations.circleImgTransition}
+        transition={circleAnimations.transition}
+        getCircleStyle={getCircleStyle}
+      />
+
+      {/* Circle-Love */}
+      <IkigaiCircle
+        className="scale-40 sm:scale-50 md:scale-80 lg:scale-100"
+        imageSrc="/assets/Scene/Hero/love-circle.svg"
+        iconSrc="/assets/Icon/love.svg"
+        text="สิ่งที่รัก"
+        rotateValue={circle1_rotate}
+        initialAnimation={circleAnimations.circle1}
+        shouldAnimate={shouldAnimate}
+        opacity={opacity}
+        tooltipRotate={180}
+        circleImgTransition={circleAnimations.circleImgTransition}
+        transition={circleAnimations.transition}
+        getCircleStyle={getCircleStyle}
+        yOffset={-200}
+      />
 
       {/* Logo */}
       <motion.div
@@ -469,11 +343,7 @@ export default function Hero() {
       >
         <motion.div
           initial={{ opacity: 0 }}
-          animate={
-            isInView && shouldAnimate
-              ? { opacity: 1 }
-              : { opacity: 0 }
-          }
+          animate={isInView && shouldAnimate ? { opacity: 1 } : { opacity: 0 }}
           transition={{ duration: 2, delay: 1.5 }}
         >
           <motion.div
@@ -482,7 +352,7 @@ export default function Hero() {
           >
             <LazyLottie
               src="/assets/Icon/logo_ikigai_animate.lottie"
-              className="h-[120px] aspect-770/200 mx-auto"
+              className="h-[100px] aspect-770/200 mx-auto"
               loop={false}
               autoplay={false}
               getRef={(ref) => {
@@ -491,7 +361,7 @@ export default function Hero() {
             />
           </motion.div>
         </motion.div>
-        <h2 className="typo-h2-serif text-white whitespace-nowrap">
+        <h2 className="typo-h3-serif text-white whitespace-nowrap">
           {textChars.map((char, index) => (
             <motion.span
               key={index}

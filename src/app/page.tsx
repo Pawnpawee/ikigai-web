@@ -43,12 +43,12 @@ export default function Home() {
 
       {/* Scene Intro */}
       <Hero />
-      {/* <Intro /> 
-      <JobApplication/>
-      <Sleeping />
-      <Dreaming />
-      <Weighing />
-      <IntoDark /> */}
+      <Intro /> 
+      {/* <JobApplication/> */}
+      {/* <Sleeping /> */}
+      {/* <Dreaming /> */}
+      {/* <Weighing /> */}
+      {/* <IntoDark /> */}
 
     </main>
   );
