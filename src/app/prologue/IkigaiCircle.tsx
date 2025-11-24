@@ -71,7 +71,7 @@ const IkigaiCircle = memo(
       >
         <motion.div
           // ⭐ แก้ w-[380px] เป็น Responsive (มือถือเล็กหน่อย -> จอใหญ่ค่อยใหญ่)
-          className="relative w-[260px] sm:w-[320px] md:w-[380px] h-auto cursor-pointer"
+          className="relative w-[320px] md:w-[380px] h-auto cursor-pointer"
           style={{ y: yOffset, pointerEvents: "auto" }}
           onHoverStart={handleHoverStart}
           onHoverEnd={handleHoverEnd}
