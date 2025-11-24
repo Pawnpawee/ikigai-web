@@ -53,7 +53,7 @@ export default function Hero() {
   const backgroundY = useTransform(
     elementScrollYProgress,
     [0, 1],
-    ["0%", "100%"]
+    ["0%", "100%"],
   );
   const opacity = useTransform(elementScrollYProgress, [1, 0], [0, 1]);
 
@@ -69,7 +69,7 @@ export default function Hero() {
         },
       },
     }),
-    []
+    [],
   );
   const charVariants: Variants = useMemo(
     () => ({
@@ -79,7 +79,7 @@ export default function Hero() {
         x: 0,
       },
     }),
-    []
+    [],
   );
 
   const [isInitialAnimationComplete, setIsInitialAnimationComplete] =
@@ -87,7 +87,7 @@ export default function Hero() {
   const circle1_rotate = useTransform(
     elementScrollYProgress,
     [0, 1],
-    [-180, 0]
+    [-180, 0],
   );
   const circle2_rotate = useTransform(elementScrollYProgress, [0, 1], [90, 0]);
   const circle3_rotate = useTransform(elementScrollYProgress, [0, 1], [0, 90]);
@@ -104,7 +104,7 @@ export default function Hero() {
         transition: { duration: 0.3 },
       },
     }),
-    []
+    [],
   );
 
   const [isCircle1Hovered, setIsCircle1Hovered] = useState(false);
@@ -128,41 +128,41 @@ export default function Hero() {
         },
       },
     }),
-    []
+    [],
   );
 
   // Memoize hover handlers
   const handleCircle1HoverStart = useCallback(
     () => setIsCircle1Hovered(true),
-    []
+    [],
   );
   const handleCircle1HoverEnd = useCallback(
     () => setIsCircle1Hovered(false),
-    []
+    [],
   );
   const handleCircle2HoverStart = useCallback(
     () => setIsCircle2Hovered(true),
-    []
+    [],
   );
   const handleCircle2HoverEnd = useCallback(
     () => setIsCircle2Hovered(false),
-    []
+    [],
   );
   const handleCircle3HoverStart = useCallback(
     () => setIsCircle3Hovered(true),
-    []
+    [],
   );
   const handleCircle3HoverEnd = useCallback(
     () => setIsCircle3Hovered(false),
-    []
+    [],
   );
   const handleCircle4HoverStart = useCallback(
     () => setIsCircle4Hovered(true),
-    []
+    [],
   );
   const handleCircle4HoverEnd = useCallback(
     () => setIsCircle4Hovered(false),
-    []
+    [],
   );
 
   // Memoize animation complete callback
@@ -187,7 +187,7 @@ export default function Hero() {
       }
       return { willChange: "transform, opacity" };
     },
-    [isInitialAnimationComplete, opacity]
+    [isInitialAnimationComplete, opacity],
   );
 
   // Use reusable animation ready hook
@@ -309,7 +309,12 @@ export default function Hero() {
             animate={isCircle4Hovered ? "visible" : "hidden"}
             variants={tooltipVariants}
           >
-            <img src="/assets/Icon/world.svg" className="h-15" loading="lazy" alt="" />
+            <img
+              src="/assets/Icon/world.svg"
+              className="h-15"
+              loading="lazy"
+              alt=""
+            />
             <p className="typo-h6 text-white">สิ่งที่โลกต้องการ</p>
           </motion.div>
         </motion.div>
@@ -319,9 +324,7 @@ export default function Hero() {
         className="absolute scale-40 sm:scale-50 md:scale-80 lg:scale-100"
         initial={{ opacity: 0, rotate: 90, y: 320 }}
         animate={
-          shouldAnimate
-            ? { opacity: 1, rotate: 0 }
-            : { opacity: 0, rotate: 90 }
+          shouldAnimate ? { opacity: 1, rotate: 0 } : { opacity: 0, rotate: 90 }
         }
         transition={{
           type: "tween",
@@ -354,7 +357,12 @@ export default function Hero() {
             animate={isCircle3Hovered ? "visible" : "hidden"}
             variants={tooltipVariants}
           >
-            <img src="/assets/Icon/paid.svg" className="h-15" loading="lazy" alt="" />
+            <img
+              src="/assets/Icon/paid.svg"
+              className="h-15"
+              loading="lazy"
+              alt=""
+            />
             <p className="typo-h6 text-white">สิ่งที่สร้างรายได้</p>
           </motion.div>
         </motion.div>
@@ -364,9 +372,7 @@ export default function Hero() {
         className="absolute scale-40 sm:scale-50 md:scale-80 lg:scale-100"
         initial={{ opacity: 0, rotate: 0, x: -350 }}
         animate={
-          shouldAnimate
-            ? { opacity: 1, rotate: 90 }
-            : { opacity: 0, rotate: 0 }
+          shouldAnimate ? { opacity: 1, rotate: 90 } : { opacity: 0, rotate: 0 }
         }
         transition={{
           type: "tween",
@@ -399,7 +405,12 @@ export default function Hero() {
             animate={isCircle2Hovered ? "visible" : "hidden"}
             variants={tooltipVariants}
           >
-            <img src="/assets/Icon/skill.svg" className="h-15" loading="lazy" alt="" />
+            <img
+              src="/assets/Icon/skill.svg"
+              className="h-15"
+              loading="lazy"
+              alt=""
+            />
             <p className="typo-h6 text-white">สิ่งที่ถนัด</p>
           </motion.div>
         </motion.div>
@@ -445,7 +456,12 @@ export default function Hero() {
             animate={isCircle1Hovered ? "visible" : "hidden"}
             variants={tooltipVariants}
           >
-            <img src="/assets/Icon/love.svg" className="h-15" loading="lazy" alt="" />
+            <img
+              src="/assets/Icon/love.svg"
+              className="h-15"
+              loading="lazy"
+              alt=""
+            />
             <p className="typo-h6 text-white">สิ่งที่รัก</p>
           </motion.div>
         </motion.div>
@@ -462,11 +478,7 @@ export default function Hero() {
       >
         <motion.div
           initial={{ opacity: 0 }}
-          animate={
-            isInView && shouldAnimate
-              ? { opacity: 1 }
-              : { opacity: 0 }
-          }
+          animate={isInView && shouldAnimate ? { opacity: 1 } : { opacity: 0 }}
           transition={{ duration: 2, delay: 1.5 }}
         >
           <motion.div

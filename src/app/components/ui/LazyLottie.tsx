@@ -11,8 +11,8 @@ const DotLottiePlayer = dynamic(
   {
     ssr: false, // ปิด SSR เหมือนเดิม
     // ใส่ Placeholder สีจางๆ หรือขนาดว่างๆ รอไว้ระหว่างโหลด Script
-    loading: () => <div className="w-full h-full bg-transparent" />, 
-  }
+    loading: () => <div className="w-full h-full bg-transparent" />,
+  },
 );
 
 // สร้าง Type สำหรับ Props เพื่อให้ TS ช่วยเช็ค (Clean Architecture)
@@ -22,11 +22,11 @@ interface LazyLottieProps extends Omit<DotLottieReactProps, "src"> {
   getRef?: (ref: any) => void; // เผื่อต้องการส่ง ref กลับไปสั่ง play/stop
 }
 
-const LazyLottie: React.FC<LazyLottieProps> = ({ 
-  src, 
-  className, 
-  getRef, 
-  ...props 
+const LazyLottie: React.FC<LazyLottieProps> = ({
+  src,
+  className,
+  getRef,
+  ...props
 }) => {
   return (
     <div className={className}>

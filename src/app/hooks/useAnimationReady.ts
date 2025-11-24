@@ -12,7 +12,7 @@ export function useAnimationReady() {
 
   const shouldAnimate = useMemo(
     () => animationsStarted && !isAssetsLoading,
-    [animationsStarted, isAssetsLoading]
+    [animationsStarted, isAssetsLoading],
   );
 
   return shouldAnimate;
