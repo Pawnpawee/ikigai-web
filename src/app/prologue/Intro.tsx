@@ -1,7 +1,14 @@
 "use client";
 import { motion, useScroll, useTransform } from "framer-motion";
 import { useRef } from "react";
+import Image from "next/image"; // ⭐ 1. Import Next Image
 import WordByWordAnimation from "../components/ui/WordByWordAnimation";
+
+const INTRO_TEXT = `คำถามอิคิไกทั้งสี่ข้อ — "สิ่งที่รัก, สิ่งที่ถนัด, สิ่งที่โลกต้องการ และ สิ่งที่สร้างรายได้” 
+เป็นเพียงเครื่องมือการสำรวจเพื่อช่วยให้คุณสะท้อนตัวเอง ซึ่งเป็นภาพ ณ ตอนนี้เท่านั้น 
+และ ไม่ใช่แบบทดสอบทางจิตวิทยา ผลลัพธ์เป็นแนวทางเชิงสำรวจ 
+คุณสามารถเปลี่ยนความคิดและกลับมาสำรวจอีกครั้งได้เสมอ
+การเดินทางของชีวิต… ได้เริ่มต้นแล้ว`;
 
 export default function Intro() {
   const ref = useRef<HTMLDivElement>(null);
@@ -40,7 +47,7 @@ export default function Intro() {
     [0.07, 0.1],
     ["blur(12px)", "blur(0px)"]
   );
-  // Subtle glow appears after the title is fully visible
+
   const introGlow = useTransform(
     scrollYProgress,
     [0.07, 0.12],
@@ -48,31 +55,44 @@ export default function Intro() {
   );
 
   return (
-    <motion.div ref={ref} className="h-[250vh] w-screen relative">
+    <motion.div ref={ref} className="h-[250vh] w-full relative">
       <motion.div
-        className="fixed top-0 h-screen w-screen flex items-center justify-center text-center"
+        className="fixed top-0 h-full w-full flex items-center justify-center text-center"
         style={{ zIndex }}
       >
-        <motion.div style={{ opacity: scrollToOpacity }}>
-          <div className="relative h-20 flex items-center justify-center mb-4">
+        <motion.div
+          style={{ opacity: scrollToOpacity }}
+          className="w-full px-4 flex flex-col items-center"
+        >
+          <div className="relative h-20 w-full flex items-center justify-center mb-8">
+            {" "}
             <motion.div
               style={{
                 opacity: starOpacity,
                 scale: starScale,
                 rotate: starRotate,
                 filter: starBlur,
+                willChange: "transform, opacity, filter",
               }}
-              className="text-5xl absolute"
+              className="absolute flex items-center justify-center"
             >
-              <img src="assets/Icon/star.svg" alt="star" className="w-10" />
+              {/* ⭐ 6. ใช้ Next/Image แทน img */}
+              <div className="relative w-10 h-10">
+                <Image
+                  src="/assets/Icon/star.svg"
+                  alt="star"
+                  fill
+                  className="object-contain"
+                />
+              </div>
             </motion.div>
-
             <motion.h2
               style={{
                 opacity: introOpacity,
                 scale: introScale,
                 filter: introBlur,
                 textShadow: introGlow,
+                willChange: "transform, opacity, filter",
               }}
               className="typo-h2-serif text-white absolute"
             >
@@ -81,14 +101,10 @@ export default function Intro() {
           </div>
 
           <WordByWordAnimation
-            text={`คำถามอิคิไกทั้งสี่ข้อ — สิ่งที่รัก, สิ่งที่ถนัด, สิ่งที่โลกต้องการ และ สิ่งที่สร้างรายได้” 
-                     เป็นเพียงเครื่องมือการสำรวจเพื่อช่วยให้คุณสะท้อนตัวเอง ซึ่งเป็นภาพ ณ ตอนนี้เท่านั้น 
-                     และ ไม่ใช่แบบทดสอบทางจิตวิทยา ผลลัพธ์เป็นแนวทางเชิงสำรวจ 
-                     คุณสามารถเปลี่ยนความคิดและกลับมาสำรวจอีกครั้งได้เสมอ
-การเดินทางของชีวิต… ได้เริ่มต้นแล้ว `}
+            text={INTRO_TEXT}
             scrollYProgress={textAnimationProgress}
             as="div"
-            className="typo-p-lg text-white text-center w-70 sm:w-full"
+            className="typo-p-lg text-white text-center w-70 sm:w-full mx-auto"
           />
         </motion.div>
       </motion.div>
