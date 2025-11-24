@@ -124,12 +124,12 @@ export default function IntoDarkChoices({
   const opacity = useTransform(
     scrollYProgress,
     [0.167, 0.179, 0.389, 0.7, 0.8],
-    [0, 1, 1, 1, 0]
+    [0, 1, 1, 1, 0],
   );
   const zIndex = useTransform(
     scrollYProgress,
-    [0, 0.168, 0.179, 0.493, 0.500],
-    [-1, -1, 10, 10, -1]
+    [0, 0.168, 0.179, 0.493, 0.5],
+    [-1, -1, 10, 10, -1],
   );
 
   // Background gradients - Layer 1 (earliest)
@@ -137,7 +137,7 @@ export default function IntoDarkChoices({
   const bgGradient1Opacity = useTransform(
     scrollYProgress,
     [0.179, 0.213],
-    [0, 1]
+    [0, 1],
   );
 
   // Stars - Layer 2
@@ -150,24 +150,20 @@ export default function IntoDarkChoices({
   const catScale = useTransform(
     scrollYProgress,
     [0.226, 0.254, 0.282],
-    [0.9, 1, 1]
+    [0.9, 1, 1],
   );
 
   // Star lines - Layer 5
-  const starLinesY = useTransform(scrollYProgress, [0.254, 0.310], [50, 0]);
-  const starLinesOpacity = useTransform(
-    scrollYProgress,
-    [0.254, 0.310],
-    [0, 1]
-  );
+  const starLinesY = useTransform(scrollYProgress, [0.254, 0.31], [50, 0]);
+  const starLinesOpacity = useTransform(scrollYProgress, [0.254, 0.31], [0, 1]);
 
   // Text content - Layer 6
   const textOpacity = useTransform(scrollYProgress, [0.282, 0.327], [0, 1]);
   const textY = useTransform(scrollYProgress, [0.282, 0.327], [30, 0]);
 
   // Choice buttons - Layer 7 (latest)
-  const choicesOpacity = useTransform(scrollYProgress, [0.310, 0.350], [0, 1]);
-  const choicesY = useTransform(scrollYProgress, [0.310, 0.350], [30, 0]);
+  const choicesOpacity = useTransform(scrollYProgress, [0.31, 0.35], [0, 1]);
+  const choicesY = useTransform(scrollYProgress, [0.31, 0.35], [30, 0]);
 
   // Additional text sections
   const text2Opacity = useTransform(scrollYProgress, [0.42, 0.44], [0, 1]);
@@ -425,9 +421,7 @@ export default function IntoDarkChoices({
               </div>
               {/* Subtitle text (node-id: 497:3461) */}
               <div className="typo-text-h5 w-full">
-                <p>
-                  (ตอบอย่างน้อย 3 ข้อ)
-                </p>
+                <p>(ตอบอย่างน้อย 3 ข้อ)</p>
               </div>
             </div>
 
@@ -502,7 +496,7 @@ export default function IntoDarkChoices({
                   text={`โอ้… ถูกครอบงำจาก\nความกังวลสินะ`}
                   scrollYProgress={scrollYProgress}
                   startProgress={0.372}
-                    endProgress={0.387}
+                  endProgress={0.387}
                 />
               </div>
             </motion.div>

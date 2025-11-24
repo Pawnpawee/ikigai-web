@@ -1,6 +1,6 @@
 "use client";
 import React, { useState, useEffect, FC } from "react";
-import { motion, useMotionValue, useSpring } from "framer-motion"; 
+import { motion, useMotionValue, useSpring } from "framer-motion";
 
 const MouseFollower: FC = () => {
   // ⭐ ใช้ MotionValue เพื่อบายพาส React Render Cycle
@@ -17,7 +17,6 @@ const MouseFollower: FC = () => {
 
   useEffect(() => {
     const handleMouseMove = (e: MouseEvent) => {
-      
       // ⭐ อัปเดตค่า MotionValue โดยตรง (Performance สูงมาก)
       mouseX.set(e.clientX - 20); // ลบ 20 เพื่อจัดกึ่งกลาง (ครึ่งของ width 40)
       mouseY.set(e.clientY - 20);
@@ -39,8 +38,14 @@ const MouseFollower: FC = () => {
 
     return () => {
       window.removeEventListener("mousemove", handleMouseMove);
-      document.documentElement.removeEventListener("mouseenter", handleMouseEnter);
-      document.documentElement.removeEventListener("mouseleave", handleMouseLeave);
+      document.documentElement.removeEventListener(
+        "mouseenter",
+        handleMouseEnter,
+      );
+      document.documentElement.removeEventListener(
+        "mouseleave",
+        handleMouseLeave,
+      );
     };
   }, [mouseX, mouseY]); // ⭐ เพิ่ม dependencies
 
@@ -62,7 +67,7 @@ const MouseFollower: FC = () => {
 
   return (
     <motion.div
-      className="pointer-events-none fixed left-0 top-0 z-9999" 
+      className="pointer-events-none fixed left-0 top-0 z-9999"
       style={{
         width: 40,
         height: 40,
@@ -74,7 +79,6 @@ const MouseFollower: FC = () => {
       animate={
         !isVisible ? "hidden" : isHoveringButton ? "onButton" : "visible"
       }
-
     />
   );
 };

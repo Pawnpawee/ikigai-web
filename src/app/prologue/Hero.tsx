@@ -16,7 +16,7 @@ const DotLottiePlayer = dynamic(
   {
     ssr: false,
     loading: () => <div className="h-[200px] w-auto" />,
-  }
+  },
 );
 
 export default function Hero() {
@@ -43,7 +43,7 @@ export default function Hero() {
   const backgroundY = useTransform(
     elementScrollYProgress,
     [0, 1],
-    ["0%", "100%"]
+    ["0%", "100%"],
   );
   const opacity = useTransform(elementScrollYProgress, [1, 0], [0, 1]);
 
@@ -71,7 +71,7 @@ export default function Hero() {
   const circle1_rotate = useTransform(
     elementScrollYProgress,
     [0, 1],
-    [-180, 0]
+    [-180, 0],
   );
   const circle2_rotate = useTransform(elementScrollYProgress, [0, 1], [90, 0]);
   const circle3_rotate = useTransform(elementScrollYProgress, [0, 1], [0, 90]);
@@ -129,7 +129,7 @@ export default function Hero() {
         const animationDurationInSeconds = 3;
         const glowStartTimeInMs = Math.max(
           0,
-          animationDurationInSeconds * 1000 - 1200
+          animationDurationInSeconds * 1000 - 1200,
         );
 
         glowTimerRef.current = setTimeout(() => {
@@ -195,7 +195,7 @@ export default function Hero() {
         </motion.div>
         <h2 className="typo-h2-serif text-white whitespace-nowrap">
           {textContent.split("").map((char, index) => (
-            <motion.span  
+            <motion.span
               key={index}
               variants={charVariants}
               style={{ display: "inline-block" }}

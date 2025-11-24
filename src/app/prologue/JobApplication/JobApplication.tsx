@@ -1,5 +1,11 @@
 "use client";
-import { useScroll, MotionValue, motion, useTransform, useInView } from "framer-motion";
+import {
+  useScroll,
+  MotionValue,
+  motion,
+  useTransform,
+  useInView,
+} from "framer-motion";
 import { useRef, useState, useEffect } from "react";
 import JobApplication1 from "./JobApplication_1";
 import JobApplication2 from "./JobApplication_2";
@@ -16,12 +22,13 @@ export default function JobApplication() {
     offset: ["start end", "end end"],
   });
 
-  const { playSoundEffect: playClock, stopSoundEffect: stopClock } = useSoundEffect({
-    soundPath: "/assets/Sound/1-2/clock-ticking.mp3",
-    fadeDurationMs: 500,
-    loop: true,
-    volume: 1,
-  });
+  const { playSoundEffect: playClock, stopSoundEffect: stopClock } =
+    useSoundEffect({
+      soundPath: "/assets/Sound/1-2/clock-ticking.mp3",
+      fadeDurationMs: 500,
+      loop: true,
+      volume: 1,
+    });
 
   // Sound effects - alternating sounds
   const { playSoundEffect: playPageFlip } = useSoundEffect({
@@ -48,7 +55,7 @@ export default function JobApplication() {
     return () => {
       stopClock();
     };
-  }, [isInView, animationsStarted,  playClock, stopClock]);
+  }, [isInView, animationsStarted, playClock, stopClock]);
 
   // Alternating page-flip and typing sounds (play 1 time, pause 3 sec, alternate)
   useEffect(() => {
@@ -64,7 +71,7 @@ export default function JobApplication() {
         playTyping();
       }
       isPageFlip = !isPageFlip;
-      
+
       timeoutId = setTimeout(playAlternatingSound, 5000);
     };
 
@@ -79,21 +86,17 @@ export default function JobApplication() {
   const opacity = useTransform(
     scrollYProgress,
     [0, 0.2, 0.947, 1],
-    [0, 1, 1, 0]
+    [0, 1, 1, 0],
   );
 
   const opacity_light = useTransform(
     scrollYProgress,
     [0, 0.2, 0.5, 0.97, 1],
-    [0, 0, 0.5, 0.5, 0]
+    [0, 0, 0.5, 0.5, 0],
   );
 
   return (
-    <motion.div
-      ref={ref}
-      className="relative h-[950vh]"
-      style={{ opacity }}
-    >
+    <motion.div ref={ref} className="relative h-[950vh]" style={{ opacity }}>
       {/* bg */}
       <motion.div
         className="absolute w-screen inset-0 bg-s1 -z-1"

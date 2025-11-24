@@ -10,8 +10,8 @@ interface UseBgMusicTransitionProps {
   fadeDuration?: number;
   /** สถานะว่าอยู่ใน viewport หรือไม่ */
   isInView: boolean;
-  /** 
-   * ถ้าเป็น true จะไม่ reset เพลงเมื่อออกจาก viewport 
+  /**
+   * ถ้าเป็น true จะไม่ reset เพลงเมื่อออกจาก viewport
    * ใช้สำหรับ section ที่ต้องการให้เพลงเล่นต่อไปยัง section ถัดไป
    */
   continueOnExit?: boolean;
@@ -38,7 +38,7 @@ export function useBgMusicTransition({
       !isInView &&
       hasChangedMusicRef.current &&
       !continueOnExit &&
-      currentBgMusic !== defaultMusic 
+      currentBgMusic !== defaultMusic
     ) {
       transitionBgMusic(defaultMusic, fadeDuration);
       hasChangedMusicRef.current = false;
@@ -50,7 +50,7 @@ export function useBgMusicTransition({
     fadeDuration,
     continueOnExit,
     animationsStarted,
-    currentBgMusic, 
-    transitionBgMusic, 
+    currentBgMusic,
+    transitionBgMusic,
   ]);
 }

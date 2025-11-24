@@ -32,61 +32,73 @@ export function useSoundEffect({
   };
 
   // ฟังก์ชัน fade audio
-  const fadeAudio = useCallback((direction: "in" | "out", onComplete?: () => void) => {
-    const audio = getAudio();
-    if (!audio) return;
+  const fadeAudio = useCallback(
+    (direction: "in" | "out", onComplete?: () => void) => {
+      const audio = getAudio();
+      if (!audio) return;
 
-    const targetVol = direction === "in" ? sfxVolume * volume : 0;
-    const stepTime = 50;
-    const steps = fadeDurationMs / stepTime;
-    const volStep = (sfxVolume * volume) / steps;
+      const targetVol = direction === "in" ? sfxVolume * volume : 0;
+      const stepTime = 50;
+      const steps = fadeDurationMs / stepTime;
+      const volStep = (sfxVolume * volume) / steps;
 
-    if (fadeIntervalRef.current) clearInterval(fadeIntervalRef.current);
+      if (fadeIntervalRef.current) clearInterval(fadeIntervalRef.current);
 
-    if (direction === "in") {
-      audio.volume = 0;
-      audio.play().catch(() => { });
-    }
-
-    fadeIntervalRef.current = setInterval(() => {
-      // แก้ logic ให้ volume ไม่เกิน 0 หรือ 1
-      let newVol = audio.volume + (direction === "in" ? volStep : -volStep);
-      newVol = Math.max(0, Math.min(newVol, sfxVolume * volume));
-
-      audio.volume = newVol;
-
-      if ((direction === "in" && newVol >= targetVol) || (direction === "out" && newVol <= 0)) {
-        if (fadeIntervalRef.current) clearInterval(fadeIntervalRef.current);
-        if (direction === "out") {
-          audio.pause();
-          audio.currentTime = 0;
-          onComplete?.();
-        }
+      if (direction === "in") {
+        audio.volume = 0;
+        audio.play().catch(() => {});
       }
-    }, stepTime);
-  }, [sfxVolume, volume, fadeDurationMs]);
 
-  const playSoundEffect = useCallback((onComplete?: () => void) => {
-    if (isMuted) {
-      onComplete?.();
-      return;
-    }
+      fadeIntervalRef.current = setInterval(() => {
+        // แก้ logic ให้ volume ไม่เกิน 0 หรือ 1
+        let newVol = audio.volume + (direction === "in" ? volStep : -volStep);
+        newVol = Math.max(0, Math.min(newVol, sfxVolume * volume));
 
-    const audio = getAudio(); // ⭐ Initialize ครั้งแรกที่นี่
-    audio.currentTime = 0; // Reset เวลาเสมอเมื่อเริ่มเล่นใหม่
+        audio.volume = newVol;
 
-    if (loop) {
-      fadeAudio("in", onComplete);
-    } else {
-      fadeAudio("in");
-      // Clear timer เก่าก่อนตั้งใหม่
-      if (soundTimerRef.current) clearTimeout(soundTimerRef.current);
+        if (
+          (direction === "in" && newVol >= targetVol) ||
+          (direction === "out" && newVol <= 0)
+        ) {
+          if (fadeIntervalRef.current) clearInterval(fadeIntervalRef.current);
+          if (direction === "out") {
+            audio.pause();
+            audio.currentTime = 0;
+            onComplete?.();
+          }
+        }
+      }, stepTime);
+    },
+    [sfxVolume, volume, fadeDurationMs],
+  );
 
-      soundTimerRef.current = setTimeout(() => {
-        fadeAudio("out", onComplete);
-      }, Math.max(0, soundDurationMs - fadeDurationMs));
-    }
-  }, [isMuted, loop, soundDurationMs, fadeDurationMs, fadeAudio]);
+  const playSoundEffect = useCallback(
+    (onComplete?: () => void) => {
+      if (isMuted) {
+        onComplete?.();
+        return;
+      }
+
+      const audio = getAudio(); // ⭐ Initialize ครั้งแรกที่นี่
+      audio.currentTime = 0; // Reset เวลาเสมอเมื่อเริ่มเล่นใหม่
+
+      if (loop) {
+        fadeAudio("in", onComplete);
+      } else {
+        fadeAudio("in");
+        // Clear timer เก่าก่อนตั้งใหม่
+        if (soundTimerRef.current) clearTimeout(soundTimerRef.current);
+
+        soundTimerRef.current = setTimeout(
+          () => {
+            fadeAudio("out", onComplete);
+          },
+          Math.max(0, soundDurationMs - fadeDurationMs),
+        );
+      }
+    },
+    [isMuted, loop, soundDurationMs, fadeDurationMs, fadeAudio],
+  );
 
   const stopSoundEffect = useCallback(() => {
     if (soundTimerRef.current) clearTimeout(soundTimerRef.current);
@@ -107,6 +119,3 @@ export function useSoundEffect({
 
   return { playSoundEffect, stopSoundEffect };
 }
-
-
-
