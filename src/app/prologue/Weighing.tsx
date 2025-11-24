@@ -105,19 +105,19 @@ export default function Weighing() {
   const mainOpacity = useTransform(
     scrollYProgress,
     [0, 0.05, 0.95, 1],
-    [0, 1, 1, 0]
+    [0, 1, 1, 0],
   );
 
   const ry = useTransform(
     scrollYProgress,
     [0, 0.05, 0.1, 0.15, 0.2, 0.25, 0.28],
-    [0, 0, 40, 0, 50, 0, 200]
+    [0, 0, 40, 0, 50, 0, 200],
   );
 
   const blink_opacity = useTransform(
     scrollYProgress,
     [0, 0.2333, 0.3733],
-    [1, 1, 0]
+    [1, 1, 0],
   );
 
   // POV falling effect - extended to use additional 50vh (600-750vh = 0.6-0.75)
@@ -127,7 +127,7 @@ export default function Weighing() {
   const pov_shake_x = useTransform(
     scrollYProgress,
     [0.6, 0.615, 0.63, 0.645, 0.66, 0.675, 0.69, 0.705, 0.72, 0.735, 0.75],
-    [0, 5, -5, 4, -4, 3, -3, 2, -2, 1, 0]
+    [0, 5, -5, 4, -4, 3, -3, 2, -2, 1, 0],
   );
 
   // Blur effect - increases during fall (0.6-0.75)
@@ -168,7 +168,7 @@ export default function Weighing() {
   });
   const lightOpacity = useTransform(
     [opacity_set6, lightFlicker],
-    ([baseOpacity, flicker]) => (baseOpacity as number) * (flicker as number)
+    ([baseOpacity, flicker]) => (baseOpacity as number) * (flicker as number),
   );
 
   // Set 7: heart (300-350vh = 0.4-0.4667)
@@ -183,12 +183,12 @@ export default function Weighing() {
   const containerScale = useTransform(
     scrollYProgress,
     [0.5333, 0.6667],
-    isPortrait ? [2.3, 4.5] : [1, 2.35]
+    isPortrait ? [2.3, 4.5] : [1, 2.35],
   );
   const containerTop = useTransform(
     scrollYProgress,
     [0.5333, 0.6667],
-    isPortrait ? ["-10%", "-5%"] : ["0%", "-17%"]
+    isPortrait ? ["-10%", "-5%"] : ["0%", "-17%"],
   );
 
   // ============ SLOW MOVEMENT (500-580vh = 0.6667-0.7733) ============
@@ -196,25 +196,25 @@ export default function Weighing() {
   const heartRotate_slow = useTransform(
     scrollYProgress,
     [0.6667, 0.7733],
-    [0, -5]
+    [0, -5],
   );
   // Heart plate: slowly down (Y movement)
   const heartPlateY_slow = useTransform(
     scrollYProgress,
     [0.6667, 0.7733],
-    isPortrait ? [0, 5] : [0, 15]
+    isPortrait ? [0, 5] : [0, 15],
   );
   // Feather side: slowly rotate up
   const featherRotate_slow = useTransform(
     scrollYProgress,
     [0.6667, 0.7733],
-    [0, -5]
+    [0, -5],
   );
   // Feather plate: slowly up (Y movement)
   const featherPlateY_slow = useTransform(
     scrollYProgress,
     [0.6667, 0.7733],
-    isPortrait ? [0, -5] : [0, -15]
+    isPortrait ? [0, -5] : [0, -15],
   );
 
   // ============ FAST DROP (580-600vh = 0.7733-0.8) ============
@@ -222,49 +222,49 @@ export default function Weighing() {
   const heartRotate_fast = useTransform(
     scrollYProgress,
     [0.7733, 0.8],
-    [0, -15]
+    [0, -15],
   );
   // Heart plate: fast drop (Y movement)
   const heartPlateY_fast = useTransform(
     scrollYProgress,
     [0.7733, 0.8],
-    isPortrait ? [0, 8] : [0, 30]
+    isPortrait ? [0, 8] : [0, 30],
   );
   // Feather plate: slight rise (Y movement)
   const featherPlateY_fast = useTransform(
     scrollYProgress,
     [0.7733, 0.8],
-    isPortrait ? [0, -3] : [0, -10]
+    isPortrait ? [0, -3] : [0, -10],
   );
 
   // Combined positions
   const scaleRotate = useTransform(
-    () => heartRotate_slow.get() + heartRotate_fast.get()
+    () => heartRotate_slow.get() + heartRotate_fast.get(),
   );
   const heartPlateY = useTransform(
-    () => heartPlateY_slow.get() + heartPlateY_fast.get()
+    () => heartPlateY_slow.get() + heartPlateY_fast.get(),
   );
   const featherPlateY = useTransform(
-    () => featherPlateY_slow.get() + featherPlateY_fast.get()
+    () => featherPlateY_slow.get() + featherPlateY_fast.get(),
   );
 
   const textOpacity = useTransform(
     scrollYProgress,
     [0, 0.3, 0.7, 0.75],
-    [0, 1, 1, 0]
+    [0, 1, 1, 0],
   );
 
   const textAnimationProgress = useTransform(
     scrollYProgress,
     [0, 0.3, 0.72],
-    [0, 0, 1]
+    [0, 0, 1],
   );
 
   // ============ VIDEO SECTION (750-1000vh = 0.75-1.0) ============
   const videoOpacity = useTransform(
     scrollYProgress,
     [0.75, 0.77, 0.98, 1],
-    [0, 1, 1, 0]
+    [0, 1, 1, 0],
   );
 
   return (
@@ -536,12 +536,12 @@ export default function Weighing() {
           maskImage: useTransform(
             ry,
             (value) =>
-              `radial-gradient(ellipse 50% ${value}% at 50% 50%, transparent 0%, black 100%)`
+              `radial-gradient(ellipse 50% ${value}% at 50% 50%, transparent 0%, black 100%)`,
           ),
           WebkitMaskImage: useTransform(
             ry,
             (value) =>
-              `radial-gradient(ellipse 50% ${value}% at 50% 50%, transparent 0%, black 100%)`
+              `radial-gradient(ellipse 50% ${value}% at 50% 50%, transparent 0%, black 100%)`,
           ),
           maskRepeat: "no-repeat",
           WebkitMaskRepeat: "no-repeat",
@@ -564,7 +564,6 @@ export default function Weighing() {
         <VideoAnimation
           webmSrc="/assets/Scene/Scene4/falling.webm"
           movSrc="/assets/Scene/Scene4/falling.mov"
-        
         />
       </motion.div>
     </motion.div>
