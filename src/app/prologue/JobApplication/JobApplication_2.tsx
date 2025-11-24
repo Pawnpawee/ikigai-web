@@ -1,10 +1,13 @@
 "use client";
-import React from "react";
-import { motion, useTransform, MotionValue } from "framer-motion";
-import Lottie from "lottie-react";
-import humanAnimationData from "../../../../public/assets/Scene/Scene1/human.json";
-import moonAnimationData from "../../../../public/assets/Scene/Scene1/moon.json";
+import React, { useMemo, useState } from "react";
+import { motion, useTransform, MotionValue, useMotionValueEvent } from "framer-motion";
+import Image from "next/image";
+import LazyLottie from "@/app/components/ui/LazyLottie";
 import { useIsPortrait } from "@/app/hooks/useOrientation";
+import { useAnimationReady } from "@/app/hooks/useAnimationReady";
+
+// Create MotionImage to reduce DOM nesting (motion.div + Image -> MotionImage)
+const MotionImage = motion.create(Image);
 
 interface JobApplication2Props {
   scrollYProgress: MotionValue<number>;
@@ -88,6 +91,24 @@ export default function JobApplication2({
   // ชุด 6: moon (0.9-0.944)
   const moonY = useTransform(scrollYProgress, [0.9, 0.944, 1], [100, 0, 0]);
   const moonOpacity = useTransform(scrollYProgress, [0.9, 0.944, 1], [0, 1, 1]);
+
+  const shouldAnimate = useAnimationReady();
+
+  // Memoize style objects
+  const baseStyle = useMemo(
+    () => ({
+      willChange: "transform, opacity" as const,
+    }),
+    []
+  );
+
+  // Control play state for Scene 2 Lotties (moon & human)
+  const [playScene2, setPlayScene2] = useState(false);
+  useMotionValueEvent(opacity, "change", (latest) => {
+    if (latest > 0.1 && !playScene2) setPlayScene2(true);
+    else if (latest <= 0.1 && playScene2) setPlayScene2(false);
+  });
+
   return (
     <motion.div
       className="
@@ -107,367 +128,537 @@ export default function JobApplication2({
         >
           <motion.div className="absolute inset-0 overflow-visible">
             {/* Layer 1: Table (ล่างสุด) */}
-            <motion.img
-              src="/assets/Scene/Scene1/table.svg"
-              alt="table"
-              className="absolute"
+            <MotionImage
+              src="/assets/Scene/Scene1/table.webp"
+              alt="Desk table"
+              width={1832}
+              height={848}
+              loading="lazy"
+              sizes="50vw"
               style={{
-                left: "1.15%", // 44 / 3840
-                top: "73.07%", // 789.2 / 1080
-                width: "47.71%", // 1831.96 / 3840
-                height: "78.54%", // 848.25 / 1080
+                position: "absolute",
+                objectFit: "contain",
+                left: "1.15%",
+                top: "73.07%",
+                width: "47.71%",
+                height: "78.54%",
+                ...baseStyle,
               }}
             />
 
             {/* ชุด 1: Poster 11 */}
-            <motion.img
-              src="/assets/Scene/Scene1/poster11.svg"
-              alt="poster11"
-              className="absolute"
+            <MotionImage
+              src="/assets/Scene/Scene1/poster11.webp"
+              alt="Wall poster"
+              width={234}
+              height={180}
+              loading="lazy"
+              sizes="10vw"
               style={{
-                left: "39.17%", // 1504.04 / 3840
-                top: "-108.33%", // -1170 / 1080
-                width: "6.1%", // 234.34 / 3840
-                height: "16.66%", // 179.93 / 1080
+                position: "absolute",
+                objectFit: "contain",
+                left: "39.17%",
+                top: "-108.33%",
+                width: "6.1%",
+                height: "16.66%",
+                ...baseStyle,
               }}
             />
 
-            {/* ชุด 2: Poster 9, 10 */}
-            <motion.img
-              src="/assets/Scene/Scene1/poster9.svg"
-              alt="poster9"
-              className="absolute"
+            {/* ชุด 2: Poster 9 */}
+            <MotionImage
+              src="/assets/Scene/Scene1/poster9.webp"
+              alt="Wall poster"
+              width={326}
+              height={314}
+              loading="lazy"
+              sizes="10vw"
               style={{
-                left: "38.78%", // 1489.16 / 3840
-                top: "-62.86%", // -678.84 / 1080
-                width: "8.49%", // 325.9 / 3840
-                height: "29.04%", // 313.61 / 1080
+                position: "absolute",
+                objectFit: "contain",
+                left: "38.78%",
+                top: "-62.86%",
+                width: "8.49%",
+                height: "29.04%",
+                ...baseStyle,
               }}
             />
 
-            <motion.img
-              src="/assets/Scene/Scene1/poster10.svg"
-              alt="poster10"
-              className="absolute"
+            <MotionImage
+              src="/assets/Scene/Scene1/poster10.webp"
+              alt="Wall poster"
+              width={279}
+              height={272}
+              loading="lazy"
+              sizes="10vw"
               style={{
-                left: "3.52%", // 135 / 3840
-                top: "-102.54%", // -1107.46 / 1080
-                width: "7.25%", // 278.51 / 3840
-                height: "25.23%", // 272.44 / 1080
+                position: "absolute",
+                objectFit: "contain",
+                left: "3.52%",
+                top: "-102.54%",
+                width: "7.25%",
+                height: "25.23%",
+                ...baseStyle,
               }}
             />
 
             {/* ชุด 3: Poster 12 */}
-            <motion.img
-              src="/assets/Scene/Scene1/poster12.svg"
-              alt="poster12"
-              className="absolute"
+            <MotionImage
+              src="/assets/Scene/Scene1/poster12.webp"
+              alt="Wall poster"
+              width={279}
+              height={272}
+              loading="lazy"
+              sizes="10vw"
               style={{
-                left: "25.31%", // 971.89 / 3840
-                top: "-79.54%", // -858.98 / 1080
-                width: "7.25%", // 278.51 / 3840
-                height: "25.23%", // 272.44 / 1080
+                position: "absolute",
+                objectFit: "contain",
+                left: "25.31%",
+                top: "-79.54%",
+                width: "7.25%",
+                height: "25.23%",
+                ...baseStyle,
               }}
             />
 
             {/* ชุด 4: Poster 13, 15 */}
-            <motion.img
-              src="/assets/Scene/Scene1/poster13.svg"
-              alt="poster13"
-              className="absolute"
+            <MotionImage
+              src="/assets/Scene/Scene1/poster13.webp"
+              alt="Wall poster"
+              width={279}
+              height={272}
+              loading="lazy"
+              sizes="10vw"
               style={{
-                left: "13.24%", // 508.61 / 3840
-                top: "-63.14%", // -681.92 / 1080
-                width: "7.25%", // 278.51 / 3840
-                height: "25.23%", // 272.44 / 1080
+                position: "absolute",
+                objectFit: "contain",
+                left: "13.24%",
+                top: "-63.14%",
+                width: "7.25%",
+                height: "25.23%",
+                ...baseStyle,
               }}
             />
 
-            <motion.img
-              src="/assets/Scene/Scene1/poster15.svg"
-              alt="poster15"
-              className="absolute"
+            <MotionImage
+              src="/assets/Scene/Scene1/poster15.webp"
+              alt="Wall poster"
+              width={329}
+              height={314}
+              loading="lazy"
+              sizes="10vw"
               style={{
-                left: "5.65%", // 217.08 / 3840
-                top: "-40.03%", // -432.37 / 1080
-                width: "8.57%", // 329.03 / 3840
-                height: "29.04%", // 313.62 / 1080
+                position: "absolute",
+                objectFit: "contain",
+                left: "5.65%",
+                top: "-40.03%",
+                width: "8.57%",
+                height: "29.04%",
+                ...baseStyle,
               }}
             />
 
             {/* Layer 2: Posters - Background elements */}
             {/* Poster 14 */}
-            <motion.img
-              src="/assets/Scene/Scene1/poster14.svg"
-              alt="poster14"
-              className="absolute"
+            <MotionImage
+              src="/assets/Scene/Scene1/poster14.webp"
+              alt="Wall poster"
+              width={447}
+              height={314}
+              loading="lazy"
+              sizes="15vw"
               style={{
-                left: "24.01%", // 922.16 / 3840
-                top: "-23.2%", // -250.54 / 1080
-                width: "11.64%", // 446.75 / 3840
-                height: "29.04%", // 313.61 / 1080
+                position: "absolute",
+                objectFit: "contain",
+                left: "24.01%",
+                top: "-23.2%",
+                width: "11.64%",
+                height: "29.04%",
+                ...baseStyle,
               }}
             />
 
             {/* Poster 8 */}
-            <motion.img
-              src="/assets/Scene/Scene1/poster8.svg"
-              alt="poster8"
-              className="absolute"
+            <MotionImage
+              src="/assets/Scene/Scene1/poster8.webp"
+              alt="Wall poster"
+              width={246}
+              height={190}
+              loading="lazy"
+              sizes="10vw"
               style={{
-                left: "52.71%", // 2023.27 / 3840
-                top: "18.07%", // 195.12 / 1080
-                width: "6.41%", // 245.99 / 3840
-                height: "17.63%", // 190.41 / 1080
+                position: "absolute",
+                objectFit: "contain",
+                left: "52.71%",
+                top: "18.07%",
+                width: "6.41%",
+                height: "17.63%",
+                ...baseStyle,
               }}
             />
 
             {/* Poster 7 */}
-            <motion.img
-              src="/assets/Scene/Scene1/poster7.svg"
-              alt="poster7"
-              className="absolute"
+            <MotionImage
+              src="/assets/Scene/Scene1/poster7.webp"
+              alt="Wall poster"
+              width={210}
+              height={218}
+              loading="lazy"
+              sizes="10vw"
               style={{
-                left: "46.18%", // 1773.25 / 3840
-                top: "44.42%", // 479.73 / 1080
-                width: "5.48%", // 210.42 / 3840
-                height: "20.15%", // 217.58 / 1080
+                position: "absolute",
+                objectFit: "contain",
+                left: "46.18%",
+                top: "44.42%",
+                width: "5.48%",
+                height: "20.15%",
+                ...baseStyle,
               }}
             />
 
             {/* Poster 6 */}
-            <motion.img
-              src="/assets/Scene/Scene1/poster6.svg"
-              alt="poster6"
-              className="absolute"
+            <MotionImage
+              src="/assets/Scene/Scene1/poster6.webp"
+              alt="Wall poster"
+              width={401}
+              height={292}
+              loading="lazy"
+              sizes="15vw"
               style={{
-                left: "2.07%", // 79.42 / 3840
-                top: "7.57%", // 81.79 / 1080
-                width: "10.45%", // 401.42 / 3840
-                height: "27.07%", // 292.31 / 1080
+                position: "absolute",
+                objectFit: "contain",
+                left: "2.07%",
+                top: "7.57%",
+                width: "10.45%",
+                height: "27.07%",
+                ...baseStyle,
               }}
             />
 
             {/* Poster 5 */}
-            <motion.img
-              src="/assets/Scene/Scene1/poster5.svg"
-              alt="poster5"
-              className="absolute"
+            <MotionImage
+              src="/assets/Scene/Scene1/poster5.webp"
+              alt="Wall poster"
+              width={210}
+              height={226}
+              loading="lazy"
+              sizes="10vw"
               style={{
-                left: "-0.76%", // -29.01 / 3840
-                top: "28.56%", // 308.41 / 1080
-                width: "5.46%", // 209.7 / 3840
-                height: "20.92%", // 225.99 / 1080
+                position: "absolute",
+                objectFit: "contain",
+                left: "-0.76%",
+                top: "28.56%",
+                width: "5.46%",
+                height: "20.92%",
+                ...baseStyle,
               }}
             />
 
             {/* Poster 4 */}
-            <motion.img
-              src="/assets/Scene/Scene1/poster4.svg"
-              alt="poster4"
-              className="absolute"
+            <MotionImage
+              src="/assets/Scene/Scene1/poster4.webp"
+              alt="Wall poster"
+              width={299}
+              height={320}
+              loading="lazy"
+              sizes="10vw"
               style={{
-                left: "39.17%", // 1504.01 / 3840
-                top: "8.55%", // 92.38 / 1080
-                width: "7.8%", // 299.42 / 3840
-                height: "29.64%", // 320.06 / 1080
+                position: "absolute",
+                objectFit: "contain",
+                left: "39.17%",
+                top: "8.55%",
+                width: "7.8%",
+                height: "29.64%",
+                ...baseStyle,
               }}
             />
 
             {/* Poster 3 */}
-            <motion.img
-              src="/assets/Scene/Scene1/poster3.svg"
-              alt="poster3"
-              className="absolute"
+            <MotionImage
+              src="/assets/Scene/Scene1/poster3.webp"
+              alt="Wall poster"
+              width={130}
+              height={166}
+              loading="lazy"
+              sizes="5vw"
               style={{
-                left: "45.68%", // 1754.16 / 3840
-                top: "21.04%", // 227.23 / 1080
-                width: "3.4%", // 130.42 / 3840
-                height: "15.37%", // 166.06 / 1080
+                position: "absolute",
+                objectFit: "contain",
+                left: "45.68%",
+                top: "21.04%",
+                width: "3.4%",
+                height: "15.37%",
+                ...baseStyle,
               }}
             />
 
             {/* Poster 2 */}
-            <motion.img
-              src="/assets/Scene/Scene1/poster2.svg"
-              alt="poster2"
-              className="absolute"
+            <MotionImage
+              src="/assets/Scene/Scene1/poster2.webp"
+              alt="Wall poster"
+              width={189}
+              height={134}
+              loading="lazy"
+              sizes="5vw"
               style={{
-                left: "6.58%", // 252.75 / 3840
-                top: "40.8%", // 440.62 / 1080
-                width: "4.93%", // 189.15 / 3840
-                height: "12.45%", // 134.42 / 1080
+                position: "absolute",
+                objectFit: "contain",
+                left: "6.58%",
+                top: "40.8%",
+                width: "4.93%",
+                height: "12.45%",
+                ...baseStyle,
               }}
             />
 
             {/* Poster 1 */}
-            <motion.img
-              src="/assets/Scene/Scene1/poster1.svg"
-              alt="poster1"
-              className="absolute"
+            <MotionImage
+              src="/assets/Scene/Scene1/poster1.webp"
+              alt="Wall poster"
+              width={161}
+              height={89}
+              loading="lazy"
+              sizes="5vw"
               style={{
-                left: "39.66%", // 1522.76 / 3840
-                top: "48.5%", // 523.74 / 1080
-                width: "4.19%", // 160.88 / 3840
-                height: "8.27%", // 89.34 / 1080
+                position: "absolute",
+                objectFit: "contain",
+                left: "39.66%",
+                top: "48.5%",
+                width: "4.19%",
+                height: "8.27%",
+                ...baseStyle,
               }}
             />
 
             {/* Layer 3: Computer */}
-            <motion.img
-              src="/assets/Scene/Scene1/Computer.svg"
-              alt="computer"
-              className="absolute"
+            <MotionImage
+              src="/assets/Scene/Scene1/Computer.webp"
+              alt="Computer workstation"
+              width={958}
+              height={759}
+              priority
+              loading="eager"
+              sizes="30vw"
               style={{
-                left: "12.53%", // 481.2 / 3840
-                top: "14.28%", // 154.19 / 1080
-                width: "24.94%", // 957.6 / 3840
-                height: "70.28%", // 758.98 / 1080
+                position: "absolute",
+                objectFit: "contain",
+                left: "12.53%",
+                top: "14.28%",
+                width: "24.94%",
+                height: "70.28%",
+                ...baseStyle,
               }}
             />
 
             {/* Layer 4: Papers */}
             {/* Paper 3 */}
-            <motion.img
-              src="/assets/Scene/Scene1/paper3.svg"
-              alt="paper3"
-              className="absolute"
+            <MotionImage
+              src="/assets/Scene/Scene1/paper3.webp"
+              alt="Paper document"
+              width={265}
+              height={103}
+              loading="lazy"
+              sizes="10vw"
               style={{
-                left: "42.4%", // 1627.93 / 3840
-                top: "77.25%", // 834.27 / 1080
-                width: "6.9%", // 264.98 / 3840
-                height: "9.51%", // 102.65 / 1080
+                position: "absolute",
+                objectFit: "contain",
+                left: "42.4%",
+                top: "77.25%",
+                width: "6.9%",
+                height: "9.51%",
+                ...baseStyle,
               }}
             />
 
             {/* Paper 2 */}
-            <motion.img
-              src="/assets/Scene/Scene1/paper2.svg"
-              alt="paper2"
-              className="absolute"
+            <MotionImage
+              src="/assets/Scene/Scene1/paper2.webp"
+              alt="Paper document"
+              width={219}
+              height={95}
+              loading="lazy"
+              sizes="10vw"
               style={{
-                left: "1.61%", // 61.66 / 3840
-                top: "77.81%", // 840.39 / 1080
-                width: "5.7%", // 218.83 / 3840
-                height: "8.79%", // 94.89 / 1080
+                position: "absolute",
+                objectFit: "contain",
+                left: "1.61%",
+                top: "77.81%",
+                width: "5.7%",
+                height: "8.79%",
+                ...baseStyle,
               }}
             />
 
             {/* Paper 1 */}
-            <motion.img
-              src="/assets/Scene/Scene1/paper1.svg"
-              alt="paper1"
-              className="absolute"
+            <MotionImage
+              src="/assets/Scene/Scene1/paper1.webp"
+              alt="Paper document"
+              width={274}
+              height={103}
+              loading="lazy"
+              sizes="10vw"
               style={{
-                left: "1.52%", // 58.45 / 3840
-                top: "82.28%", // 888.6 / 1080
-                width: "7.14%", // 274.32 / 3840
-                height: "9.51%", // 102.65 / 1080
+                position: "absolute",
+                objectFit: "contain",
+                left: "1.52%",
+                top: "82.28%",
+                width: "7.14%",
+                height: "9.51%",
+                ...baseStyle,
               }}
             />
 
             {/* Layer 5: Lamp */}
-            <motion.img
-              src="/assets/Scene/Scene1/lamp.svg"
-              alt="lamp"
-              className="absolute"
+            <MotionImage
+              src="/assets/Scene/Scene1/lamp.webp"
+              alt="Desk lamp"
+              width={478}
+              height={733}
+              loading="lazy"
+              sizes="15vw"
               style={{
-                left: "2.96%", // 113.54 / 3840
-                top: "12.05%", // 130.18 / 1080
-                width: "12.46%", // 478.48 / 3840
-                height: "67.85%", // 732.76 / 1080
+                position: "absolute",
+                objectFit: "contain",
+                left: "2.96%",
+                top: "12.05%",
+                width: "12.46%",
+                height: "67.85%",
+                ...baseStyle,
               }}
             />
 
             {/* Layer 6: Books */}
             {/* Book 1 */}
-            <motion.img
-              src="/assets/Scene/Scene1/book1.svg"
-              alt="book1"
-              className="absolute"
+            <MotionImage
+              src="/assets/Scene/Scene1/book1.webp"
+              alt="Book"
+              width={206}
+              height={124}
+              loading="lazy"
+              sizes="10vw"
               style={{
-                left: "8.99%", // 345.38 / 3840
-                top: "77.93%", // 841.65 / 1080
-                width: "5.37%", // 206.33 / 3840
-                height: "11.49%", // 124.14 / 1080
+                position: "absolute",
+                objectFit: "contain",
+                left: "8.99%",
+                top: "77.93%",
+                width: "5.37%",
+                height: "11.49%",
+                ...baseStyle,
               }}
             />
 
             {/* Book 2 */}
-            <motion.img
-              src="/assets/Scene/Scene1/book2.svg"
-              alt="book2"
-              className="absolute"
+            <MotionImage
+              src="/assets/Scene/Scene1/book2.webp"
+              alt="Book"
+              width={237}
+              height={145}
+              loading="lazy"
+              sizes="10vw"
               style={{
-                left: "37.3%", // 1432.25 / 3840
-                top: "69.98%", // 755.76 / 1080
-                width: "6.17%", // 236.87 / 3840
-                height: "13.41%", // 144.83 / 1080
+                position: "absolute",
+                objectFit: "contain",
+                left: "37.3%",
+                top: "69.98%",
+                width: "6.17%",
+                height: "13.41%",
+                ...baseStyle,
               }}
             />
 
             {/* Layer 7: Pen */}
-            <motion.img
-              src="/assets/Scene/Scene1/pen.svg"
-              alt="pen"
-              className="absolute"
+            <MotionImage
+              src="/assets/Scene/Scene1/pen.webp"
+              alt="Pen"
+              width={123}
+              height={22}
+              loading="lazy"
+              sizes="5vw"
               style={{
-                left: "38.85%", // 1491.88 / 3840
-                top: "86.26%", // 931.58 / 1080
-                width: "3.2%", // 122.95 / 3840
-                height: "2.02%", // 21.81 / 1080
+                position: "absolute",
+                objectFit: "contain",
+                left: "38.85%",
+                top: "86.26%",
+                width: "3.2%",
+                height: "2.02%",
+                ...baseStyle,
               }}
             />
 
             {/* Layer 8: Light (mix-blend-screen) */}
-            <motion.img
-              src="/assets/Scene/Scene1/light.svg"
-              alt="light"
+            <MotionImage
+              src="/assets/Scene/Scene1/light.webp"
+              alt=""
+              width={979}
+              height={647}
+              loading="lazy"
+              sizes="30vw"
               className="absolute mix-blend-screen"
               style={{
-                left: "11.92%", // 457.68 / 3840
-                top: "23.18%", // 250.32 / 1080
-                width: "25.5%", // 979.2 / 3840
-                height: "59.89%", // 646.8 / 1080
+                position: "absolute",
+                objectFit: "contain",
+                left: "11.92%",
+                top: "23.18%",
+                width: "25.5%",
+                height: "59.89%",
+                ...baseStyle,
               }}
             />
 
             {/* Layer 9: Pencil Box */}
-            <motion.img
-              src="/assets/Scene/Scene1/pencil box.svg"
-              alt="pencil box"
-              className="absolute"
+            <MotionImage
+              src="/assets/Scene/Scene1/pencil box.webp"
+              alt="Pencil box"
+              width={103}
+              height={166}
+              loading="lazy"
+              sizes="5vw"
               style={{
-                left: "43.37%", // 1665.59 / 3840
-                top: "67.67%", // 730.87 / 1080
-                width: "2.69%", // 103.18 / 3840
-                height: "15.37%", // 165.95 / 1080
+                position: "absolute",
+                objectFit: "contain",
+                left: "43.37%",
+                top: "67.67%",
+                width: "2.69%",
+                height: "15.37%",
+                ...baseStyle,
               }}
             />
 
             {/* Layer 10: Post-it */}
-            <motion.img
-              src="/assets/Scene/Scene1/postit.svg"
-              alt="postit"
-              className="absolute"
+            <MotionImage
+              src="/assets/Scene/Scene1/postit.webp"
+              alt="Post-it note"
+              width={100}
+              height={46}
+              loading="lazy"
+              sizes="5vw"
               style={{
-                left: "43.84%", // 1683.63 / 3840
-                top: "85.06%", // 918.69 / 1080
-                width: "2.61%", // 100.19 / 3840
-                height: "4.24%", // 45.75 / 1080
+                position: "absolute",
+                objectFit: "contain",
+                left: "43.84%",
+                top: "85.06%",
+                width: "2.61%",
+                height: "4.24%",
+                ...baseStyle,
               }}
             />
 
             {/* Layer 11: Paper 4 */}
-            <motion.img
-              src="/assets/Scene/Scene1/paper4.svg"
-              alt="paper4"
-              className="absolute"
+            <MotionImage
+              src="/assets/Scene/Scene1/paper4.webp"
+              alt="Paper document"
+              width={88}
+              height={87}
+              loading="lazy"
+              sizes="5vw"
               style={{
-                left: "10.65%", // 408.86 / 3840
-                top: "68.42%", // 738.9 / 1080
-                width: "2.28%", // 87.59 / 3840
-                height: "8.03%", // 86.77 / 1080
+                position: "absolute",
+                objectFit: "contain",
+                left: "10.65%",
+                top: "68.42%",
+                width: "2.28%",
+                height: "8.03%",
+                ...baseStyle,
               }}
             />
 
@@ -479,30 +670,34 @@ export default function JobApplication2({
                 top: "30.65%", // 331 / 1080
                 width: "21.71%", // 833.69 / 3840
                 height: "134.07%", // 1447.89 / 1080
+                ...baseStyle,
               }}
             >
-              <Lottie
-                animationData={humanAnimationData}
+              <LazyLottie
+                src="/assets/Scene/Scene1/human.lottie"
+                className="w-full h-full"
                 loop={true}
-                autoplay={true}
-                style={{
-                  width: "100%",
-                  height: "100%",
-                }}
+                autoplay={playScene2}
               />
             </motion.div>
 
             {/* ชุด 2: Light Window */}
-            <motion.img
-              src="/assets/Scene/Scene1/light window.svg"
-              alt="light window"
-              className="absolute"
+            <MotionImage
+              src="/assets/Scene/Scene1/light window.webp"
+              alt="Window light glow"
+              width={571}
+              height={677}
+              loading="lazy"
+              sizes="20vw"
               style={{
-                left: "67.31%", // 2584.62 / 3840
-                top: "19.3%", // 208.43 / 1080
-                width: "14.89%", // 571.79 / 3840
-                height: "62.68%", // 676.97 / 1080
+                position: "absolute",
+                objectFit: "contain",
+                left: "67.31%",
+                top: "19.3%",
+                width: "14.89%",
+                height: "62.68%",
                 opacity: lightWindowOpacity,
+                ...baseStyle,
               }}
             />
 
@@ -516,23 +711,19 @@ export default function JobApplication2({
                 height: "15.42%", // 166.54 / 1080
                 y: moonY,
                 opacity: moonOpacity,
+                ...baseStyle,
               }}
             >
-              <Lottie
-                animationData={moonAnimationData}
+              <LazyLottie
+                src="/assets/Scene/Scene1/moon.lottie"
+                className="w-full h-full"
                 loop={true}
-                autoplay={true}
-                style={{
-                  width: "100%",
-                  height: "100%",
-                }}
+                autoplay={playScene2}
               />
             </motion.div>
 
             {/* ชุด 4: Stars */}
-            <motion.img
-              src="/assets/Scene/Scene1/star.svg"
-              alt="stars"
+            <motion.div
               className="absolute"
               style={{
                 left: "73.03%", // 2804.21 / 3840
@@ -541,13 +732,22 @@ export default function JobApplication2({
                 height: "7.37%", // 79.55 / 1080
                 y: building2Y,
                 opacity: building2Opacity,
+                ...baseStyle,
               }}
-            />
+            >
+              <Image
+                src="/assets/Scene/Scene1/star.webp"
+                alt="Stars decoration"
+                fill
+                loading="lazy"
+                
+                sizes="10vw"
+                style={{ objectFit: "contain" }}
+              />
+            </motion.div>
 
             {/* ชุด 5: Circle decorations */}
-            <motion.img
-              src="/assets/Scene/Scene1/circle.svg"
-              alt="circles"
+            <motion.div
               className="absolute"
               style={{
                 left: "67.12%", // 2577.73 / 3840
@@ -556,13 +756,22 @@ export default function JobApplication2({
                 height: "24.88%", // 268.66 / 1080
                 y: building1Y,
                 opacity: building1Opacity,
+                ...baseStyle,
               }}
-            />
+            >
+              <Image
+                src="/assets/Scene/Scene1/circle.webp"
+                alt="Decorative circles"
+                fill
+                loading="lazy"
+                
+                sizes="20vw"
+                style={{ objectFit: "contain" }}
+              />
+            </motion.div>
 
             {/* ชุด 4: Building 2 */}
-            <motion.img
-              src="/assets/Scene/Scene1/building2.svg"
-              alt="building2"
+            <motion.div
               className="absolute"
               style={{
                 left: "67.31%", // 2584.62 / 3840
@@ -571,13 +780,22 @@ export default function JobApplication2({
                 height: "44.37%", // 479.17 / 1080
                 y: building2Y,
                 opacity: building2Opacity,
+                ...baseStyle,
               }}
-            />
+            >
+              <Image
+                src="/assets/Scene/Scene1/building2.webp"
+                alt="Building exterior"
+                fill
+                loading="lazy"
+                
+                sizes="20vw"
+                style={{ objectFit: "contain" }}
+              />
+            </motion.div>
 
             {/* ชุด 5: Building 1 */}
-            <motion.img
-              src="/assets/Scene/Scene1/building1.svg"
-              alt="building1"
+            <motion.div
               className="absolute"
               style={{
                 left: "67.31%", // 2584.62 / 3840
@@ -586,13 +804,22 @@ export default function JobApplication2({
                 height: "33.97%", // 366.89 / 1080
                 y: building1Y,
                 opacity: building1Opacity,
+                ...baseStyle,
               }}
-            />
+            >
+              <Image
+                src="/assets/Scene/Scene1/building1.webp"
+                alt="Building exterior"
+                fill
+                loading="lazy"
+                
+                sizes="20vw"
+                style={{ objectFit: "contain" }}
+              />
+            </motion.div>
 
             {/* ชุด 1: Window Frame */}
-            <motion.img
-              src="/assets/Scene/Scene1/window.svg"
-              alt="window"
+            <motion.div
               className="absolute"
               style={{
                 left: "60.95%", // 2340.64 / 3840
@@ -601,13 +828,22 @@ export default function JobApplication2({
                 height: "79.63%", // 860.04 / 1080
                 y: windowY,
                 opacity: windowOpacity,
+                ...baseStyle,
               }}
-            />
+            >
+              <Image
+                src="/assets/Scene/Scene1/window.webp"
+                alt="Window frame"
+                fill
+                loading="lazy"
+                
+                sizes="30vw"
+                style={{ objectFit: "contain" }}
+              />
+            </motion.div>
 
             {/* ชุด 3: Curtain 2 (Right) */}
-            <motion.img
-              src="/assets/Scene/Scene1/curtain2.svg"
-              alt="curtain2"
+            <motion.div
               className="absolute"
               style={{
                 left: "81.49%", // 3129.62 / 3840
@@ -616,13 +852,22 @@ export default function JobApplication2({
                 height: "86.95%", // 939.04 / 1080
                 y: curtainY,
                 opacity: curtainOpacity,
+                ...baseStyle,
               }}
-            />
+            >
+              <Image
+                src="/assets/Scene/Scene1/curtain2.webp"
+                alt="Window curtain"
+                fill
+                loading="lazy"
+                
+                sizes="10vw"
+                style={{ objectFit: "contain" }}
+              />
+            </motion.div>
 
             {/* ชุด 3: Curtain 1 (Left - บนสุด) */}
-            <motion.img
-              src="/assets/Scene/Scene1/curtain1.svg"
-              alt="curtain1"
+            <motion.div
               className="absolute"
               style={{
                 left: "63.3%", // 2430.84 / 3840
@@ -631,8 +876,19 @@ export default function JobApplication2({
                 height: "86.95%", // 939.03 / 1080
                 y: curtainY,
                 opacity: curtainOpacity,
+                ...baseStyle,
               }}
-            />
+            >
+              <Image
+                src="/assets/Scene/Scene1/curtain1.webp"
+                alt="Window curtain"
+                fill
+                loading="lazy"
+                
+                sizes="10vw"
+                style={{ objectFit: "contain" }}
+              />
+            </motion.div>
           </motion.div>
         </motion.div>
       </motion.div>

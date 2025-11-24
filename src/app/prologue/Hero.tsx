@@ -188,11 +188,10 @@ export default function Hero() {
           className="absolute bottom-0 w-full h-full"
         >
           <Image
-            src="/assets/Scene/Hero/hill-c-b.svg"
+            src="/assets/Scene/Hero/hill-c-b.webp"
             alt=""
             fill
             sizes="100vw"
-            quality={85}
             className="object-bottom object-cover"
           />
         </motion.div>
@@ -203,11 +202,10 @@ export default function Hero() {
           className="absolute bottom-0 w-full h-full"
         >
           <Image
-            src="/assets/Scene/Hero/hill-c-f.svg"
+            src="/assets/Scene/Hero/hill-c-f.webp"
             alt=""
             fill
             sizes="100vw"
-            quality={85}
             className="object-bottom object-cover"
           />
         </motion.div>
@@ -218,11 +216,10 @@ export default function Hero() {
           className="absolute bottom-0 w-full h-full"
         >
           <Image
-            src="/assets/Scene/Hero/hill-r-f.svg"
+            src="/assets/Scene/Hero/hill-r-f.webp"
             alt=""
             fill
             sizes="100vw"
-            quality={85}
             className="object-bottom object-cover"
           />
         </motion.div>
@@ -233,12 +230,11 @@ export default function Hero() {
           className="absolute bottom-0 w-full h-full"
         >
           <Image
-            src="/assets/Scene/Hero/hill-l-f.svg"
+            src="/assets/Scene/Hero/hill-l-f.webp"
             alt="Mountain Foreground"
             fill
             priority
             sizes="100vw"
-            quality={85}
             className="object-bottom object-cover"
           />
         </motion.div>
@@ -247,7 +243,7 @@ export default function Hero() {
       {/* Circle-World */}
       <IkigaiCircle
         className="scale-40 sm:scale-50 md:scale-80 lg:scale-100"
-        imageSrc="/assets/Scene/Hero/world-circle.svg"
+        imageSrc="/assets/Scene/Hero/world-circle.webp"
         iconSrc="/assets/Icon/world.svg"
         text="สิ่งที่โลกต้องการ"
         rotateValue={circle4_rotate}
@@ -262,7 +258,7 @@ export default function Hero() {
       {/* Circle-Paid */}
       <IkigaiCircle
         className="scale-40 sm:scale-50 md:scale-80 lg:scale-100"
-        imageSrc="/assets/Scene/Hero/paid-circle.svg"
+        imageSrc="/assets/Scene/Hero/paid-circle.webp"
         iconSrc="/assets/Icon/paid.svg"
         text="สิ่งที่สร้างรายได้"
         rotateValue={circle3_rotate}
@@ -277,7 +273,7 @@ export default function Hero() {
       {/* Circle-Skill */}
       <IkigaiCircle
         className="scale-40 sm:scale-50 md:scale-80 lg:scale-100"
-        imageSrc="/assets/Scene/Hero/skill-circle.svg"
+        imageSrc="/assets/Scene/Hero/skill-circle.webp"
         iconSrc="/assets/Icon/skill.svg"
         text="สิ่งที่ถนัด"
         rotateValue={circle2_rotate}
@@ -292,7 +288,7 @@ export default function Hero() {
       {/* Circle-Love */}
       <IkigaiCircle
         className="scale-40 sm:scale-50 md:scale-80 lg:scale-100"
-        imageSrc="/assets/Scene/Hero/love-circle.svg"
+        imageSrc="/assets/Scene/Hero/love-circle.webp"
         iconSrc="/assets/Icon/love.svg"
         text="สิ่งที่รัก"
         rotateValue={circle1_rotate}
