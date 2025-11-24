@@ -21,7 +21,6 @@ import { useAnimationReady } from "@/app/hooks/useAnimationReady";
 import { useLottieWithSound } from "@/app/hooks/useLottieWithSound";
 import IkigaiCircle from "./IkigaiCircle";
 
-
 export default function Hero() {
   const ref = useRef<HTMLDivElement>(null);
   const isInView = useInView(ref, { once: false, amount: 0.1 });
@@ -84,8 +83,6 @@ export default function Hero() {
     []
   );
 
-  const [isInitialAnimationComplete, setIsInitialAnimationComplete] =
-    useState(false);
   const circle1_rotate = useTransform(
     elementScrollYProgress,
     [0, 1],
@@ -125,30 +122,8 @@ export default function Hero() {
     []
   );
 
-  // Memoize animation complete callback
-  const handleAnimationComplete = useCallback(() => {
-    if (!isInitialAnimationComplete) {
-      setIsInitialAnimationComplete(true);
-    }
-  }, [isInitialAnimationComplete]);
-
   // Memoize text split
   const textChars = useMemo(() => textContent.split(""), [textContent]);
-
-  // Memoize circle style function
-  const getCircleStyle = useCallback(
-    (rotateTransform: any) => {
-      if (isInitialAnimationComplete) {
-        return {
-          rotate: rotateTransform,
-          opacity,
-          willChange: "transform, opacity" as const,
-        };
-      }
-      return { willChange: "transform, opacity" as const };
-    },
-    [isInitialAnimationComplete, opacity]
-  );
 
   // Use reusable animation ready hook
   const shouldAnimate = useAnimationReady();
@@ -184,11 +159,13 @@ export default function Hero() {
         type: "tween" as const,
         duration: 2,
         ease: "easeInOut" as const,
+        delay: 2.0,
       },
       circleImgTransition: {
         type: "tween" as const,
         duration: 2,
         ease: "easeInOut" as const,
+        delay: 2.0,
       },
     }),
     [shouldAnimate]
@@ -197,7 +174,7 @@ export default function Hero() {
   return (
     <div
       ref={ref}
-      className="w-screen h-dvh overflow-hidden flex flex-col items-center justify-center relative black-linear"
+      className="w-full h-dvh overflow-hidden flex flex-col items-center justify-center relative black-linear"
     >
       {/* Mountain */}
       <motion.div
@@ -280,7 +257,6 @@ export default function Hero() {
         tooltipRotate={90}
         circleImgTransition={circleAnimations.circleImgTransition}
         transition={circleAnimations.transition}
-        getCircleStyle={getCircleStyle}
       />
 
       {/* Circle-Paid */}
@@ -296,7 +272,6 @@ export default function Hero() {
         tooltipRotate={0}
         circleImgTransition={circleAnimations.circleImgTransition}
         transition={circleAnimations.transition}
-        getCircleStyle={getCircleStyle}
       />
 
       {/* Circle-Skill */}
@@ -312,7 +287,6 @@ export default function Hero() {
         tooltipRotate={-90}
         circleImgTransition={circleAnimations.circleImgTransition}
         transition={circleAnimations.transition}
-        getCircleStyle={getCircleStyle}
       />
 
       {/* Circle-Love */}
@@ -328,7 +302,6 @@ export default function Hero() {
         tooltipRotate={180}
         circleImgTransition={circleAnimations.circleImgTransition}
         transition={circleAnimations.transition}
-        getCircleStyle={getCircleStyle}
         yOffset={-200}
       />
 
@@ -338,8 +311,6 @@ export default function Hero() {
         variants={containerVariants}
         initial="hidden"
         animate={isInView && animationsStarted ? "visible" : "hidden"}
-        onAnimationComplete={handleAnimationComplete}
-        style={isInitialAnimationComplete && isInView ? { opacity } : undefined}
       >
         <motion.div
           initial={{ opacity: 0 }}
