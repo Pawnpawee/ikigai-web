@@ -12,7 +12,7 @@ export const ASSETS_TO_PRELOAD = [
   "/assets/Scene/Hero/skill-circle.webp",
   "/assets/Scene/Hero/world-circle.webp",
   "/assets/Scene/Hero/paid-circle.webp",
-  
+
   // Intro Scene
   // "/assets/Scene/Intro/bg.webp",
   // "/assets/Scene/Intro/animal.webp",
@@ -20,7 +20,7 @@ export const ASSETS_TO_PRELOAD = [
   // "/assets/Scene/Intro/desert2.webp",
   // "/assets/Scene/Intro/desert3.webp",
   // "/assets/Scene/Intro/sun.webp",
-  
+
   // Scene1 (Job Application)
   "/assets/Scene/Scene1/table.webp",
   "/assets/Scene/Scene1/Computer.webp",
@@ -60,7 +60,7 @@ export const ASSETS_TO_PRELOAD = [
   "/assets/Scene/Scene1/poster13.webp",
   "/assets/Scene/Scene1/poster14.webp",
   "/assets/Scene/Scene1/poster15.webp",
-  
+
   // Scene2 (Sleeping)
   // "/assets/Scene/Scene2/bg.webp",
   // "/assets/Scene/Scene2/bed.webp",
@@ -76,7 +76,7 @@ export const ASSETS_TO_PRELOAD = [
   // "/assets/Scene/Scene2/blanket.webp",
   // "/assets/Scene/Scene2/phone.webp",
   // "/assets/Scene/Scene2/slipper.webp",
-  
+
   // // Scene4 (Weighing)
   // "/assets/Scene/Scene4/bg.webp",
   // "/assets/Scene/Scene4/sky.webp",
@@ -101,7 +101,7 @@ export const ASSETS_TO_PRELOAD = [
   // "/assets/Scene/Scene4/feather.webp",
   // "/assets/Scene/Scene4/feather-plate.webp",
   // "/assets/Scene/Scene4/night mode.webp",
-  
+
   // // Scene5-01 (Into Dark - Name Input)
   // "/assets/Scene/Scene5/scene5-01/bggradient.webp",
   // "/assets/Scene/Scene5/scene5-01/Light cat.webp",
@@ -114,7 +114,7 @@ export const ASSETS_TO_PRELOAD = [
   // "/assets/Scene/Scene5/scene5-01/water.webp",
   // "/assets/Scene/Scene5/scene5-01/tail.webp",
   // "/assets/Scene/Scene5/scene5-01/cat face.webp",
-  
+
   // // Scene5-02 (Into Dark - Choices)
   // "/assets/Scene/Scene5/scene5-02/bggradient1.webp",
   // "/assets/Scene/Scene5/scene5-02/bggradient2.webp",
@@ -127,7 +127,7 @@ export const ASSETS_TO_PRELOAD = [
   // "/assets/Scene/Scene5/scene5-02/Little Star3.webp",
   // "/assets/Scene/Scene5/scene5-02/Star line1.webp",
   // "/assets/Scene/Scene5/scene5-02/Star line2.webp",
-  
+
   // // Scene5-03 (Into Dark - Heard)
   // "/assets/Scene/Scene5/scene5-03/bggradient.webp",
   // "/assets/Scene/Scene5/scene5-03/Light Cat.webp",
@@ -136,7 +136,7 @@ export const ASSETS_TO_PRELOAD = [
   // "/assets/Scene/Scene5/scene5-03/Little Star2.webp",
   // "/assets/Scene/Scene5/scene5-03/Little Star3.webp",
   // "/assets/Scene/Scene5/scene5-03/Star line1.webp",
-  
+
   // // Scene5-04 (Into Dark - Submit)
   // "/assets/Scene/Scene5/scene5-04/bggradient1.webp",
   // "/assets/Scene/Scene5/scene5-04/bggradient2.webp",
@@ -162,6 +162,6 @@ export const ASSETS_TO_PRELOAD = [
 export const getAssetUrl = (path: string): string => {
   // ถ้าไม่ได้ตั้งค่า CDN ก็ให้คืนค่า path เดิม (ใช้ของ Vercel)
   const cdnBase = process.env.NEXT_PUBLIC_CDN_URL || "";
-  const cleanPath = path.startsWith('/') ? path.slice(1) : path;
+  const cleanPath = path.startsWith("/") ? path.slice(1) : path;
   return cdnBase ? `${cdnBase}/${cleanPath}` : `/${cleanPath}`;
 };

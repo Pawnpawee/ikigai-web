@@ -1,6 +1,11 @@
 "use client";
 import React, { useMemo, useState } from "react";
-import { motion, useTransform, MotionValue, useMotionValueEvent } from "framer-motion";
+import {
+  motion,
+  useTransform,
+  MotionValue,
+  useMotionValueEvent,
+} from "framer-motion";
 import Image from "next/image";
 import LazyLottie from "@/app/components/ui/LazyLottie";
 import { useAnimationReady } from "@/app/hooks/useAnimationReady";
@@ -21,19 +26,18 @@ export default function JobApplication1({
   const opacity = useTransform(
     scrollYProgress,
     [0, 0.611, 0.611, 1],
-    [1, 1, 0, 0]
+    [1, 1, 0, 0],
   );
 
   // 3. ซ่อน Container เมื่อ opacity = 0 เพื่อลดภาระ GPU
-  const containerVisibility = useTransform(
-    opacity,
-    (v) => (v > 0 ? "visible" : "hidden")
+  const containerVisibility = useTransform(opacity, (v) =>
+    v > 0 ? "visible" : "hidden",
   );
 
   const opacity_light = useTransform(
     scrollYProgress,
     [0.35, 0.367, 1],
-    [0, 1, 1]
+    [0, 1, 1],
   );
 
   // ชุด 1-5: Posters (150vh = 0-0.167)
@@ -42,55 +46,55 @@ export default function JobApplication1({
   const poster11Opacity = useTransform(
     scrollYProgress,
     [0, 0.033, 1],
-    [0, 1, 1]
+    [0, 1, 1],
   );
 
   // ชุด 2: poster9,10 (starts when poster11 opacity=1, 0.033-0.066)
   const poster9_10Y = useTransform(
     scrollYProgress,
     [0.033, 0.066, 1],
-    [100, 0, 0]
+    [100, 0, 0],
   );
   const poster9_10Opacity = useTransform(
     scrollYProgress,
     [0.033, 0.066, 1],
-    [0, 1, 1]
+    [0, 1, 1],
   );
 
   // ชุด 3: poster12 (0.066-0.099)
   const poster12Y = useTransform(
     scrollYProgress,
     [0.066, 0.099, 1],
-    [100, 0, 0]
+    [100, 0, 0],
   );
   const poster12Opacity = useTransform(
     scrollYProgress,
     [0.066, 0.099, 1],
-    [0, 1, 1]
+    [0, 1, 1],
   );
 
   // ชุด 4: poster13,15 (0.099-0.132)
   const poster13_15Y = useTransform(
     scrollYProgress,
     [0.099, 0.132, 1],
-    [100, 0, 0]
+    [100, 0, 0],
   );
   const poster13_15Opacity = useTransform(
     scrollYProgress,
     [0.099, 0.132, 1],
-    [0, 1, 1]
+    [0, 1, 1],
   );
 
   // ชุด 5: poster14 (0.132-0.167)
   const poster14Y = useTransform(
     scrollYProgress,
     [0.132, 0.167, 1],
-    [100, 0, 0]
+    [100, 0, 0],
   );
   const poster14Opacity = useTransform(
     scrollYProgress,
     [0.132, 0.167, 1],
-    [0, 1, 1]
+    [0, 1, 1],
   );
 
   // ชุด 6-9: (100vh = 0.167-0.278)
@@ -98,24 +102,24 @@ export default function JobApplication1({
   const poster6_1Y = useTransform(
     scrollYProgress,
     [0.167, 0.194, 1],
-    [100, 0, 0]
+    [100, 0, 0],
   );
   const poster6_1Opacity = useTransform(
     scrollYProgress,
     [0.167, 0.194, 1],
-    [0, 1, 1]
+    [0, 1, 1],
   );
 
   // ชุด 7: poster2,3,4 (0.194-0.222)
   const poster2_3_4Y = useTransform(
     scrollYProgress,
     [0.194, 0.222, 1],
-    [100, 0, 0]
+    [100, 0, 0],
   );
   const poster2_3_4Opacity = useTransform(
     scrollYProgress,
     [0.194, 0.222, 1],
-    [0, 1, 1]
+    [0, 1, 1],
   );
 
   // ชุด 8: poster7 (0.222-0.25)
@@ -123,19 +127,19 @@ export default function JobApplication1({
   const poster7Opacity = useTransform(
     scrollYProgress,
     [0.222, 0.25, 1],
-    [0, 1, 1]
+    [0, 1, 1],
   );
 
   // ชุด 9: poster5,8 (0.25-0.278)
   const poster5_8Y = useTransform(
     scrollYProgress,
     [0.25, 0.278, 1],
-    [100, 0, 0]
+    [100, 0, 0],
   );
   const poster5_8Opacity = useTransform(
     scrollYProgress,
     [0.25, 0.278, 1],
-    [0, 1, 1]
+    [0, 1, 1],
   );
 
   // ชุด 10: table+computer (50vh = 0.278-0.333)
@@ -143,18 +147,18 @@ export default function JobApplication1({
   const tableOpacity = useTransform(
     scrollYProgress,
     [0.278, 0.305, 1],
-    [0, 1, 1]
+    [0, 1, 1],
   );
 
   const computerY = useTransform(
     scrollYProgress,
     [0.305, 0.333, 1],
-    [100, 0, 0]
+    [100, 0, 0],
   );
   const computerOpacity = useTransform(
     scrollYProgress,
     [0.305, 0.333, 1],
-    [0, 1, 1]
+    [0, 1, 1],
   );
 
   // ชุด 11: paper4,lamp,book2 (50vh = 0.333-0.389)
@@ -162,38 +166,38 @@ export default function JobApplication1({
   const paper4Opacity = useTransform(
     scrollYProgress,
     [0.333, 0.35, 1],
-    [0, 1, 1]
+    [0, 1, 1],
   );
 
   const lampY = useTransform(scrollYProgress, [0.35, 0.367, 1], [100, 0, 0]);
   const lampOpacity = useTransform(
     scrollYProgress,
     [0.35, 0.367, 1],
-    [0, 1, 1]
+    [0, 1, 1],
   );
 
   const book2Y = useTransform(scrollYProgress, [0.367, 0.389, 1], [100, 0, 0]);
   const book2Opacity = useTransform(
     scrollYProgress,
     [0.367, 0.389, 1],
-    [0, 1, 1]
+    [0, 1, 1],
   );
 
   // ชุด 12: human (50vh = 0.389-0.444)
   const humanY = useTransform(
     scrollYProgress,
     [0.389, 0.417, 0.43, 0.444],
-    [100, 0, -5, 0]
+    [100, 0, -5, 0],
   );
   const humanOpacity = useTransform(
     scrollYProgress,
     [0.389, 0.444, 1],
-    [0, 1, 1]
+    [0, 1, 1],
   );
   const humanScale = useTransform(
     scrollYProgress,
     [0.389, 0.417, 0.43, 0.444],
-    [0.95, 1, 1.02, 1]
+    [0.95, 1, 1.02, 1],
   );
 
   // ชุด 13: postit,paper3,paper2 (50vh = 0.444-0.5)
@@ -201,21 +205,21 @@ export default function JobApplication1({
   const postitOpacity = useTransform(
     scrollYProgress,
     [0.444, 0.461, 1],
-    [0, 1, 1]
+    [0, 1, 1],
   );
 
   const paper3Y = useTransform(scrollYProgress, [0.461, 0.478, 1], [100, 0, 0]);
   const paper3Opacity = useTransform(
     scrollYProgress,
     [0.461, 0.478, 1],
-    [0, 1, 1]
+    [0, 1, 1],
   );
 
   const paper2Y = useTransform(scrollYProgress, [0.478, 0.5, 1], [100, 0, 0]);
   const paper2Opacity = useTransform(
     scrollYProgress,
     [0.478, 0.5, 1],
-    [0, 1, 1]
+    [0, 1, 1],
   );
 
   // ชุด 14: pen,pencilbox,book1 (50vh = 0.5-0.556)
@@ -225,19 +229,19 @@ export default function JobApplication1({
   const pencilBoxY = useTransform(
     scrollYProgress,
     [0.517, 0.537, 1],
-    [100, 0, 0]
+    [100, 0, 0],
   );
   const pencilBoxOpacity = useTransform(
     scrollYProgress,
     [0.517, 0.537, 1],
-    [0, 1, 1]
+    [0, 1, 1],
   );
 
   const book1Y = useTransform(scrollYProgress, [0.537, 0.556, 1], [100, 0, 0]);
   const book1Opacity = useTransform(
     scrollYProgress,
     [0.537, 0.556, 1],
-    [0, 1, 1]
+    [0, 1, 1],
   );
 
   // 2. Lottie Optimization: เล่นเฉพาะตอนที่มองเห็น
@@ -252,7 +256,7 @@ export default function JobApplication1({
     () => ({
       willChange: "transform, opacity" as const,
     }),
-    []
+    [],
   );
 
   return (
@@ -273,7 +277,6 @@ export default function JobApplication1({
             width={1832}
             height={848}
             loading="lazy"
-            
             sizes="100vw"
             style={{
               position: "absolute",
@@ -295,7 +298,6 @@ export default function JobApplication1({
             width={234}
             height={180}
             loading="lazy"
-            
             sizes="15vw"
             style={{
               position: "absolute",
@@ -317,7 +319,6 @@ export default function JobApplication1({
             width={326}
             height={314}
             loading="lazy"
-            
             sizes="20vw"
             style={{
               position: "absolute",
@@ -338,7 +339,6 @@ export default function JobApplication1({
             width={279}
             height={272}
             loading="lazy"
-            
             sizes="20vw"
             style={{
               position: "absolute",
