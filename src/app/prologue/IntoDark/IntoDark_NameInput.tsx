@@ -10,12 +10,12 @@ import Image from "next/image";
 import InputButton from "@/app/components/ui/InputButton";
 import MysteriousText from "./MysteriousText";
 import Lottie from "lottie-react";
-import catAnimationData from "../../../../../public/assets/Scene/Scene5/scene5-01/s5-1-cat.json";
-import tailAnimationData from "../../../../../public/assets/Scene/Scene5/scene5-01/s5-1-tail.json";
-import starLine1AnimationData from "../../../../../public/assets/Scene/Scene5/scene5-01/starline1.json";
-import starLine2AnimationData from "../../../../../public/assets/Scene/Scene5/scene5-01/starline2.json";
-import starLine3AnimationData from "../../../../../public/assets/Scene/Scene5/scene5-01/starline3.json";
-import waterAnimationData from "../../../../../public/assets/Scene/Scene5/scene5-01/s-5-1-water.json";
+import catAnimationData from "../../../../public/assets/Scene/Scene5/scene5-01/s5-1-cat.json";
+import tailAnimationData from "../../../../public/assets/Scene/Scene5/scene5-01/s5-1-tail.json";
+import starLine1AnimationData from "../../../../public/assets/Scene/Scene5/scene5-01/starline1.json";
+import starLine2AnimationData from "../../../../public/assets/Scene/Scene5/scene5-01/starline2.json";
+import starLine3AnimationData from "../../../../public/assets/Scene/Scene5/scene5-01/starline3.json";
+import waterAnimationData from "../../../../public/assets/Scene/Scene5/scene5-01/s-5-1-water.json";
 import { useIsPortrait } from "@/app/hooks/useOrientation";
 import { HiCheck } from "react-icons/hi";
 

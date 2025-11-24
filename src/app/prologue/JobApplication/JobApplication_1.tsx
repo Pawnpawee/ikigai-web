@@ -2,7 +2,7 @@
 import React from "react";
 import { motion, useTransform, MotionValue } from "framer-motion";
 import Lottie from "lottie-react";
-import humanAnimationData from "../../../../../public/assets/Scene/Scene1/human.json";
+import humanAnimationData from "../../../../public/assets/Scene/Scene1/human.json";
 
 interface JobApplication1Props {
   scrollYProgress: MotionValue<number>;

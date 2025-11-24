@@ -6,10 +6,10 @@ import Lottie from "lottie-react";
 import ChoiceButton from "@/app/components/ui/ChoiceButton";
 import MysteriousText from "./MysteriousText";
 import { useIsPortrait } from "@/app/hooks/useOrientation";
-import catAnimationData from "../../../../../public/assets/Scene/Scene5/scene5-02/s-5-2-cat.json";
-import tailAnimationData from "../../../../../public/assets/Scene/Scene5/scene5-02/s5-2-tail.json";
-import starLine1AnimationData from "../../../../../public/assets/Scene/Scene5/scene5-02/starline3.json";
-import starLine2AnimationData from "../../../../../public/assets/Scene/Scene5/scene5-02/starline1.json";
+import catAnimationData from "../../../../public/assets/Scene/Scene5/scene5-02/s-5-2-cat.json";
+import tailAnimationData from "../../../../public/assets/Scene/Scene5/scene5-02/s5-2-tail.json";
+import starLine1AnimationData from "../../../../public/assets/Scene/Scene5/scene5-02/starline3.json";
+import starLine2AnimationData from "../../../../public/assets/Scene/Scene5/scene5-02/starline1.json";
 
 const REASONS = [
   { id: 1, text: "เครียดเรื่องเรียน" },
