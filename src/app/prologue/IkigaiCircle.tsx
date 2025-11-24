@@ -25,11 +25,13 @@ interface IkigaiCircleProps {
     ease: "easeInOut";
   };
   yOffset?: number;
-  getCircleStyle: (rotateTransform: any) => {
-    rotate: MotionValue<number>;
-    opacity: MotionValue<number>;
-    willChange: "transform, opacity";
-  } | { willChange: "transform, opacity" };
+  getCircleStyle: (rotateTransform: any) =>
+    | {
+        rotate: MotionValue<number>;
+        opacity: MotionValue<number>;
+        willChange: "transform, opacity";
+      }
+    | { willChange: "transform, opacity" };
 }
 
 const IkigaiCircle: React.FC<IkigaiCircleProps> = ({
@@ -70,7 +72,7 @@ const IkigaiCircle: React.FC<IkigaiCircleProps> = ({
         transition: { duration: 0.3 },
       },
     }),
-    []
+    [],
   );
 
   return (

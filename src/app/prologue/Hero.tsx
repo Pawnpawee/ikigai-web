@@ -21,7 +21,6 @@ import { useAnimationReady } from "@/app/hooks/useAnimationReady";
 import { useLottieWithSound } from "@/app/hooks/useLottieWithSound";
 import IkigaiCircle from "./IkigaiCircle";
 
-
 export default function Hero() {
   const ref = useRef<HTMLDivElement>(null);
   const isInView = useInView(ref, { once: false, amount: 0.1 });
@@ -55,7 +54,7 @@ export default function Hero() {
   const backgroundY = useTransform(
     elementScrollYProgress,
     [0, 1],
-    ["0%", "100%"]
+    ["0%", "100%"],
   );
   const opacity = useTransform(elementScrollYProgress, [1, 0], [0, 1]);
 
@@ -71,7 +70,7 @@ export default function Hero() {
         },
       },
     }),
-    []
+    [],
   );
   const charVariants: Variants = useMemo(
     () => ({
@@ -81,7 +80,7 @@ export default function Hero() {
         x: 0,
       },
     }),
-    []
+    [],
   );
 
   const [isInitialAnimationComplete, setIsInitialAnimationComplete] =
@@ -89,7 +88,7 @@ export default function Hero() {
   const circle1_rotate = useTransform(
     elementScrollYProgress,
     [0, 1],
-    [-180, 0]
+    [-180, 0],
   );
   const circle2_rotate = useTransform(elementScrollYProgress, [0, 1], [90, 0]);
   const circle3_rotate = useTransform(elementScrollYProgress, [0, 1], [0, 90]);
@@ -111,7 +110,7 @@ export default function Hero() {
         },
       },
     }),
-    []
+    [],
   );
 
   // Memoize mountain transitions
@@ -122,7 +121,7 @@ export default function Hero() {
       mountain3: { duration: 1.5, delay: 0.5 },
       mountain4: { duration: 1.5 },
     }),
-    []
+    [],
   );
 
   // Memoize animation complete callback
@@ -147,7 +146,7 @@ export default function Hero() {
       }
       return { willChange: "transform, opacity" as const };
     },
-    [isInitialAnimationComplete, opacity]
+    [isInitialAnimationComplete, opacity],
   );
 
   // Use reusable animation ready hook
@@ -191,7 +190,7 @@ export default function Hero() {
         ease: "easeInOut" as const,
       },
     }),
-    [shouldAnimate]
+    [shouldAnimate],
   );
 
   return (
