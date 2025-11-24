@@ -1,7 +1,7 @@
 "use client";
 import { motion, useScroll, useTransform } from "framer-motion";
 import { useRef } from "react";
-import WordByWordAnimation from "../components/ui/WordByWordAnimation";
+import WordByWordAnimation from "../../components/ui/WordByWordAnimation";
 
 export default function Intro() {
   const ref = useRef<HTMLDivElement>(null);

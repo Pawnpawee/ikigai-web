@@ -5,9 +5,9 @@ import Image from "next/image";
 import Lottie from "lottie-react";
 import GradientButton from "@/app/components/ui/GradientButton";
 import MysteriousText from "./MysteriousText";
-import catAnimationData from "../../../../public/assets/Scene/Scene5/scene5-03/s5-3-cat.json";
-import tailAnimationData from "../../../../public/assets/Scene/Scene5/scene5-01/s5-1-tail.json";
-import starLine1AnimationData from "../../../../public/assets/Scene/Scene5/scene5-01/starline1.json";
+import catAnimationData from "../../../../../public/assets/Scene/Scene5/scene5-03/s5-3-cat.json";
+import tailAnimationData from "../../../../../public/assets/Scene/Scene5/scene5-01/s5-1-tail.json";
+import starLine1AnimationData from "../../../../../public/assets/Scene/Scene5/scene5-01/starline1.json";
 import { useIsPortrait } from "@/app/hooks/useOrientation";
 
 interface HeardProps {
