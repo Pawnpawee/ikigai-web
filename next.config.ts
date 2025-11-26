@@ -9,9 +9,13 @@ const withBundleAnalyzer = bundleAnalyzer({
 const nextConfig: NextConfig = {
   // Config เดิมของคุณ (เช่น images domains) ใส่ตรงนี้
   images: {
-      remotePatterns: [
-          { protocol: "https", hostname: "**" }
-      ]
+    remotePatterns: [
+      { protocol: "https", hostname: "**" }
+    ],
+    qualities: [75, 80, 90],
+
+    // ⭐ แนะนำให้กำหนด formats ด้วย เพื่อให้รองรับ WebP และ AVIF (ใหม่กว่า WebP)
+    formats: ['image/avif', 'image/webp'],
   },
   reactStrictMode: true,
 };

@@ -6,13 +6,7 @@ import React, {
   useCallback,
 } from "react";
 import Image from "next/image";
-import {
-  motion,
-  useScroll,
-  useTransform,
-  Variants,
-  useInView,
-} from "framer-motion";
+import { motion, useScroll, useTransform, Variants, useInView } from "framer-motion";
 import LazyLottie from "@/app/components/ui/LazyLottie";
 import { useAudio } from "@/app/contexts/AudioContext";
 import { useSoundEffect } from "@/app/hooks/useSoundEffect";
@@ -20,6 +14,8 @@ import { useAssetLoader } from "@/app/contexts/AssetLoaderContext";
 import { useAnimationReady } from "@/app/hooks/useAnimationReady";
 import { useLottieWithSound } from "@/app/hooks/useLottieWithSound";
 import IkigaiCircle from "./IkigaiCircle";
+import SceneLayer from "@/app/components/scene/SceneLayer";
+import { SCENE_HERO_ITEMS } from "@/app/data/scene_hero.data";
 
 export default function Hero() {
   const ref = useRef<HTMLDivElement>(null);
@@ -174,70 +170,38 @@ export default function Hero() {
   return (
     <div
       ref={ref}
-      className="w-full h-dvh overflow-hidden flex flex-col items-center justify-center relative black-linear"
+      className="w-full h-dvh overflow-hidden flex flex-col items-center justify-center relative black-linear -z-1"
     >
-      {/* Mountain */}
-      <motion.div
-        className="absolute bottom-0 w-screen h-screen pointer-events-none"
-        style={{ y: backgroundY }}
-      >
-        <motion.div
-          initial={{ opacity: 0 }}
-          animate={shouldAnimate ? { opacity: 1 } : { opacity: 0 }}
-          transition={mountainTransitions.mountain1}
-          className="absolute bottom-0 w-full h-full"
-        >
-          <Image
-            src="/assets/Scene/Hero/hill-c-b.webp"
-            alt=""
-            fill
-            sizes="100vw"
-            className="object-bottom object-cover"
-          />
-        </motion.div>
-        <motion.div
-          initial={{ opacity: 0 }}
-          animate={shouldAnimate ? { opacity: 1 } : { opacity: 0 }}
-          transition={mountainTransitions.mountain2}
-          className="absolute bottom-0 w-full h-full"
-        >
-          <Image
-            src="/assets/Scene/Hero/hill-c-f.webp"
-            alt=""
-            fill
-            sizes="100vw"
-            className="object-bottom object-cover"
-          />
-        </motion.div>
-        <motion.div
-          initial={{ opacity: 0 }}
-          animate={shouldAnimate ? { opacity: 1 } : { opacity: 0 }}
-          transition={mountainTransitions.mountain3}
-          className="absolute bottom-0 w-full h-full"
-        >
-          <Image
-            src="/assets/Scene/Hero/hill-r-f.webp"
-            alt=""
-            fill
-            sizes="100vw"
-            className="object-bottom object-cover"
-          />
-        </motion.div>
-        <motion.div
-          initial={{ opacity: 0 }}
-          animate={shouldAnimate ? { opacity: 1 } : { opacity: 0 }}
-          transition={mountainTransitions.mountain4}
-          className="absolute bottom-0 w-full h-full"
-        >
-          <Image
-            src="/assets/Scene/Hero/hill-l-f.webp"
-            alt="Mountain Foreground"
-            fill
-            priority
-            sizes="100vw"
-            className="object-bottom object-cover"
-          />
-        </motion.div>
+      {/* Mountain - rendered via SceneLayer so order/data-driven */}
+      <motion.div className="absolute bottom-0 w-screen pointer-events-none" style={{ y: backgroundY }}>
+        <SceneLayer
+          items={SCENE_HERO_ITEMS}
+          animations={{}}
+          baseStyle={{ willChange: "opacity, transform" }}
+          containerAspectRatio="1920 / 1080"
+          itemOverrides={{
+            "hill-c-b": {
+              initial: { opacity: 0 },
+              animate: shouldAnimate ? { opacity: 1 } : { opacity: 0 },
+              transition: mountainTransitions.mountain1,
+            },
+            "hill-c-f": {
+              initial: { opacity: 0 },
+              animate: shouldAnimate ? { opacity: 1 } : { opacity: 0 },
+              transition: mountainTransitions.mountain2,
+            },
+            "hill-r-f": {
+              initial: { opacity: 0 },
+              animate: shouldAnimate ? { opacity: 1 } : { opacity: 0 },
+              transition: mountainTransitions.mountain3,
+            },
+            "hill-l-f": {
+              initial: { opacity: 0 },
+              animate: shouldAnimate ? { opacity: 1 } : { opacity: 0 },
+              transition: mountainTransitions.mountain4,
+            },
+          }}
+        />
       </motion.div>
 
       {/* Circle-World */}

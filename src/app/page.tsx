@@ -45,7 +45,7 @@ export default function Home() {
       <Hero />
       <Intro /> 
       <JobApplication/>
-      {/* <Sleeping /> */}
+      <Sleeping />
       {/* <Dreaming /> */}
       {/* <Weighing /> */}
       {/* <IntoDark /> */}

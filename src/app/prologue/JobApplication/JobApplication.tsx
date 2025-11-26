@@ -88,17 +88,23 @@ export default function JobApplication() {
     [0, 0, 0.5, 0.5, 0]
   );
 
+  const opacity_bg = useTransform(
+    scrollYProgress,
+    [0, 0.2, 0.5, 0.97, 1],
+    [0, 0, 1, 1, 0]
+  );
+
   return (
     <motion.div
       ref={ref}
-      className="relative h-[950vh] z-2"
+      className="relative h-[950vh]"
       style={{ opacity }}
     >
       {/* bg */}
       <motion.div
         className="absolute w-screen inset-0 bg-s1"
         style={{
-          opacity: opacity_light,
+          opacity: opacity_bg,
         }}
       />
       <motion.div

@@ -10,7 +10,7 @@ const StarryBackground: React.FC = () => {
   const { isLoading } = useAssetLoader();
 
   return (
-    <div className="fixed inset-0 w-full h-full pointer-events-none z-1 overflow-hidden flex justify-center items-center">
+    <div className="fixed inset-0 w-full h-full pointer-events-none z-0 overflow-hidden flex justify-center items-center">
       {animationsStarted && !isLoading && (
         <div className="h-full w-auto max-w-none aspect-video">
           {" "}
