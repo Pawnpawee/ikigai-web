@@ -59,14 +59,18 @@ export default function SceneLayer({
   itemOverrides,
 }: SceneLayerProps) {
   return (
-    <div className="relative w-full" style={{ aspectRatio: containerAspectRatio }}>
+    <div
+      className="relative w-full"
+      style={{ aspectRatio: containerAspectRatio }}
+    >
       <div className="absolute inset-0">
         {/* ⭐ Render Items Loop */}
         {items.map((item) => {
           // ดึง Animation จาก Map ถ้าไม่มีใช้ค่า Default (นิ่งๆ)
-          const anim = item.animGroup !== undefined && animations[item.animGroup]
-            ? animations[item.animGroup]
-            : { y: 0, opacity: 1 };
+          const anim =
+            item.animGroup !== undefined && animations[item.animGroup]
+              ? animations[item.animGroup]
+              : { y: 0, opacity: 1 };
 
           // Use a positioned wrapper so Next/Image fill works reliably
           const override = itemOverrides?.[item.id];

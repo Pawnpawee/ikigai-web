@@ -6,7 +6,13 @@ import React, {
   useCallback,
 } from "react";
 import Image from "next/image";
-import { motion, useScroll, useTransform, Variants, useInView } from "framer-motion";
+import {
+  motion,
+  useScroll,
+  useTransform,
+  Variants,
+  useInView,
+} from "framer-motion";
 import LazyLottie from "@/app/components/ui/LazyLottie";
 import { useAudio } from "@/app/contexts/AudioContext";
 import { useSoundEffect } from "@/app/hooks/useSoundEffect";
@@ -50,7 +56,7 @@ export default function Hero() {
   const backgroundY = useTransform(
     elementScrollYProgress,
     [0, 1],
-    ["0%", "100%"]
+    ["0%", "100%"],
   );
   const opacity = useTransform(elementScrollYProgress, [1, 0], [0, 1]);
 
@@ -66,7 +72,7 @@ export default function Hero() {
         },
       },
     }),
-    []
+    [],
   );
   const charVariants: Variants = useMemo(
     () => ({
@@ -76,13 +82,13 @@ export default function Hero() {
         x: 0,
       },
     }),
-    []
+    [],
   );
 
   const circle1_rotate = useTransform(
     elementScrollYProgress,
     [0, 1],
-    [-180, 0]
+    [-180, 0],
   );
   const circle2_rotate = useTransform(elementScrollYProgress, [0, 1], [90, 0]);
   const circle3_rotate = useTransform(elementScrollYProgress, [0, 1], [0, 90]);
@@ -104,7 +110,7 @@ export default function Hero() {
         },
       },
     }),
-    []
+    [],
   );
 
   // Memoize mountain transitions
@@ -115,7 +121,7 @@ export default function Hero() {
       mountain3: { duration: 1.5, delay: 0.5 },
       mountain4: { duration: 1.5 },
     }),
-    []
+    [],
   );
 
   // Memoize text split
@@ -164,7 +170,7 @@ export default function Hero() {
         delay: 2.0,
       },
     }),
-    [shouldAnimate]
+    [shouldAnimate],
   );
 
   return (
@@ -173,7 +179,10 @@ export default function Hero() {
       className="w-full h-dvh overflow-hidden flex flex-col items-center justify-center relative black-linear -z-1"
     >
       {/* Mountain - rendered via SceneLayer so order/data-driven */}
-      <motion.div className="absolute bottom-0 w-screen pointer-events-none" style={{ y: backgroundY }}>
+      <motion.div
+        className="absolute bottom-0 w-screen pointer-events-none"
+        style={{ y: backgroundY }}
+      >
         <SceneLayer
           items={SCENE_HERO_ITEMS}
           animations={{}}
