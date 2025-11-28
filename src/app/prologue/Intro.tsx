@@ -3,6 +3,7 @@ import { motion, useScroll, useTransform } from "framer-motion";
 import { useRef } from "react";
 import Image from "next/image"; // ⭐ 1. Import Next Image
 import WordByWordAnimation from "../components/ui/WordByWordAnimation";
+import StarryBackground from "../components/ui/StarryBackground";
 
 const INTRO_TEXT = `คำถามอิคิไกทั้งสี่ข้อ — "สิ่งที่รัก, สิ่งที่ถนัด, สิ่งที่โลกต้องการ และ สิ่งที่สร้างรายได้” 
 เป็นเพียงเครื่องมือการสำรวจเพื่อช่วยให้คุณสะท้อนตัวเอง ซึ่งเป็นภาพ ณ ตอนนี้เท่านั้น 
@@ -106,8 +107,11 @@ export default function Intro() {
             as="div"
             className="typo-p-lg text-white text-center w-70 sm:w-full mx-auto"
           />
+          <StarryBackground />
         </motion.div>
+        
       </motion.div>
+      
     </motion.div>
   );
 }

@@ -6,7 +6,15 @@ import React, {
   useCallback,
 } from "react";
 import Image from "next/image";
-import { motion, useScroll, useTransform, Variants, useInView } from "framer-motion";
+import {
+  motion,
+  useScroll,
+  useTransform,
+  Variants,
+  useInView,
+  useSpring,
+  useWillChange,
+} from "framer-motion";
 import LazyLottie from "@/app/components/ui/LazyLottie";
 import { useAudio } from "@/app/contexts/AudioContext";
 import { useSoundEffect } from "@/app/hooks/useSoundEffect";
@@ -16,6 +24,7 @@ import { useLottieWithSound } from "@/app/hooks/useLottieWithSound";
 import IkigaiCircle from "./IkigaiCircle";
 import SceneLayer from "@/app/components/scene/SceneLayer";
 import { SCENE_HERO_ITEMS } from "@/app/data/scene_hero.data";
+import StarryBackground from "../components/ui/StarryBackground";
 
 export default function Hero() {
   const ref = useRef<HTMLDivElement>(null);
@@ -42,17 +51,25 @@ export default function Hero() {
     glowOffsetMs: 1200,
   });
 
-  const { scrollYProgress: elementScrollYProgress } = useScroll({
+  const { scrollYProgress } = useScroll({
     target: ref,
     offset: ["start start", "end start"],
   });
 
-  const backgroundY = useTransform(
-    elementScrollYProgress,
-    [0, 1],
-    ["0%", "100%"]
-  );
-  const opacity = useTransform(elementScrollYProgress, [1, 0], [0, 1]);
+  // ⭐ แก้ไข 1: ใช้ useSpring เพื่อลดอาการสั่น (Smooth ค่า input)
+  // mass/stiffness/damping นี้คือสูตรนุ่มนวลที่นิยมใช้กับ Parallax
+  const smoothScroll = useSpring(scrollYProgress, {
+    mass: 0.1,
+    stiffness: 100,
+    damping: 20,
+    restDelta: 0.001,
+  });
+
+  // ⭐ แก้ไข 2: ใช้ willChange บอก Browser ให้เตรียม GPU รอไว้
+  const willChange = useWillChange();
+
+  const backgroundY = useTransform(scrollYProgress, [0, 1], ["0%", "100%"]);
+  const opacity = useTransform(scrollYProgress, [1, 0], [0, 1]);
 
   const textContent = "LIFE OF JOURNEY";
   const containerVariants: Variants = useMemo(
@@ -79,14 +96,10 @@ export default function Hero() {
     []
   );
 
-  const circle1_rotate = useTransform(
-    elementScrollYProgress,
-    [0, 1],
-    [-180, 0]
-  );
-  const circle2_rotate = useTransform(elementScrollYProgress, [0, 1], [90, 0]);
-  const circle3_rotate = useTransform(elementScrollYProgress, [0, 1], [0, 90]);
-  const circle4_rotate = useTransform(elementScrollYProgress, [0, 1], [-90, 0]);
+  const circle1_rotate = useTransform(scrollYProgress, [0, 1], [-180, 0]);
+  const circle2_rotate = useTransform(scrollYProgress, [0, 1], [90, 0]);
+  const circle3_rotate = useTransform(scrollYProgress, [0, 1], [0, 90]);
+  const circle4_rotate = useTransform(scrollYProgress, [0, 1], [-90, 0]);
 
   const lottieGlowVariants: Variants = useMemo(
     () => ({
@@ -168,16 +181,19 @@ export default function Hero() {
   );
 
   return (
-    <div
+    <motion.div
       ref={ref}
-      className="w-full h-dvh overflow-hidden flex flex-col items-center justify-center relative black-linear -z-1"
+      className="w-full h-screen overflow-hidden flex flex-col items-center justify-center relative black-linear "
+      style={{ opacity }}
     >
       {/* Mountain - rendered via SceneLayer so order/data-driven */}
-      <motion.div className="absolute bottom-0 w-screen pointer-events-none" style={{ y: backgroundY }}>
+      <motion.div
+        className="absolute bottom-0 w-screen pointer-events-none"
+        style={{ y: backgroundY, willChange, z: 0 }}
+      >
         <SceneLayer
           items={SCENE_HERO_ITEMS}
           animations={{}}
-          baseStyle={{ willChange: "opacity, transform" }}
           containerAspectRatio="1920 / 1080"
           itemOverrides={{
             "hill-c-b": {
@@ -285,7 +301,6 @@ export default function Hero() {
               src="/assets/Icon/logo_ikigai_animate.lottie"
               className="h-[100px] aspect-770/200 mx-auto"
               loop={false}
-              autoplay={false}
               getRef={(ref) => {
                 lottieRef.current = ref;
               }}
@@ -304,6 +319,7 @@ export default function Hero() {
           ))}
         </h2>
       </motion.div>
-    </div>
+      <StarryBackground />
+    </motion.div>
   );
 }

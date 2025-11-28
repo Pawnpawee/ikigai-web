@@ -145,6 +145,20 @@ export function AudioProvider({ children }: { children: React.ReactNode }) {
   // ฟังก์ชันเปลี่ยน bg music
   const setBgMusic = async (src: string) => {
     if (audioRef.current) {
+      // If there's a separate bgMusic audio element playing, stop it
+      const existingBg = bgMusicRef.current as HTMLAudioElement | null;
+      if (existingBg && !existingBg.paused) {
+        try {
+          existingBg.pause();
+        } catch (e) {
+          console.warn("Failed to pause bgMusicRef in setBgMusic", e);
+        }
+      }
+      bgMusicRef.current = null;
+      if (fadeIntervalRef.current) {
+        clearInterval(fadeIntervalRef.current);
+        fadeIntervalRef.current = null;
+      }
       const wasPlaying = !audioRef.current.paused;
 
       // Pause audio ถ้ากำลังเล่นอยู่
@@ -179,7 +193,41 @@ export function AudioProvider({ children }: { children: React.ReactNode }) {
           }
         });
 
-        await audioRef.current.play();
+        try {
+          await audioRef.current.play();
+          // Make sure bgMusicRef is not playing
+          const existingAfter = bgMusicRef.current as HTMLAudioElement | null;
+          if (existingAfter && !existingAfter.paused) {
+            try {
+              existingAfter.pause();
+            } catch (e) {
+              console.warn("Failed to pause bgMusicRef after play", e);
+            }
+          }
+        } catch (err) {
+          // ถ้า browser บล็อก autoplay จะโยน DOMException (NotAllowedError)
+          // ให้รอการ interact ครั้งแรกของผู้ใช้ แล้วลองเล่นใหม่จาก handler นั้น
+          console.warn("Autoplay blocked for setBgMusic, waiting for user gesture to resume.", err);
+
+          const onUserGesture = async () => {
+            try {
+              if (audioRef.current) {
+                await audioRef.current.play();
+                setIsPlaying(true);
+                setUserConsented(true);
+                setAnimationsStarted(true);
+                saveSettingsToStorage({ hasVisited: true, isMuted: false, volume });
+              }
+            } catch (e) {
+              console.error("Play after user gesture failed", e);
+            }
+            window.removeEventListener("pointerdown", onUserGesture);
+            window.removeEventListener("touchstart", onUserGesture);
+          };
+
+          window.addEventListener("pointerdown", onUserGesture, { once: true, passive: true } as any);
+          window.addEventListener("touchstart", onUserGesture, { once: true, passive: true } as any);
+        }
       }
     }
   };
@@ -187,6 +235,16 @@ export function AudioProvider({ children }: { children: React.ReactNode }) {
   // ฟังก์ชันเปลี่ยน bg music แบบ fade in/out
   const transitionBgMusic = async (src: string, fadeDuration = 1000) => {
     if (currentBgMusic === src) return; // ถ้าเพลงเดิมไม่ต้องทำอะไร
+
+    // Ensure the main audioRef is not also playing — bg music must be exclusive
+    if (audioRef.current && !audioRef.current.paused) {
+      try {
+        audioRef.current.pause();
+        setIsPlaying(false);
+      } catch (e) {
+        console.warn("Failed to pause primary audioRef before transition", e);
+      }
+    }
 
     // 1. Fade Out เพลงเก่า (ถ้ามี)
     if (bgMusicRef.current) {
@@ -217,10 +275,14 @@ export function AudioProvider({ children }: { children: React.ReactNode }) {
     bgMusicRef.current = newAudio; // ⭐ update ref เป็นตัวใหม่ทันที
 
     try {
-        await newAudio.play();
+      await newAudio.play();
+      setIsPlaying(true);
+      setUserConsented(true);
+      setAnimationsStarted(true);
         // 3. Fade In
         const steps = 20;
-        const targetVol = isMuted ? 0 : volume; // เช็ค Mute ด้วย
+        // volume state is 0-100; audio.volume expects 0-1
+        const targetVol = isMuted ? 0 : volume / 100; // เช็ค Mute ด้วย
         const stepTime = fadeDuration / steps;
         const volStep = targetVol / steps;
 
@@ -238,35 +300,103 @@ export function AudioProvider({ children }: { children: React.ReactNode }) {
         }, stepTime);
 
     } catch (err) {
-        console.error("Audio play failed", err);
+      // Autoplay may be blocked — retry on first user gesture
+      console.warn("Audio play failed (autoplay blocked). Will retry on user interaction.", err);
+
+      const onUserGesture = async () => {
+        try {
+          // ยืนยันว่า newAudio ยังเป็นตัวปัจจุบัน
+          if (newAudio === bgMusicRef.current) {
+            await newAudio.play();
+            setIsPlaying(true);
+            setUserConsented(true);
+            setAnimationsStarted(true);
+            saveSettingsToStorage({ hasVisited: true, isMuted: false, volume });
+          }
+        } catch (e) {
+          console.error("Play after user gesture failed", e);
+        }
+        window.removeEventListener("pointerdown", onUserGesture);
+        window.removeEventListener("touchstart", onUserGesture);
+      };
+
+      window.addEventListener("pointerdown", onUserGesture, { once: true, passive: true } as any);
+      window.addEventListener("touchstart", onUserGesture, { once: true, passive: true } as any);
     }
   };
 
-  // อัพเดท mute
+  // อัพเดท mute — pause/resume ทั้ง primary และ bg audio ให้เป็นหนึ่งเดียว
   useEffect(() => {
-    if (!isInitialized) return; // ⭐ ห้ามทำถ้ายังโหลดไม่เสร็จ
+    if (!isInitialized) return; // ห้ามทำถ้ายังโหลดไม่เสร็จ
 
-    if (audioRef.current) {
-      audioRef.current.muted = isMuted;
+    const primary = audioRef.current;
+    const bg = bgMusicRef.current as HTMLAudioElement | null;
 
-      // ถ้า unmute และยัง consent แล้ว → เล่นเสียง
-      if (!isMuted && userConsented) {
-        if (audioRef.current.paused) {
-          audioRef.current
-            .play()
-            .catch((err) => console.error("Play failed:", err));
-          setIsPlaying(true);
+    if (primary) {
+      primary.muted = isMuted;
+    }
+
+    if (isMuted) {
+      // Mute: pause both audios and clear any fades
+      if (primary && !primary.paused) {
+        try {
+          primary.pause();
+        } catch (e) {
+          console.warn("Failed to pause primary on mute", e);
+        }
+        setIsPlaying(false);
+      }
+
+      if (bg && !bg.paused) {
+        try {
+          bg.pause();
+        } catch (e) {
+          console.warn("Failed to pause bg on mute", e);
         }
       }
 
-      // ถ้า mute → หยุดเล่น
-      if (isMuted && !audioRef.current.paused) {
-        audioRef.current.pause();
-        setIsPlaying(false);
+      if (fadeIntervalRef.current) {
+        clearInterval(fadeIntervalRef.current);
+        fadeIntervalRef.current = null;
+      }
+    } else {
+      // Unmute: if consented, resume appropriate audio asynchronously
+      if (userConsented) {
+        (async () => {
+          const targetVol = Math.min(1, Math.max(0, volume / 100));
+
+          if (bg) {
+            // If bg exists, prefer it and pause primary
+            if (primary && !primary.paused) {
+              try {
+                primary.pause();
+                setIsPlaying(false);
+              } catch (e) {
+                console.warn("Failed to pause primary before resuming bg", e);
+              }
+            }
+
+            try {
+              bg.volume = targetVol;
+              await bg.play();
+              setIsPlaying(true);
+            } catch (err) {
+              console.error("Failed to resume bg on unmute", err);
+            }
+          } else if (primary) {
+            try {
+              await primary.play();
+              setIsPlaying(true);
+            } catch (err) {
+              console.error("Failed to resume primary on unmute", err);
+            }
+          }
+        })();
       }
     }
+
     saveSettingsToStorage({ isMuted });
-  }, [isMuted, isInitialized, userConsented]);
+  }, [isMuted, isInitialized, userConsented, volume]);
 
   // อัพเดท volume
   useEffect(() => {
@@ -310,6 +440,15 @@ export function AudioProvider({ children }: { children: React.ReactNode }) {
 
       // 3. Play
       try {
+        // Ensure any bgMusicRef is paused before starting primary audio
+        const existingBg = bgMusicRef.current as HTMLAudioElement | null;
+        if (existingBg && !existingBg.paused) {
+          try {
+            existingBg.pause();
+          } catch (e) {
+            console.warn("Failed to pause bgMusicRef in startAudio", e);
+          }
+        }
         if (audioRef.current.readyState < 2) {
           await new Promise<void>((resolve) => {
             audioRef.current?.addEventListener("canplay", () => resolve(), {
@@ -329,6 +468,15 @@ export function AudioProvider({ children }: { children: React.ReactNode }) {
   const pauseAudio = () => {
     if (audioRef.current) {
       audioRef.current.pause();
+      // Also pause any bgMusicRef
+      const existingBg = bgMusicRef.current as HTMLAudioElement | null;
+      if (existingBg && !existingBg.paused) {
+        try {
+          existingBg.pause();
+        } catch (e) {
+          console.warn("Failed to pause bgMusicRef in pauseAudio", e);
+        }
+      }
       setIsPlaying(false);
       setIsMuted(true); 
       setUserConsented(true);

@@ -7,21 +7,17 @@ import {
   useInView,
 } from "framer-motion";
 import { useRef, useEffect } from "react";
+import Image from "next/image";
 import { useIsPortrait } from "@/app/hooks/useOrientation";
 import { useBgMusicTransition } from "@/app/hooks/useBgMusicTransition";
 import SubtitleScroll from "@/app/components/ui/SubtitleScroll";
 import { VideoAnimation } from "@/app/components/ui/VideoAnimation";
-import Lottie from "lottie-react";
-import buildingAnimationData from "../../../public/assets/Scene/Scene4/s4-building.json";
-import humanFallingAnimationData from "../../../public/assets/Scene/Scene4/human-falling.json";
-import treeLeftAnimationData from "../../../public/assets/Scene/Scene4/s4-tree.json";
-import treeRightAnimationData from "../../../public/assets/Scene/Scene4/s4-tree.json";
-import skyAnimationData from "../../../public/assets/Scene/Scene4/s4-sky.json";
-import poleLeftAnimationData from "../../../public/assets/Scene/Scene4/s4-pole.json";
-import catLeftAnimationData from "../../../public/assets/Scene/Scene4/s4-cat.json";
-import catRightAnimationData from "../../../public/assets/Scene/Scene4/s4-cat.json";
+import LazyLottie from "@/app/components/ui/LazyLottie";
 import { useSoundEffect } from "@/app/hooks/useSoundEffect";
 import { useAudio } from "@/app/contexts/AudioContext";
+import SceneLayer from "@/app/components/scene/SceneLayer";
+import { SCENE_WEIGHING_ITEMS } from "@/app/data/scene_weighing.data";
+import StarryBackground from "../components/ui/StarryBackground";
 
 export default function Weighing() {
   const ref = useRef<HTMLDivElement>(null);
@@ -46,65 +42,81 @@ export default function Weighing() {
     loop: false,
   });
 
-  const { playSoundEffect: playMetal } = useSoundEffect({
-    soundPath: "/assets/Sound/3-4/metal-slide.mp3",
-    fadeDurationMs: 500,
-    loop: false,
-  });
+  const { playSoundEffect: playMetal, stopSoundEffect: stopMetal } =
+    useSoundEffect({
+      soundPath: "/assets/Sound/3-4/metal-slide.mp3",
+      fadeDurationMs: 20, // quick fade out for near-instant cut
+      loop: true, // loop while rotation is active
+    });
 
   const { scrollYProgress } = useScroll({
     target: ref,
     offset: ["start start", "end end"],
   });
 
-  // เล่นเสียง metal ตอนที่ scale เริ่ม rotate (slow movement: 0.6667-0.7733)
   useEffect(() => {
-    const unsubscribe = scrollYProgress.on("change", (value) => {
-      // เล่นเสียง metal เมื่อเริ่มช่วง slow movement (scrollYProgress >= 0.6667)
-      if (
-        value >= 0.6667 &&
-        !hasPlayedMetalRef.current &&
-        animationsStarted &&
-        isInView
-      ) {
-        playMetal();
-        hasPlayedMetalRef.current = true;
-      }
-      // Reset flag เมื่อ scroll กลับ
-      if (value < 0.66) {
-        hasPlayedMetalRef.current = false;
-      }
-    });
+    const unsubscribe = scrollYProgress.on("change", (latest) => {
+      // เช็คว่า Animation เริ่มหรือยัง และอยู่ใน View ไหม
+      if (!animationsStarted || !isInView) return;
 
-    return () => unsubscribe();
-  }, [scrollYProgress, playMetal, animationsStarted, isInView]);
-
-  // เล่นเสียง scales เมื่อ heartPlateY_fast ถึงค่าสูงสุด (scrollYProgress >= 0.8)
-  useEffect(() => {
-    const unsubscribe = scrollYProgress.on("change", (value) => {
-      // เล่นเสียงเมื่อถึง 0.8 (80%) ซึ่งเป็นจุดสิ้นสุดของ heartPlateY_fast animation
-      if (
-        value >= 0.8 &&
-        !hasPlayedScalesRef.current &&
-        animationsStarted &&
-        isInView
-      ) {
-        playScales();
-        hasPlayedScalesRef.current = true;
+      // -----------------------------------------------------
+      // 🔊 1. Play Metal (เสียงเหล็กขูด)
+      // เงื่อนไข: เล่นระหว่างที่ Scale กำลังหมุน (0.66) จนถึง Heart Plate หยุด (0.75)
+      // -----------------------------------------------------
+      if (latest > 0.66 && latest < 0.75) {
+        // ถ้าอยู่ในช่วงเวลา และเสียงยังไม่เล่น -> ให้เล่น
+        if (!hasPlayedMetalRef.current) {
+          playMetal();
+          hasPlayedMetalRef.current = true; // ใช้ ref นี้แทนความหมายว่า "กำลังเล่นอยู่"
+        }
+      } else {
+        // ถ้าหลุดช่วงเวลา (จบแล้ว หรือ ถอยหลังกลับ) และเสียงกำลังเล่น -> ให้หยุด
+        if (hasPlayedMetalRef.current) {
+          stopMetal();
+          hasPlayedMetalRef.current = false;
+        }
       }
-      // Reset flag เมื่อ scroll กลับ
-      if (value < 0.77) {
+
+      // -----------------------------------------------------
+      // 🔊 2. Play Scales (เสียงกระแทกตุ้บ!)
+      // เงื่อนไข: เล่นโป๊ะเชะ ตอนที่ Heart Plate สิ้นสุด Animation (0.75)
+      // -----------------------------------------------------
+      if (latest >= 0.75) {
+        // เล่นครั้งเดียว
+        if (!hasPlayedScalesRef.current) {
+          playScales();
+          hasPlayedScalesRef.current = true;
+        }
+      }
+
+      // Reset Logic: ถ้า user สกรอลล์ย้อนกลับขึ้นไป ให้ reset เพื่อให้เล่นใหม่ได้
+      if (latest < 0.74) {
         hasPlayedScalesRef.current = false;
       }
     });
 
-    return () => unsubscribe();
-  }, [scrollYProgress, playScales, animationsStarted, isInView]);
-
+    return () => {
+      unsubscribe();
+      stopMetal(); // Cleanup: หยุดเสียงเมื่อ Unmount กันเสียงค้าง
+    };
+  }, [
+    scrollYProgress,
+    playMetal,
+    stopMetal,
+    playScales,
+    animationsStarted,
+    isInView,
+  ]);
   // Main opacity for entire section
   const mainOpacity = useTransform(
     scrollYProgress,
-    [0, 0.05, 0.95, 1],
+    [0, 0.05, 0.98, 1],
+    [0, 1, 1, 0]
+  );
+
+  const insideOpacity = useTransform(
+    scrollYProgress,
+    [0, 0.05, 0.75, 0.8],
     [0, 1, 1, 0]
   );
 
@@ -121,21 +133,7 @@ export default function Weighing() {
   );
 
   // POV falling effect - extended to use additional 50vh (600-750vh = 0.6-0.75)
-  const pov_y = useTransform(scrollYProgress, [0, 0.6, 0.75], [0, 0, -500]);
-
-  // Shake effect - rapid oscillation during fall (0.6-0.75)
-  const pov_shake_x = useTransform(
-    scrollYProgress,
-    [0.6, 0.615, 0.63, 0.645, 0.66, 0.675, 0.69, 0.705, 0.72, 0.735, 0.75],
-    [0, 5, -5, 4, -4, 3, -3, 2, -2, 1, 0]
-  );
-
-  // Blur effect - increases during fall (0.6-0.75)
-  const pov_blur = useTransform(scrollYProgress, [0, 0.6, 0.75], [0, 0, 8]);
-
-  // Set 1: tree right, tree left (0-50vh = 0-0.0667)
-  const opacity_set1 = useTransform(scrollYProgress, [0, 0.0667], [0, 1]);
-  const y_set1 = useTransform(scrollYProgress, [0, 0.0667], [100, 0]);
+  const pov_y = useTransform(scrollYProgress, [0, 0.75, 0.9], [0, 0, -500]);
 
   // Set 2: sky, wall (50-100vh = 0.0667-0.1333)
   const opacity_set2 = useTransform(scrollYProgress, [0.0667, 0.1333], [0, 1]);
@@ -183,57 +181,53 @@ export default function Weighing() {
   const containerScale = useTransform(
     scrollYProgress,
     [0.5333, 0.6667],
-    isPortrait ? [2.3, 4.5] : [1, 2.35]
+    isPortrait ? [2.3, 4] : [1, 2.35]
   );
   const containerTop = useTransform(
     scrollYProgress,
     [0.5333, 0.6667],
-    isPortrait ? ["-10%", "-5%"] : ["0%", "-17%"]
+    isPortrait ? ["-5%", "-3%"] : ["0%", "-7%"]
   );
+
+  // Derive z_move from the existing containerScale so the visual zoom
+  // matches the previous `scale` mapping exactly.
+  const z_move = useTransform(containerScale, (s) => {
+    const scale = Number(s) || 1;
+    // avoid division by zero and clamp small scales
+    if (scale === 0) return 0;
+    return 1000 * (1 - 1 / scale);
+  });
 
   // ============ SLOW MOVEMENT (500-580vh = 0.6667-0.7733) ============
   // Heart side: slowly rotate down
-  const heartRotate_slow = useTransform(
-    scrollYProgress,
-    [0.6667, 0.7733],
-    [0, -5]
-  );
+  const heartRotate_slow = useTransform(scrollYProgress, [0.65, 0.7], [0, -5]);
   // Heart plate: slowly down (Y movement)
   const heartPlateY_slow = useTransform(
     scrollYProgress,
-    [0.6667, 0.7733],
+    [0.65, 0.7],
     isPortrait ? [0, 5] : [0, 15]
   );
-  // Feather side: slowly rotate up
-  const featherRotate_slow = useTransform(
-    scrollYProgress,
-    [0.6667, 0.7733],
-    [0, -5]
-  );
+
   // Feather plate: slowly up (Y movement)
   const featherPlateY_slow = useTransform(
     scrollYProgress,
-    [0.6667, 0.7733],
+    [0.65, 0.7],
     isPortrait ? [0, -5] : [0, -15]
   );
 
   // ============ FAST DROP (580-600vh = 0.7733-0.8) ============
   // Heart: fast rotate down with easeIn
-  const heartRotate_fast = useTransform(
-    scrollYProgress,
-    [0.7733, 0.8],
-    [0, -15]
-  );
+  const heartRotate_fast = useTransform(scrollYProgress, [0.7, 0.75], [0, -15]);
   // Heart plate: fast drop (Y movement)
   const heartPlateY_fast = useTransform(
     scrollYProgress,
-    [0.7733, 0.8],
+    [0.7, 0.75],
     isPortrait ? [0, 8] : [0, 30]
   );
   // Feather plate: slight rise (Y movement)
   const featherPlateY_fast = useTransform(
     scrollYProgress,
-    [0.7733, 0.8],
+    [0.7, 0.75],
     isPortrait ? [0, -3] : [0, -10]
   );
 
@@ -248,6 +242,68 @@ export default function Weighing() {
     () => featherPlateY_slow.get() + featherPlateY_fast.get()
   );
 
+  // Play sounds based on MotionValue changes rather than raw scroll thresholds
+  useEffect(() => {
+    // playMetal: when scaleRotate starts to move (rotation magnitude exceeds small threshold)
+    const unsubscribeRotate = scaleRotate.on("change", (v) => {
+      const rotateVal = typeof v === "number" ? Math.abs(v) : 0;
+      if (
+        rotateVal > 1 &&
+        !hasPlayedMetalRef.current &&
+        animationsStarted &&
+        isInView
+      ) {
+        playMetal();
+        hasPlayedMetalRef.current = true;
+      }
+      // stop metal sound as soon as rotation subsides
+      if (rotateVal < 0.5 && hasPlayedMetalRef.current) {
+        try {
+          stopMetal();
+        } catch (e) {
+          // swallow
+        }
+        hasPlayedMetalRef.current = false;
+      }
+    });
+
+    return () => {
+      try {
+        unsubscribeRotate && unsubscribeRotate();
+      } catch (e) {}
+    };
+  }, [scaleRotate, playMetal, animationsStarted, isInView]);
+
+  useEffect(() => {
+    // playScales: when heartPlateY_fast reaches its end (fast drop finished)
+    // Determine expected end value depending on orientation
+    const heartFastEnd = isPortrait ? /* px */ 8 : /* px */ 30;
+
+    const unsubscribeHeart = heartPlateY_fast.on("change", (v) => {
+      const val = typeof v === "number" ? v : 0;
+      // trigger when near the final value (allow small epsilon)
+      if (
+        val >= heartFastEnd - 0.5 &&
+        !hasPlayedScalesRef.current &&
+        animationsStarted &&
+        isInView
+      ) {
+        playScales();
+        hasPlayedScalesRef.current = true;
+      }
+      // reset if heart plate moves back up
+      if (val < heartFastEnd - 2) {
+        hasPlayedScalesRef.current = false;
+      }
+    });
+
+    return () => {
+      try {
+        unsubscribeHeart && unsubscribeHeart();
+      } catch (e) {}
+    };
+  }, [heartPlateY_fast, playScales, animationsStarted, isInView, isPortrait]);
+
   const textOpacity = useTransform(
     scrollYProgress,
     [0, 0.3, 0.7, 0.75],
@@ -256,16 +312,17 @@ export default function Weighing() {
 
   const textAnimationProgress = useTransform(
     scrollYProgress,
-    [0, 0.3, 0.72],
+    [0, 0.3, 0.75],
     [0, 0, 1]
   );
 
   // ============ VIDEO SECTION (750-1000vh = 0.75-1.0) ============
   const videoOpacity = useTransform(
     scrollYProgress,
-    [0.75, 0.77, 0.98, 1],
+    [0.75, 0.76, 0.98, 1],
     [0, 1, 1, 0]
   );
+  
 
   return (
     <motion.div
@@ -274,242 +331,135 @@ export default function Weighing() {
       style={{ opacity: mainOpacity }}
     >
       {/* Background */}
-      <div className="absolute w-screen inset-0 -z-1" />
-
-      {/* fixed Container with aspect-video layout */}
-      <motion.div
-        className="
-          fixed top-0 left-0 w-screen h-screen flex items-center justify-center bg-s4"
+      <div className="absolute w-screen inset-0" />
+      <div
+        className="fixed inset-0 w-screen h-screen pointer-events-none "
         style={{
-          scale: containerScale,
-          top: containerTop,
-          y: pov_y,
-          x: pov_shake_x,
-          filter: useTransform(pov_blur, (value) => `blur(${value}px)`),
+          perspective: "1000px", // กำหนดความลึกที่ตัวพ่อ
+          // ถ้าอยากให้จุด Center อยู่กลางจอเป๊ะๆ
+          perspectiveOrigin: "50% 50%",
+          zIndex: 0,
         }}
       >
-        <div className="relative aspect-video w-full ">
-          {/* Set 2: Sky (Lottie) */}
-          <motion.div
-            className="absolute inset-0 w-full h-full"
-            style={{ opacity: opacity_set2, y: y_set2 }}
-          >
-            <Lottie
-              animationData={skyAnimationData}
-              loop
-              autoplay
-              style={{ width: "100%", height: "100%" }}
-            />
-          </motion.div>
+        {/* fixed Container with aspect-video layout */}
+        <motion.div
+          className="fixed
+          w-full h-full flex items-center justify-center bg-s4"
+          // suppress hydration warnings for this animated container because
+          // inline styles are driven by MotionValues that differ between
+          // server render and client hydration.
+          suppressHydrationWarning
+          style={{
+            // replace scale with 3D perspective + translateZ (z)
+            top: containerTop,
+            y: pov_y,
+            z: z_move,
+            // rendering hints
+            willChange: "transform, filter",
+            backfaceVisibility: "hidden",
+            opacity: insideOpacity,
+          }}
+        >
+          <div className="relative aspect-video w-full ">
+            <motion.div className="absolute inset-0 w-full h-full">
+              <SceneLayer
+                items={SCENE_WEIGHING_ITEMS}
+                animations={{
+                  2: { y: y_set2, opacity: opacity_set2 },
+                  // Group 6: main plates/scale intro
+                  6: { y: y_set6, opacity: opacity_set6 },
+                  // Heart and feather appear in their own groups
+                  7: {
+                    y: useTransform(() => y_set7.get() + heartPlateY.get()),
+                    opacity: opacity_set7,
+                  },
+                  8: {
+                    y: useTransform(() => y_set8.get() + featherPlateY.get()),
+                    opacity: opacity_set8,
+                  },
+                  // Per-item combined transforms for plates
+                  66: {
+                    y: useTransform(() => y_set6.get() + heartPlateY.get()),
+                    opacity: opacity_set6,
+                  },
+                  67: {
+                    y: useTransform(() => y_set6.get() + featherPlateY.get()),
+                    opacity: opacity_set6,
+                  },
+                  // Light needs flicker opacity
+                  68: { y: y_set6, opacity: lightOpacity },
+                  // Scale with rotate
+                  69: { y: y_set6, opacity: opacity_set6, rotate: scaleRotate },
+                }}
+                baseStyle={{ willChange: "transform, opacity" }}
+                containerAspectRatio="16 / 9"
+              >
+                {/* Sky (Lottie) - full background */}
+                <motion.div
+                  className="absolute inset-0 w-full h-full -z-1"
+                  style={{ opacity: opacity_set2, y: y_set2 }}
+                >
+                  <LazyLottie
+                    src="/assets/Scene/Scene4/s4-sky.lottie"
+                    loop
+                    scrollYProgress={opacity_set2}
+                    className="w-full h-full"
+                  />
+                </motion.div>
 
-          {/* Set 1: Trees (Lottie) */}
-          <motion.div
-            className="absolute bottom-0 right-[8%] w-[20%] h-auto scale-x-[-1]"
-            style={{ opacity: opacity_set1, y: y_set1 }}
-          >
-            <Lottie
-              animationData={treeRightAnimationData}
-              loop
-              autoplay
-              style={{ width: "100%", height: "100%" }}
-            />
-          </motion.div>
-          <motion.div
-            className="absolute bottom-0 left-[7.5%] w-[20%] h-auto"
-            style={{ opacity: opacity_set1, y: y_set1 }}
-          >
-            <Lottie
-              animationData={treeLeftAnimationData}
-              loop
-              autoplay
-              style={{ width: "100%", height: "100%" }}
-            />
-          </motion.div>
+                {/* Tree */}
+                <motion.div
+                  className="absolute left-[8.28%] top-[50.01%] w-[84.24%] h-[57.66%] -z-3"
+                  style={{ opacity: opacity_set4, y: y_set4 }}
+                >
+                  <VideoAnimation
+                    webmSrc="/assets/Scene/Scene4/tree.webm"
+                    movSrc="/assets/Scene/Scene4/tree.mov"
+                  />
+                </motion.div>
 
-          {/* Set 2: Wall, Ground, Pool */}
-          <motion.img
-            src="/assets/Scene/Scene4/wall.svg"
-            alt="Wall"
-            className="absolute bottom-0 left-[19%] w-[62.5%] h-auto "
-            style={{ opacity: opacity_set2, y: y_set2 }}
+                {/* Building */}
+                <motion.div className="absolute w-full h-full">
+                  <VideoAnimation
+                    webmSrc="/assets/Scene/Scene4/building.webm"
+                    movSrc="/assets/Scene/Scene4/building.mov"
+                  />
+                </motion.div>
+
+                {/* Cat */}
+                <motion.div
+                  className="absolute left-[28.12%] top-[81.47%] w-[43.86%] h-[22.83%] "
+                  style={{ opacity: opacity_set5, y: y_set5 }}
+                >
+                  <VideoAnimation
+                    webmSrc="/assets/Scene/Scene4/cat.webm"
+                    movSrc="/assets/Scene/Scene4/cat.mov"
+                  />
+                </motion.div>
+              </SceneLayer>
+            </motion.div>
+          </div>
+        </motion.div>
+
+        {/* Video Section (750-1000vh) */}
+        <motion.div
+          className="fixed inset-0 w-screen h-screen flex items-center justify-center pointer-events-none"
+          style={{
+            opacity: videoOpacity,
+            background:
+              "linear-gradient(180deg, #101518 1.07%, #0C1B1F 77.07%, #0B1E23 99.78%)",
+            willChange: "opacity",
+            z: isPortrait ? 500 : 0,
+          }}
+        >
+          <VideoAnimation
+            webmSrc="/assets/Scene/Scene4/falling.webm"
+            movSrc="/assets/Scene/Scene4/falling.mov"
+            className="mix-blend-screen"
           />
-          <motion.img
-            src="/assets/Scene/Scene4/ground.svg"
-            alt="Ground"
-            className="absolute bottom-[-94.73%] right-[-0.55%] w-[179.12%] h-auto"
-            style={{ opacity: opacity_set2, y: y_set2 }}
-          />
-          <motion.img
-            src="/assets/Scene/Scene4/pool.svg"
-            alt="Pool"
-            className="absolute bottom-[-131.66%] right-[-3.59%] w-[179.12%] h-auto "
-            style={{ opacity: opacity_set2, y: y_set2 }}
-          />
-
-          {/* Set 3: Poles (Lottie) */}
-          <motion.div
-            className="absolute bottom-[-6%] right-[-13.5%] w-[38%] h-auto scale-x-[-1]"
-            style={{ opacity: opacity_set3, y: y_set3 }}
-          >
-            <Lottie
-              animationData={poleLeftAnimationData}
-              loop
-              autoplay
-              style={{ width: "100%", height: "100%" }}
-            />
-          </motion.div>
-          <motion.div
-            className="absolute bottom-[-6.5%] left-[-13.5%] w-[38%] h-auto "
-            style={{ opacity: opacity_set3, y: y_set3 }}
-          >
-            <Lottie
-              animationData={poleLeftAnimationData}
-              loop
-              autoplay
-              style={{ width: "100%", height: "100%" }}
-            />
-          </motion.div>
-
-          {/* Set 4: Building (Lottie) */}
-          <motion.div
-            className="absolute top-[11.3%] left-[27.9%] w-[44.3%] h-auto"
-            style={{ opacity: opacity_set4, y: y_set4 }}
-          >
-            <Lottie
-              animationData={buildingAnimationData}
-              loop
-              autoplay
-              style={{ width: "100%", height: "100%" }}
-            />
-          </motion.div>
-          {/* Stairs left as image, unless you have a Lottie for it */}
-          <motion.img
-            src="/assets/Scene/Scene4/stairs.svg"
-            alt="Stairs"
-            className="absolute bottom-[-2.1%] left-[23.5%] w-[52.9%] h-auto"
-            style={{ opacity: opacity_set4, y: y_set4 }}
-          />
-
-          {/* Set 5: Cats (Lottie) */}
-          <motion.div
-            className="absolute bottom-[-4.2%] right-[28.1%] w-[7.17%] h-auto"
-            style={{ opacity: opacity_set5, y: y_set5 }}
-          >
-            <Lottie
-              animationData={catRightAnimationData}
-              loop
-              autoplay
-              style={{ width: "100%", height: "100%" }}
-            />
-          </motion.div>
-          <motion.div
-            className="absolute bottom-[-4.3%] left-[28%] w-[7.17%] h-auto"
-            style={{ opacity: opacity_set5, y: y_set5 }}
-          >
-            <Lottie
-              animationData={catLeftAnimationData}
-              loop
-              autoplay
-              style={{ width: "100%", height: "100%" }}
-            />
-          </motion.div>
-
-          {/* Set 6: Scale system */}
-          <motion.img
-            src="/assets/Scene/Scene4/light.svg"
-            alt="Light"
-            className="absolute top-[23.4%] left-[32.4%] w-[35.1%] h-auto mix-blend-screen"
-            style={{ opacity: lightOpacity, y: y_set6 }}
-          />
-
-          {/* Set 6: Heart Scale (left side) - will rotate */}
-          <motion.div
-            className="absolute bottom-[43.8%] right-[43.55%] w-[12.86%]"
-            style={{
-              opacity: opacity_set6,
-              y: y_set6,
-              rotate: scaleRotate,
-            }}
-          >
-            <img
-              src="/assets/Scene/Scene4/scale-2.svg"
-              className="w-full h-auto"
-            />
-          </motion.div>
-
-          <motion.div
-            className="absolute top-[62.7%] left-[41.95%] w-[3.4%]"
-            style={{
-              opacity: opacity_set6,
-              y: useTransform(() => y_set6.get() + heartPlateY.get()),
-            }}
-          >
-            <img
-              src="/assets/Scene/Scene4/heart-plate.svg"
-              alt="Heart Plate"
-              className="w-full h-auto"
-            />
-          </motion.div>
-
-          {/* Set 6: Feather Plate*/}
-          <motion.div
-            className="absolute top-[63%] left-[53.6%] w-[3.4%]"
-            style={{
-              opacity: opacity_set6,
-              y: useTransform(() => y_set6.get() + featherPlateY.get()),
-            }}
-          >
-            <img
-              src="/assets/Scene/Scene4/feather-plate.svg"
-              alt="Feather Plate"
-              className="w-full h-auto"
-            />
-          </motion.div>
-
-          <motion.img
-            src="/assets/Scene/Scene4/scale.svg"
-            alt="Scale"
-            className="absolute top-[45.8%] left-[41.95%] w-[16.1%] h-auto"
-            style={{ opacity: opacity_set6, y: y_set6 }}
-          />
-
-          {/* Set 7: Heart - moves with heart plate */}
-          <motion.div
-            className="absolute top-[58.5%] left-[42.2%] w-[3.5%]"
-            style={{
-              opacity: opacity_set7,
-              y: useTransform(() => y_set7.get() + heartPlateY.get()),
-            }}
-          >
-            <img
-              src="/assets/Scene/Scene4/heart.svg"
-              alt="Heart"
-              className="w-full h-auto"
-            />
-          </motion.div>
-
-          {/* Set 8: Feather - moves with feather plate */}
-          <motion.div
-            className="absolute top-[58.8%] left-[54.6%] w-[3.4%]"
-            style={{
-              opacity: opacity_set8,
-              y: useTransform(() => y_set8.get() + featherPlateY.get()),
-            }}
-          >
-            <img
-              src="/assets/Scene/Scene4/feather.svg"
-              alt="Feather"
-              className="w-full h-auto"
-            />
-          </motion.div>
-        </div>
-      </motion.div>
-
-      {/* Light overlay */}
-      <div
-        className="absolute w-screen inset-0 mix-blend-soft-light pointer-events-none"
-        style={{ backgroundColor: "var(--color-overlay)", opacity: 0.7 }}
-      />
+          <StarryBackground />
+        </motion.div>
+      </div>
 
       {/* ชุด 10: Subtitles */}
       <motion.div
@@ -551,22 +501,11 @@ export default function Weighing() {
         }}
       />
 
-      {/* Video Section (750-1000vh) */}
-      <motion.div
-        className="fixed inset-0 w-screen h-screen flex items-center justify-center pointer-events-none z-0"
-        style={{
-          opacity: videoOpacity,
-          background:
-            "linear-gradient(180deg, #101518 1.07%, #0C1B1F 77.07%, #0B1E23 99.78%)",
-          willChange: "opacity",
-        }}
-      >
-        <VideoAnimation
-          webmSrc="/assets/Scene/Scene4/falling.webm"
-          movSrc="/assets/Scene/Scene4/falling.mov"
-        
-        />
-      </motion.div>
+      {/* Light overlay */}
+      <div
+        className="absolute w-screen inset-0 mix-blend-soft-light pointer-events-none"
+        style={{ backgroundColor: "var(--color-overlay)", opacity: 0.5 }}
+      />
     </motion.div>
   );
 }

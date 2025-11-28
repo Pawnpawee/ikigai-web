@@ -1,47 +1,92 @@
 "use client";
 
-import React from "react";
+import React, { memo, useEffect, useState } from "react";
 import dynamic from "next/dynamic";
 import { DotLottieReactProps } from "@lottiefiles/dotlottie-react";
+// ⭐ เพิ่ม useMotionValue เข้ามาด้วย เพื่อสร้างค่า Default
+import { MotionValue, useMotionValueEvent, useMotionValue } from "framer-motion"; 
 
-// ⭐ ย้าย logic การโหลดแบบ Lazy มาไว้ที่นี่ที่เดียว
 const DotLottiePlayer = dynamic(
   () =>
     import("@lottiefiles/dotlottie-react").then((mod) => mod.DotLottieReact),
   {
-    ssr: false, // ปิด SSR เหมือนเดิม
-    // ใส่ Placeholder สีจางๆ หรือขนาดว่างๆ รอไว้ระหว่างโหลด Script
-    loading: () => <div className="w-full h-full bg-transparent" />, 
+    ssr: false,
+    loading: () => <div className="w-full h-full bg-transparent" />,
   }
 );
 
-// สร้าง Type สำหรับ Props เพื่อให้ TS ช่วยเช็ค (Clean Architecture)
-interface LazyLottieProps extends Omit<DotLottieReactProps, "src"> {
-  src: string; // บังคับว่าต้องส่ง path เป็น string เท่านั้น (เพื่อ Performance)
+interface LazyLottieProps extends Omit<DotLottieReactProps, "src" | "play"> {
+  src: string;
   className?: string;
-  getRef?: (ref: any) => void; // เผื่อต้องการส่ง ref กลับไปสั่ง play/stop
+  getRef?: (ref: any) => void;
+  play?: boolean;
+  scrollYProgress?: MotionValue<number>; 
+  triggerRange?: [number, number];
 }
 
-const LazyLottie: React.FC<LazyLottieProps> = ({ 
+const LazyLottie: React.FC<LazyLottieProps> = memo(({ 
   src, 
   className, 
   getRef, 
+  play, 
+  scrollYProgress, 
+  triggerRange = [0.01, 1], 
   ...props 
 }) => {
+  const [dotLottie, setDotLottie] = useState<any>(null);
+  const [isScrollPlaying, setIsScrollPlaying] = useState(false);
+
+  // ⭐ แก้ไขตรงนี้: สร้าง MotionValue จำลอง (Dummy) ไว้กันตาย
+  const fallbackMotionValue = useMotionValue(0);
+  
+  // ⭐ ถ้า scrollYProgress ไม่มี ให้ใช้ fallbackMotionValue แทน (เพื่อไม่ให้ Hook พัง)
+  const targetMotionValue = scrollYProgress || fallbackMotionValue;
+
+  // ตอนนี้ targetMotionValue จะเป็น MotionValue เสมอ ไม่ใช่ undefined แล้ว
+  useMotionValueEvent(targetMotionValue, "change", (latest) => {
+    // เช็คอีกรอบเพื่อความชัวร์ทาง Logic ว่าถ้าไม่มี Props ส่งมาจริงๆ ไม่ต้องทำอะไร
+    if (!triggerRange || !scrollYProgress) return;
+
+    const [start, end] = triggerRange;
+    const shouldPlay = latest >= start && latest <= end;
+
+    if (isScrollPlaying !== shouldPlay) {
+      setIsScrollPlaying(shouldPlay);
+    }
+  });
+
+  const finalPlayState = (triggerRange && scrollYProgress) ? isScrollPlaying : (play ?? false);
+
+  useEffect(() => {
+    if (!dotLottie) return;
+    if (finalPlayState) {
+      dotLottie.play();
+    } else {
+      dotLottie.pause();
+    }
+  }, [finalPlayState, dotLottie]);
+
   return (
     <div className={className}>
       <DotLottiePlayer
         {...props}
         src={src}
-        dotLottieRefCallback={getRef} // ส่ง ref กลับไปถ้ามีการขอ
+        autoplay={false}
+        dotLottieRefCallback={(dotLottieInstance) => {
+          setDotLottie(dotLottieInstance);
+          if (getRef) getRef(dotLottieInstance);
+        }}
         renderConfig={{
           autoResize: true,
-          devicePixelRatio: 1, // ⭐ Optimize GPU
+          devicePixelRatio: 1,
+          freezeOnOffscreen: true,
           ...props.renderConfig,
         }}
       />
     </div>
   );
-};
+});
+
+LazyLottie.displayName = "LazyLottie";
 
 export default LazyLottie;

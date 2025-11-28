@@ -142,8 +142,19 @@ export default function Sleeping() {
   // Bubble fade out: 400-440vh (50-55%)
 
   // ชุด 10: scale + text (450-600vh = 56.25-75%)
-  const scale = useTransform(scrollYProgress, [0.5625, 0.75], [1, 2]);
-  const top_zoom = useTransform(scrollYProgress, [0.5625, 0.75], ["0%", "25%"]);
+  const scale = useTransform(scrollYProgress, [0.5625, 0.75], [1, 1.7]);
+  const top_zoom = useTransform(
+    scrollYProgress,
+    [0.5625, 0.75],
+    [isPortrait ? "15%" : "0%", isPortrait ? "15%" : "0%"]
+  );
+
+  const z_move = useTransform(scale, (s) => {
+    const scale = Number(s) || 1;
+    // avoid division by zero and clamp small scales
+    if (scale === 0) return 0;
+    return 1000 * (1 - 1 / scale);
+  });
   const textOpacity = useTransform(
     scrollYProgress,
     [0.5625, 0.65, 0.7, 0.8],
@@ -169,23 +180,33 @@ export default function Sleeping() {
       style={{ opacity: bgOpacity }}
     >
       {/* Sticky Container */}
-      <div className="sticky top-0 w-screen h-screen overflow-hidden flex items-center justify-center bg-black">
+      <div
+        className="sticky top-0 w-screen h-screen overflow-hidden flex items-center justify-center bg-black"
+        suppressHydrationWarning
+        style={{
+          perspective: "1000px", // กำหนดความลึกที่ตัวพ่อ
+          // ถ้าอยากให้จุด Center อยู่กลางจอเป๊ะๆ
+          perspectiveOrigin: "50% 50%",
+        }}
+      >
         <motion.div
           className="absolute aspect-video w-full portrait:w-[250%]"
           style={{
-            scale,
-            top: isPortrait ? "20%" : top_zoom,
+            top: top_zoom,
+            z: z_move,
           }}
         >
           <SceneLayer
             items={SCENE_SLEEPING_ITEMS}
-            animations={{
-              1: { y: set1Y, opacity: set1Opacity },
-              2: { y: set2Y, opacity: set2Opacity },
-              3: { y: set3Y, opacity: set3Opacity },
-              4: { y: set4Y, opacity: set4Opacity },
-              5: { y: set5Y, opacity: set5Opacity },
-            } as AnimationMap}
+            animations={
+              {
+                1: { y: set1Y, opacity: set1Opacity },
+                2: { y: set2Y, opacity: set2Opacity },
+                3: { y: set3Y, opacity: set3Opacity },
+                4: { y: set4Y, opacity: set4Opacity },
+                5: { y: set5Y, opacity: set5Opacity },
+              } as AnimationMap
+            }
             baseStyle={{ willChange: "transform, opacity" }}
             containerAspectRatio="16 / 9"
           />

@@ -1,18 +1,49 @@
 "use client";
 import { motion, useScroll, useTransform, useInView } from "framer-motion";
-import { useRef } from "react";
-import Lottie from "lottie-react";
+import { useRef, useMemo, useCallback, useEffect } from "react";
+import LazyLottie from "../components/ui/LazyLottie";
 import WordByWordAnimation from "../components/ui/WordByWordAnimation";
 import { useIsPortrait } from "@/app/hooks/useOrientation";
 import { useBgMusicTransition } from "@/app/hooks/useBgMusicTransition";
-import skyAnimationData from "../../../public/assets/Scene/Intro/sky.json";
-import camelAnimationData from "../../../public/assets/Scene/Intro/camel.json";
-import sunAnimationData from "../../../public/assets/Scene/Intro/sun.json";
+import { useAudio } from "@/app/contexts/AudioContext";
+import { useAnimationReady } from "@/app/hooks/useAnimationReady";
+// Use string paths with LazyLottie to avoid bundling JSON into the client bundle
+// Prefer .lottie files when available for better packaging (dotLottie)
+const SKY_SRC = "/assets/Scene/Intro/sky.lottie";
+const CAMEL_SRC = "/assets/Scene/Intro/camel.lottie";
+const SUN_SRC = "/assets/Scene/Intro/sun.lottie";
 
 export default function Dreaming() {
   const ref = useRef<HTMLDivElement>(null);
   const isPortrait = useIsPortrait();
   const isInView = useInView(ref, { once: false, amount: 0.1 });
+
+  // ให้ส่วนนี้รอการ interact ครั้งแรกจากผู้ใช้เพื่อเปิดเสียง (ถ้ายังไม่ได้ consent)
+  const { startAudio, userConsented } = useAudio();
+
+  // ถ้า section เข้ามาใน viewport แต่ผู้ใช้ยังไม่ได้ให้ consent, ให้รอฟัง gesture ครั้งแรก
+  // แล้วเรียก startAudio เพื่อเปิดระบบเสียง (และทำให้ useBgMusicTransition ทำงาน)
+  useEffect(() => {
+    if (!isInView || userConsented) return;
+
+    const onUserGesture = () => {
+      try {
+        startAudio();
+      } catch (e) {
+        console.error("startAudio after gesture failed", e);
+      }
+      window.removeEventListener("pointerdown", onUserGesture);
+      window.removeEventListener("touchstart", onUserGesture);
+    };
+
+    window.addEventListener("pointerdown", onUserGesture, { once: true, passive: true } as any);
+    window.addEventListener("touchstart", onUserGesture, { once: true, passive: true } as any);
+
+    return () => {
+      window.removeEventListener("pointerdown", onUserGesture);
+      window.removeEventListener("touchstart", onUserGesture);
+    };
+  }, [isInView, userConsented, startAudio]);
 
   // จัดการ bg music transition แบบ fade in/out
   useBgMusicTransition({
@@ -76,6 +107,70 @@ export default function Dreaming() {
   const sun_scale = useTransform(scrollYProgress, [0, 1], [0.5, 1]);
   const textAnimationProgress = useTransform(scrollYProgress, [0, 0.8], [0, 1]);
 
+  // Memoize the displayed text so it isn't recreated each render
+  const text = useMemo(
+    () =>
+      `ตำนานอียิปต์เชื่อว่า เมื่อตายไปแล้วจะต้องเดินทางไปยัง 'ดินแดนแห่งการพิพากษา'
+                ภายในห้องโถงแห่งสัจจะ หัวใจจะถูกนำไปชั่งเทียบกับขนนก
+หากหัวใจเบากว่าขนนกก็จะเข้าถึงชีวิตหลังความตายเดินทางสู่ทุ่งแห่งความสุข
+แต่ถ้าหากจิตใจหนักแน่นมักถูกกลืนกินด้วยบางสิ่ง…`,
+    []
+  );
+
+  // Scene items list (order matters — first item is bottom-most)
+  const SCENE_ITEMS = useMemo(
+    () => [
+      {
+        id: "desert1",
+        src: "/assets/Scene/Intro/desert1.webp",
+        alt: "desert1",
+        style: { bottom: "0%", left: "0%", width: "100%" },
+        animGroup: 3,
+        
+      },
+      {
+        id: "desert2",
+        src: "/assets/Scene/Intro/desert2.webp",
+        alt: "desert2",
+        style: { bottom: "23.15%", left: "-13.02%", width: "67.19%" },
+        animGroup: 2,
+      },
+      {
+        id: "desert3",
+        src: "/assets/Scene/Intro/desert3.webp",
+        alt: "desert3",
+        style: { bottom: "0%", left: "0%", width: "100%" },
+        animGroup: 1,
+      },
+    ],
+    []
+  );
+
+  // Map motion values into an animations map for SceneLayer-like usage
+  const animations = useMemo(
+    () => ({
+      1: { y: y_first_quarter, opacity: opacity_first_quarter },
+      2: { y: y_second_quarter, opacity: opacity_second_quarter },
+      3: { y: y_third_quarter, opacity: opacity_third_quarter },
+    }),
+    [
+      y_first_quarter,
+      y_second_quarter,
+      y_third_quarter,
+      opacity_first_quarter,
+      opacity_second_quarter,
+      opacity_third_quarter,
+    ]
+  );
+
+  const getItemStyle = useCallback(
+    (item: any) => ({
+      ...item.style,
+      willChange: "transform, opacity",
+    }),
+    []
+  );
+
   return (
     <motion.div
       ref={ref}
@@ -83,10 +178,13 @@ export default function Dreaming() {
       style={{ opacity: bgOpacity }}
     >
       {/* Sticky Container */}
-      <div className="sticky top-0 w-screen h-screen overflow-hidden flex items-center justify-center">
+      <div
+        className="sticky top-0 w-screen h-screen overflow-hidden flex items-center justify-center"
+        style={{ willChange: "transform, opacity" }}
+      >
         {/* Background */}
         <img
-          src="/assets/Scene/Intro/bg.svg"
+          src="/assets/Scene/Intro/bg.webp"
           alt="Background"
           className="absolute inset-0 w-full h-full object-cover"
         />
@@ -96,11 +194,11 @@ export default function Dreaming() {
           className="absolute top-0 left-1/30 w-full portrait:w-[250%] portrait:-left-1/6 portrait:top-1/10"
           style={{ opacity: opacity_first_quarter }}
         >
-          <Lottie
-            animationData={skyAnimationData}
+          <LazyLottie
+            src={SKY_SRC}
             loop={true}
-            autoplay={true}
-            className="w-full object-cover"
+            scrollYProgress={opacity_first_quarter}
+            className="w-full object-cover aspect-1930/308"
           />
         </motion.div>
 
@@ -112,48 +210,46 @@ export default function Dreaming() {
             bottom: sun_bottom,
             left: sun_left,
             scale: sun_scale,
+            willChange: "transform, opacity",
           }}
         >
-          <Lottie
-            animationData={sunAnimationData}
+          <LazyLottie
+            src={SUN_SRC}
             loop={true}
-            autoplay={true}
-            className="w-full h-full"
+            scrollYProgress={scrollYProgress}
+            className="h-[370px]"
           />
         </motion.div>
 
         {/* ส่วนล่าง: desert และ animal (bottom-0) */}
         <motion.div className="absolute bottom-0 aspect-video w-full portrait:w-[200%]">
-          {/* desert1 */}
-          <motion.img
-            src="/assets/Scene/Intro/desert1.svg"
-            className="absolute w-full bottom-0 left-0 portrait:left-[10%]"
-            style={{ opacity: opacity_third_quarter, y: y_third_quarter }}
-          />
-
-          {/* desert2 */}
-          <motion.img
-            src="/assets/Scene/Intro/desert2.svg"
-            className="absolute w-[67.19%] left-[-13.02%] bottom-[23.15%] portrait:left-[-3%]"
-            style={{ opacity: opacity_second_quarter, y: y_second_quarter }}
-          />
-
-          {/* desert3 */}
-          <motion.img
-            src="/assets/Scene/Intro/desert3.svg"
-            className="absolute w-full bottom-0 left-0"
-            style={{ opacity: opacity_first_quarter, y: y_first_quarter }}
-          />
+          {SCENE_ITEMS.map((item) => {
+            const anim =
+              animations[item.animGroup as keyof typeof animations] || {};
+            return (
+              <motion.img
+                key={item.id}
+                src={item.src}
+                alt={item.alt}
+                className="absolute"
+                style={{
+                  ...(getItemStyle(item) as any),
+                  opacity: anim.opacity ?? 1,
+                  y: anim.y,
+                }}
+              />
+            );
+          })}
 
           {/* animal */}
           <motion.div
             className="absolute w-[29.17%] bottom-1/15 portrait:bottom-1/30"
-            style={{ right: animal_right }}
+            style={{ right: animal_right, willChange: "transform" }}
           >
-            <Lottie
-              animationData={camelAnimationData}
+            <LazyLottie
+              src={CAMEL_SRC}
               loop={true}
-              autoplay={true}
+              scrollYProgress={opacity_third_quarter}
               className="w-full h-full"
             />
           </motion.div>
@@ -169,10 +265,7 @@ export default function Dreaming() {
         <div className="absolute inset-0 flex items-center justify-center  text-center px-4">
           <motion.div style={{ opacity: opacity_first_quarter }}>
             <WordByWordAnimation
-              text={`ตำนานอียิปต์เชื่อว่า เมื่อตายไปแล้วจะต้องเดินทางไปยัง 'ดินแดนแห่งการพิพากษา'
-                ภายในห้องโถงแห่งสัจจะ หัวใจจะถูกนำไปชั่งเทียบกับขนนก
-หากหัวใจเบากว่าขนนกก็จะเข้าถึงชีวิตหลังความตายเดินทางสู่ทุ่งแห่งความสุข
-แต่ถ้าหากจิตใจหนักแน่นมักถูกกลืนกินด้วยบางสิ่ง…`}
+              text={text}
               scrollYProgress={textAnimationProgress}
               as="p"
               className="typo-text-h4 text-white w-80 md:w-140 xl:w-full"

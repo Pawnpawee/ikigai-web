@@ -12,7 +12,7 @@ const nextConfig: NextConfig = {
     remotePatterns: [
       { protocol: "https", hostname: "**" }
     ],
-    qualities: [75, 80, 90],
+    qualities: [85, 90, 100],
 
     // ⭐ แนะนำให้กำหนด formats ด้วย เพื่อให้รองรับ WebP และ AVIF (ใหม่กว่า WebP)
     formats: ['image/avif', 'image/webp'],

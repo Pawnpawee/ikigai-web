@@ -1,6 +1,6 @@
 "use client";
-import React, { useMemo } from "react";
-import { useTransform, MotionValue, motion } from "framer-motion";
+import React, { useMemo, useState } from "react";
+import { useTransform, MotionValue, motion, useMotionValueEvent } from "framer-motion";
 import SceneLayer, { AnimationMap } from "@/app/components/scene/SceneLayer";
 import { SCENE_1_ITEMS } from "@/app/data/scene1.data";
 import LazyLottie from "@/app/components/ui/LazyLottie";
@@ -128,7 +128,12 @@ export default function JobApplication1({ scrollYProgress }: JobApplication1Prop
             ...baseStyle,
           }}
         >
-          <LazyLottie src="/assets/Scene/Scene1/human.lottie" className="w-full h-full" loop autoplay />
+          <LazyLottie 
+            src="/assets/Scene/Scene1/human.lottie" 
+            className="w-full h-full" 
+            loop 
+            scrollYProgress={humanOp}
+          />
         </motion.div>
       </SceneLayer>
     </motion.div>
