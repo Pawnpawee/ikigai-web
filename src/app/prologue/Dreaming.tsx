@@ -36,8 +36,14 @@ export default function Dreaming() {
       window.removeEventListener("touchstart", onUserGesture);
     };
 
-    window.addEventListener("pointerdown", onUserGesture, { once: true, passive: true } as any);
-    window.addEventListener("touchstart", onUserGesture, { once: true, passive: true } as any);
+    window.addEventListener("pointerdown", onUserGesture, {
+      once: true,
+      passive: true,
+    } as any);
+    window.addEventListener("touchstart", onUserGesture, {
+      once: true,
+      passive: true,
+    } as any);
 
     return () => {
       window.removeEventListener("pointerdown", onUserGesture);
@@ -63,14 +69,14 @@ export default function Dreaming() {
   const bgOpacity = useTransform(
     scrollYProgress,
     [0, 0.3, 0.95, 1],
-    [0, 1, 1, 0]
+    [0, 1, 1, 0],
   );
 
   // 1/4: desert3 + sky โผล่ขึ้นมา
   const opacity_first_quarter = useTransform(
     scrollYProgress,
     [0.1, 0.25],
-    [0, 1]
+    [0, 1],
   );
   const y_first_quarter = useTransform(scrollYProgress, [0.1, 0.25], [100, 0]);
 
@@ -78,7 +84,7 @@ export default function Dreaming() {
   const opacity_second_quarter = useTransform(
     scrollYProgress,
     [0.35, 0.5],
-    [0, 1]
+    [0, 1],
   );
   const y_second_quarter = useTransform(scrollYProgress, [0.35, 0.5], [100, 0]);
 
@@ -86,7 +92,7 @@ export default function Dreaming() {
   const opacity_third_quarter = useTransform(
     scrollYProgress,
     [0.6, 0.75],
-    [0, 1]
+    [0, 1],
   );
   const y_third_quarter = useTransform(scrollYProgress, [0.6, 0.75], [100, 0]);
 
@@ -94,14 +100,14 @@ export default function Dreaming() {
   const animal_right = useTransform(
     scrollYProgress,
     [0.3, 1],
-    ["-50%", isPortrait ? "30%" : "8%"]
+    ["-50%", isPortrait ? "30%" : "8%"],
   );
 
   // Sun: เคลื่อนที่ตลอดการ scroll
   const sun_bottom = useTransform(
     scrollYProgress,
     [0, 1],
-    ["70%", isPortrait ? "25%" : "30%"]
+    ["70%", isPortrait ? "25%" : "30%"],
   );
   const sun_left = useTransform(scrollYProgress, [0, 1], ["0%", "85%"]);
   const sun_scale = useTransform(scrollYProgress, [0, 1], [0.5, 1]);
@@ -114,7 +120,7 @@ export default function Dreaming() {
                 ภายในห้องโถงแห่งสัจจะ หัวใจจะถูกนำไปชั่งเทียบกับขนนก
 หากหัวใจเบากว่าขนนกก็จะเข้าถึงชีวิตหลังความตายเดินทางสู่ทุ่งแห่งความสุข
 แต่ถ้าหากจิตใจหนักแน่นมักถูกกลืนกินด้วยบางสิ่ง…`,
-    []
+    [],
   );
 
   // Scene items list (order matters — first item is bottom-most)
@@ -126,7 +132,6 @@ export default function Dreaming() {
         alt: "desert1",
         style: { bottom: "0%", left: "0%", width: "100%" },
         animGroup: 3,
-        
       },
       {
         id: "desert2",
@@ -143,7 +148,7 @@ export default function Dreaming() {
         animGroup: 1,
       },
     ],
-    []
+    [],
   );
 
   // Map motion values into an animations map for SceneLayer-like usage
@@ -160,7 +165,7 @@ export default function Dreaming() {
       opacity_first_quarter,
       opacity_second_quarter,
       opacity_third_quarter,
-    ]
+    ],
   );
 
   const getItemStyle = useCallback(
@@ -168,7 +173,7 @@ export default function Dreaming() {
       ...item.style,
       willChange: "transform, opacity",
     }),
-    []
+    [],
   );
 
   return (

@@ -83,7 +83,7 @@ export default function Hero() {
         },
       },
     }),
-    []
+    [],
   );
   const charVariants: Variants = useMemo(
     () => ({
@@ -93,7 +93,7 @@ export default function Hero() {
         x: 0,
       },
     }),
-    []
+    [],
   );
 
   const circle1_rotate = useTransform(scrollYProgress, [0, 1], [-180, 0]);
@@ -117,7 +117,7 @@ export default function Hero() {
         },
       },
     }),
-    []
+    [],
   );
 
   // Memoize mountain transitions
@@ -128,7 +128,7 @@ export default function Hero() {
       mountain3: { duration: 1.5, delay: 0.5 },
       mountain4: { duration: 1.5 },
     }),
-    []
+    [],
   );
 
   // Memoize text split
@@ -177,7 +177,7 @@ export default function Hero() {
         delay: 2.0,
       },
     }),
-    [shouldAnimate]
+    [shouldAnimate],
   );
 
   return (
