@@ -5,18 +5,24 @@ import Navbar from "./components/ui/Navbar";
 import { ReactLenis, useLenis } from "lenis/react";
 import MouseFollower from "./components/ui/MouseFollower";
 import Intro from "./prologue//Intro";
-import IntoDark from "./prologue//IntoDark/IntoDark";
 import ScrollTo from "./components/ui/ScrollTo";
-import { useScroll, useTransform } from "framer-motion";
-import { useEffect } from "react";
+import {
+  AnimatePresence,
+  motion,
+  useScroll,
+  useTransform,
+} from "framer-motion";
+import { useEffect, useState } from "react";
 import Preloader from "./components/ui/Preloader";
-import Dreaming from "./prologue//Dreaming";
 import JobApplication from "./prologue//JobApplication/JobApplication";
 import Sleeping from "./prologue//Sleeping";
-import Weighing from "./prologue//Weighing";
+import DecisionSection from "./components/scene/DecisionSection";
+import { useRouter } from "next/navigation";
 
 export default function Home() {
+  const router = useRouter();
   const lenis = useLenis();
+  const [isTransitioning, setIsTransitioning] = useState(false);
   useEffect(() => {
     if (lenis) {
       lenis.scrollTo(0, { immediate: true });
@@ -31,6 +37,13 @@ export default function Home() {
     [1, 1, 0, 0]
   );
 
+  const handleWakeUp = () => {
+    setIsTransitioning(true);
+    setTimeout(() => {
+      router.push("/dreaming"); // ⭐ ไป Route ใหม่
+    }, 1000); // รอ Fade Out 1 วินาที
+  };
+
   return (
     <main className="relative flex flex-col justify-between h-full">
       <Preloader />
@@ -41,13 +54,29 @@ export default function Home() {
 
       {/* Scene Intro */}
       <Hero />
-      <Intro /> 
-      <JobApplication/>
+      <Intro />
+      <JobApplication />
       <Sleeping />
-      <Dreaming />
-      <Weighing />
-      {/* <IntoDark /> */}
+      {/* ⭐ ส่วนตัดสินใจ 1: ตื่นหรือไม่ */}
+      <DecisionSection
+        text="คุณหลับมาพักนึงแล้ว อยากตื่นขึ้นเลยไหม"
+        primaryButtonText="ตื่นเลย"
+        secondaryButtonText="ยังก่อน"
+        onPrimaryClick={handleWakeUp}
+      />
 
+      {/* Transition Overlay (ม่านดำสำหรับเปลี่ยนหน้า) */}
+      <AnimatePresence>
+        {isTransitioning && (
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            transition={{ duration: 1 }}
+            className="fixed inset-0 z-20 pointer-events-none"
+          />
+        )}
+      </AnimatePresence>
     </main>
   );
 }

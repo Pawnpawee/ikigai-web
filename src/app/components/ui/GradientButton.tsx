@@ -6,7 +6,7 @@ interface GradientButtonProps {
   isSelected: boolean;
   onClick: () => void;
   className?: string;
-  variant?: "default" | "white";
+  variant?: "default" | "white" | "transparent";
 }
 
 export default function GradientButton({
@@ -17,19 +17,28 @@ export default function GradientButton({
   variant = "default",
 }: GradientButtonProps) {
   const isWhiteVariant = variant === "white";
+  const isTransparentVariant = variant === "transparent";
 
   const getButtonStyles = () => {
+
+    if (isTransparentVariant) {
+      return {
+        border: "2px solid rgba(255, 255, 255, 1)", // ขอบสีขาวจางๆ
+        background: "transparent", // พื้นหลังใส
+        boxShadow: "0 0 40px -20px var(--color-slate-100)",
+      };
+    }
     if (isWhiteVariant) {
       // White variant - similar to InputButton
       return {
         border: "4px solid var(--white-radial)",
         background: "var(--white-linear)",
-        boxShadow: "0 0 60px -20px var(--color-slate-100)",
+        boxShadow: "0 0 40px -20px var(--color-slate-100)",
       };
     }
     // Default variant
     return {
-      boxShadow: isSelected ? "0 0 60px -10px #CFD5DC" : "none",
+      boxShadow: isSelected ? "0 0 40px -10px #CFD5DC" : "none",
     };
   };
 
@@ -42,8 +51,12 @@ export default function GradientButton({
         px-14 py-4
         typo-text-h4
         transition-all
+        
         ${
-          isWhiteVariant
+          // ⭐ Logic การเลือก ClassName
+          isTransparentVariant
+            ? "text-white hover:bg-white/10 hover:border-white" // สีขาว, hover แล้วมีพื้นจางๆ
+            : isWhiteVariant
             ? "text-black"
             : isSelected
             ? "bg-linear-to-b from-slate-200 to-slate-100 border-slate-200 text-black border-4"

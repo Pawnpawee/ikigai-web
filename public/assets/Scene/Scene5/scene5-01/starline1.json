@@ -1,1 +1,330 @@
-{"v":"5.9.0","fr":25,"ip":0,"op":115,"w":113,"h":92,"nm":"s-5-1-starline1","ddd":0,"assets":[{"id":"image_0","w":27,"h":27,"u":"","p":"data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABsAAAAbBAMAAAB/+ulmAAAAJHpUWHRDcmVhdG9yAAAImXNMyU9KVXBMK0ktUnBNS0tNLikGAEF6Bs5qehXFAAAACXBIWXMAAAABAAAAAQBPJcTWAAAAIVBMVEVHcEwTi58Ti58Ti58Ti58Si58Uip8Qj58Qh58Ti58Ti59zVIcgAAAACnRSTlMAWOiad9A0ECC26pxQHQAAAJNJREFUGNNjYAADRgYUkInKdULlzkpA4WoJIPPYVhkgc1lWKSBzmVYtROZ6rVpUgOAxrlq1KhxZctWqpQ0wY51WgcBisF1snlqroCBYnIEBwQPygRrYhKECU6AOZQTzLeAmlwJ5igiL2KNWrUL2Q9eqxciOZF61ApnLuGoCivdXOaBwo1ADxwo16ERRucWoXA4oDQCGnDJ7vVWF5QAAAABJRU5ErkJggg==","e":1},{"id":"image_1","w":27,"h":27,"u":"","p":"data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABsAAAAbBAMAAAB/+ulmAAAAJHpUWHRDcmVhdG9yAAAImXNMyU9KVXBMK0ktUnBNS0tNLikGAEF6Bs5qehXFAAAACXBIWXMAAAABAAAAAQBPJcTWAAAAJFBMVEVHcEwTi58Si58Ti58Ti58Uip8Qj58Qh58Ti58Ti58Tip8Ti59a7kcvAAAAC3RSTlMAWM2neDQQIODwkB80K9sAAACVSURBVBjTY2AAA0YGFBCMyvVE5VoHoHBnCyDzWHcbIHNZdjcgczl2b0Tmeu/ekYDgMe7evVsNWXL37k0FMGM9doPAZrBdrM6zd0OBlhgDgzCcB+QDNbAKd0M4KlCHMoL55nCTk4C8iQiL2LR370b2Q/XuzciOZN69HZnLuFsBxfu7HVC42qiBsxo16IRQuVmoXHYoDQALfDa0KtecaAAAAABJRU5ErkJggg==","e":1},{"id":"image_2","w":90,"h":68,"u":"","p":"data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAFoAAABEBAMAAADzWj/aAAAAJHpUWHRDcmVhdG9yAAAImXNMyU9KVXBMK0ktUnBNS0tNLikGAEF6Bs5qehXFAAAACXBIWXMAAAABAAAAAQBPJcTWAAAAKlBMVEVHcEwBBgkEGCAJPE8GKTcMT2kGKDUAKDUCEhgFJDEFJjMGKDUJQ1kJPFBhejuxAAAADnRSTlMAf39/f38bCGQvUD9jdWx/KxwAAADoSURBVEjH7dYhDsJAEIXhVfhdCaqTKuy2hgSzO4oE1YzhFEhENRokjivQwhW4QBPOwwlI+osmJLB6xCdm3xs3m+/d+Hf2RzDtvT+Nnz54Tyw3Tyyzb7IUISBLQBYRYpEgxCKyBJYOWkSZZUMsSYklKbKoEstd9QUsqltgabOuiCXHJ7BUcU0sVSSWPiLLwCyx3hFLY8hiRiyNEcvDkMWYxX7HgvbFGmSpJ91d+o9Ivgw5IwvKuj6j3K1Q7rY0d0ti0VSSDkisGxPqxiSwp8nN0BUF6mmP7pcw6S31vzE/WBaOWK5g2l3cG5DqYp7noJpQAAAAAElFTkSuQmCC","e":1}],"layers":[{"ddd":0,"ind":1,"ty":2,"nm":"Layer 3","refId":"image_0","sr":1,"ks":{"o":{"a":1,"k":[{"i":{"x":[0.667],"y":[1]},"o":{"x":[0.333],"y":[0]},"t":10,"s":[0]},{"i":{"x":[0.667],"y":[1]},"o":{"x":[0.333],"y":[0]},"t":20,"s":[100]},{"i":{"x":[0.667],"y":[1]},"o":{"x":[0.333],"y":[0]},"t":85,"s":[100]},{"t":95,"s":[0]}],"ix":11},"r":{"a":0,"k":0,"ix":10},"p":{"a":0,"k":[99.995,78.848,0],"ix":2,"l":2},"a":{"a":0,"k":[13.237,13.237,0],"ix":1,"l":2},"s":{"a":1,"k":[{"i":{"x":[0.667,0.667,0.667],"y":[1,1,1]},"o":{"x":[0.333,0.333,0.333],"y":[0,0,0]},"t":10,"s":[0,0,100]},{"i":{"x":[0.667,0.667,0.667],"y":[1,1,1]},"o":{"x":[0.333,0.333,0.333],"y":[0,0,0]},"t":20,"s":[100,100,100]},{"i":{"x":[0.667,0.667,0.667],"y":[1,1,1]},"o":{"x":[0.333,0.333,0.333],"y":[0,0,0]},"t":85,"s":[100,100,100]},{"t":95,"s":[0,0,100]}],"ix":6,"l":2}},"ao":0,"ip":0,"op":115,"st":0,"bm":0},{"ddd":0,"ind":2,"ty":2,"nm":"Layer 2","refId":"image_1","sr":1,"ks":{"o":{"a":1,"k":[{"i":{"x":[0.667],"y":[1]},"o":{"x":[0.333],"y":[0]},"t":0,"s":[0]},{"i":{"x":[0.667],"y":[1]},"o":{"x":[0.333],"y":[0]},"t":10,"s":[100]},{"i":{"x":[0.667],"y":[1]},"o":{"x":[0.333],"y":[0]},"t":105,"s":[100]},{"t":114,"s":[0]}],"ix":11},"r":{"a":0,"k":0,"ix":10},"p":{"a":0,"k":[13.005,13.151,0],"ix":2,"l":2},"a":{"a":0,"k":[13.237,13.236,0],"ix":1,"l":2},"s":{"a":1,"k":[{"i":{"x":[0.667,0.667,0.667],"y":[1,1,1]},"o":{"x":[0.333,0.333,0.333],"y":[0,0,0]},"t":0,"s":[0,0,100]},{"i":{"x":[0.667,0.667,0.667],"y":[1,1,1]},"o":{"x":[0.333,0.333,0.333],"y":[0,0,0]},"t":10,"s":[100,100,100]},{"i":{"x":[0.667,0.667,0.667],"y":[1,1,1]},"o":{"x":[0.333,0.333,0.333],"y":[0,0,0]},"t":105,"s":[100,100,100]},{"t":114,"s":[0,0,100]}],"ix":6,"l":2}},"ao":0,"ip":0,"op":115,"st":0,"bm":0},{"ddd":0,"ind":3,"ty":2,"nm":"Layer 1","refId":"image_2","sr":1,"ks":{"o":{"a":0,"k":100,"ix":11},"r":{"a":0,"k":0,"ix":10},"p":{"a":0,"k":[15.222,15.979,0],"ix":2,"l":2},"a":{"a":0,"k":[3.621,2.828,0],"ix":1,"l":2},"s":{"a":0,"k":[100,100,100],"ix":6,"l":2}},"ao":0,"hasMask":true,"masksProperties":[{"inv":false,"mode":"n","pt":{"a":0,"k":{"i":[[0,0],[0,0]],"o":[[0,0],[0,0]],"v":[[3.648,2.849],[93.398,70.099]],"c":false},"ix":1},"o":{"a":0,"k":100,"ix":3},"x":{"a":0,"k":0,"ix":4},"nm":"Mask 1"}],"ef":[{"ty":22,"nm":"Stroke","np":13,"mn":"ADBE Stroke","ix":1,"en":1,"ef":[{"ty":10,"nm":"Path","mn":"ADBE Stroke-0001","ix":1,"v":{"a":0,"k":1,"ix":1}},{"ty":7,"nm":"All Masks","mn":"ADBE Stroke-0010","ix":2,"v":{"a":0,"k":0,"ix":2}},{"ty":7,"nm":"Stroke Sequentially","mn":"ADBE Stroke-0011","ix":3,"v":{"a":0,"k":1,"ix":3}},{"ty":2,"nm":"Color","mn":"ADBE Stroke-0002","ix":4,"v":{"a":0,"k":[1,1,1,1],"ix":4}},{"ty":0,"nm":"Brush Size","mn":"ADBE Stroke-0003","ix":5,"v":{"a":0,"k":2.5,"ix":5}},{"ty":0,"nm":"Brush Hardness","mn":"ADBE Stroke-0004","ix":6,"v":{"a":0,"k":0.75,"ix":6}},{"ty":0,"nm":"Opacity","mn":"ADBE Stroke-0005","ix":7,"v":{"a":0,"k":1,"ix":7}},{"ty":0,"nm":"Start","mn":"ADBE Stroke-0008","ix":8,"v":{"a":0,"k":0,"ix":8}},{"ty":0,"nm":"End","mn":"ADBE Stroke-0009","ix":9,"v":{"a":1,"k":[{"i":{"x":[0.667],"y":[1]},"o":{"x":[0.333],"y":[0]},"t":0,"s":[0]},{"i":{"x":[0.667],"y":[1]},"o":{"x":[0.333],"y":[0]},"t":20,"s":[100]},{"i":{"x":[0.667],"y":[1]},"o":{"x":[0.333],"y":[0]},"t":95,"s":[100]},{"t":105,"s":[0]}],"ix":9}},{"ty":7,"nm":"Spacing","mn":"ADBE Stroke-0006","ix":10,"v":{"a":0,"k":15,"ix":10}},{"ty":7,"nm":"Paint Style","mn":"ADBE Stroke-0007","ix":11,"v":{"a":0,"k":3,"ix":11}}]}],"ip":0,"op":115,"st":0,"bm":0}],"markers":[]}
+{
+  "v": "5.9.0",
+  "fr": 25,
+  "ip": 0,
+  "op": 115,
+  "w": 113,
+  "h": 92,
+  "nm": "s-5-1-starline1",
+  "ddd": 0,
+  "assets": [
+    {
+      "id": "image_0",
+      "w": 27,
+      "h": 27,
+      "u": "",
+      "p": "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABsAAAAbBAMAAAB/+ulmAAAAJHpUWHRDcmVhdG9yAAAImXNMyU9KVXBMK0ktUnBNS0tNLikGAEF6Bs5qehXFAAAACXBIWXMAAAABAAAAAQBPJcTWAAAAIVBMVEVHcEwTi58Ti58Ti58Ti58Si58Uip8Qj58Qh58Ti58Ti59zVIcgAAAACnRSTlMAWOiad9A0ECC26pxQHQAAAJNJREFUGNNjYAADRgYUkInKdULlzkpA4WoJIPPYVhkgc1lWKSBzmVYtROZ6rVpUgOAxrlq1KhxZctWqpQ0wY51WgcBisF1snlqroCBYnIEBwQPygRrYhKECU6AOZQTzLeAmlwJ5igiL2KNWrUL2Q9eqxciOZF61ApnLuGoCivdXOaBwo1ADxwo16ERRucWoXA4oDQCGnDJ7vVWF5QAAAABJRU5ErkJggg==",
+      "e": 1
+    },
+    {
+      "id": "image_1",
+      "w": 27,
+      "h": 27,
+      "u": "",
+      "p": "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABsAAAAbBAMAAAB/+ulmAAAAJHpUWHRDcmVhdG9yAAAImXNMyU9KVXBMK0ktUnBNS0tNLikGAEF6Bs5qehXFAAAACXBIWXMAAAABAAAAAQBPJcTWAAAAJFBMVEVHcEwTi58Si58Ti58Ti58Uip8Qj58Qh58Ti58Ti58Tip8Ti59a7kcvAAAAC3RSTlMAWM2neDQQIODwkB80K9sAAACVSURBVBjTY2AAA0YGFBCMyvVE5VoHoHBnCyDzWHcbIHNZdjcgczl2b0Tmeu/ekYDgMe7evVsNWXL37k0FMGM9doPAZrBdrM6zd0OBlhgDgzCcB+QDNbAKd0M4KlCHMoL55nCTk4C8iQiL2LR370b2Q/XuzciOZN69HZnLuFsBxfu7HVC42qiBsxo16IRQuVmoXHYoDQALfDa0KtecaAAAAABJRU5ErkJggg==",
+      "e": 1
+    },
+    {
+      "id": "image_2",
+      "w": 90,
+      "h": 68,
+      "u": "",
+      "p": "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAFoAAABEBAMAAADzWj/aAAAAJHpUWHRDcmVhdG9yAAAImXNMyU9KVXBMK0ktUnBNS0tNLikGAEF6Bs5qehXFAAAACXBIWXMAAAABAAAAAQBPJcTWAAAAKlBMVEVHcEwBBgkEGCAJPE8GKTcMT2kGKDUAKDUCEhgFJDEFJjMGKDUJQ1kJPFBhejuxAAAADnRSTlMAf39/f38bCGQvUD9jdWx/KxwAAADoSURBVEjH7dYhDsJAEIXhVfhdCaqTKuy2hgSzO4oE1YzhFEhENRokjivQwhW4QBPOwwlI+osmJLB6xCdm3xs3m+/d+Hf2RzDtvT+Nnz54Tyw3Tyyzb7IUISBLQBYRYpEgxCKyBJYOWkSZZUMsSYklKbKoEstd9QUsqltgabOuiCXHJ7BUcU0sVSSWPiLLwCyx3hFLY8hiRiyNEcvDkMWYxX7HgvbFGmSpJ91d+o9Ivgw5IwvKuj6j3K1Q7rY0d0ti0VSSDkisGxPqxiSwp8nN0BUF6mmP7pcw6S31vzE/WBaOWK5g2l3cG5DqYp7noJpQAAAAAElFTkSuQmCC",
+      "e": 1
+    }
+  ],
+  "layers": [
+    {
+      "ddd": 0,
+      "ind": 1,
+      "ty": 2,
+      "nm": "Layer 3",
+      "refId": "image_0",
+      "sr": 1,
+      "ks": {
+        "o": {
+          "a": 1,
+          "k": [
+            {
+              "i": { "x": [0.667], "y": [1] },
+              "o": { "x": [0.333], "y": [0] },
+              "t": 10,
+              "s": [0]
+            },
+            {
+              "i": { "x": [0.667], "y": [1] },
+              "o": { "x": [0.333], "y": [0] },
+              "t": 20,
+              "s": [100]
+            },
+            {
+              "i": { "x": [0.667], "y": [1] },
+              "o": { "x": [0.333], "y": [0] },
+              "t": 85,
+              "s": [100]
+            },
+            { "t": 95, "s": [0] }
+          ],
+          "ix": 11
+        },
+        "r": { "a": 0, "k": 0, "ix": 10 },
+        "p": { "a": 0, "k": [99.995, 78.848, 0], "ix": 2, "l": 2 },
+        "a": { "a": 0, "k": [13.237, 13.237, 0], "ix": 1, "l": 2 },
+        "s": {
+          "a": 1,
+          "k": [
+            {
+              "i": { "x": [0.667, 0.667, 0.667], "y": [1, 1, 1] },
+              "o": { "x": [0.333, 0.333, 0.333], "y": [0, 0, 0] },
+              "t": 10,
+              "s": [0, 0, 100]
+            },
+            {
+              "i": { "x": [0.667, 0.667, 0.667], "y": [1, 1, 1] },
+              "o": { "x": [0.333, 0.333, 0.333], "y": [0, 0, 0] },
+              "t": 20,
+              "s": [100, 100, 100]
+            },
+            {
+              "i": { "x": [0.667, 0.667, 0.667], "y": [1, 1, 1] },
+              "o": { "x": [0.333, 0.333, 0.333], "y": [0, 0, 0] },
+              "t": 85,
+              "s": [100, 100, 100]
+            },
+            { "t": 95, "s": [0, 0, 100] }
+          ],
+          "ix": 6,
+          "l": 2
+        }
+      },
+      "ao": 0,
+      "ip": 0,
+      "op": 115,
+      "st": 0,
+      "bm": 0
+    },
+    {
+      "ddd": 0,
+      "ind": 2,
+      "ty": 2,
+      "nm": "Layer 2",
+      "refId": "image_1",
+      "sr": 1,
+      "ks": {
+        "o": {
+          "a": 1,
+          "k": [
+            {
+              "i": { "x": [0.667], "y": [1] },
+              "o": { "x": [0.333], "y": [0] },
+              "t": 0,
+              "s": [0]
+            },
+            {
+              "i": { "x": [0.667], "y": [1] },
+              "o": { "x": [0.333], "y": [0] },
+              "t": 10,
+              "s": [100]
+            },
+            {
+              "i": { "x": [0.667], "y": [1] },
+              "o": { "x": [0.333], "y": [0] },
+              "t": 105,
+              "s": [100]
+            },
+            { "t": 114, "s": [0] }
+          ],
+          "ix": 11
+        },
+        "r": { "a": 0, "k": 0, "ix": 10 },
+        "p": { "a": 0, "k": [13.005, 13.151, 0], "ix": 2, "l": 2 },
+        "a": { "a": 0, "k": [13.237, 13.236, 0], "ix": 1, "l": 2 },
+        "s": {
+          "a": 1,
+          "k": [
+            {
+              "i": { "x": [0.667, 0.667, 0.667], "y": [1, 1, 1] },
+              "o": { "x": [0.333, 0.333, 0.333], "y": [0, 0, 0] },
+              "t": 0,
+              "s": [0, 0, 100]
+            },
+            {
+              "i": { "x": [0.667, 0.667, 0.667], "y": [1, 1, 1] },
+              "o": { "x": [0.333, 0.333, 0.333], "y": [0, 0, 0] },
+              "t": 10,
+              "s": [100, 100, 100]
+            },
+            {
+              "i": { "x": [0.667, 0.667, 0.667], "y": [1, 1, 1] },
+              "o": { "x": [0.333, 0.333, 0.333], "y": [0, 0, 0] },
+              "t": 105,
+              "s": [100, 100, 100]
+            },
+            { "t": 114, "s": [0, 0, 100] }
+          ],
+          "ix": 6,
+          "l": 2
+        }
+      },
+      "ao": 0,
+      "ip": 0,
+      "op": 115,
+      "st": 0,
+      "bm": 0
+    },
+    {
+      "ddd": 0,
+      "ind": 3,
+      "ty": 2,
+      "nm": "Layer 1",
+      "refId": "image_2",
+      "sr": 1,
+      "ks": {
+        "o": { "a": 0, "k": 100, "ix": 11 },
+        "r": { "a": 0, "k": 0, "ix": 10 },
+        "p": { "a": 0, "k": [15.222, 15.979, 0], "ix": 2, "l": 2 },
+        "a": { "a": 0, "k": [3.621, 2.828, 0], "ix": 1, "l": 2 },
+        "s": { "a": 0, "k": [100, 100, 100], "ix": 6, "l": 2 }
+      },
+      "ao": 0,
+      "hasMask": true,
+      "masksProperties": [
+        {
+          "inv": false,
+          "mode": "n",
+          "pt": {
+            "a": 0,
+            "k": {
+              "i": [[0, 0], [0, 0]],
+              "o": [[0, 0], [0, 0]],
+              "v": [[3.648, 2.849], [93.398, 70.099]],
+              "c": false
+            },
+            "ix": 1
+          },
+          "o": { "a": 0, "k": 100, "ix": 3 },
+          "x": { "a": 0, "k": 0, "ix": 4 },
+          "nm": "Mask 1"
+        }
+      ],
+      "ef": [
+        {
+          "ty": 22,
+          "nm": "Stroke",
+          "np": 13,
+          "mn": "ADBE Stroke",
+          "ix": 1,
+          "en": 1,
+          "ef": [
+            {
+              "ty": 10,
+              "nm": "Path",
+              "mn": "ADBE Stroke-0001",
+              "ix": 1,
+              "v": { "a": 0, "k": 1, "ix": 1 }
+            },
+            {
+              "ty": 7,
+              "nm": "All Masks",
+              "mn": "ADBE Stroke-0010",
+              "ix": 2,
+              "v": { "a": 0, "k": 0, "ix": 2 }
+            },
+            {
+              "ty": 7,
+              "nm": "Stroke Sequentially",
+              "mn": "ADBE Stroke-0011",
+              "ix": 3,
+              "v": { "a": 0, "k": 1, "ix": 3 }
+            },
+            {
+              "ty": 2,
+              "nm": "Color",
+              "mn": "ADBE Stroke-0002",
+              "ix": 4,
+              "v": { "a": 0, "k": [1, 1, 1, 1], "ix": 4 }
+            },
+            {
+              "ty": 0,
+              "nm": "Brush Size",
+              "mn": "ADBE Stroke-0003",
+              "ix": 5,
+              "v": { "a": 0, "k": 2.5, "ix": 5 }
+            },
+            {
+              "ty": 0,
+              "nm": "Brush Hardness",
+              "mn": "ADBE Stroke-0004",
+              "ix": 6,
+              "v": { "a": 0, "k": 0.75, "ix": 6 }
+            },
+            {
+              "ty": 0,
+              "nm": "Opacity",
+              "mn": "ADBE Stroke-0005",
+              "ix": 7,
+              "v": { "a": 0, "k": 1, "ix": 7 }
+            },
+            {
+              "ty": 0,
+              "nm": "Start",
+              "mn": "ADBE Stroke-0008",
+              "ix": 8,
+              "v": { "a": 0, "k": 0, "ix": 8 }
+            },
+            {
+              "ty": 0,
+              "nm": "End",
+              "mn": "ADBE Stroke-0009",
+              "ix": 9,
+              "v": {
+                "a": 1,
+                "k": [
+                  {
+                    "i": { "x": [0.667], "y": [1] },
+                    "o": { "x": [0.333], "y": [0] },
+                    "t": 0,
+                    "s": [0]
+                  },
+                  {
+                    "i": { "x": [0.667], "y": [1] },
+                    "o": { "x": [0.333], "y": [0] },
+                    "t": 20,
+                    "s": [100]
+                  },
+                  {
+                    "i": { "x": [0.667], "y": [1] },
+                    "o": { "x": [0.333], "y": [0] },
+                    "t": 95,
+                    "s": [100]
+                  },
+                  { "t": 105, "s": [0] }
+                ],
+                "ix": 9
+              }
+            },
+            {
+              "ty": 7,
+              "nm": "Spacing",
+              "mn": "ADBE Stroke-0006",
+              "ix": 10,
+              "v": { "a": 0, "k": 15, "ix": 10 }
+            },
+            {
+              "ty": 7,
+              "nm": "Paint Style",
+              "mn": "ADBE Stroke-0007",
+              "ix": 11,
+              "v": { "a": 0, "k": 3, "ix": 11 }
+            }
+          ]
+        }
+      ],
+      "ip": 0,
+      "op": 115,
+      "st": 0,
+      "bm": 0
+    }
+  ],
+  "markers": []
+}

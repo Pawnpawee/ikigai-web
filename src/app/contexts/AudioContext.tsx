@@ -47,7 +47,7 @@ export function AudioProvider({ children }: { children: React.ReactNode }) {
   const [userConsented, setUserConsented] = useState(false);
   const [animationsStarted, setAnimationsStarted] = useState(false);
   const [currentBgMusic, setCurrentBgMusic] = useState(
-    "/assets/Sound/bg-music.mp3"
+    "/assets/Sound/bg-music.mp3",
   );
   const isTransitioningRef = useRef(false);
   const bgMusicRef = useRef<HTMLAudioElement | null>(null);
@@ -207,7 +207,10 @@ export function AudioProvider({ children }: { children: React.ReactNode }) {
         } catch (err) {
           // ถ้า browser บล็อก autoplay จะโยน DOMException (NotAllowedError)
           // ให้รอการ interact ครั้งแรกของผู้ใช้ แล้วลองเล่นใหม่จาก handler นั้น
-          console.warn("Autoplay blocked for setBgMusic, waiting for user gesture to resume.", err);
+          console.warn(
+            "Autoplay blocked for setBgMusic, waiting for user gesture to resume.",
+            err,
+          );
 
           const onUserGesture = async () => {
             try {
@@ -216,7 +219,11 @@ export function AudioProvider({ children }: { children: React.ReactNode }) {
                 setIsPlaying(true);
                 setUserConsented(true);
                 setAnimationsStarted(true);
-                saveSettingsToStorage({ hasVisited: true, isMuted: false, volume });
+                saveSettingsToStorage({
+                  hasVisited: true,
+                  isMuted: false,
+                  volume,
+                });
               }
             } catch (e) {
               console.error("Play after user gesture failed", e);
@@ -225,8 +232,14 @@ export function AudioProvider({ children }: { children: React.ReactNode }) {
             window.removeEventListener("touchstart", onUserGesture);
           };
 
-          window.addEventListener("pointerdown", onUserGesture, { once: true, passive: true } as any);
-          window.addEventListener("touchstart", onUserGesture, { once: true, passive: true } as any);
+          window.addEventListener("pointerdown", onUserGesture, {
+            once: true,
+            passive: true,
+          } as any);
+          window.addEventListener("touchstart", onUserGesture, {
+            once: true,
+            passive: true,
+          } as any);
         }
       }
     }
@@ -279,29 +292,31 @@ export function AudioProvider({ children }: { children: React.ReactNode }) {
       setIsPlaying(true);
       setUserConsented(true);
       setAnimationsStarted(true);
-        // 3. Fade In
-        const steps = 20;
-        // volume state is 0-100; audio.volume expects 0-1
-        const targetVol = isMuted ? 0 : volume / 100; // เช็ค Mute ด้วย
-        const stepTime = fadeDuration / steps;
-        const volStep = targetVol / steps;
+      // 3. Fade In
+      const steps = 20;
+      // volume state is 0-100; audio.volume expects 0-1
+      const targetVol = isMuted ? 0 : volume / 100; // เช็ค Mute ด้วย
+      const stepTime = fadeDuration / steps;
+      const volStep = targetVol / steps;
 
-        // ⭐ เก็บ interval ใหม่ลง ref
-        fadeIntervalRef.current = setInterval(() => {
-            // ต้องเช็คว่า audio นี้ยังเป็น current อยู่ไหม (เผื่อเปลี่ยนเพลงเร็วมาก)
-            if (newAudio !== bgMusicRef.current) return; 
+      // ⭐ เก็บ interval ใหม่ลง ref
+      fadeIntervalRef.current = setInterval(() => {
+        // ต้องเช็คว่า audio นี้ยังเป็น current อยู่ไหม (เผื่อเปลี่ยนเพลงเร็วมาก)
+        if (newAudio !== bgMusicRef.current) return;
 
-            if (newAudio.volume < targetVol - volStep) {
-                newAudio.volume += volStep;
-            } else {
-                newAudio.volume = targetVol;
-                if (fadeIntervalRef.current) clearInterval(fadeIntervalRef.current);
-            }
-        }, stepTime);
-
+        if (newAudio.volume < targetVol - volStep) {
+          newAudio.volume += volStep;
+        } else {
+          newAudio.volume = targetVol;
+          if (fadeIntervalRef.current) clearInterval(fadeIntervalRef.current);
+        }
+      }, stepTime);
     } catch (err) {
       // Autoplay may be blocked — retry on first user gesture
-      console.warn("Audio play failed (autoplay blocked). Will retry on user interaction.", err);
+      console.warn(
+        "Audio play failed (autoplay blocked). Will retry on user interaction.",
+        err,
+      );
 
       const onUserGesture = async () => {
         try {
@@ -320,8 +335,14 @@ export function AudioProvider({ children }: { children: React.ReactNode }) {
         window.removeEventListener("touchstart", onUserGesture);
       };
 
-      window.addEventListener("pointerdown", onUserGesture, { once: true, passive: true } as any);
-      window.addEventListener("touchstart", onUserGesture, { once: true, passive: true } as any);
+      window.addEventListener("pointerdown", onUserGesture, {
+        once: true,
+        passive: true,
+      } as any);
+      window.addEventListener("touchstart", onUserGesture, {
+        once: true,
+        passive: true,
+      } as any);
     }
   };
 
@@ -478,13 +499,13 @@ export function AudioProvider({ children }: { children: React.ReactNode }) {
         }
       }
       setIsPlaying(false);
-      setIsMuted(true); 
+      setIsMuted(true);
       setUserConsented(true);
       setAnimationsStarted(true);
-      
-      saveSettingsToStorage({ 
-        hasVisited: true, 
-        isMuted: true 
+
+      saveSettingsToStorage({
+        hasVisited: true,
+        isMuted: true,
       });
     }
   };
@@ -522,7 +543,7 @@ export function AudioProvider({ children }: { children: React.ReactNode }) {
         if (audioRef.current) {
           audioRef.current.volume = Math.max(
             0,
-            originalVolume - volumeStep * currentStep
+            originalVolume - volumeStep * currentStep,
           );
 
           if (currentStep >= fadeSteps) {
@@ -562,7 +583,7 @@ export function AudioProvider({ children }: { children: React.ReactNode }) {
         if (audioRef.current) {
           audioRef.current.volume = Math.min(
             targetVolume,
-            volumeStep * currentStep
+            volumeStep * currentStep,
           );
 
           if (currentStep >= fadeSteps) {

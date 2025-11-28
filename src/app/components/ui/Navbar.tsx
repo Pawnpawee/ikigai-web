@@ -77,23 +77,23 @@ export default function Navbar({ className }: NavbarTopProps) {
           className || ""
         }`}
       >
-        <div className="pointer-events-auto"> 
-            <NavbarIconButton
-            className="btn" 
+        <div className="pointer-events-auto">
+          <NavbarIconButton
+            className="btn"
             iconSrc={musicIcon}
             label={isMuted ? "Unmute music" : "Mute music"}
             onClick={handleMusicClick}
-            />
+          />
         </div>
 
         {/* Menu Button */}
-        <div className="pointer-events-auto"> 
-            <NavbarIconButton
+        <div className="pointer-events-auto">
+          <NavbarIconButton
             className="btn"
             iconSrc="/assets/Icon/menu.svg"
             label="Open menu"
             onClick={handleMenuClick}
-            />
+          />
         </div>
       </div>
 

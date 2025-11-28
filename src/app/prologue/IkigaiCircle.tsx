@@ -1,17 +1,17 @@
-import React, { useState, useCallback, useMemo, memo } from "react"; // ⭐ เพิ่ม memo
-import { motion, MotionValue, Variants } from "framer-motion";
+import React, { useState, useCallback, useMemo, memo, useEffect } from "react"; // ⭐ เพิ่ม memo
+import { motion, MotionValue, Variants, useMotionValue } from "framer-motion";
 export interface IkigaiCircleProps {
   className?: string;
   imageSrc: string;
   iconSrc: string;
   text: string;
-  rotateValue: MotionValue<number>;
+  rotateValue?: MotionValue<number>;
   initialAnimation: {
     initial: { opacity: number; rotate: number; x?: number; y?: number };
     animate: { opacity: number; rotate: number; x?: number; y?: number };
   };
   shouldAnimate: boolean;
-  opacity: MotionValue<number>;
+  opacity?: MotionValue<number>;
   tooltipRotate: number;
   circleImgTransition?: {
     type: "tween";
@@ -43,6 +43,7 @@ const IkigaiCircle = memo(
     opacity, // ⭐ รับ opacity มาใช้ตรงๆ
   }: IkigaiCircleProps) => {
     const [isHovered, setIsHovered] = useState(false);
+      const [isTouchDevice, setIsTouchDevice] = useState(false);
 
     const handleHoverStart = useCallback(() => setIsHovered(true), []);
     const handleHoverEnd = useCallback(() => setIsHovered(false), []);
@@ -52,8 +53,55 @@ const IkigaiCircle = memo(
         hidden: { opacity: 0, transition: { duration: 0.2 } },
         visible: { opacity: 0.8, transition: { duration: 0.3 } },
       }),
-      []
+      [],
     );
+
+    // Local motion value fallbacks when parent doesn't provide them
+    const localRotate = useMotionValue(0);
+    const localOpacity = useMotionValue(1);
+    const appliedRotate = rotateValue ?? localRotate;
+    const appliedOpacity = opacity ?? localOpacity;
+
+    useEffect(() => {
+      // Detect touch / non-hover devices (phones, tablets) and keep tooltip visible
+      if (typeof window !== "undefined") {
+        const mq = window.matchMedia('(hover: none) and (pointer: coarse)');
+        const detect = () => {
+          const hasTouch = !!(
+            navigator.maxTouchPoints > 0 ||
+            // eslint-disable-next-line no-underscore-dangle
+            (window as any).ontouchstart !== undefined ||
+            mq.matches
+          );
+          setIsTouchDevice(hasTouch);
+        };
+        detect();
+        if (mq.addEventListener) mq.addEventListener("change", detect);
+        else if ((mq as any).addListener) (mq as any).addListener(detect);
+        return () => {
+          if (mq.removeEventListener) mq.removeEventListener("change", detect);
+          else if ((mq as any).removeListener) (mq as any).removeListener(detect);
+        };
+      }
+
+      if (!rotateValue && initialAnimation?.animate?.rotate !== undefined) {
+        const target = shouldAnimate
+          ? initialAnimation.animate.rotate
+          : initialAnimation.initial.rotate;
+        localRotate.set(target);
+      }
+      if (!opacity && initialAnimation?.animate?.opacity !== undefined) {
+        const targetO = shouldAnimate
+          ? initialAnimation.animate.opacity
+          : initialAnimation.initial.opacity;
+        localOpacity.set(targetO);
+      }
+    }, [rotateValue, opacity, initialAnimation, shouldAnimate, localRotate, localOpacity]);
+
+    // When on touch devices, keep tooltip visible
+    useEffect(() => {
+      if (isTouchDevice) setIsHovered(true);
+    }, [isTouchDevice]);
 
     return (
       <motion.div
@@ -64,8 +112,8 @@ const IkigaiCircle = memo(
         // ⭐ ใส่ Style ตรงนี้เลย ไม่ต้องผ่าน Function
         // Framer Motion ฉลาดพอที่จะจัดการค่าระหว่าง Animation vs MotionValue
         style={{
-          rotate: rotateValue,
-          opacity: opacity,
+          rotate: appliedRotate,
+          opacity: appliedOpacity,
           willChange: "transform, opacity",
         }}
       >
@@ -109,7 +157,7 @@ const IkigaiCircle = memo(
         </motion.div>
       </motion.div>
     );
-  }
+  },
 );
 
 IkigaiCircle.displayName = "IkigaiCircle"; // ⭐ Best practice เมื่อใช้ memo

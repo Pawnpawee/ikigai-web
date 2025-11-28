@@ -36,7 +36,6 @@ export const JOB_CARDS_LIST = [
   "สาขาอาชีพเหมืองแร่",
 ];
 
-
 // --- Types ---
 export type EverPaidAnswer = "yes" | "no" | "";
 
@@ -65,41 +64,45 @@ export default function PaidSessionContainer() {
   const scene1Opacity = useTransform(
     scrollYProgress,
     [0, 0.02, 0.23, 0.25],
-    [0, 1, 1, 0]
+    [0, 1, 1, 0],
   );
   const scene1TextProgress = useTransform(
     scrollYProgress,
     [0.02, 0.15],
-    [0, 1]
+    [0, 1],
   );
   const z1 = useTransform(
     scrollYProgress,
     [0, 0.01, 0.24, 0.25],
-    [-1, 10, 10, -1]
+    [-1, 10, 10, -1],
   );
 
   // Scene 2 (0.25 -> 0.5)
   const scene2Opacity = useTransform(
     scrollYProgress,
     [0.25, 0.27, 0.48, 0.5],
-    [0, 1, 1, 0]
+    [0, 1, 1, 0],
   );
   const scene2TextProgress = useTransform(scrollYProgress, [0.27, 0.4], [0, 1]);
   const z2 = useTransform(
     scrollYProgress,
     [0.25, 0.26, 0.49, 0.5],
-    [-1, 10, 10, -1]
+    [-1, 10, 10, -1],
   );
 
   // Scene 3 (0.5 -> 1.0) - Stays visible
-  const scene3Opacity = useTransform(scrollYProgress, [0.5, 0.52, 1], [0, 1, 1]);
+  const scene3Opacity = useTransform(
+    scrollYProgress,
+    [0.5, 0.52, 1],
+    [0, 1, 1],
+  );
   const scene3TextProgress = useTransform(scrollYProgress, [0.52, 0.9], [0, 1]);
   const z3 = useTransform(scrollYProgress, [0.5, 0.51, 1], [-1, 10, 10]);
 
   const scrollToOpacity = useTransform(
     scrollYProgress,
     [0, 0.02, 0.8, 0.85],
-    [0, 1, 1, 0]
+    [0, 1, 1, 0],
   );
 
   // --- Submission Logic ---
@@ -150,7 +153,6 @@ export default function PaidSessionContainer() {
       monetizableExperience,
     };
 
-
     // TODO: Combine with data from previous sessions (e.g., from Zustand, Context, or local storage)
     // TODO: Send all data to your n8n webhook URL
     try {
@@ -159,14 +161,13 @@ export default function PaidSessionContainer() {
 
       // router.push("/results-page"); // Navigate to the results/thank you page
     } catch (error) {
-     
     } finally {
       setIsLoading(false);
     }
   };
 
   return (
-  <motion.div ref={ref} className="h-[600vh] w-full relative">
+    <motion.div ref={ref} className="h-[600vh] w-full relative">
       <Scene1EverPaid
         opacity={scene1Opacity}
         zIndex={z1}

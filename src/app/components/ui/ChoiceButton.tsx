@@ -7,7 +7,12 @@ interface Props {
   className?: string;
 }
 
-export default function ChoiceButton({ text, isSelected, onClick, className = "" }: Props) {
+export default function ChoiceButton({
+  text,
+  isSelected,
+  onClick,
+  className = "",
+}: Props) {
   return (
     <motion.button
       onClick={onClick}

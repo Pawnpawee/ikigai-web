@@ -12,9 +12,9 @@ function AppContent({ children }: { children: React.ReactNode }) {
 
   useEffect(() => {
     if (isInitialized) {
-        if (!userConsented) {
-            setShowWelcomeModal(true);
-        }
+      if (!userConsented) {
+        setShowWelcomeModal(true);
+      }
     }
   }, [userConsented, isInitialized]);
 
@@ -30,8 +30,7 @@ function AppContent({ children }: { children: React.ReactNode }) {
 
   return (
     <>
-      <Preloader />{" "}
-      {/* Preloader จะเรียก useLenis() ข้างในเพื่อสั่งหยุด scroll */}
+      <Preloader /> {/* Preloader จะเรียก useLenis() ข้างในเพื่อสั่งหยุด scroll */}
       <WelcomeSoundModal
         isOpen={showWelcomeModal}
         onAccept={handleAccept}
@@ -49,7 +48,7 @@ export default function AppWrapper({
   children: React.ReactNode;
 }) {
   const lenisOptions = {
-    wheelMultiplier: 0.8, // ปรับความเร็วล้อเม้าส์
+    wheelMultiplier: 0.6, // ปรับความเร็วล้อเม้าส์
     duration: 1.2, // ระยะเวลา animation
     lerp: 0.1,
     smoothWheel: true,

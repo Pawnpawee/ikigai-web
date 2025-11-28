@@ -13,15 +13,37 @@ interface Props {
   isLoading?: boolean;
 }
 
-export default function Scene3MonetizableExperience({ opacity, zIndex, textProgress, monetizableExperience, setMonetizableExperience, errorMessage, handleSubmit, isLoading }: Props) {
-  const text = "แมว : เจ้าคิดว่าเคยช่วยใครแล้วพูดกับตัวเองว่า… ‘ว้าว ฉันคิดเงินได้จากสิ่งนี้นะ’ ไหม? บางครั้งสิ่งที่เจอในอดีต อาจบอกเส้นทางให้เจ้ารู้ว่าเจ้าเก่งอะไร และสิ่งนั้นมีค่าในตลาด";
-  
+export default function Scene3MonetizableExperience({
+  opacity,
+  zIndex,
+  textProgress,
+  monetizableExperience,
+  setMonetizableExperience,
+  errorMessage,
+  handleSubmit,
+  isLoading,
+}: Props) {
+  const text =
+    "แมว : เจ้าคิดว่าเคยช่วยใครแล้วพูดกับตัวเองว่า… ‘ว้าว ฉันคิดเงินได้จากสิ่งนี้นะ’ ไหม? บางครั้งสิ่งที่เจอในอดีต อาจบอกเส้นทางให้เจ้ารู้ว่าเจ้าเก่งอะไร และสิ่งนั้นมีค่าในตลาด";
+
   return (
-    <motion.div style={{ opacity, zIndex }} className="fixed top-0 h-screen w-full flex items-center justify-center">
-  <div className="flex flex-col items-center gap-6 sm:gap-8 p-3 sm:p-4 max-w-3xl text-center">
-        <WordByWordAnimation text={text} scrollYProgress={textProgress} as="p"
-className="typo-h5 text-white" />
-        <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.5 }} className="w-full relative">
+    <motion.div
+      style={{ opacity, zIndex }}
+      className="fixed top-0 h-screen w-full flex items-center justify-center"
+    >
+      <div className="flex flex-col items-center gap-6 sm:gap-8 p-3 sm:p-4 max-w-3xl text-center">
+        <WordByWordAnimation
+          text={text}
+          scrollYProgress={textProgress}
+          as="p"
+          className="typo-h5 text-white"
+        />
+        <motion.div
+          initial={{ opacity: 0, y: 10 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.5 }}
+          className="w-full relative"
+        >
           <textarea
             value={monetizableExperience}
             onChange={(e) => setMonetizableExperience(e.target.value)}
@@ -54,7 +76,7 @@ className="typo-h5 text-white" />
             whileHover={{ scale: 1.05 }}
             whileTap={{ scale: 0.95 }}
           >
-            {isLoading ? 'กำลังส่งข้อมูล...' : 'ส่งข้อมูลเพื่อประเมิน'}
+            {isLoading ? "กำลังส่งข้อมูล..." : "ส่งข้อมูลเพื่อประเมิน"}
           </motion.button>
         )}
       </div>

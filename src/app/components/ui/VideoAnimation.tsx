@@ -8,7 +8,11 @@ interface VideoAnimationProps {
   className?: string;
 }
 
-export const VideoAnimation = ({ webmSrc, movSrc, className = "" }: VideoAnimationProps) => {
+export const VideoAnimation = ({
+  webmSrc,
+  movSrc,
+  className = "",
+}: VideoAnimationProps) => {
   const videoRef = useRef<HTMLVideoElement>(null);
 
   useEffect(() => {
@@ -38,9 +42,9 @@ export const VideoAnimation = ({ webmSrc, movSrc, className = "" }: VideoAnimati
     if (video) {
       // สามารถใส่ setTimeout ตรงนี้ถ้าต้องการให้หยุดรอก่อนวน loop
       // setTimeout(() => {
-        video.currentTime = 0;
-        video.play();
-      // }, 0); 
+      video.currentTime = 0;
+      video.play();
+      // }, 0);
     }
   };
 

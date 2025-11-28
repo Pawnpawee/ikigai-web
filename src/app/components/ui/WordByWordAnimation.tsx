@@ -11,16 +11,25 @@ interface WordByWordAnimationProps {
   style?: React.CSSProperties;
 }
 
-const AnimatedWord: FC<{ opacity: MotionValue<number>; children: string }> = ({ opacity, children }) => {
+const AnimatedWord: FC<{ opacity: MotionValue<number>; children: string }> = ({
+  opacity,
+  children,
+}) => {
   return (
     // ใช้ display: 'inline-block' เพื่อให้ transform ทำงานได้ถูกต้อง
-    <motion.span style={{ opacity, display: 'inline-block' }}>
+    <motion.span style={{ opacity, display: "inline-block" }}>
       {children}
     </motion.span>
   );
 };
 
-const WordByWordAnimation: FC<WordByWordAnimationProps> = ({ text, scrollYProgress, as = "p", className = "typo-p-md", style }) => {
+const WordByWordAnimation: FC<WordByWordAnimationProps> = ({
+  text,
+  scrollYProgress,
+  as = "p",
+  className = "typo-p-md",
+  style,
+}) => {
   // 1. แยกข้อความทั้งหมดด้วยช่องว่างหรือการขึ้นบรรทัดใหม่ เพื่อนับจำนวนคำทั้งหมดให้ถูกต้อง
   const allWords = text.split(/\s+/).filter(Boolean);
   const totalWords = allWords.length;
@@ -37,7 +46,10 @@ const WordByWordAnimation: FC<WordByWordAnimationProps> = ({ text, scrollYProgre
       { className, style },
       lines.map((line, lineIndex) => (
         // 3. คอนเทนเนอร์สำหรับแต่ละบรรทัด
-        <span key={lineIndex} className="flex flex-wrap items-center justify-center whitespace-pre-line select-none">
+        <span
+          key={lineIndex}
+          className="flex flex-wrap items-center justify-center whitespace-pre-line select-none"
+        >
           {line.split(" ").map((word, wordIndexInLine) => {
             if (word === "") return null;
 
@@ -55,7 +67,7 @@ const WordByWordAnimation: FC<WordByWordAnimationProps> = ({ text, scrollYProgre
             );
           })}
         </span>
-      ))
+      )),
     )
   );
 };
