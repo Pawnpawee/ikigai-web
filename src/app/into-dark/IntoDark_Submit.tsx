@@ -36,19 +36,19 @@ export default function IntoDarkSubmit({
   const opacity = useTransform(
     scrollYProgress,
     [0.67, 0.7, 0.944, 1.0],
-    [0, 1, 1, 1]
+    [0, 1, 1, 1],
   );
   const zIndex = useTransform(
     scrollYProgress,
     [0, 0.667, 0.668, 1.0],
-    [-1, -1, 10, 10]
+    [-1, -1, 10, 10],
   );
 
   // Circle rotations (like Hero component)
   const circle1_rotate = useTransform(
     scrollYProgress,
     [0.676, 0.73],
-    [0, -180]
+    [0, -180],
   ); // Love - Top
   const circle2_rotate = useTransform(scrollYProgress, [0.676, 0.73], [0, 90]); // Skill - Left
   const circle3_rotate = useTransform(scrollYProgress, [0.676, 0.73], [90, 0]); // Paid - Bottom
@@ -106,7 +106,7 @@ export default function IntoDarkSubmit({
       };
       return acc;
     },
-    {} as ItemAnimationOverride
+    {} as ItemAnimationOverride,
   );
 
   // Text reveal sequencing (layers): higher layers should appear first.

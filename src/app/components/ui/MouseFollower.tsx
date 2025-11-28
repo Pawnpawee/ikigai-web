@@ -25,12 +25,12 @@ const MouseFollower: FC = () => {
     if (typeof window === "undefined") return;
 
     // media query: ถ้ามี pointer แบบ 'fine' และรองรับ hover แสดงว่าเป็นอุปกรณ์ที่มีเมาส์/trackpad
-    const mq = window.matchMedia('(pointer: fine) and (hover: hover)');
+    const mq = window.matchMedia("(pointer: fine) and (hover: hover)");
 
     const isTouchDevice = () => {
       // รวมกรณีพิเศษของ iPadOS ที่อาจรายงาน platform เป็น 'MacIntel' แต่มี touch points
       return (
-        'ontouchstart' in window ||
+        "ontouchstart" in window ||
         (navigator.maxTouchPoints && navigator.maxTouchPoints > 0) ||
         /Android|iPhone|iPad|iPod|Mobile/.test(navigator.userAgent)
       );
@@ -45,11 +45,11 @@ const MouseFollower: FC = () => {
     };
 
     update();
-    if (mq.addEventListener) mq.addEventListener('change', update);
+    if (mq.addEventListener) mq.addEventListener("change", update);
     else mq.addListener(update as any);
 
     return () => {
-      if (mq.removeEventListener) mq.removeEventListener('change', update);
+      if (mq.removeEventListener) mq.removeEventListener("change", update);
       else mq.removeListener(update as any);
     };
   }, []);

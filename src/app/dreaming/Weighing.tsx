@@ -111,25 +111,25 @@ export default function Weighing() {
   const mainOpacity = useTransform(
     scrollYProgress,
     [0, 0.05, 0.98, 1],
-    [0, 1, 1, 0]
+    [0, 1, 1, 0],
   );
 
   const insideOpacity = useTransform(
     scrollYProgress,
     [0, 0.05, 0.75, 0.8],
-    [0, 1, 1, 0]
+    [0, 1, 1, 0],
   );
 
   const ry = useTransform(
     scrollYProgress,
     [0, 0.05, 0.1, 0.15, 0.2, 0.25, 0.28],
-    [0, 0, 40, 0, 50, 0, 200]
+    [0, 0, 40, 0, 50, 0, 200],
   );
 
   const blink_opacity = useTransform(
     scrollYProgress,
     [0, 0.2333, 0.3733],
-    [1, 1, 0]
+    [1, 1, 0],
   );
 
   // POV falling effect - extended to use additional 50vh (600-750vh = 0.6-0.75)
@@ -167,7 +167,7 @@ export default function Weighing() {
   });
   const lightOpacity = useTransform(
     [opacity_set6, lightFlicker],
-    ([baseOpacity, flicker]) => (baseOpacity as number) * (flicker as number)
+    ([baseOpacity, flicker]) => (baseOpacity as number) * (flicker as number),
   );
 
   // Set 7: heart (300-350vh = 0.4-0.4667)
@@ -182,12 +182,12 @@ export default function Weighing() {
   const containerScale = useTransform(
     scrollYProgress,
     [0.5, 0.7],
-    isPortrait ? [2.3, 4] : [1, 2]
+    isPortrait ? [2.3, 4] : [1, 2],
   );
   const containerTop = useTransform(
     scrollYProgress,
     [0.5, 0.7],
-    isPortrait ? ["-5%", "-3%"] : ["0%", "-7%"]
+    isPortrait ? ["-5%", "-3%"] : ["0%", "-7%"],
   );
 
   // Derive z_move from the existing containerScale so the visual zoom
@@ -206,14 +206,14 @@ export default function Weighing() {
   const heartPlateY_slow = useTransform(
     scrollYProgress,
     [0.55, 0.62],
-    isPortrait ? [0, 5] : [0, 15]
+    isPortrait ? [0, 5] : [0, 15],
   );
 
   // Feather plate: slowly up (Y movement)
   const featherPlateY_slow = useTransform(
     scrollYProgress,
     [0.55, 0.62],
-    isPortrait ? [0, -5] : [0, -15]
+    isPortrait ? [0, -5] : [0, -15],
   );
 
   // ============ FAST DROP (580-600vh = 0.7733-0.8) ============
@@ -221,30 +221,30 @@ export default function Weighing() {
   const heartRotate_fast = useTransform(
     scrollYProgress,
     [0.62, 0.72],
-    [0, -15]
+    [0, -15],
   );
   // Heart plate: fast drop (Y movement)
   const heartPlateY_fast = useTransform(
     scrollYProgress,
     [0.62, 0.72],
-    isPortrait ? [0, 8] : [0, 30]
+    isPortrait ? [0, 8] : [0, 30],
   );
   // Feather plate: slight rise (Y movement)
   const featherPlateY_fast = useTransform(
     scrollYProgress,
     [0.62, 0.72],
-    isPortrait ? [0, -3] : [0, -10]
+    isPortrait ? [0, -3] : [0, -10],
   );
 
   // Combined positions
   const scaleRotate = useTransform(
-    () => heartRotate_slow.get() + heartRotate_fast.get()
+    () => heartRotate_slow.get() + heartRotate_fast.get(),
   );
   const heartPlateY = useTransform(
-    () => heartPlateY_slow.get() + heartPlateY_fast.get()
+    () => heartPlateY_slow.get() + heartPlateY_fast.get(),
   );
   const featherPlateY = useTransform(
-    () => featherPlateY_slow.get() + featherPlateY_fast.get()
+    () => featherPlateY_slow.get() + featherPlateY_fast.get(),
   );
 
   // Play sounds based on MotionValue changes rather than raw scroll thresholds
@@ -312,23 +312,23 @@ export default function Weighing() {
   const textOpacity = useTransform(
     scrollYProgress,
     [0, 0.3, 0.75, 0.8],
-    [0, 1, 1, 0]
+    [0, 1, 1, 0],
   );
 
   const textAnimationProgress = useTransform(
     scrollYProgress,
     [0, 0.3, 0.8],
-    [0, 0, 1]
+    [0, 0, 1],
   );
 
   // ============ VIDEO SECTION (750-1000vh = 0.75-1.0) ============
   const videoOpacity = useTransform(
     scrollYProgress,
     [0.75, 0.8, 0.98, 1],
-    [0, 1, 1, 0]
+    [0, 1, 1, 0],
   );
   const videoDisplay = useTransform(videoOpacity, (v) =>
-    v > 0.01 ? "flex" : "none"
+    v > 0.01 ? "flex" : "none",
   );
 
   return (

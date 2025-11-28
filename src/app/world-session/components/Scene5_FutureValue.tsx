@@ -29,7 +29,8 @@ export default function Scene5FutureValue({
   handleSubmit,
   isLoading,
 }: Props) {
-  const text = "แมว : เจ้าคิดหรือไม่…ว่างานที่เจ้าเลือก \n จะยังคงมีคุณค่าในอีกสิบปีข้างหน้า?";
+  const text =
+    "แมว : เจ้าคิดหรือไม่…ว่างานที่เจ้าเลือก \n จะยังคงมีคุณค่าในอีกสิบปีข้างหน้า?";
 
   return (
     <motion.div

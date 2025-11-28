@@ -68,7 +68,9 @@ export default function WelcomeSoundModal({
                 transition={{ delay: 0.3 }}
                 className="text-center mb-8"
               >
-                <h2 className="typo-h3 text-white mb-4">ประสบการณ์เสียงประกอบ</h2>
+                <h2 className="typo-h3 text-white mb-4">
+                  ประสบการณ์เสียงประกอบ
+                </h2>
                 <p className="typo-p-lg text-slate-300">
                   เว็บไซต์นี้มีเสียงประกอบและเอฟเฟกต์เสียง
                   <br />

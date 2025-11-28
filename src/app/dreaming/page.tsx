@@ -44,7 +44,6 @@ export default function DreamingPage() {
       {/* Scenes */}
       <Dreaming />
       <Weighing />
-      
 
       {/* ⭐ ส่วนตัดสินใจ 2: ดูสิ่งที่เดินเข้ามาไหม */}
       <DecisionSection

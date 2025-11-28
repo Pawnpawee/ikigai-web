@@ -30,7 +30,8 @@ function AppContent({ children }: { children: React.ReactNode }) {
 
   return (
     <>
-      <Preloader /> {/* Preloader จะเรียก useLenis() ข้างในเพื่อสั่งหยุด scroll */}
+      <Preloader />{" "}
+      {/* Preloader จะเรียก useLenis() ข้างในเพื่อสั่งหยุด scroll */}
       <WelcomeSoundModal
         isOpen={showWelcomeModal}
         onAccept={handleAccept}

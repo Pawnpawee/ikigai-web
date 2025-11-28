@@ -43,7 +43,7 @@ const IkigaiCircle = memo(
     opacity, // ⭐ รับ opacity มาใช้ตรงๆ
   }: IkigaiCircleProps) => {
     const [isHovered, setIsHovered] = useState(false);
-      const [isTouchDevice, setIsTouchDevice] = useState(false);
+    const [isTouchDevice, setIsTouchDevice] = useState(false);
 
     const handleHoverStart = useCallback(() => setIsHovered(true), []);
     const handleHoverEnd = useCallback(() => setIsHovered(false), []);
@@ -65,7 +65,7 @@ const IkigaiCircle = memo(
     useEffect(() => {
       // Detect touch / non-hover devices (phones, tablets) and keep tooltip visible
       if (typeof window !== "undefined") {
-        const mq = window.matchMedia('(hover: none) and (pointer: coarse)');
+        const mq = window.matchMedia("(hover: none) and (pointer: coarse)");
         const detect = () => {
           const hasTouch = !!(
             navigator.maxTouchPoints > 0 ||
@@ -80,7 +80,8 @@ const IkigaiCircle = memo(
         else if ((mq as any).addListener) (mq as any).addListener(detect);
         return () => {
           if (mq.removeEventListener) mq.removeEventListener("change", detect);
-          else if ((mq as any).removeListener) (mq as any).removeListener(detect);
+          else if ((mq as any).removeListener)
+            (mq as any).removeListener(detect);
         };
       }
 
@@ -96,7 +97,14 @@ const IkigaiCircle = memo(
           : initialAnimation.initial.opacity;
         localOpacity.set(targetO);
       }
-    }, [rotateValue, opacity, initialAnimation, shouldAnimate, localRotate, localOpacity]);
+    }, [
+      rotateValue,
+      opacity,
+      initialAnimation,
+      shouldAnimate,
+      localRotate,
+      localOpacity,
+    ]);
 
     // When on touch devices, keep tooltip visible
     useEffect(() => {

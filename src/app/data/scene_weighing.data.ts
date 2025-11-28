@@ -11,7 +11,6 @@ export const SCENE_WEIGHING_ITEMS = [
       zIndex: 0,
     },
     animGroup: 2,
-
   },
   // ----- New items moved from inline scene for easier management -----
   // {
@@ -35,7 +34,6 @@ export const SCENE_WEIGHING_ITEMS = [
       height: "2.30%",
     },
     animGroup: 69,
-
   },
   {
     id: "heart_plate",
@@ -43,7 +41,6 @@ export const SCENE_WEIGHING_ITEMS = [
     alt: "Heart Plate",
     style: { top: "62.68%", left: "41.95%", width: "3.38%", height: "1.54%" },
     animGroup: 66,
-
   },
   {
     id: "feather_plate",
@@ -51,7 +48,6 @@ export const SCENE_WEIGHING_ITEMS = [
     alt: "Feather Plate",
     style: { top: "63.02%", left: "53.56%", width: "3.38%", height: "1.54%" },
     animGroup: 67,
-
   },
   {
     id: "scale_center",
@@ -59,7 +55,6 @@ export const SCENE_WEIGHING_ITEMS = [
     alt: "Scale",
     style: { top: "45.77%", left: "41.95%", width: "16.11%", height: "31.79%" },
     animGroup: 6,
-
   },
 
   {
@@ -87,6 +82,5 @@ export const SCENE_WEIGHING_ITEMS = [
     alt: "Feather",
     style: { top: "58.76%", left: "54.60%", width: "3.42%", height: "4.96%" },
     animGroup: 8,
-
   },
 ];
