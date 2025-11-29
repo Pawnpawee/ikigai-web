@@ -3,17 +3,25 @@
 
 import { useEffect } from "react";
 import { useLenis } from "lenis/react";
-import { motion } from "framer-motion";
+import { motion, useTransform, useMotionValue, useScroll } from "framer-motion";
 
 import MouseFollower from "../components/ui/MouseFollower";
 import Navbar from "../components/ui/Navbar";
 import IntoDark from "./IntoDark";
 import { useAudio } from "../contexts/AudioContext";
+import ScrollTo from "../components/ui/ScrollTo";
 
 export default function IntoDarkPage() {
   const lenis = useLenis();
   const { transitionBgMusic } = useAudio();
 
+  const { scrollYProgress } = useScroll();
+
+  const scrollToOpacity = useTransform(
+    scrollYProgress,
+    [0, 0.8, 0.95, 1],
+    [1, 1, 0, 0]
+  );
   useEffect(() => {
     if (lenis) lenis.scrollTo(0, { immediate: true });
   }, [lenis]);
@@ -28,6 +36,7 @@ export default function IntoDarkPage() {
     <main className="relative bg-black min-h-screen">
       <MouseFollower />
       <Navbar />
+      <ScrollTo opacity={scrollToOpacity} />
 
       {/* Fade In Transition */}
       <motion.div

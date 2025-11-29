@@ -4,13 +4,19 @@
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import { useLenis } from "lenis/react";
-import { motion, AnimatePresence } from "framer-motion";
+import {
+  motion,
+  AnimatePresence,
+  useScroll,
+  useTransform,
+} from "framer-motion";
 import Dreaming from "./Dreaming";
 import Weighing from "./Weighing";
 import DecisionSection from "../components/scene/DecisionSection"; // ⭐ Reuse
 import MouseFollower from "../components/ui/MouseFollower";
 import Navbar from "../components/ui/Navbar";
 import { useAudio } from "../contexts/AudioContext";
+import ScrollTo from "../components/ui/ScrollTo";
 
 export default function DreamingPage() {
   const router = useRouter();
@@ -25,20 +31,28 @@ export default function DreamingPage() {
   // ฟังก์ชันเปลี่ยนหน้าไป IntoDark
   const handleLook = async () => {
     setIsTransitioning(true);
-    
+
     // Fade out background music (1 วินาที)
     pauseBgMusic();
-    
+
     // รอให้ fade out เสร็จก่อนเปลี่ยนหน้า
     setTimeout(() => {
       router.push("/into-dark"); // ⭐ ไป Route ใหม่
     }, 1000);
   };
+  const { scrollYProgress } = useScroll();
+
+  const scrollToOpacity = useTransform(
+    scrollYProgress,
+    [0, 0.8, 0.95, 1],
+    [1, 1, 0, 0]
+  );
 
   return (
     <main className="relative bg-black min-h-screen">
       <MouseFollower />
       <Navbar />
+      <ScrollTo opacity={scrollToOpacity} />
 
       {/* Fade In ตอนเข้าหน้าเว็บ (เพื่อให้เนียนกับหน้าก่อน) */}
       <motion.div
@@ -51,7 +65,6 @@ export default function DreamingPage() {
       {/* Scenes */}
       <Dreaming />
       <Weighing />
-      
 
       {/* ⭐ ส่วนตัดสินใจ 2: ดูสิ่งที่เดินเข้ามาไหม */}
       <DecisionSection
