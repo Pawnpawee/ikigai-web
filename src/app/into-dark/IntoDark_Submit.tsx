@@ -15,7 +15,7 @@ import SceneLayer, {
   ItemAnimationOverride,
 } from "@/app/components/scene/SceneLayer";
 import {
-  SCENE_5_04_ITEMS,
+  getScene504Items,
   SCENE_5_04_ANIMATIONS,
 } from "@/app/data/scene5-04.data";
 
@@ -31,6 +31,9 @@ export default function IntoDarkSubmit({
   handleSubmit,
 }: SubmitProps) {
   const isPortrait = useIsPortrait();
+
+  // Get scene items based on orientation
+  const sceneItems = getScene504Items(isPortrait);
 
   // Main container opacity and z-index
   const opacity = useTransform(
@@ -56,6 +59,27 @@ export default function IntoDarkSubmit({
 
   const subText_opacity = useTransform(scrollYProgress, [0.7, 0.75], [0, 1]); // World - Right
   const subText_y = useTransform(scrollYProgress, [0.7, 0.75], [30, 0]);
+
+  // Text opacity animations - appear sequentially
+  const text1_opacity = useTransform(scrollYProgress, [0.67, 0.69], [0, 1]); // "ถ้าเจ้าหาจุด..."
+  const text2_opacity = useTransform(scrollYProgress, [0.73, 0.75], [0, 1]); // Description set 1
+  const text3_opacity = useTransform(scrollYProgress, [0.76, 0.78], [0, 1]); // Description set 2
+  const text4_opacity = useTransform(scrollYProgress, [0.79, 0.81], [0, 1]); // Description set 3
+  const text5_opacity = useTransform(scrollYProgress, [0.82, 0.84], [0, 1]); // Description set 4
+  const text6_opacity = useTransform(scrollYProgress, [0.85, 0.87], [0, 1]); // "แต่เจ้าไม่ต้องกังวล..."
+  const text7_opacity = useTransform(scrollYProgress, [0.88, 0.9], [0, 1]); // "ไม่ใช่เรื่องแปลก"
+  const text8_opacity = useTransform(scrollYProgress, [0.91, 0.93], [0, 1]); // "เจ้าอยากจะลองไปตามหา..."
+
+  // Container top position control:
+  // 0.667-0.8: sticky top-0 with y offset
+  // 0.8+: release to relative (shows bottom)
+  const top = useTransform(
+    scrollYProgress,
+    [0.667, 0.75, 0.8, 0.85, 1],
+    isPortrait
+      ? ["-10vh", "-10vh", "-40vh", "-50vh", "-100vh"]
+      : ["-10vh", "-10vh", "-80vh", "-90vh", "-100vh"]
+  );
 
   // Local animation config for IkigaiCircle reuse
   const circleTransition = {
@@ -94,11 +118,11 @@ export default function IntoDarkSubmit({
       acc[id] = {
         initial: { opacity: 0 },
         animate: {
-          opacity: [0.35, 1, 0.35, 1],
+          opacity: [0.35, 1, 0.35, 1, 0.35],
         },
         transition: {
           duration: 4.2,
-          times: [0, 0.28, 0.6, 1],
+          times: [0, 0.28, 0.4, 0.6, 1],
           repeat: Infinity,
           ease: "easeInOut",
           delay,
@@ -109,32 +133,20 @@ export default function IntoDarkSubmit({
     {} as ItemAnimationOverride
   );
 
-  // Text reveal sequencing (layers): higher layers should appear first.
-  // Base progress window for this section is around 0.667-0.676; we'll stagger from there.
-  const textBase = 0.67;
-  const textStep = 0.08;
-  const tHeaderStart = textBase + textStep * 0;
-  const tHeaderEnd = tHeaderStart + textStep;
-  const tIntersectStart = textBase + textStep * 1;
-  const tIntersectEnd = tIntersectStart + textStep;
-  const tLongStart = tIntersectEnd + 0.02;
-  const tCTALineStart = textBase + textStep * 3.7;
-  const tTextSectionStart = textBase + textStep * 3.6;
-
   return (
-    <div className="sticky -top-20 w-full pointer-events-none">
+    <motion.div className="sticky pointer-events-none" style={{ top: top }}>
       <motion.div
-        className="flex items-center justify-center min-h-screen pointer-events-none"
+        className="flex items-center justify-center pointer-events-none"
         style={{
           opacity,
           zIndex,
         }}
       >
         <div
-          className={`relative w-full pointer-events-auto flex flex-col items-center justify-between overflow-hidden bg-black ${
+          className={`relative pointer-events-auto flex flex-col w-screen items-center justify-between  bg-black  ${
             isPortrait
-              ? "aspect-1080/4320 px-[5.2%] pt-[200px]"
-              : "aspect-1920/2160 px-[5.2%] py-[6.48%]"
+              ? "aspect-1080/4320 px-[20px] md:py-[200px] pt-[200px]"
+              : "aspect-1920/2160 px-[80px] py-[100px] gap-[100px] 2xl:gap-5"
           }`}
         >
           {/* Line Star 1 */}
@@ -157,7 +169,7 @@ export default function IntoDarkSubmit({
           <div className="absolute inset-0 ">
             {/* Little Stars 3 - 8 as SceneLayer items (positions from Figma - percent values for 1920x2160) */}
             <SceneLayer
-              items={SCENE_5_04_ITEMS}
+              items={sceneItems}
               animations={sceneAnimations as AnimationMap}
               baseStyle={{}}
               containerAspectRatio="1920 / 2160"
@@ -166,8 +178,17 @@ export default function IntoDarkSubmit({
           </div>
 
           {/* SECTION 1: Description with Circle Ikigai */}
-          <div className="flex flex-col items-center justify-between relative z-10 w-full portrait:h-screen h-fit shrink-0">
-            <div className="typo-text-h4 text-center text-slate-100">
+          <div
+            className={` flex flex-col items-center ${
+              isPortrait
+                ? " justify-center gap-[] md:gap-[100px]"
+                : " gap-[30px] self-stretch"
+            }`}
+          >
+            <motion.div
+              className="typo-text-h4 text-center text-slate-100"
+              style={{ opacity: text1_opacity }}
+            >
               <MysteriousText
                 text={
                   isPortrait
@@ -175,10 +196,10 @@ export default function IntoDarkSubmit({
                     : `ถ้าเจ้าหาจุดที่ทั้งสี่สายมาบรรจบกันได้… จะเกิดเป็น`
                 }
                 scrollYProgress={scrollYProgress}
-                startProgress={tHeaderStart}
-                endProgress={tHeaderEnd}
+                startProgress={0.667}
+                endProgress={0.7}
               />
-            </div>
+            </motion.div>
 
             {/* Circle Ikigai with 4 colored circles (reused IkigaiCircle component) */}
             <div className="w-[400px] md:w-[735px] h-[400px] md:h-[735px]  flex flex-col items-center justify-center relative over">
@@ -265,16 +286,16 @@ export default function IntoDarkSubmit({
                     <MysteriousText
                       text={`แรงผลักดัน\n(Passion)`}
                       scrollYProgress={scrollYProgress}
-                      startProgress={tIntersectStart}
-                      endProgress={tIntersectEnd}
+                      startProgress={0.7}
+                      endProgress={0.73}
                     />
                   </div>
                   <div className="text-white relative">
                     <MysteriousText
                       text={`หน้าที่\n(Mission)`}
                       scrollYProgress={scrollYProgress}
-                      startProgress={tIntersectStart}
-                      endProgress={tIntersectEnd}
+                      startProgress={0.7}
+                      endProgress={0.73}
                     />
                   </div>
                 </div>
@@ -283,16 +304,16 @@ export default function IntoDarkSubmit({
                     <MysteriousText
                       text={`ทักษะวิชาชีพ\n(Vocation)`}
                       scrollYProgress={scrollYProgress}
-                      startProgress={tIntersectStart}
-                      endProgress={tIntersectEnd}
+                      startProgress={0.7}
+                      endProgress={0.73}
                     />
                   </div>
                   <div className="text-white relative">
                     <MysteriousText
                       text={`อาชีพ\n(Profession)`}
                       scrollYProgress={scrollYProgress}
-                      startProgress={tIntersectStart}
-                      endProgress={tIntersectEnd}
+                      startProgress={0.7}
+                      endProgress={0.73}
                     />
                   </div>
                 </div>
@@ -301,15 +322,19 @@ export default function IntoDarkSubmit({
 
             {/* Long description text */}
             <div className="typo-text-h4 text-center text-slate-100 w-full">
-              <div className="mb-0">
+              <motion.div className="mb-0" style={{ opacity: text2_opacity }}>
                 <MysteriousText
-                  text={`พื้นที่ของ "ความหมาย" ในชีวิตและงานของแต่ละบุคคล`}
+                  text={
+                    isPortrait
+                      ? `พื้นที่ของ "ความหมาย" ในชีวิต \n และงานของแต่ละบุคคล`
+                      : `พื้นที่ของ "ความหมาย" ในชีวิตและงานของแต่ละบุคคล`
+                  }
                   scrollYProgress={scrollYProgress}
-                  startProgress={tLongStart}
-                  endProgress={tLongStart + 0.05}
+                  startProgress={0.7}
+                  endProgress={0.8}
                 />
-              </div>
-              <div className="mb-0">
+              </motion.div>
+              <motion.div className="mb-0" style={{ opacity: text3_opacity }}>
                 <MysteriousText
                   text={
                     isPortrait
@@ -317,51 +342,57 @@ export default function IntoDarkSubmit({
                       : `ใช้เพื่อเตรียมความพร้อมและส่งเสริมการปรับตัวเข้าสู่สังคมการทำงาน`
                   }
                   scrollYProgress={scrollYProgress}
-                  startProgress={tLongStart + 0.02}
-                  endProgress={tLongStart + 0.07}
+                  startProgress={0.7}
+                  endProgress={0.8}
                 />
-              </div>
-              <div className="mb-0">
+              </motion.div>
+              <motion.div className="mb-0" style={{ opacity: text4_opacity }}>
                 <MysteriousText
-                  text={`หากได้ศึกษาหรือเข้าใจอิคิไก\nก่อนที่จะเลือกเรียนหรือเลือกประกอบอาชีพ`}
+                  text={`หากได้ศึกษาหรือเข้าใจอิคิไก\nก่อนที่จะเลือกเรียน/เลือกประกอบอาชีพ`}
                   scrollYProgress={scrollYProgress}
-                  startProgress={tLongStart + 0.04}
-                  endProgress={tLongStart + 0.09}
+                  startProgress={0.7}
+                  endProgress={0.8}
                 />
-              </div>
-              <div>
+              </motion.div>
+              <motion.div style={{ opacity: text5_opacity }}>
                 <MysteriousText
-                  text={`ก็จะมีประโยชน์มากยิ่งขึ้น\nและอาจพาเจ้าออกจากความมัวมืดในคืนนี้ได้`}
+                  text={
+                    isPortrait
+                      ? `ก็จะมีประโยชน์มากยิ่งขึ้น\nและอาจพาเจ้า ออกจาก\nความมัวมืดในคืนนี้ได้`
+                      : `ก็จะมีประโยชน์มากยิ่งขึ้น\nและอาจพาเจ้าออกจากความมัวมืดในคืนนี้ได้`
+                  }
                   scrollYProgress={scrollYProgress}
-                  startProgress={tLongStart + 0.06}
-                  endProgress={tLongStart + 0.11}
+                  startProgress={0.7}
+                  endProgress={0.8}
                 />
-              </div>
+              </motion.div>
             </div>
           </div>
 
           {/* SECTION 2: Submit Cat with Text */}
           <div
-            className={`flex items-center relative z-10 w-full h-screen shrink-0  ${
-              isPortrait ? "flex-col gap-[100px] pt-[150px]" : "justify-between"
+            className={`flex items-center w-full h-full ${
+              isPortrait
+                ? "flex-col-reverse justify-start gap-[0px] md:gap-[200px] "
+                : " justify-between  flex-1"
             }`}
           >
             {/* Cat Frame */}
             <div
-              className={`relative inline-grid grid-cols-[max-content] grid-rows-[max-content] place-items-start shrink-0 ${
-                isPortrait ? "" : ""
+              className={`relative flex items-center align-stretch ${
+                isPortrait
+                  ? "h-[80%] md:h-[18.17%] w-[77.03%]"
+                  : "flex-1 w-full h-full"
               }`}
             >
-              {/* Light Cat moved into SceneLayer (see SCENE_5_04_ITEMS) */}
-
               {/* Tail Animation */}
               <div
-                className="[grid-area:1/1] relative"
+                className="absolute"
                 style={{
-                  width: isPortrait ? "230.4px" : "320px",
-                  height: isPortrait ? "216px" : "300px",
-                  marginLeft: isPortrait ? "340.95px" : "473.54px",
-                  marginTop: "0px",
+                  width: "38.19%",
+                  height: "38.22%",
+                  right: "10%",
+                  top: "17.42%",
                 }}
               >
                 <Lottie
@@ -373,12 +404,12 @@ export default function IntoDarkSubmit({
 
               {/* Cat Animation */}
               <div
-                className="[grid-area:1/1] relative"
+                className="absolute"
                 style={{
-                  width: isPortrait ? "360.46px" : "500.64px",
-                  height: isPortrait ? "381.05px" : "528.96px",
-                  marginLeft: isPortrait ? "16.31px" : "22.65px",
-                  marginTop: isPortrait ? "22.38px" : "31.06px",
+                  width: isPortrait ? "57.23%" : "58.73%",
+                  height: "66.04%",
+                  left: isPortrait ? "10.81%" : "11.10%",
+                  top: "16.69%",
                 }}
               >
                 <Lottie
@@ -389,17 +420,23 @@ export default function IntoDarkSubmit({
               </div>
 
               {/* Cloud 2 - Bottom */}
-              <Image
-                src="/assets/Scene/Scene5/scene5-04/Cloud2.svg"
-                alt="cloud"
-                width={isPortrait ? 599 : 832}
-                height={isPortrait ? 140 : 195}
-                className="[grid-area:1/1] mix-blend-screen relative"
+
+              <div
+                className="absolute"
                 style={{
-                  marginLeft: "0px",
-                  marginTop: isPortrait ? "279.76px" : "388.69px",
+                  width: "99.33%",
+                  height: "24.86%",
+                  right: "-10.43%",
+                  bottom: "10.98%",
                 }}
-              />
+              >
+                <Image
+                  src="/assets/Scene/Scene5/scene5-04/Cloud2.svg"
+                  alt="cloud"
+                  fill
+                  className=" object-contain"
+                />
+              </div>
             </div>
 
             {/* Text Section */}
@@ -411,32 +448,38 @@ export default function IntoDarkSubmit({
               }`}
             >
               <div className="typo-text-h4 text-center text-slate-100 w-full">
-                <div className="mb-0">
+                <motion.div className="mb-0" style={{ opacity: text6_opacity }}>
                   <MysteriousText
-                    text={`แต่เจ้าไม่ต้องกังวลไปการที่เจ้ายังไม่ค้นพบตัวเองตอนนี้`}
+                    text={
+                      isPortrait
+                        ? `แต่เจ้าไม่ต้องกังวลไป\nการที่เจ้ายังไม่ค้นพบตัวเองตอนนี้`
+                        : `แต่เจ้าไม่ต้องกังวลไปการที่เจ้ายัง \nไม่ค้นพบตัวเองตอนนี้`
+                    }
                     scrollYProgress={scrollYProgress}
-                    startProgress={tTextSectionStart}
+                    startProgress={0.667}
                     endProgress={1}
                   />
-                </div>
-                <div>
+                </motion.div>
+                <motion.div style={{ opacity: text7_opacity }}>
                   <MysteriousText
                     text={`ไม่ใช่เรื่องที่แปลกประหลาด`}
                     scrollYProgress={scrollYProgress}
-                    startProgress={tTextSectionStart + 0.005}
+                    startProgress={0.667}
                     endProgress={1}
                   />
-                </div>
-              </div>
-
+                </motion.div>
+              </div>{" "}
               {/* CTA Section */}
               <div className="flex flex-col items-center justify-between w-full gap-[60px]">
-                <div className="typo-text-h4 text-center text-slate-100 w-full">
+                <motion.div
+                  className="typo-text-h4 text-center text-slate-100 w-full"
+                  style={{ opacity: text8_opacity }}
+                >
                   <div className="mb-0">
                     <MysteriousText
                       text={`เจ้าอยากจะลองไปตามหาอิคิไก`}
                       scrollYProgress={scrollYProgress}
-                      startProgress={tCTALineStart}
+                      startProgress={0.667}
                       endProgress={1}
                     />
                   </div>
@@ -444,11 +487,11 @@ export default function IntoDarkSubmit({
                     <MysteriousText
                       text={`ของเจ้าดูบ้างไหมล่ะ`}
                       scrollYProgress={scrollYProgress}
-                      startProgress={tCTALineStart + 0.005}
+                      startProgress={0.667}
                       endProgress={1}
                     />
                   </div>
-                </div>
+                </motion.div>
 
                 <GradientButton
                   text={isLoading ? "กำลังโหลด..." : "พยักหน้า"}
@@ -461,6 +504,6 @@ export default function IntoDarkSubmit({
           </div>
         </div>
       </motion.div>
-    </div>
+    </motion.div>
   );
 }

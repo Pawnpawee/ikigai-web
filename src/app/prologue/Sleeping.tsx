@@ -146,7 +146,7 @@ export default function Sleeping() {
   const top_zoom = useTransform(
     scrollYProgress,
     [0.5625, 0.75],
-    [isPortrait ? "15%" : "0%", isPortrait ? "15%" : "0%"],
+    [isPortrait ? "15%" : "8%", isPortrait ? "15%" : "8%"],
   );
 
   const z_move = useTransform(scale, (s) => {

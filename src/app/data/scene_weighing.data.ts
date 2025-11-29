@@ -13,17 +13,18 @@ export const SCENE_WEIGHING_ITEMS = [
     animGroup: 2,
 
   },
-  // ----- New items moved from inline scene for easier management -----
-  // {
-  //   id: "light_overlay",
-  //   src: "/assets/Scene/Scene4/light.webp",
-  //   alt: "Light",
-  //   style: { top: "23.39%", left: "32.43%", width: "35.14%", height: "62.45%" },
-  //   animGroup: 68,
-  //   className: "mix-blend-screen",
-  //   quality: 100,
-  //   priority: true,
-  // },
+  {
+    id: "stairs",
+    src: "/assets/Scene/Scene4/stairs.webp",
+    alt: "Stairs",
+    style: {
+      bottom: "-6.70%",
+      left: "-13.54%",
+      width: "127.03%",
+      height: "110.51%",
+    },
+    animGroup: 4,
+  },
   {
     id: "scale-2-1",
     src: "/assets/Scene/Scene4/scale-2.webp",
@@ -35,6 +36,13 @@ export const SCENE_WEIGHING_ITEMS = [
       height: "2.30%",
     },
     animGroup: 69,
+  },
+  {
+    id: "scale_center",
+    src: "/assets/Scene/Scene4/scale.webp",
+    alt: "Scale",
+    style: { top: "45.77%", left: "41.95%", width: "16.11%", height: "31.79%" },
+    animGroup: 6,
 
   },
   {
@@ -54,27 +62,6 @@ export const SCENE_WEIGHING_ITEMS = [
 
   },
   {
-    id: "scale_center",
-    src: "/assets/Scene/Scene4/scale.webp",
-    alt: "Scale",
-    style: { top: "45.77%", left: "41.95%", width: "16.11%", height: "31.79%" },
-    animGroup: 6,
-
-  },
-
-  {
-    id: "stairs",
-    src: "/assets/Scene/Scene4/stairs.webp",
-    alt: "Stairs",
-    style: {
-      bottom: "-6.70%",
-      left: "-13.54%",
-      width: "127.03%",
-      height: "110.51%",
-    },
-    animGroup: 4,
-  },
-  {
     id: "heart",
     src: "/assets/Scene/Scene4/heart.webp",
     alt: "Heart",
@@ -89,4 +76,19 @@ export const SCENE_WEIGHING_ITEMS = [
     animGroup: 8,
 
   },
+
+  {
+    id: "light_overlay",
+    src: "/assets/Scene/Scene4/light.webp",
+    alt: "Light",
+    style: { top: "23.39%", left: "32.43%", width: "35.14%", height: "62.45%" },
+    animGroup: 68,
+    className: "mix-blend-screen",
+    priority: true,
+  },
+
+
+
+
+
 ];

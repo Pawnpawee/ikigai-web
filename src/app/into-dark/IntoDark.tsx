@@ -83,7 +83,7 @@ export default function IntoDark() {
     setSelectedReasons((prev) =>
       prev.includes(reasonId)
         ? prev.filter((id) => id !== reasonId)
-        : [...prev, reasonId],
+        : [...prev, reasonId]
     );
   };
 
@@ -154,9 +154,9 @@ export default function IntoDark() {
   };
 
   return (
-    <div ref={ref} className="w-full relative bg-black">
+    <div ref={ref} className="w-full relative bg-black touch-pan-y">
       {/* 300vh */}
-      <div className="h-[300vh] w-full">
+      <div className="h-[300vh] w-full ">
         <IntoDarkNameInput
           scrollYProgress={scrollYProgress}
           playerName={playerName}
@@ -188,7 +188,7 @@ export default function IntoDark() {
       </div>
 
       {/* 600vh - Ikigai Submit */}
-      <div className="h-[600vh] w-full">
+      <div className="h-[600vh] w-full ">
         <IntoDarkSubmit
           scrollYProgress={scrollYProgress}
           isLoading={isLoading}

@@ -124,12 +124,12 @@ export default function IntoDarkChoices({
   const opacity = useTransform(
     scrollYProgress,
     [0.167, 0.179, 0.389, 0.7, 0.8],
-    [0, 1, 1, 1, 0],
+    [0, 1, 1, 1, 0]
   );
   const zIndex = useTransform(
     scrollYProgress,
     [0, 0.168, 0.179, 0.493, 0.5],
-    [-1, -1, 10, 10, -1],
+    [-1, -1, 10, 10, -1]
   );
 
   // Background gradients - Layer 1 (earliest)
@@ -137,7 +137,7 @@ export default function IntoDarkChoices({
   const bgGradient1Opacity = useTransform(
     scrollYProgress,
     [0.179, 0.213],
-    [0, 1],
+    [0, 1]
   );
 
   // Stars - Layer 2
@@ -150,7 +150,7 @@ export default function IntoDarkChoices({
   const catScale = useTransform(
     scrollYProgress,
     [0.226, 0.254, 0.282],
-    [0.9, 1, 1],
+    [0.9, 1, 1]
   );
 
   // Star lines - Layer 5
@@ -174,7 +174,7 @@ export default function IntoDarkChoices({
   return (
     <div className="sticky top-0 w-full overflow-y-auto pointer-events-none">
       <motion.div
-        className="flex items-center justify-center bg-black min-h-screen  pointer-events-none"
+        className="flex items-center justify-center bg-black min-h-screen  pointer-events-none overflow-x-hidden touch-pan-y"
         style={{ opacity, zIndex }}
       >
         <div
@@ -285,7 +285,7 @@ export default function IntoDarkChoices({
               animationData={starLine1AnimationData}
               loop
               autoplay
-              style={{ width: "100%", height: "100%" }}
+           
             />
           </motion.div>
 
@@ -390,7 +390,7 @@ export default function IntoDarkChoices({
               className={`flex flex-col items-center justify-center text-center text-white w-full gap-4 px-0 ${
                 isPortrait
                   ? "pt-[100px] pb-[30px] lg:pt-[120px] lg:pb-[50px]"
-                  : "py-[150px]"
+                  : "py-[100px] 2xl:py-[150px]"
               }`}
             >
               {/* Main welcome text (node-id: 497:3460) */}
@@ -403,6 +403,7 @@ export default function IntoDarkChoices({
                     endProgress={0.293}
                   />
                   {playerName ? <b> {playerName}</b> : " (ชื่อผู้เล่น)"}{" "}
+                  <>{isPortrait ? <br /> : null}</>
                   <MysteriousText
                     text="มีหลายชีวิตเหลือเกินที่หลงเข้ามาในที่นี้"
                     scrollYProgress={scrollYProgress}
@@ -421,7 +422,7 @@ export default function IntoDarkChoices({
               </div>
               {/* Subtitle text (node-id: 497:3461) */}
               <div className="typo-text-h5 w-full">
-                <p>(ตอบอย่างน้อย 3 ข้อ)</p>
+                <p>(ตอบอย่างน้อย 1 ข้อ)</p>
               </div>
             </div>
 
@@ -483,7 +484,7 @@ export default function IntoDarkChoices({
           {/* End Content Container (node-id: 497:3447) */}
           <motion.div
             className={`absolute bottom-0 flex w-screen flex-col items-center justify-center ${
-              isPortrait ? "gap-[100px] py-[20%]" : "gap-[150px] py-[8%]"
+              isPortrait ? "gap-[100px] py-[20%]" : "gap-[150px] py-[2%] py 2xl:py-[8%]"
             }`}
           >
             {/* Text 2 - First message (node-id: 497:3448, 497:3449) */}

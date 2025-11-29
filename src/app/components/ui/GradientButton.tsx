@@ -1,5 +1,6 @@
 "use client";
 import { motion } from "framer-motion";
+import { useSoundEffect } from "@/app/hooks/useSoundEffect";
 
 interface GradientButtonProps {
   text: string;
@@ -19,12 +20,25 @@ export default function GradientButton({
   const isWhiteVariant = variant === "white";
   const isTransparentVariant = variant === "transparent";
 
+  // เสียง click button
+  const { playSoundEffect } = useSoundEffect({
+    soundPath: "/assets/Sound/Pop Select Button.wav",
+    fadeDurationMs: 50,
+    soundDurationMs: 300,
+    loop: false,
+  });
+
+  const handleClick = () => {
+    playSoundEffect();
+    onClick();
+  };
+
   const getButtonStyles = () => {
 
     if (isTransparentVariant) {
       return {
         border: "2px solid rgba(255, 255, 255, 1)", // ขอบสีขาวจางๆ
-        background: "transparent", // พื้นหลังใส
+        background: "rgba(255, 255, 255, 0)", // พื้นหลังใส (ใช้ rgba แทน transparent เพื่อให้ animate ได้)
         boxShadow: "0 0 40px -20px var(--color-slate-100)",
       };
     }
@@ -44,7 +58,7 @@ export default function GradientButton({
 
   return (
     <motion.button
-      onClick={onClick}
+      onClick={handleClick}
       className={`
         relative
         rounded-full

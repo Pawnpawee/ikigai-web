@@ -47,11 +47,29 @@ export default function AppWrapper({
 }: {
   children: React.ReactNode;
 }) {
+  // Detect mobile
+  const [isMobile, setIsMobile] = useState(false);
+
+  useEffect(() => {
+    const checkMobile = () => {
+      setIsMobile(window.innerWidth < 768);
+    };
+    
+    // Check on mount
+    checkMobile();
+    
+    // Check on resize
+    window.addEventListener('resize', checkMobile);
+    return () => window.removeEventListener('resize', checkMobile);
+  }, []);
+
   const lenisOptions = {
-    wheelMultiplier: 0.6, // ปรับความเร็วล้อเม้าส์
-    duration: 1.2, // ระยะเวลา animation
-    lerp: 0.1,
+    wheelMultiplier: isMobile ? 0.4 : 0.6, // ลดความเร็วบนมือถือ
+    touchMultiplier: 1.5, // ลดความไวของ touch
+    duration: isMobile ? 1.8 : 1.2, // เพิ่มระยะเวลา animation บนมือถือ
+    lerp: isMobile ? 0.05 : 0.1, // ลด lerp = ทำให้นุ่มนวลขึ้น
     smoothWheel: true,
+    smoothTouch: true, // เปิด smooth touch
   };
 
   return (

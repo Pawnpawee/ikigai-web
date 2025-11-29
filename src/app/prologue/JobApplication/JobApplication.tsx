@@ -102,7 +102,7 @@ export default function JobApplication() {
   );
 
   return (
-    <motion.div ref={ref} className="relative h-[950vh]" style={{ opacity }}>
+    <motion.div ref={ref} className="w-screen relative h-[950vh]" style={{ opacity }}>
       {/* bg */}
       <motion.div
         className="absolute w-screen inset-0 bg-s1"

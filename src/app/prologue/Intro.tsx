@@ -23,13 +23,13 @@ export default function Intro() {
   const scrollToOpacity = useTransform(
     scrollYProgress,
     [0, 0.05, 0.9, 1],
-    [0, 1, 1, 0],
+    [0, 1, 1, 0]
   );
 
   const zIndex = useTransform(
     scrollYProgress,
     [0, 0.1, 0.9, 1],
-    [-1, 10, 10, -1],
+    [-1, 10, 10, -1]
   );
 
   const starOpacity = useTransform(scrollYProgress, [0.04, 0.08], [1, 0]);
@@ -38,7 +38,7 @@ export default function Intro() {
   const starBlur = useTransform(
     scrollYProgress,
     [0.05, 0.1],
-    ["blur(0px)", "blur(12px)"],
+    ["blur(0px)", "blur(12px)"]
   );
 
   const introOpacity = useTransform(scrollYProgress, [0.07, 0.12], [0, 1]);
@@ -46,19 +46,19 @@ export default function Intro() {
   const introBlur = useTransform(
     scrollYProgress,
     [0.07, 0.1],
-    ["blur(12px)", "blur(0px)"],
+    ["blur(12px)", "blur(0px)"]
   );
 
   const introGlow = useTransform(
     scrollYProgress,
     [0.07, 0.12],
-    ["0px 0px 0px rgba(255,255,255,0)", "0px 0px 10px rgba(255,255,255,0.6)"],
+    ["0px 0px 0px rgba(255,255,255,0)", "0px 0px 10px rgba(255,255,255,0.6)"]
   );
 
   return (
     <motion.div ref={ref} className="h-[250vh] w-full relative">
       <motion.div
-        className="fixed top-0 h-full w-full flex items-center justify-center text-center"
+        className="fixed top-0 h-full  flex items-center justify-center text-center w-screen overflow-hidden"
         style={{ zIndex }}
       >
         <motion.div

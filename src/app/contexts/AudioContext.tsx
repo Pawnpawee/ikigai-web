@@ -530,30 +530,58 @@ export function AudioProvider({ children }: { children: React.ReactNode }) {
   };
 
   const pauseBgMusic = () => {
-    if (audioRef.current && isPlaying) {
-      const originalVolume = audioRef.current.volume;
-      const fadeDuration = 1000; // 500ms fade out
-      const fadeSteps = 20;
-      const volumeStep = originalVolume / fadeSteps;
-      const stepDuration = fadeDuration / fadeSteps;
+    // Fade out both audio elements (audioRef and bgMusicRef)
+    const fadeDuration = 1000;
+    const fadeSteps = 20;
+    const stepDuration = fadeDuration / fadeSteps;
 
-      let currentStep = 0;
-      const fadeOutInterval = setInterval(() => {
-        currentStep++;
+    // Fade out audioRef
+    if (audioRef.current && !audioRef.current.paused) {
+      const originalVolume1 = audioRef.current.volume;
+      const volumeStep1 = originalVolume1 / fadeSteps;
+      let currentStep1 = 0;
+      
+      const fadeOutInterval1 = setInterval(() => {
+        currentStep1++;
         if (audioRef.current) {
           audioRef.current.volume = Math.max(
             0,
-            originalVolume - volumeStep * currentStep,
+            originalVolume1 - volumeStep1 * currentStep1,
           );
 
-          if (currentStep >= fadeSteps) {
-            clearInterval(fadeOutInterval);
+          if (currentStep1 >= fadeSteps) {
+            clearInterval(fadeOutInterval1);
             audioRef.current.pause();
-            audioRef.current.volume = originalVolume; // คืนค่า volume เดิม
+            audioRef.current.volume = originalVolume1;
           }
         }
       }, stepDuration);
     }
+
+    // Fade out bgMusicRef (for scene-specific music like egypt)
+    if (bgMusicRef.current && !bgMusicRef.current.paused) {
+      const originalVolume2 = bgMusicRef.current.volume;
+      const volumeStep2 = originalVolume2 / fadeSteps;
+      let currentStep2 = 0;
+      
+      const fadeOutInterval2 = setInterval(() => {
+        currentStep2++;
+        if (bgMusicRef.current) {
+          bgMusicRef.current.volume = Math.max(
+            0,
+            originalVolume2 - volumeStep2 * currentStep2,
+          );
+
+          if (currentStep2 >= fadeSteps) {
+            clearInterval(fadeOutInterval2);
+            bgMusicRef.current.pause();
+            bgMusicRef.current.volume = originalVolume2;
+          }
+        }
+      }, stepDuration);
+    }
+    
+    setIsPlaying(false);
   };
 
   const resumeBgMusic = async () => {

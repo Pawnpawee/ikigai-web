@@ -18,11 +18,14 @@ import JobApplication from "./prologue//JobApplication/JobApplication";
 import Sleeping from "./prologue//Sleeping";
 import DecisionSection from "./components/scene/DecisionSection";
 import { useRouter } from "next/navigation";
+import { useAudio } from "./contexts/AudioContext";
 
 export default function Home() {
   const router = useRouter();
   const lenis = useLenis();
+  const { pauseBgMusic } = useAudio();
   const [isTransitioning, setIsTransitioning] = useState(false);
+  
   useEffect(() => {
     if (lenis) {
       lenis.scrollTo(0, { immediate: true });
@@ -37,15 +40,20 @@ export default function Home() {
     [1, 1, 0, 0]
   );
 
-  const handleWakeUp = () => {
+  const handleWakeUp = async () => {
     setIsTransitioning(true);
+    
+    // Fade out background music (1 วินาที)
+    pauseBgMusic();
+    
+    // รอให้ fade out เสร็จก่อนเปลี่ยนหน้า
     setTimeout(() => {
       router.push("/dreaming"); // ⭐ ไป Route ใหม่
-    }, 1000); // รอ Fade Out 1 วินาที
+    }, 1000);
   };
 
   return (
-    <main className="relative flex flex-col justify-between h-full">
+    <main className="relative flex flex-col justify-between h-full ">
       <Preloader />
 
       <MouseFollower />

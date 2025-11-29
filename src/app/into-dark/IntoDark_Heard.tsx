@@ -32,42 +32,77 @@ export default function IntoDarkHeard({
 
     // Cloud
     cloud: isPortrait
-      ? { left: "-14.81%", top: "80.47%", width: "77.63%", height: "7.43%" } // Portrait: -160/1080, 1545.08/1920, 838.4/1080, 142.62/1920
+      ? { width: "76.98%", height: "7.43%", left: "-14.81%", bottom: "12.10%" } // Portrait: -160/1080, 1545.08/1920, 838.4/1080, 142.62/1920
       : { bottom: "4.96%", right: "25.69%", width: "43.3%", height: "13.21%" }, // Landscape
 
     // Little Star 2
     littleStar2: isPortrait
-      ? { left: "8.89%", top: "79.64%", width: "158.22%", height: "16.56%" } // Portrait: 96/1080, 1529.01/1920, 1708.8/1080, 317.95/1920
+      ? {
+          width: "157.44%",
+          height: "16.56%",
+          right: "-66.33%",
+          bottom: "3.80%",
+        } // Portrait: 96/1080, 1529.01/1920, 1708.8/1080, 317.95/1920
       : { left: "5.48%", top: "48.85%", width: "88.52%", height: "29.45%" }, // Landscape
 
     // Star line 1
     starLine1: isPortrait
-      ? { left: "27.29%", top: "72.92%", width: "17.57%", height: "2.34%" } // Portrait: 294.72/1080, 1400/1920, 189.84/1080, 45/1920
+      ? {
+          width: "21.74%",
+          height: "4.35%",
+          left: "9.72%",
+          top: "72.92%",
+        } // Portrait: 294.72/1080, 1400/1920, 189.84/1080, 45/1920
       : { left: "8.32%", top: "84.02%", width: "12.23%", height: "7.74%" }, // Landscape
 
     // Light Cat
     lightCat: isPortrait
-      ? { left: "68.73%", top: "65.99%", width: "33.4%", height: "17.5%" } // Portrait: 742.26/1080, 1266.98/1920, 360.72/1080, 336/1920
+      ? {
+          width: "33.41%",
+          height: "17.41%",
+          right: "-2.14%",
+          bottom: "16.60%",
+        } // Portrait: 742.26/1080, 1266.98/1920, 360.72/1080, 336/1920
       : { left: "72.33%", top: "52.96%", width: "18.8%", height: "30.96%" }, // Landscape
 
     // Cat
     cat: isPortrait
-      ? { left: "51.67%", top: "67.81%", width: "55.33%", height: "17.81%" } // Portrait: 558/1080, 1302/1920, 597.6/1080, 342/1920
+      ? {
+          width: "55.31%",
+          height: "17.81%",
+          right: "-6.98%",
+          bottom: "14.38%",
+        } // Portrait: 558/1080, 1302/1920, 597.6/1080, 342/1920
       : { left: "62.74%", top: "56.2%", width: "31.11%", height: "31.65%" }, // Landscape
 
     // Tail
     tail: isPortrait
-      ? { left: "89.2%", top: "51.46%", width: "29.63%", height: "15.63%" } // Portrait: 963.46/1080, 988/1920, 320/1080, 300/1920
+      ? {
+          width: "29.63%",
+          height: "15.63%",
+          right: "-18.84%",
+          bottom: "32.92%",
+        } // Portrait: 963.46/1080, 988/1920, 320/1080, 300/1920
       : { left: "83.85%", top: "27.14%", width: "16.67%", height: "27.78%" }, // Landscape
 
     // Little Star 1
     littleStar1: isPortrait
-      ? { left: "-62.78%", top: "52.81%", width: "163.89%", height: "47.76%" } // Portrait: -678/1080, 1014/1920, 1770/1080, 917/1920
+      ? {
+          width: "163.69%",
+          height: "47.76%",
+          left: "-62.78%",
+          bottom: "-0.57%",
+        } // Portrait: -678/1080, 1014/1920, 1770/1080, 917/1920
       : { left: "6.48%", top: "15.28%", width: "92.08%", height: "84.91%" }, // Landscape
 
     // Little Star 3
     littleStar3: isPortrait
-      ? { left: "54.26%", top: "60%", width: "40.13%", height: "30.63%" } // Portrait: 586/1080, 1152/1920, 433.4/1080, 588/1920
+      ? {
+          width: "40.13%",
+          height: "30.53%",
+          right: "5.61%",
+          bottom: "9.47%",
+        } // Portrait: 586/1080, 1152/1920, 433.4/1080, 588/1920
       : { left: "2.9%", top: "35.51%", width: "22.57%", height: "54.28%" }, // Landscape
 
     // Text Container
@@ -80,12 +115,12 @@ export default function IntoDarkHeard({
   const opacity = useTransform(
     scrollYProgress,
     [0.5, 0.51, 0.657, 0.667],
-    [0, 1, 1, 0],
+    [0, 1, 1, 0]
   );
   const zIndex = useTransform(
     scrollYProgress,
     [0.497, 0.5, 0.665, 0.667],
-    [-1, 10, 10, -1],
+    [-1, 10, 10, -1]
   );
 
   // Background gradient - แสดงตลอดเวลา
@@ -95,7 +130,7 @@ export default function IntoDarkHeard({
   const set1Opacity = useTransform(
     scrollYProgress,
     [0.5, 0.51, 0.539],
-    [0, 1, 1],
+    [0, 1, 1]
   );
   const set1Y = useTransform(scrollYProgress, [0.5, 0.51], [30, 0]);
 
@@ -103,7 +138,7 @@ export default function IntoDarkHeard({
   const set2Opacity = useTransform(
     scrollYProgress,
     [0.539, 0.548, 0.556],
-    [0, 1, 1],
+    [0, 1, 1]
   );
   const set2Y = useTransform(scrollYProgress, [0.539, 0.548], [20, 0]);
 
@@ -111,7 +146,7 @@ export default function IntoDarkHeard({
   const set3Opacity = useTransform(
     scrollYProgress,
     [0.556, 0.564, 0.611],
-    [0, 1, 1],
+    [0, 1, 1]
   );
   const set3Y = useTransform(scrollYProgress, [0.556, 0.564], [30, 0]);
 
@@ -119,7 +154,7 @@ export default function IntoDarkHeard({
   const set4Opacity = useTransform(
     scrollYProgress,
     [0.611, 0.618, 0.625],
-    [0, 1, 1],
+    [0, 1, 1]
   );
   const set4Y = useTransform(scrollYProgress, [0.611, 0.618], [20, 0]);
 
@@ -127,7 +162,7 @@ export default function IntoDarkHeard({
   const set5Opacity = useTransform(
     scrollYProgress,
     [0.625, 0.631, 0.639],
-    [0, 1, 1],
+    [0, 1, 1]
   );
   const set5Y = useTransform(scrollYProgress, [0.625, 0.631], [50, 0]);
 
@@ -144,7 +179,7 @@ export default function IntoDarkHeard({
         />
       </motion.div>
       <motion.div
-        className="relative flex aspect-video portrait:aspect-9/16 px-16 portrait:px-15 justify-center items-center w-screen h-[99%] mx-auto mix-blend-screen"
+        className="relative flex aspect-video portrait:aspect-9/16  justify-center items-center w-screen h-[99%] mx-auto mix-blend-screen"
         style={{ opacity, zIndex }}
       >
         {/* Cloud - Set 4 */}
@@ -152,7 +187,7 @@ export default function IntoDarkHeard({
           className="absolute mix-blend-screen"
           style={{
             ...(isPortrait
-              ? { left: positions.cloud.left, top: positions.cloud.top }
+              ? { left: positions.cloud.left, bottom: positions.cloud.bottom }
               : {
                   bottom: positions.cloud.bottom,
                   right: positions.cloud.right,
@@ -175,8 +210,8 @@ export default function IntoDarkHeard({
         <motion.div
           className="absolute mix-blend-screen"
           style={{
-            left: positions.littleStar3.left,
-            top: positions.littleStar3.top,
+            right: positions.littleStar3.right,
+            bottom: positions.littleStar3.bottom,
             width: positions.littleStar3.width,
             height: positions.littleStar3.height,
             y: set4Y,
@@ -196,8 +231,8 @@ export default function IntoDarkHeard({
         <motion.div
           className="absolute mix-blend-screen"
           style={{
-            left: positions.littleStar2.left,
-            top: positions.littleStar2.top,
+            right: positions.littleStar2.right,
+            bottom: positions.littleStar2.bottom,
             width: positions.littleStar2.width,
             height: positions.littleStar2.height,
             y: set2Y,
@@ -218,7 +253,7 @@ export default function IntoDarkHeard({
           className="absolute mix-blend-screen"
           style={{
             left: positions.littleStar1.left,
-            top: positions.littleStar1.top,
+            bottom: positions.littleStar1.bottom,
             width: positions.littleStar1.width,
             height: positions.littleStar1.height,
             y: set3Y,
@@ -246,20 +281,17 @@ export default function IntoDarkHeard({
             opacity: set4Opacity,
           }}
         >
-          <Lottie
-            animationData={starLine1AnimationData}
-            loop
-            autoplay
-            style={{ width: "100%", height: "100%" }}
-          />
+          <Lottie animationData={starLine1AnimationData} loop autoplay />
         </motion.div>
 
         {/* Light Cat - Set 5 */}
         <motion.div
           className="absolute mix-blend-screen"
           style={{
-            left: positions.lightCat.left,
+            right: positions.lightCat.right,
             top: positions.lightCat.top,
+            left: positions.lightCat.left,
+            bottom: positions.lightCat.bottom,
             width: positions.lightCat.width,
             height: positions.lightCat.height,
             y: set5Y,
@@ -277,10 +309,12 @@ export default function IntoDarkHeard({
 
         {/* Main Cat - Set 5 */}
         <motion.div
-          className="absolute"
+          className="absolute -z-1"
           style={{
-            left: positions.cat.left,
+            right: positions.cat.right,
             top: positions.cat.top,
+            bottom: positions.cat.bottom,
+            left: positions.cat.left,
             width: positions.cat.width,
             height: positions.cat.height,
             y: set5Y,
@@ -298,7 +332,9 @@ export default function IntoDarkHeard({
         <motion.div
           className="absolute scale-x-[-1]"
           style={{
+            right: positions.tail.right,
             left: positions.tail.left,
+            bottom: positions.tail.bottom,
             top: positions.tail.top,
             width: positions.tail.width,
             height: positions.tail.height,
@@ -316,13 +352,13 @@ export default function IntoDarkHeard({
         {/* Text Container */}
         <motion.div
           className={`flex flex-col items-center h-full w-full ${
-            isPortrait ? "gap-0 py-20" : "gap-10 py-15"
+            isPortrait ? "gap-0" : "gap-10 py-15"
           }`}
         >
           {/* Set 1: Main Text + Buttons */}
           <motion.div
             className={`flex flex-col items-center w-full ${
-              isPortrait ? "gap-10 px-0 py-30" : "gap-10 py-8"
+              isPortrait ? "gap-8 md:gap-10 px-0 pt-20 pb-10 md:py-30" : "gap-10 py-8"
             }`}
             style={{
               y: set1Y,
@@ -330,12 +366,16 @@ export default function IntoDarkHeard({
             }}
           >
             <div
-              className={`text-white text-center ${
-                isPortrait ? "typo-text-h3 w-[65%] px-0" : "typo-text-h3 w-full"
+              className={`text-white text-center typo-text-h3 ${
+                isPortrait ? " px-0" : "typo-text-h3 w-full"
               }`}
             >
               <MysteriousText
-                text="มนุษย์บางพวก เรียกมันว่า อิคิไก… เคยได้ยินมาก่อนไหมล่ะ"
+                text={
+                  isPortrait
+                    ? `มนุษย์บางพวก เรียกมันว่า \n อิคิไก… เคยได้ยินมาก่อนไหมล่ะ`
+                    : `มนุษย์บางพวก เรียกมันว่า อิคิไก… เคยได้ยินมาก่อนไหมล่ะ`
+                }
                 scrollYProgress={scrollYProgress}
                 startProgress={0.5}
                 endProgress={0.539}
@@ -345,7 +385,7 @@ export default function IntoDarkHeard({
             {/* Set 2: Choice Buttons */}
             <motion.div
               className={`flex pointer-events-auto ${
-                isPortrait ? "gap-[130px]" : "gap-[130px]"
+                isPortrait ? " gap-[20px] md:gap-[130px]" : "gap-[130px]"
               }`}
               style={{
                 opacity: set2Opacity,
@@ -355,20 +395,20 @@ export default function IntoDarkHeard({
                 text="เคย"
                 isSelected={hasHeard === true}
                 onClick={() => setHasHeard(true)}
-                className="min-w-[200px]"
               />
               <GradientButton
                 text="ไม่เคย"
                 isSelected={hasHeard === false}
                 onClick={() => setHasHeard(false)}
-                className="min-w-[200px]"
               />
             </motion.div>
           </motion.div>
 
           {/* Set 3: Four Paths Explanation */}
           <motion.div
-            className={`text-left w-full ${isPortrait ? "px-5" : "px-0"}`}
+            className={`text-left  ${
+              isPortrait ? "px-8 items-stretch" : "px-0 w-full"
+            }`}
             style={{
               ...(isPortrait ? {} : { paddingLeft: "8.46%" }),
               y: set3Y,
@@ -382,7 +422,11 @@ export default function IntoDarkHeard({
             >
               <div className="mb-2">
                 <MysteriousText
-                  text="— สายหนึ่งคือสิ่งที่ทำให้หัวใจเจ้ารู้สึกมีไฟ (What you love)"
+                  text={
+                    isPortrait
+                      ? `— สายหนึ่งคือสิ่งที่ทำให้หัวใจเจ้า \n รู้สึกมีไฟ (What you love)`
+                      : `— สายหนึ่งคือสิ่งที่ทำให้หัวใจเจ้ารู้สึกมีไฟ (What you love)`
+                  }
                   scrollYProgress={scrollYProgress}
                   startProgress={0.556}
                   endProgress={0.573}
@@ -391,7 +435,11 @@ export default function IntoDarkHeard({
 
               <div className="mb-2">
                 <MysteriousText
-                  text="— สายหนึ่งคือสิ่งที่เจ้าทำได้ดี (What you are good at)"
+                  text={
+                    isPortrait
+                      ? `— สายหนึ่งคือสิ่งที่เจ้าทำได้ดี \n (What you are good at)`
+                      : `— สายหนึ่งคือสิ่งที่เจ้าทำได้ดี (What you are good at)`
+                  }
                   scrollYProgress={scrollYProgress}
                   startProgress={0.564}
                   endProgress={0.581}
@@ -400,7 +448,11 @@ export default function IntoDarkHeard({
 
               <div className="mb-2">
                 <MysteriousText
-                  text="— สายหนึ่งคือสิ่งที่โลกภายนอก กำลังรอคอยจากเจ้า"
+                  text={
+                    isPortrait
+                      ? `— สายหนึ่งคือสิ่งที่โลกภายนอก \n กำลังรอคอยจากเจ้า`
+                      : `— สายหนึ่งคือสิ่งที่โลกภายนอก กำลังรอคอยจากเจ้า`
+                  }
                   scrollYProgress={scrollYProgress}
                   startProgress={0.57}
                   endProgress={0.587}
@@ -416,18 +468,14 @@ export default function IntoDarkHeard({
               </div>
               <div className="mb-2">
                 <MysteriousText
-                  text="— และอีกสิ่งคือสิ่งที่โลกยอมจ่ายให้"
+                  text={
+                    isPortrait
+                      ? `และอีกสิ่งคือสิ่งที่โลกยอมจ่ายให้ \n (What you can be paid for)`
+                      : `— และอีกสิ่งคือสิ่งที่โลกยอมจ่ายให้ \n (What you can be paid for)`
+                  }
                   scrollYProgress={scrollYProgress}
                   startProgress={0.581}
                   endProgress={0.598}
-                />
-              </div>
-              <div>
-                <MysteriousText
-                  text="(What you can be paid for)"
-                  scrollYProgress={scrollYProgress}
-                  startProgress={0.587}
-                  endProgress={0.611}
                 />
               </div>
             </div>

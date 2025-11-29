@@ -10,10 +10,12 @@ import Weighing from "./Weighing";
 import DecisionSection from "../components/scene/DecisionSection"; // ⭐ Reuse
 import MouseFollower from "../components/ui/MouseFollower";
 import Navbar from "../components/ui/Navbar";
+import { useAudio } from "../contexts/AudioContext";
 
 export default function DreamingPage() {
   const router = useRouter();
   const lenis = useLenis();
+  const { pauseBgMusic } = useAudio();
   const [isTransitioning, setIsTransitioning] = useState(false);
 
   useEffect(() => {
@@ -21,8 +23,13 @@ export default function DreamingPage() {
   }, [lenis]);
 
   // ฟังก์ชันเปลี่ยนหน้าไป IntoDark
-  const handleLook = () => {
+  const handleLook = async () => {
     setIsTransitioning(true);
+    
+    // Fade out background music (1 วินาที)
+    pauseBgMusic();
+    
+    // รอให้ fade out เสร็จก่อนเปลี่ยนหน้า
     setTimeout(() => {
       router.push("/into-dark"); // ⭐ ไป Route ใหม่
     }, 1000);

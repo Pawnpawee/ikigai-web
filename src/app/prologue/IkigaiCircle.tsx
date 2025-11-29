@@ -43,7 +43,8 @@ const IkigaiCircle = memo(
     opacity, // ⭐ รับ opacity มาใช้ตรงๆ
   }: IkigaiCircleProps) => {
     const [isHovered, setIsHovered] = useState(false);
-      const [isTouchDevice, setIsTouchDevice] = useState(false);
+    const [isTouchDevice, setIsTouchDevice] = useState(false);
+    const [animationComplete, setAnimationComplete] = useState(false);
 
     const handleHoverStart = useCallback(() => setIsHovered(true), []);
     const handleHoverEnd = useCallback(() => setIsHovered(false), []);
@@ -59,7 +60,8 @@ const IkigaiCircle = memo(
     // Local motion value fallbacks when parent doesn't provide them
     const localRotate = useMotionValue(0);
     const localOpacity = useMotionValue(1);
-    const appliedRotate = rotateValue ?? localRotate;
+    // ⭐ ใช้ rotateValue เฉพาะตอน animation เสร็จแล้ว
+    const appliedRotate = (animationComplete && rotateValue) ? rotateValue : localRotate;
     const appliedOpacity = opacity ?? localOpacity;
 
     useEffect(() => {
@@ -102,6 +104,17 @@ const IkigaiCircle = memo(
     useEffect(() => {
       if (isTouchDevice) setIsHovered(true);
     }, [isTouchDevice]);
+
+    // Track animation completion
+    useEffect(() => {
+      if (shouldAnimate && transition) {
+        const delay = (transition as any).delay || 0;
+        const timer = setTimeout(() => {
+          setAnimationComplete(true);
+        }, (transition.duration + delay) * 1000);
+        return () => clearTimeout(timer);
+      }
+    }, [shouldAnimate, transition]);
 
     return (
       <motion.div

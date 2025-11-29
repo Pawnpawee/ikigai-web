@@ -107,6 +107,19 @@ export function useSoundEffect({
     fadeAudio("out");
   }, [fadeAudio]);
 
+  // Update volume in real-time when sfxVolume changes
+  useEffect(() => {
+    const audio = audioRef.current;
+    if (audio && !audio.paused) {
+      const targetVol = Math.min(sfxVolume * volume, 1);
+      // Safari fix: set volume with small delay
+      audio.volume = targetVol;
+      setTimeout(() => {
+        if (audio) audio.volume = targetVol;
+      }, 10);
+    }
+  }, [sfxVolume, volume]);
+
   // Cleanup เมื่อ Component unmount
   useEffect(() => {
     return () => {

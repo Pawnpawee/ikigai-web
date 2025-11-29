@@ -8,13 +8,21 @@ import { motion } from "framer-motion";
 import MouseFollower from "../components/ui/MouseFollower";
 import Navbar from "../components/ui/Navbar";
 import IntoDark from "./IntoDark";
+import { useAudio } from "../contexts/AudioContext";
 
 export default function IntoDarkPage() {
   const lenis = useLenis();
+  const { transitionBgMusic } = useAudio();
 
   useEffect(() => {
     if (lenis) lenis.scrollTo(0, { immediate: true });
   }, [lenis]);
+
+  // เปลี่ยนเพลงกลับไป default bg-music เมื่อเข้าหน้า IntoDark
+  useEffect(() => {
+    // transitionBgMusic จะจัดการ fade out เพลงเก่าและ fade in เพลงใหม่เองอัตโนมัติ
+    transitionBgMusic("/assets/Sound/bg-music.mp3", 1000);
+  }, [transitionBgMusic]);
 
   return (
     <main className="relative bg-black min-h-screen">

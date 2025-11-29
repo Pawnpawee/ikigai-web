@@ -9,7 +9,6 @@ import {
 import { useRef, useEffect } from "react";
 import Image from "next/image";
 import { useIsPortrait } from "@/app/hooks/useOrientation";
-import { useBgMusicTransition } from "@/app/hooks/useBgMusicTransition";
 import SubtitleScroll from "@/app/components/ui/SubtitleScroll";
 import { VideoAnimation } from "@/app/components/ui/VideoAnimation";
 import LazyLottie from "@/app/components/ui/LazyLottie";
@@ -25,29 +24,39 @@ export default function Weighing() {
   const isInView = useInView(ref, { once: false, amount: 0.1 });
   const hasPlayedScalesRef = useRef(false);
   const hasPlayedMetalRef = useRef(false);
-  const { animationsStarted } = useAudio();
-
-  // จัดการ bg music transition - ใช้เพลงเดียวกับ Dreaming
-  useBgMusicTransition({
-    targetMusic: "/assets/Sound/3-4/egypt-jelly-dance.mp3",
-    defaultMusic: "/assets/Sound/bg-music.mp3",
-    fadeDuration: 1000,
-    isInView,
-    continueOnExit: true,
-  });
+  const hasPlayedBlackHoleRef = useRef(false);
+  const hasPlayedFallingRef = useRef(false);
+  const hasPausedBgMusicRef = useRef(false);
+  const { animationsStarted, pauseBgMusic, resumeBgMusic } = useAudio();
 
   const { playSoundEffect: playScales } = useSoundEffect({
     soundPath: "/assets/Sound/3-4/weighing.mp3",
     fadeDurationMs: 500,
+    soundDurationMs: 1500, // weighing sound duration
     loop: false,
   });
 
   const { playSoundEffect: playMetal, stopSoundEffect: stopMetal } =
     useSoundEffect({
       soundPath: "/assets/Sound/3-4/metal-slide.mp3",
-      fadeDurationMs: 20, // quick fade out for near-instant cut
+      fadeDurationMs: 300, // smooth fade out
       loop: true, // loop while rotation is active
     });
+
+  const { playSoundEffect: playBlackHole, stopSoundEffect: stopBlackHole } =
+    useSoundEffect({
+      soundPath: "/assets/Sound/black-hole.mp3",
+      fadeDurationMs: 1000,
+      loop: true,
+    });
+
+  const { playSoundEffect: playFalling } = useSoundEffect({
+    soundPath: "/assets/Sound/falling.mp3",
+    fadeDurationMs: 500,
+    soundDurationMs: 3000,
+    loop: false,
+    volume: 100, // เพิ่มความดังเสียง
+  });
 
   const { scrollYProgress } = useScroll({
     target: ref,
@@ -56,21 +65,21 @@ export default function Weighing() {
 
   useEffect(() => {
     const unsubscribe = scrollYProgress.on("change", (latest) => {
-      // เช็คว่า Animation เริ่มหรือยัง และอยู่ใน View ไหม
+      // เช็คว่า Animation พร้อมและอยู่ใน View หรือไม่
       if (!animationsStarted || !isInView) return;
 
       // -----------------------------------------------------
       // 🔊 1. Play Metal (เสียงเหล็กขูด)
-      // เงื่อนไข: เล่นระหว่างที่ Scale กำลังหมุน (0.66) จนถึง Heart Plate หยุด (0.75)
+      // เงื่อนไข: เล่นขณะที่ scaleRotate กำลังเปลี่ยนค่า
+      // อิงจาก range Animation: heartRotate_slow (0.55) -> heartRotate_fast (0.72)
       // -----------------------------------------------------
-      if (latest > 0.66 && latest < 0.75) {
-        // ถ้าอยู่ในช่วงเวลา และเสียงยังไม่เล่น -> ให้เล่น
+      if (latest > 0.55 && latest < 0.72) {
         if (!hasPlayedMetalRef.current) {
           playMetal();
-          hasPlayedMetalRef.current = true; // ใช้ ref นี้แทนความหมายว่า "กำลังเล่นอยู่"
+          hasPlayedMetalRef.current = true;
         }
       } else {
-        // ถ้าหลุดช่วงเวลา (จบแล้ว หรือ ถอยหลังกลับ) และเสียงกำลังเล่น -> ให้หยุด
+        // หยุดเสียงเมื่อหลุดช่วง Animation (จบแล้ว หรือ ถอยกลับ)
         if (hasPlayedMetalRef.current) {
           stopMetal();
           hasPlayedMetalRef.current = false;
@@ -79,34 +88,95 @@ export default function Weighing() {
 
       // -----------------------------------------------------
       // 🔊 2. Play Scales (เสียงกระแทกตุ้บ!)
-      // เงื่อนไข: เล่นโป๊ะเชะ ตอนที่ Heart Plate สิ้นสุด Animation (0.75)
+      // เงื่อนไข: เล่นครั้งเดียวเมื่อ heartPlateY ลงมาสุด (ที่ 0.72)
       // -----------------------------------------------------
-      if (latest >= 0.75) {
-        // เล่นครั้งเดียว
+      if (latest >= 0.72) {
         if (!hasPlayedScalesRef.current) {
           playScales();
           hasPlayedScalesRef.current = true;
         }
       }
 
-      // Reset Logic: ถ้า user สกรอลล์ย้อนกลับขึ้นไป ให้ reset เพื่อให้เล่นใหม่ได้
-      if (latest < 0.74) {
+      // Reset Logic: ถ้า user สกรอลล์ย้อนกลับขึ้นไป (เผื่อระยะ buffer นิดหน่อย เช่น < 0.70)
+      if (latest < 0.7) {
         hasPlayedScalesRef.current = false;
+      }
+
+      // -----------------------------------------------------
+      // 🔊 3. Video Section Audio Management
+      // -----------------------------------------------------
+      // 0.72-0.75: Fade out egypt music (once)
+      if (latest >= 0.72 && latest < 0.75) {
+        if (!hasPausedBgMusicRef.current) {
+          pauseBgMusic(); // Fade out bg music
+          hasPausedBgMusicRef.current = true;
+        }
+      }
+
+      // 0.75-0.98: Play black-hole sound effect
+      if (latest >= 0.75 && latest < 0.98) {
+        if (!hasPlayedBlackHoleRef.current) {
+          playBlackHole();
+          hasPlayedBlackHoleRef.current = true;
+        }
+      } else if (latest < 0.75) {
+        // Stop black-hole when scrolling back before 0.75
+        if (hasPlayedBlackHoleRef.current) {
+          stopBlackHole();
+          hasPlayedBlackHoleRef.current = false;
+        }
+      }
+
+      // 0.98-1.0: Stop black-hole and play falling sound (once at 0.98)
+      if (latest >= 0.98) {
+        // Stop black-hole at 0.98
+        if (hasPlayedBlackHoleRef.current) {
+          stopBlackHole();
+          hasPlayedBlackHoleRef.current = false;
+        }
+        // Play falling once
+        if (!hasPlayedFallingRef.current) {
+          playFalling();
+          hasPlayedFallingRef.current = true;
+        }
+      }
+
+      // Reset logic for video section when scrolling back
+      if (latest < 0.72) {
+        // Resume Egypt music when scrolling back
+        if (hasPausedBgMusicRef.current) {
+          resumeBgMusic();
+          hasPausedBgMusicRef.current = false;
+        }
+        hasPlayedBlackHoleRef.current = false;
+        hasPlayedFallingRef.current = false;
+      }
+
+      // Reset falling when scrolling back from end
+      if (latest < 0.98) {
+        hasPlayedFallingRef.current = false;
       }
     });
 
     return () => {
       unsubscribe();
-      stopMetal(); // Cleanup: หยุดเสียงเมื่อ Unmount กันเสียงค้าง
+      stopMetal(); // Cleanup เสียงเมื่อ Unmount
+      stopBlackHole();
     };
   }, [
     scrollYProgress,
     playMetal,
     stopMetal,
     playScales,
+    playBlackHole,
+    stopBlackHole,
+    playFalling,
     animationsStarted,
     isInView,
+    pauseBgMusic,
+    resumeBgMusic,
   ]);
+
   // Main opacity for entire section
   const mainOpacity = useTransform(
     scrollYProgress,
@@ -133,7 +203,7 @@ export default function Weighing() {
   );
 
   // POV falling effect - extended to use additional 50vh (600-750vh = 0.6-0.75)
-  const pov_y = useTransform(scrollYProgress, [0, 0.7, 0.8], [0, 0, -200]);
+  const pov_y = useTransform(scrollYProgress, [0, 0.72, 0.75], [0, 0, -300]);
 
   // Set 2: sky, wall (50-100vh = 0.0667-0.1333)
   const opacity_set2 = useTransform(scrollYProgress, [0.0667, 0.1333], [0, 1]);
@@ -187,7 +257,7 @@ export default function Weighing() {
   const containerTop = useTransform(
     scrollYProgress,
     [0.5, 0.7],
-    isPortrait ? ["-5%", "-3%"] : ["0%", "-7%"]
+    isPortrait ? ["-1%", "-3%"] : ["0%", "-7%"]
   );
 
   // Derive z_move from the existing containerScale so the visual zoom
@@ -247,68 +317,6 @@ export default function Weighing() {
     () => featherPlateY_slow.get() + featherPlateY_fast.get()
   );
 
-  // Play sounds based on MotionValue changes rather than raw scroll thresholds
-  useEffect(() => {
-    // playMetal: when scaleRotate starts to move (rotation magnitude exceeds small threshold)
-    const unsubscribeRotate = scaleRotate.on("change", (v) => {
-      const rotateVal = typeof v === "number" ? Math.abs(v) : 0;
-      if (
-        rotateVal > 1 &&
-        !hasPlayedMetalRef.current &&
-        animationsStarted &&
-        isInView
-      ) {
-        playMetal();
-        hasPlayedMetalRef.current = true;
-      }
-      // stop metal sound as soon as rotation subsides
-      if (rotateVal < 0.5 && hasPlayedMetalRef.current) {
-        try {
-          stopMetal();
-        } catch (e) {
-          // swallow
-        }
-        hasPlayedMetalRef.current = false;
-      }
-    });
-
-    return () => {
-      try {
-        unsubscribeRotate && unsubscribeRotate();
-      } catch (e) {}
-    };
-  }, [scaleRotate, playMetal, animationsStarted, isInView]);
-
-  useEffect(() => {
-    // playScales: when heartPlateY_fast reaches its end (fast drop finished)
-    // Determine expected end value depending on orientation
-    const heartFastEnd = isPortrait ? /* px */ 8 : /* px */ 30;
-
-    const unsubscribeHeart = heartPlateY_fast.on("change", (v) => {
-      const val = typeof v === "number" ? v : 0;
-      // trigger when near the final value (allow small epsilon)
-      if (
-        val >= heartFastEnd - 0.5 &&
-        !hasPlayedScalesRef.current &&
-        animationsStarted &&
-        isInView
-      ) {
-        playScales();
-        hasPlayedScalesRef.current = true;
-      }
-      // reset if heart plate moves back up
-      if (val < heartFastEnd - 2) {
-        hasPlayedScalesRef.current = false;
-      }
-    });
-
-    return () => {
-      try {
-        unsubscribeHeart && unsubscribeHeart();
-      } catch (e) {}
-    };
-  }, [heartPlateY_fast, playScales, animationsStarted, isInView, isPortrait]);
-
   const textOpacity = useTransform(
     scrollYProgress,
     [0, 0.3, 0.75, 0.8],
@@ -324,7 +332,7 @@ export default function Weighing() {
   // ============ VIDEO SECTION (750-1000vh = 0.75-1.0) ============
   const videoOpacity = useTransform(
     scrollYProgress,
-    [0.75, 0.8, 0.98, 1],
+    [0.72, 0.75, 0.98, 1],
     [0, 1, 1, 0]
   );
   const videoDisplay = useTransform(videoOpacity, (v) =>
@@ -374,6 +382,8 @@ export default function Weighing() {
                 animations={{
                   2: { y: y_set2, opacity: opacity_set2 },
                   4: { y: y_set2, opacity: opacity_set2 },
+                  // Scale with rotate
+                  69: { y: y_set6, opacity: opacity_set6, rotate: scaleRotate },
                   // Group 6: main plates/scale intro
                   6: { y: y_set6, opacity: opacity_set6 },
                   // Heart and feather appear in their own groups
@@ -395,9 +405,7 @@ export default function Weighing() {
                     opacity: opacity_set6,
                   },
                   // Light needs flicker opacity
-                  // 68: { y: y_set6, opacity: lightOpacity },
-                  // Scale with rotate
-                  69: { y: y_set6, opacity: opacity_set6, rotate: scaleRotate },
+                  68: { y: y_set6, opacity: lightOpacity },
                 }}
                 baseStyle={{ willChange: "transform, opacity" }}
                 containerAspectRatio="16 / 9"
@@ -421,7 +429,7 @@ export default function Weighing() {
 
                 {/* Tree */}
                 <motion.div
-                  className="absolute bottom-0 right-[8%] w-[20%] h-auto scale-x-[-1] -z-1"
+                  className="absolute bottom-0 right-[8%] w-[20%] h-[54.87%] scale-x-[-1] -z-1"
                   style={{
                     opacity: opacity_set4,
                     y: y_set4,
@@ -431,12 +439,12 @@ export default function Weighing() {
                   <LazyLottie
                     src="/assets/Scene/Scene4/s4-tree.lottie"
                     scrollYProgress={opacity_set4}
-                    // loop
-                    className="w-full object-cover aspect-384/592"
+                    loop
+                    className="w-full h-full"
                   />
                 </motion.div>
                 <motion.div
-                  className="absolute bottom-0 left-[7.5%] w-[20%] h-auto -z-1"
+                  className="absolute bottom-0 left-[7.5%] w-[20%] h-[54.87%] -z-1"
                   style={{
                     opacity: opacity_set4,
                     y: y_set4,
@@ -446,31 +454,30 @@ export default function Weighing() {
                   <LazyLottie
                     src="/assets/Scene/Scene4/s4-tree.lottie"
                     scrollYProgress={opacity_set4}
-                    // loop
-                    className="w-full object-cover aspect-384/592"
+                    loop
+                    className="w-full h-full"
                   />
                 </motion.div>
 
                 {/* Set 4: Building (Lottie) */}
                 <motion.div
-                  className="absolute top-[11.3%] left-[27.9%] w-[44.3%] h-auto -z-1"
+                  className="absolute top-[11.3%] left-[27.9%] w-[44.3%] h-[66.48%] -z-1"
                   style={{
-                    opacity: opacity_set2,
-                    y: y_set2,
-                    display: display_set2,
+                    opacity: opacity_set4,
+                    y: y_set4,
                   }}
                 >
                   <LazyLottie
                     src="/assets/Scene/Scene4/s4-building.lottie"
                     loop
-                    scrollYProgress={opacity_set2}
-                    className="w-full object-cover aspect-850/718"
+                    scrollYProgress={opacity_set4}
+                    className="w-full h-full"
                   />
                 </motion.div>
 
                 {/* Cat */}
                 <motion.div
-                  className="absolute bottom-[-4.2%] right-[28.1%] w-[7.17%] h-auto scale-x-[-1]"
+                  className="absolute bottom-[-4.2%] right-[28.1%] w-[7.17%] h-[22.77%] scale-x-[-1]"
                   style={{
                     opacity: opacity_set5,
                     y: y_set5,
@@ -481,11 +488,11 @@ export default function Weighing() {
                     src="/assets/Scene/Scene4/s4-cat.lottie"
                     scrollYProgress={opacity_set5}
                     loop
-                    className="w-full object-cover aspect-170/267"
+                    className="w-full h-full"
                   />
                 </motion.div>
                 <motion.div
-                  className="absolute bottom-[-4.3%] left-[28%] w-[7.17%] h-auto"
+                  className="absolute bottom-[-4.3%] left-[28%] w-[7.17%] h-[22.77%] "
                   style={{
                     opacity: opacity_set5,
                     y: y_set5,
@@ -496,7 +503,7 @@ export default function Weighing() {
                     src="/assets/Scene/Scene4/s4-cat.lottie"
                     scrollYProgress={opacity_set5}
                     loop
-                    className="w-full object-cover aspect-170/267"
+                    className="w-full h-full"
                   />
                 </motion.div>
               </SceneLayer>

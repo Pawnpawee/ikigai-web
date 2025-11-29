@@ -35,3 +35,32 @@ export function useIsPortrait(): boolean {
   const orientation = useOrientation();
   return orientation === "portrait";
 }
+
+/**
+ * Hook สำหรับตรวจสอบว่าเป็นหน้าจอ iPad แนวนอน (landscape tablet)
+ * ตรวจสอบจาก width 768px - 1024px และ landscape orientation
+ * @returns {boolean} true ถ้าเป็น iPad landscape
+ */
+export function useIsTabletLandscape(): boolean {
+  const [isTabletLandscape, setIsTabletLandscape] = useState<boolean>(() => {
+    if (typeof window === "undefined") return false;
+    const width = window.innerWidth;
+    const height = window.innerHeight;
+    return width > height && width >= 768 && width <= 1024;
+  });
+
+  useEffect(() => {
+    const handleResize = () => {
+      const width = window.innerWidth;
+      const height = window.innerHeight;
+      const isLandscape = width > height;
+      const isTabletSize = width >= 768 && width <= 1024;
+      setIsTabletLandscape(isLandscape && isTabletSize);
+    };
+
+    window.addEventListener("resize", handleResize);
+    return () => window.removeEventListener("resize", handleResize);
+  }, []);
+
+  return isTabletLandscape;
+}

@@ -101,6 +101,21 @@ export default function Hero() {
   const circle3_rotate = useTransform(scrollYProgress, [0, 1], [0, 90]);
   const circle4_rotate = useTransform(scrollYProgress, [0, 1], [-90, 0]);
 
+  // ⭐ Log rotate values
+  useEffect(() => {
+    const unsubscribe1 = circle1_rotate.on("change", (v) => console.log("circle1_rotate:", v));
+    const unsubscribe2 = circle2_rotate.on("change", (v) => console.log("circle2_rotate:", v));
+    const unsubscribe3 = circle3_rotate.on("change", (v) => console.log("circle3_rotate:", v));
+    const unsubscribe4 = circle4_rotate.on("change", (v) => console.log("circle4_rotate:", v));
+    
+    return () => {
+      unsubscribe1();
+      unsubscribe2();
+      unsubscribe3();
+      unsubscribe4();
+    };
+  }, [circle1_rotate, circle2_rotate, circle3_rotate, circle4_rotate]);
+
   const lottieGlowVariants: Variants = useMemo(
     () => ({
       initial: {

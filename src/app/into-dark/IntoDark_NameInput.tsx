@@ -42,57 +42,107 @@ export default function IntoDarkNameInput({
   const positions = {
     // Background gradient
     bgGradient: isPortrait
-      ? { left: "-22.13%", top: "39.38%", width: "143.56%", height: "107.76%" } // Portrait: -239/1080, 756/1920, 1550.5/1080, 2069.88/1920
+      ? {
+          width: "143.56%",
+          height: "107.81%",
+          left: "-22.13%",
+          bottom: "-47.18%",
+        } // Portrait: -239/1080, 756/1920, 1550.5/1080, 2069.88/1920
       : { left: "-10.75%", top: "-6.84%", width: "80.76%", height: "191.66%" }, // Landscape: -206.396/1920, -73.892/1080, 1550.5/1920, 2069.88/1080
 
     // Star line 3
     starLine3: isPortrait
-      ? { left: "42.02%", top: "52.63%", width: "18.79%", height: "10.88%" } // Portrait: 453.81/1080, 1010.48/1920, 202.99/1080, 209/1920
+      ? {
+          width: "18.80%",
+          height: "10.89%",
+          left: "42.02%",
+          top: "52.63%",
+        } // Portrait: 453.81/1080, 1010.48/1920, 202.99/1080, 209/1920
       : { left: "25.33%", top: "16.72%", width: "10.57%", height: "19.35%" }, // Landscape: 486.414/1920, 180.587/1080, 202.99/1920, 209/1080
 
     // Star line 2
     starLine2: isPortrait
-      ? { left: "14.45%", top: "64.48%", width: "11.57%", height: "10.55%" } // Portrait: 156.04/1080, 1238.08/1920, 124.91/1080, 202.62/1920
+      ? {
+          width: "11.57%",
+          height: "10.55%",
+          left: "14.45%",
+          top: "64.48%",
+        } // Portrait: 156.04/1080, 1238.08/1920, 124.91/1080, 202.62/1920
       : { left: "9.83%", top: "37.79%", width: "6.51%", height: "18.76%" }, // Landscape: 188.644/1920, 408.188/1080, 124.91/1920, 202.62/1080
 
     // Star line 1
     starLine1: isPortrait
-      ? { left: "74.22%", top: "70.00%", width: "10.46%", height: "4.77%" } // Portrait: 801.56/1080, 1344.10/1920, 112.97/1080, 91.68/1920
+      ? {
+          width: "10.46%",
+          height: "4.78%",
+          left: "74.22%",
+          top: "70.01%",
+        } // Portrait: 801.56/1080, 1344.10/1920, 112.97/1080, 91.68/1920
       : { left: "43.45%", top: "47.61%", width: "5.88%", height: "8.49%" }, // Landscape: 834.163/1920, 514.208/1080, 112.97/1920, 91.68/1080
 
     // Little star 3
     littleStar3: isPortrait
-      ? { left: "17.03%", top: "48.21%", width: "63.88%", height: "41.39%" } // Portrait: 183.95/1080, 925.56/1920, 689.95/1080, 794.79/1920
+      ? {
+          width: "63.88%",
+          height: "41.40%",
+          left: "17.03%",
+          bottom: "10.40%",
+        } // Portrait: 183.95/1080, 925.56/1920, 689.95/1080, 794.79/1920
       : { left: "11.28%", top: "8.86%", width: "35.94%", height: "73.59%" }, // Landscape: 216.554/1920, 95.668/1080, 689.95/1920, 794.79/1080
 
     // Little star 2
     littleStar2: isPortrait
-      ? { left: "12.26%", top: "50.75%", width: "71.80%", height: "32.73%" } // Portrait: 132.45/1080, 974.40/1920, 775.35/1080, 628.47/1920
+      ? {
+          width: "71.79%",
+          height: "32.73%",
+          left: "12.26%",
+          bottom: "16.52%",
+        } // Portrait: 132.45/1080, 974.40/1920, 775.35/1080, 628.47/1920
       : { left: "8.59%", top: "13.38%", width: "40.38%", height: "58.19%" }, // Landscape: 165.054/1920, 144.508/1080, 775.35/1920, 628.47/1080
 
     // Little star 1
     littleStar1: isPortrait
-      ? { left: "2.52%", top: "45.21%", width: "105.46%", height: "52.16%" } // Portrait: 27.16/1080, 868.05/1920, 1138.8/1080, 1001.56/1920
+      ? {
+          width: "105.44%",
+          height: "52.16%",
+          right: "-7.96%",
+          bottom: "2.62%",
+        } // Portrait: 27.16/1080, 868.05/1920, 1138.8/1080, 1001.56/1920
       : { left: "3.11%", top: "3.53%", width: "59.31%", height: "92.74%" }, // Landscape: 59.764/1920, 38.158/1080, 1138.8/1920, 1001.56/1080
 
     // Water
     water: isPortrait
-      ? { left: "4.80%", top: "82.90%", width: "117.29%", height: "14.64%" } // Portrait: 51.88/1080, 1591.60/1920, 1266.72/1080, 281.04/1920
+      ? {
+          width: "117.29%",
+          height: "14.64%",
+          right: "-22.09%",
+          bottom: "2.47%",
+        } // Portrait: 51.88/1080, 1591.60/1920, 1266.72/1080, 281.04/1920
       : { left: "4.40%", top: "70.53%", width: "65.98%", height: "26.02%" }, // Landscape: 84.484/1920, 761.708/1080, 1266.72/1920, 281.04/1080
 
     // Light cat (glow)
     lightCat: isPortrait
-      ? { left: "26.07%", top: "63.77%", width: "49.05%", height: "27.59%" } // Portrait: 281.54/1080, 1224.38/1920, 529.74/1080, 529.74/1920
+      ? {
+          width: "49.05%",
+          height: "27.59%",
+          right: "24.88%",
+          bottom: "8.64%",
+        } // Portrait: 281.54/1080, 1224.38/1920, 529.74/1080, 529.74/1920
       : { left: "16.38%", top: "36.52%", width: "27.59%", height: "49.05%" }, // Landscape: 314.544/1920, 394.378/1080, 529.74/1920, 529.74/1080
 
     // Cat
     cat: isPortrait
-      ? { left: "23.06%", top: "55.47%", width: "52.04%", height: "35.89%" } // Portrait: 249.04/1080, 1065.02/1920, 562.24/1080, 689.10/1920
+      ? { width: "40.89%", height: "22.63%", right: "29.43%", bottom: "11.45%" } // Portrait: 249.04/1080, 1065.02/1920, 562.24/1080, 689.10/1920
       : { left: "16.04%", top: "33.50%", width: "27.60%", height: "49.07%" }, // Landscape: 308/1920, 388/1080, 530/1920, 530/1080
 
     // Tail
     tail: isPortrait
-      ? { left: "22.31%", top: "51.20%", width: "27.78%", height: "15.63%" } // Portrait: 241/1080, 983/1920, 300/1080, 300/1920
+      ? {
+          width: "27.78%",
+          height: "15.62%",
+          left: "22.31%",
+          bottom: "33.18%",
+        } // Portrait: 241/1080, 983/1920, 300/1080, 300/1920
       : { left: "14.27%", top: "14.17%", width: "16.67%", height: "27.78%" }, // Landscape: 274/1920, 153/1080, 320/1920, 300/1080
 
     // Text Container
@@ -113,12 +163,12 @@ export default function IntoDarkNameInput({
   const opacity = useTransform(
     scrollYProgress,
     [0, 0.006, 0.153, 0.167],
-    [0, 1, 1, 0],
+    [0, 1, 1, 0]
   );
   const zIndex = useTransform(
     scrollYProgress,
     [0, 0.006, 0.166, 0.167],
-    [10, 10, 10, -1],
+    [10, 10, 10, -1]
   );
 
   // ชุด 1: Background Gradient + Little star 2 (0-25vh = 0-0.014)
@@ -128,49 +178,49 @@ export default function IntoDarkNameInput({
   const set2Opacity = useTransform(
     scrollYProgress,
     [0.014, 0.021, 0.028],
-    [0, 1, 1],
+    [0, 1, 1]
   );
 
   // ชุด 3: Star line 1 (50-75vh = 0.028-0.042) - รอชุด 2 opacity = 1
   const set3Opacity = useTransform(
     scrollYProgress,
     [0.028, 0.035, 0.042],
-    [0, 1, 1],
+    [0, 1, 1]
   );
 
   // ชุด 4: Star line 3 + Little star 1 + Cat (75-175vh = 0.042-0.097) - รอชุด 3 opacity = 1
   const set4Opacity = useTransform(
     scrollYProgress,
     [0.042, 0.049, 0.097],
-    [0, 1, 1],
+    [0, 1, 1]
   );
 
   // Cat floating down animation
   const catY = useTransform(
     scrollYProgress,
     [0.042, 0.103, 0.125],
-    [-100, 10, 0],
+    [-100, 10, 0]
   );
 
   // ชุด 5: ข้อความ + Water (175-225vh = 0.097-0.125) - 50vh - รอชุด 4 opacity = 1
   const textOpacity = useTransform(
     scrollYProgress,
     [0.097, 0.111, 0.125],
-    [0, 1, 1],
+    [0, 1, 1]
   );
 
   // Water bounce animation (scale) - ย้ายมาชุด 5
   const waterScale = useTransform(
     scrollYProgress,
     [0.097, 0.103, 0.111, 0.118, 0.125],
-    [0, 1.3, 0.9, 1.1, 1],
+    [0, 1.3, 0.9, 1.1, 1]
   );
 
   // ชุด 6: Input box (225-275vh = 0.125-0.153) - 50vh - รอชุด 5 opacity = 1
   const inputOpacity = useTransform(
     scrollYProgress,
     [0.125, 0.139, 0.153],
-    [0, 1, 1],
+    [0, 1, 1]
   );
 
   const handleKeyDown = (e: React.KeyboardEvent) => {
@@ -181,12 +231,16 @@ export default function IntoDarkNameInput({
 
   return (
     <motion.div
-      className="fixed top-0 h-screen w-screen bg-black"
+      className="fixed top-0 h-screen w-screen bg-black overflow-x-hidden touch-pan-y"
       style={{ opacity, zIndex }}
     >
-      <motion.div className="relative flex aspect-video portrait:aspect-9/16 px-16 portrait:px-15 justify-end items-center w-[85%] h-screen mx-auto">
+      <motion.div
+        className={`relative flex aspect-video portrait:aspect-9/16 px-5 2xl:px-16 portrait:px-15  items-center w-[85%] h-screen mx-auto ${
+          isPortrait ? "justify-center" : "justify-end"
+        }`}
+      >
         {/* Background Elements Container */}
-        <div className="absolute inset-0 w-full h-full">
+        <div className="absolute w-full inset-0  h-full">
           {/* 1. ชุด 1: Background Gradient (bggradient) */}
           <motion.div
             className="absolute mix-blend-screen"
@@ -248,7 +302,7 @@ export default function IntoDarkNameInput({
               animationData={starLine1AnimationData}
               loop
               autoplay
-              style={{ width: "100%", height: "100%" }}
+           
             />
           </motion.div>
 
@@ -375,25 +429,11 @@ export default function IntoDarkNameInput({
 
         {/* Text and Input */}
         <div
-          style={
+          className={`flex flex-col items-center  ${
             isPortrait
-              ? {
-                  paddingTop: "50%",
-                  paddingBottom: "50%",
-                  display: "flex",
-                  flexDirection: "column",
-                  alignItems: "center",
-                  gap: "3rem",
-                  alignSelf: "stretch",
-                  width: "100%",
-                }
-              : {
-                  display: "flex",
-                  flexDirection: "column",
-                  alignItems: "center",
-                  gap: "5rem", // 80px
-                }
-          }
+              ? "py-[100px] md:py-[200px] self-stretch gap-[40px] md:gap-[80px]"
+              : "gap-[80px]"
+          }`}
         >
           {/* ชุด 5: Main heading text - ขึ้นทีละตัวอักษรแบบลึกลับ */}
           <motion.div className="text-center" style={{ opacity: textOpacity }}>
@@ -401,7 +441,11 @@ export default function IntoDarkNameInput({
               className={`text-white select-none leading-normal tracking-[0.72px] typo-text-h3`}
             >
               <MysteriousText
-                text="สวัสดี... ข้าคือผู้นำทางแห่งความมืด"
+                text={`${
+                  isPortrait
+                    ? "สวัสดี... ข้าคือ\nผู้นำทางแห่งความมืด"
+                    : "สวัสดี... ข้าคือผู้นำทางแห่งความมืด"
+                }`}
                 scrollYProgress={scrollYProgress}
                 startProgress={0.097}
                 endProgress={0.111}
@@ -417,7 +461,9 @@ export default function IntoDarkNameInput({
           </motion.div>
 
           <motion.div
-            className="flex items-start gap-5"
+            className={`flex gap-5 ${
+              isPortrait ? "items-center" : "items-start"
+            }`}
             style={{ opacity: inputOpacity, zIndex }}
           >
             <div className="flex flex-col items-center">

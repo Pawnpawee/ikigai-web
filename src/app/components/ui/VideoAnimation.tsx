@@ -65,7 +65,6 @@ export const VideoAnimation = ({
           backfaceVisibility: "hidden",
         }}
         className="w-full h-auto object-contain pointer-events-none"
-        onError={(e) => console.error("Video failed to load:", e)}
       >
         {/* ⭐ เอา MOV ขึ้นก่อนเพื่อให้ iOS/Mac เลือกใช้ไฟล์ที่ดีที่สุด */}
         <source src={movSrc} type='video/quicktime; codecs="hvc1"' />
