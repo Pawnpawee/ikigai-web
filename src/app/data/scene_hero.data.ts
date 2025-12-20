@@ -1,4 +1,4 @@
-import { SceneItemData } from "../components/reusable/SceneLayer";
+import type { SceneItemData } from "../components/reusable/SceneLayer";
 
 // Mountains / hero background layers (order bottom -> top)
 export const SCENE_HERO_ITEMS: SceneItemData[] = [
@@ -25,8 +25,6 @@ export const SCENE_HERO_ITEMS: SceneItemData[] = [
     src: "/assets/Scene/Hero/hill-l-f.webp",
     alt: "Hill left foreground",
     style: { left: "0%", bottom: "0%", width: "100%", height: "100%" },
-
     priority: true,
   },
 ];
-

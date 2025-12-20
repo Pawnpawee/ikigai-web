@@ -1,12 +1,12 @@
 import type { Metadata } from "next";
 import { Anuphan, Bentham, Luxurious_Script } from "next/font/google";
 import "./globals.css";
-import { AudioProvider } from "./contexts/AudioContext";
 import AppWrapper from "./AppWrapper";
 import OrientationGuard from "./components/OrientationGuard";
+import StarryBackground from "./components/StarryBackground";
+import { AudioProvider } from "./contexts/AudioContext";
 import { DeviceProvider } from "./contexts/DeviceContext";
 import { UIStarProvider } from "./contexts/UIStarContext";
-import StarryBackground from "./components/StarryBackground";
 
 const anuphan = Anuphan({
   variable: "--font-anuphan",
@@ -31,7 +31,6 @@ const luxuriousScript = Luxurious_Script({
 export const metadata: Metadata = {
   title: "Ikigai - Life Of Journey",
 };
-
 
 export default function RootLayout({
   children,

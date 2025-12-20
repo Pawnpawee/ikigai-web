@@ -1,12 +1,12 @@
 "use client";
-import React, { createContext, useContext } from "react";
+import { createContext, type ReactNode, useContext } from "react";
 import { useDeviceCheck } from "../hooks/useDeviceCheck";
 
 const DeviceContext = createContext<ReturnType<typeof useDeviceCheck> | null>(
-  null
+  null,
 );
 
-export const DeviceProvider = ({ children }: { children: React.ReactNode }) => {
+export const DeviceProvider = ({ children }: { children: ReactNode }) => {
   const deviceData = useDeviceCheck();
 
   return (

@@ -1,17 +1,13 @@
 "use client";
 
+import { useEffect, useState } from "react";
+import WelcomeSoundModal from "./components/modal/WelcomeSoundModal";
+import { useAssetLoader } from "./contexts/AssetLoaderContext";
+import { useAudio } from "./contexts/AudioContext";
 import Hero from "./prologue/Hero";
 import Intro from "./prologue//Intro";
-import { useEffect, useState } from "react";
-import { useRouter } from "next/navigation";
-import { useAudio } from "./contexts/AudioContext";
-import { useAssetLoader } from "./contexts/AssetLoaderContext";
-import WelcomeSoundModal from "./components/modal/WelcomeSoundModal";
-
 
 export default function Home() {
-  const router = useRouter();
-
   const [showWelcomeModal, setShowWelcomeModal] = useState(false);
   const { start, stop } = useAudio();
 
@@ -42,12 +38,6 @@ export default function Home() {
     setShouldAnimate(true);
   };
 
-  const handleWakeUp = async () => {
-    setTimeout(() => {
-      router.push("/dreaming");
-    }, 1000);
-  };
-
   return (
     <div>
       <WelcomeSoundModal
@@ -59,7 +49,6 @@ export default function Home() {
 
       <Hero shouldAnimate={shouldAnimate} />
       <Intro />
-
     </div>
   );
 }

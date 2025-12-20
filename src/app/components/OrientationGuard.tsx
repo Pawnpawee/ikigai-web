@@ -1,8 +1,8 @@
 // components/OrientationGuard.tsx
 "use client";
 
+import { AnimatePresence, m } from "framer-motion";
 import { useDevice } from "@/app/contexts/DeviceContext";
-import { motion, AnimatePresence } from "framer-motion";
 
 export default function OrientationGuard() {
   const { isInvalidOrientation } = useDevice();
@@ -10,7 +10,7 @@ export default function OrientationGuard() {
   return (
     <AnimatePresence>
       {isInvalidOrientation && (
-        <motion.div
+        <m.div
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           exit={{ opacity: 0 }}
@@ -28,7 +28,7 @@ export default function OrientationGuard() {
               (Desktop users can browse in Landscape as usual)
             </span>
           </p>
-        </motion.div>
+        </m.div>
       )}
     </AnimatePresence>
   );

@@ -1,9 +1,9 @@
 "use client";
-import React, { useState } from "react";
+import { useState } from "react";
 import { useAudio } from "@/app/contexts/AudioContext";
 import { useDevice } from "@/app/contexts/DeviceContext";
-import Icon from "./reusable/Icon";
 import MenuModal from "./modal/MenuModal";
+import Icon from "./reusable/Icon";
 
 export default function Navbar() {
   const [isMenuModalOpen, setIsMenuModalOpen] = useState(false);

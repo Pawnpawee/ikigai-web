@@ -1,7 +1,7 @@
 // hooks/useDeviceCheck.ts
 "use client";
 
-import { useState, useEffect } from "react";
+import { useEffect, useState } from "react";
 
 export function useDeviceCheck() {
   const [isInvalidOrientation, setIsInvalidOrientation] = useState(false);

@@ -1,7 +1,7 @@
 "use client";
-import React from "react";
-import { motion, AnimatePresence } from "framer-motion";
+import { AnimatePresence, m } from "framer-motion";
 import Link from "next/link";
+import type { ChangeEvent } from "react";
 import { useAudio } from "@/app/contexts/AudioContext";
 
 interface MenuModalProps {
@@ -12,12 +12,12 @@ interface MenuModalProps {
 export default function MenuModal({ isOpen, onClose }: MenuModalProps) {
   const { volume, sfxVolume, setVolume, setSfxVolume } = useAudio();
 
-  const handleVolumeChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const handleVolumeChange = (e: ChangeEvent<HTMLInputElement>) => {
     const newVolume = Number(e.target.value);
     setVolume(newVolume);
   };
 
-  const handleSfxVolumeChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const handleSfxVolumeChange = (e: ChangeEvent<HTMLInputElement>) => {
     const newVolume = Number(e.target.value);
     setSfxVolume(newVolume);
   };
@@ -26,17 +26,17 @@ export default function MenuModal({ isOpen, onClose }: MenuModalProps) {
       {isOpen && (
         <>
           {/* Backdrop */}
-          <motion.div
+          <m.div
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
             transition={{ duration: 0.3 }}
-            className="fixed inset-0 bg-black/60 backdrop-blur-sm z-100"
+            className="fixed inset-0 bg-black/60 z-100"
             onClick={onClose}
           />
 
           {/* Modal */}
-          <motion.div
+          <m.div
             initial={{ scale: 0.8, opacity: 0 }}
             animate={{ scale: 1, opacity: 1 }}
             exit={{ scale: 0.8, opacity: 0 }}
@@ -47,6 +47,7 @@ export default function MenuModal({ isOpen, onClose }: MenuModalProps) {
             <div className="flex items-center justify-between mb-6">
               <h2 className="typo-h4 text-white">เมนู</h2>
               <button
+                type="button"
                 onClick={onClose}
                 className="text-white hover:text-slate-300 transition-colors"
                 aria-label="ปิดเมนู"
@@ -61,6 +62,7 @@ export default function MenuModal({ isOpen, onClose }: MenuModalProps) {
                   strokeLinecap="round"
                   strokeLinejoin="round"
                 >
+                  <title>Close icon</title>
                   <line x1="18" y1="6" x2="6" y2="18" />
                   <line x1="6" y1="6" x2="18" y2="18" />
                 </svg>
@@ -91,6 +93,7 @@ export default function MenuModal({ isOpen, onClose }: MenuModalProps) {
                     strokeLinejoin="round"
                     className="text-slate-400 shrink-0"
                   >
+                    <title>Volume low</title>
                     <polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5" />
                   </svg>
 
@@ -133,6 +136,7 @@ export default function MenuModal({ isOpen, onClose }: MenuModalProps) {
                     strokeLinejoin="round"
                     className="text-slate-400 shrink-0"
                   >
+                    <title>Volume high</title>
                     <polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5" />
                     <path d="M15.54 8.46a5 5 0 0 1 0 7.07" />
                     <path d="M19.07 4.93a10 10 0 0 1 0 14.14" />
@@ -162,6 +166,7 @@ export default function MenuModal({ isOpen, onClose }: MenuModalProps) {
                     strokeLinejoin="round"
                     className="text-slate-400 shrink-0"
                   >
+                    <title>Music note</title>
                     <path d="M9 18V5l12-2v13" />
                     <circle cx="6" cy="18" r="3" />
                     <circle cx="18" cy="16" r="3" />
@@ -206,6 +211,7 @@ export default function MenuModal({ isOpen, onClose }: MenuModalProps) {
                     strokeLinejoin="round"
                     className="text-slate-400 shrink-0"
                   >
+                    <title>Sparkle</title>
                     <path d="M12 2v4" />
                     <path d="M12 18v4" />
                     <path d="M4.93 4.93l2.83 2.83" />
@@ -223,7 +229,7 @@ export default function MenuModal({ isOpen, onClose }: MenuModalProps) {
             <nav className="flex flex-col gap-4">
               {/* Privacy Policy Button */}
               <Link href="/privacy-policy" onClick={onClose} className="group">
-                <motion.div
+                <m.div
                   whileHover={{ scale: 1.02 }}
                   whileTap={{ scale: 0.98 }}
                   className="flex items-center gap-4 p-6 bg-slate-800 rounded-xl hover:bg-slate-700 transition-colors cursor-pointer"
@@ -241,6 +247,7 @@ export default function MenuModal({ isOpen, onClose }: MenuModalProps) {
                       strokeLinejoin="round"
                       className="text-blue-400"
                     >
+                      <title>Shield icon</title>
                       <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z" />
                     </svg>
                   </div>
@@ -265,15 +272,16 @@ export default function MenuModal({ isOpen, onClose }: MenuModalProps) {
                     strokeLinejoin="round"
                     className="text-slate-400 group-hover:text-blue-400 transition-colors"
                   >
+                    <title>Arrow right</title>
                     <line x1="5" y1="12" x2="19" y2="12" />
                     <polyline points="12 5 19 12 12 19" />
                   </svg>
-                </motion.div>
+                </m.div>
               </Link>
 
               {/* About Button */}
               <Link href="/about" onClick={onClose} className="group">
-                <motion.div
+                <m.div
                   whileHover={{ scale: 1.02 }}
                   whileTap={{ scale: 0.98 }}
                   className="flex items-center gap-4 p-6 bg-slate-800 rounded-xl hover:bg-slate-700 transition-colors cursor-pointer"
@@ -291,6 +299,7 @@ export default function MenuModal({ isOpen, onClose }: MenuModalProps) {
                       strokeLinejoin="round"
                       className="text-purple-400"
                     >
+                      <title>Info icon</title>
                       <circle cx="12" cy="12" r="10" />
                       <line x1="12" y1="16" x2="12" y2="12" />
                       <line x1="12" y1="8" x2="12.01" y2="8" />
@@ -315,13 +324,14 @@ export default function MenuModal({ isOpen, onClose }: MenuModalProps) {
                     strokeLinejoin="round"
                     className="text-slate-400 group-hover:text-purple-400 transition-colors"
                   >
+                    <title>Arrow right</title>
                     <line x1="5" y1="12" x2="19" y2="12" />
                     <polyline points="12 5 19 12 12 19" />
                   </svg>
-                </motion.div>
+                </m.div>
               </Link>
             </nav>
-          </motion.div>
+          </m.div>
         </>
       )}
     </AnimatePresence>

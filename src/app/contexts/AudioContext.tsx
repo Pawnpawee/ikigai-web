@@ -1,13 +1,14 @@
 "use client";
-import React, {
+import { Howl, Howler } from "howler";
+import type React from "react";
+import {
   createContext,
+  useCallback,
   useContext,
   useEffect,
   useRef,
   useState,
-  useCallback,
 } from "react";
-import { Howl, Howler } from "howler";
 
 interface AudioContextType {
   // State
@@ -48,7 +49,7 @@ export function AudioProvider({ children }: { children: React.ReactNode }) {
         console.error("Save settings failed", e);
       }
     },
-    []
+    [],
   );
 
   // --- Initialization ---
@@ -164,8 +165,8 @@ export function AudioProvider({ children }: { children: React.ReactNode }) {
         loop: true,
         volume: 0,
         autoplay: false,
-        onloaderror: (id, err) => console.error("Load Error:", err),
-        onplayerror: (id, err) => {
+        onloaderror: (_id, err) => console.error("Load Error:", err),
+        onplayerror: (_id, err) => {
           console.warn("Play Error:", err);
           soundRef.current?.once("unlock", () => {
             soundRef.current?.play();
@@ -187,11 +188,10 @@ export function AudioProvider({ children }: { children: React.ReactNode }) {
 
   const playSfx = useCallback(
     (src: string, options?: { volumeMultiplier?: number }) => {
-      
       if (isMutedRef.current) return;
 
       try {
-        const sfx = new Howl({
+        new Howl({
           src: [src],
           loop: false,
           volume: (sfxVolume / 100) * (options?.volumeMultiplier ?? 1.0),
@@ -201,7 +201,7 @@ export function AudioProvider({ children }: { children: React.ReactNode }) {
         console.error("Failed to play SFX:", error);
       }
     },
-    [isMuted, sfxVolume]
+    [sfxVolume],
   );
 
   return (

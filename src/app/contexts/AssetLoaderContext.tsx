@@ -1,6 +1,12 @@
 "use client";
-import React, { createContext, useContext, useEffect, useState } from "react";
-import { getAssetUrl, ASSETS_TO_PRELOAD } from "@/utils/assets";
+import {
+  createContext,
+  type ReactNode,
+  useContext,
+  useEffect,
+  useState,
+} from "react";
+import { ASSETS_TO_PRELOAD, getAssetUrl } from "@/utils/assets";
 
 const AssetLoaderContext = createContext({
   isLoading: true,
@@ -9,12 +15,7 @@ const AssetLoaderContext = createContext({
 
 export const useAssetLoader = () => useContext(AssetLoaderContext);
 
-export const AssetLoaderProvider = ({
-  children,
-}: {
-  children: React.ReactNode;
-}) => {
-
+export const AssetLoaderProvider = ({ children }: { children: ReactNode }) => {
   const [isLoading, setIsLoading] = useState(true);
   const [progress, setProgress] = useState(0);
 

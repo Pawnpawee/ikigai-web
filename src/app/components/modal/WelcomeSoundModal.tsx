@@ -1,6 +1,5 @@
 "use client";
-import React from "react";
-import { motion, AnimatePresence } from "framer-motion";
+import { AnimatePresence, m } from "framer-motion";
 
 interface WelcomeSoundModalProps {
   isOpen: boolean;
@@ -18,16 +17,16 @@ export default function WelcomeSoundModal({
       {isOpen && (
         <>
           {/* Backdrop */}
-          <motion.div
+          <m.div
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
             transition={{ duration: 0.3 }}
-            className="fixed inset-0 bg-black/80 backdrop-blur-md z-99"
+            className="fixed inset-0 bg-black/80 z-99"
           />
 
           {/* Modal */}
-          <motion.div
+          <m.div
             initial={{ scale: 0.9, opacity: 0, y: 20 }}
             animate={{ scale: 1, opacity: 1, y: 0 }}
             exit={{ scale: 0.9, opacity: 0, y: 20 }}
@@ -36,7 +35,7 @@ export default function WelcomeSoundModal({
           >
             <div className="bg-linear-to-br from-slate-900 to-slate-800 rounded-3xl shadow-2xl p-8 border border-slate-700">
               {/* Icon */}
-              <motion.div
+              <m.div
                 initial={{ scale: 0 }}
                 animate={{ scale: 1 }}
                 transition={{ delay: 0.2, type: "spring", stiffness: 200 }}
@@ -53,16 +52,18 @@ export default function WelcomeSoundModal({
                     strokeLinecap="round"
                     strokeLinejoin="round"
                     className="text-blue-400"
+                    aria-label="Sound icon"
                   >
+                    <title>Sound icon</title>
                     <polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5" />
                     <path d="M15.54 8.46a5 5 0 0 1 0 7.07" />
                     <path d="M19.07 4.93a10 10 0 0 1 0 14.14" />
                   </svg>
                 </div>
-              </motion.div>
+              </m.div>
 
               {/* Content */}
-              <motion.div
+              <m.div
                 initial={{ opacity: 0, y: 10 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: 0.3 }}
@@ -74,10 +75,10 @@ export default function WelcomeSoundModal({
                   <br />
                   คุณต้องการเปิดเสียงหรือไม่?
                 </p>
-              </motion.div>
+              </m.div>
 
               {/* Buttons */}
-              <motion.div
+              <m.div
                 initial={{ opacity: 0, y: 10 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: 0.4 }}
@@ -85,6 +86,7 @@ export default function WelcomeSoundModal({
               >
                 {/* ปุ่มไม่ */}
                 <button
+                  type="button"
                   onClick={onDecline}
                   className="flex-1 px-6 py-4 rounded-xl bg-slate-700 hover:bg-slate-600 text-white typo-h5 transition-colors border border-slate-600"
                 >
@@ -93,24 +95,25 @@ export default function WelcomeSoundModal({
 
                 {/* ปุ่มใช่ */}
                 <button
+                  type="button"
                   onClick={onAccept}
                   className="flex-1 px-6 py-4 rounded-xl bg-linear-to-r from-blue-500 to-blue-600 hover:from-blue-600 hover:to-blue-700 text-white typo-h5 transition-all shadow-lg shadow-blue-500/30 hover:shadow-blue-500/50"
                 >
                   เปิดเสียง
                 </button>
-              </motion.div>
+              </m.div>
 
               {/* Note */}
-              <motion.p
+              <m.p
                 initial={{ opacity: 0 }}
                 animate={{ opacity: 1 }}
                 transition={{ delay: 0.5 }}
                 className="text-center text-slate-400 typo-p-sm mt-4"
               >
                 คุณสามารถเปลี่ยนการตั้งค่าได้ทุกเมื่อจากเมนู
-              </motion.p>
+              </m.p>
             </div>
-          </motion.div>
+          </m.div>
         </>
       )}
     </AnimatePresence>

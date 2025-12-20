@@ -1,9 +1,16 @@
 "use client";
-import React from "react";
-import { motion, MotionStyle, MotionValue, TargetAndTransition, VariantLabels } from "framer-motion";
+import type {
+  MotionStyle,
+  MotionValue,
+  TargetAndTransition,
+  Transition,
+  VariantLabels,
+} from "framer-motion";
+import { m } from "framer-motion";
 import Image from "next/image";
+import type React from "react";
 
-const MotionImage = motion.create(Image);
+const MotionImage = m.create(Image);
 
 export interface SceneItemData {
   id: string;
@@ -18,11 +25,11 @@ export interface SceneItemData {
     right?: string;
     zIndex?: number;
   };
-  animGroup?: number; 
+  animGroup?: number;
   priority?: boolean;
-  sizes?: string; 
-  quality?: number; 
-  className?: string; 
+  sizes?: string;
+  quality?: number;
+  className?: string;
 }
 
 type AnimationMap = Record<
@@ -40,17 +47,17 @@ type ItemAnimationOverride = Record<
   {
     initial?: boolean | TargetAndTransition | VariantLabels;
     animate?: boolean | TargetAndTransition | VariantLabels;
-    transition?: any;
+    transition?: Transition;
     style?: MotionStyle;
   }
 >;
 
 interface SceneLayerProps {
   items: SceneItemData[];
-  animations: AnimationMap; 
-  baseStyle?: React.CSSProperties; 
-  containerAspectRatio?: string; 
-  children?: React.ReactNode; 
+  animations: AnimationMap;
+  baseStyle?: React.CSSProperties;
+  containerAspectRatio?: string;
+  children?: React.ReactNode;
   itemOverrides?: ItemAnimationOverride;
 }
 
@@ -93,7 +100,7 @@ export default function SceneLayer({
           };
 
           return (
-            <motion.div
+            <m.div
               key={item.id}
               className={`absolute ${item.className || ""}`}
               initial={override?.initial}
@@ -107,11 +114,12 @@ export default function SceneLayer({
                 fill
                 loading={item.priority ? "eager" : "lazy"}
                 priority={item.priority}
+                fetchPriority={item.priority ? "high" : "auto"}
                 sizes={item.sizes || "(max-width: 768px) 100vw, 50vw"}
                 className="object-contain w-full h-full"
                 quality={item.quality || 85}
               />
-            </motion.div>
+            </m.div>
           );
         })}
         {children}

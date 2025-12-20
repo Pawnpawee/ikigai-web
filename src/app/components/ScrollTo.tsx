@@ -1,7 +1,6 @@
 "use client";
-import React from "react";
+import { type MotionValue, m } from "framer-motion";
 import { HiArrowDown } from "react-icons/hi";
-import { motion, MotionValue } from "framer-motion";
 import { useDevice } from "@/app/contexts/DeviceContext";
 
 interface ScrollToProps {
@@ -11,7 +10,7 @@ interface ScrollToProps {
 export default function ScrollTo({ opacity }: ScrollToProps) {
   const { isMobile } = useDevice();
   return (
-    <motion.div
+    <m.div
       className="box-border flex flex-col gap-2 items-center justify-center px-8 md:px-14 py-0 fixed bottom-[env(safe-area-inset-bottom)] z-50 w-screen h-[70px] md:h-[100px]"
       style={{ opacity, pointerEvents: opacity.get() <= 0 ? "none" : "auto" }}
     >
@@ -24,6 +23,6 @@ export default function ScrollTo({ opacity }: ScrollToProps) {
           <HiArrowDown size={isMobile ? 20 : 30} className="text-white" />
         </div>
       </div>
-    </motion.div>
+    </m.div>
   );
 }

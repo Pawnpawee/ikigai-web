@@ -1,16 +1,14 @@
-import React, { useState, useCallback, useMemo, memo, useEffect } from "react";
 import {
-  motion,
-  MotionValue,
-  Variants,
+  type MotionValue,
+  m,
   useMotionValue,
-  delay,
-  scale,
+  type Variants,
 } from "framer-motion";
 import Image from "next/image";
+import { memo, useCallback, useEffect, useMemo, useState } from "react";
 import { useDevice } from "@/app/contexts/DeviceContext";
 
-const MotionImage = motion.create(Image);
+const MotionImage = m.create(Image);
 
 interface IkigaiCircleProps {
   className?: string;
@@ -34,6 +32,7 @@ interface IkigaiCircleProps {
     type: "tween";
     duration: number;
     ease: "easeInOut";
+    delay?: number;
   };
   yOffset?: number;
 }
@@ -66,10 +65,10 @@ const IkigaiCircle = memo(
         hidden: { opacity: 0, transition: { duration: 0.2 } },
         visible: { opacity: 0.8, transition: { duration: 0.3 } },
       }),
-      []
+      [],
     );
 
-    // Local motion value fallbacks when parent doesn't provide them
+    // Local m value fallbacks when parent doesn't provide them
     const localRotate = useMotionValue(0);
     const localOpacity = useMotionValue(1);
 
@@ -80,16 +79,19 @@ const IkigaiCircle = memo(
     // Track animation completion
     useEffect(() => {
       if (shouldAnimate && transition) {
-        const delay = (transition as any).delay || 0;
-        const timer = setTimeout(() => {
-          setAnimationComplete(true);
-        }, (transition.duration + delay) * 1000);
+        const delay = transition.delay || 0;
+        const timer = setTimeout(
+          () => {
+            setAnimationComplete(true);
+          },
+          (transition.duration + delay) * 1000,
+        );
         return () => clearTimeout(timer);
       }
     }, [shouldAnimate, transition]);
 
     return (
-      <motion.div
+      <m.div
         className={`absolute pointer-events-none ${className}`}
         initial={initialAnimation.initial}
         animate={initialAnimation.animate}
@@ -101,7 +103,7 @@ const IkigaiCircle = memo(
           willChange: "transform, opacity",
         }}
       >
-        <motion.div
+        <m.div
           className="relative w-[320px] md:w-[380px] h-auto cursor-pointer"
           style={{
             y: yOffset,
@@ -127,12 +129,13 @@ const IkigaiCircle = memo(
           />
 
           {/* ... Tooltip code ... */}
-          <motion.div
+          <m.div
             className="absolute bottom-8 left-1/2 -translate-x-1/2 flex flex-col items-center gap-2"
             style={{ rotate: tooltipRotate }}
             initial={{ opacity: 0 }}
             animate={
-              (shouldAnimate && isHovered && !isMobile) || (shouldAnimate && isMobile)
+              (shouldAnimate && isHovered && !isMobile) ||
+              (shouldAnimate && isMobile)
                 ? { opacity: 1 }
                 : { opacity: 0 }
             }
@@ -149,11 +152,11 @@ const IkigaiCircle = memo(
             <p className="typo-h6 text-white whitespace-nowrap shadow-black/50 drop-shadow-md">
               {text}
             </p>
-          </motion.div>
-        </motion.div>
-      </motion.div>
+          </m.div>
+        </m.div>
+      </m.div>
     );
-  }
+  },
 );
 
 IkigaiCircle.displayName = "IkigaiCircle";

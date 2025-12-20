@@ -1,7 +1,6 @@
 @import "tailwindcss";
 
 @theme inline {
- 
   --color-black: #101518;
   --color-white: #fcf7f1;
 
@@ -554,7 +553,7 @@ button:not([disabled]) {
   select,
   [role="button"],
   .cursor-pointer {
-    cursor: none !important;
+    cursor: none;
   }
 }
 

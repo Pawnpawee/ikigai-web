@@ -1,8 +1,8 @@
 "use client";
-import React, { useEffect, useState } from "react";
-import { motion, useMotionValue, useSpring } from "framer-motion";
-import { useDevice } from "@/app/contexts/DeviceContext";
+import { m, useMotionValue } from "framer-motion";
 import Image from "next/image";
+import { useEffect, useState } from "react";
+import { useDevice } from "@/app/contexts/DeviceContext";
 
 export default function GifCursor() {
   const { isMobile } = useDevice();
@@ -24,7 +24,7 @@ export default function GifCursor() {
       // เช็คว่า Hover ปุ่มไหม
       const target = e.target as HTMLElement;
       const isInteractive = target.closest(
-        "button, a, input, textarea, [role='button'], .cursor-pointer"
+        "button, a, input, textarea, [role='button'], .cursor-pointer",
       );
       setIsHover(!!isInteractive);
     };
@@ -36,7 +36,7 @@ export default function GifCursor() {
   if (isMobile) return null;
 
   return (
-    <motion.div
+    <m.div
       className="fixed top-0 left-0 pointer-events-none z-9999 mix-blend-screen"
       style={{
         x: mouseX,
@@ -59,6 +59,6 @@ export default function GifCursor() {
         unoptimized={true}
         className="pointer-events-none select-none"
       />
-    </motion.div>
+    </m.div>
   );
 }

@@ -1,28 +1,22 @@
-import React, {
-  useRef,
-  useEffect,
-  useState,
-  useMemo,
-  useLayoutEffect,
-} from "react";
 import {
-  motion,
+  m,
+  useMotionValue,
   useScroll,
-  useTransform,
-  Variants,
-  useMotionValue, 
   useSpring,
+  useTransform,
+  type Variants,
 } from "framer-motion";
+import { useEffect, useMemo, useRef, useState } from "react";
 import LazyLottie from "@/app/components/reusable/LazyLottie";
 import { useAudio } from "@/app/contexts/AudioContext";
 
 import { SCENE_HERO_ITEMS } from "@/app/data/scene_hero.data";
-import { useUI } from "../contexts/UIStarContext";
 import IkigaiCircle from "../components/reusable/IkigaiCircle";
 import SceneLayer from "../components/reusable/SceneLayer";
+import { useUI } from "../contexts/UIStarContext";
 
 interface HeroProps {
-  shouldAnimate: boolean; 
+  shouldAnimate: boolean;
 }
 
 export default function Hero({ shouldAnimate }: HeroProps) {
@@ -79,7 +73,7 @@ export default function Hero({ shouldAnimate }: HeroProps) {
 
       return () => clearTimeout(timer);
     }
-  }, [shouldAnimate]);
+  }, [shouldAnimate, setShowStars, playSfx]);
 
   useEffect(() => {
     if (shouldAnimate) {
@@ -90,17 +84,17 @@ export default function Hero({ shouldAnimate }: HeroProps) {
     }
   }, [shouldAnimate]);
 
-  useLayoutEffect(() => {
+  useEffect(() => {
     if (isInteractionLocked) {
       document.documentElement.style.setProperty(
         "overflow",
         "hidden",
-        "important"
+        "important",
       );
       document.documentElement.style.setProperty(
         "height",
         "100vh",
-        "important"
+        "important",
       );
       document.body.style.setProperty("overflow", "hidden", "important");
       document.body.style.setProperty("height", "100vh", "important");
@@ -146,7 +140,7 @@ export default function Hero({ shouldAnimate }: HeroProps) {
         },
       },
     }),
-    []
+    [],
   );
   const charVariants: Variants = useMemo(
     () => ({
@@ -156,7 +150,7 @@ export default function Hero({ shouldAnimate }: HeroProps) {
         x: 0,
       },
     }),
-    []
+    [],
   );
 
   const circle1_rotate = useTransform(scrollYProgress, [0, 1], [-180, 0]);
@@ -180,7 +174,7 @@ export default function Hero({ shouldAnimate }: HeroProps) {
         },
       },
     }),
-    []
+    [],
   );
 
   // Memoize mountain transitions
@@ -191,11 +185,11 @@ export default function Hero({ shouldAnimate }: HeroProps) {
       mountain3: { duration: 1.5, delay: 0.5 },
       mountain4: { duration: 1.5 },
     }),
-    []
+    [],
   );
 
   // Memoize text split
-  const textChars = useMemo(() => textContent.split(""), [textContent]);
+  const textChars = useMemo(() => textContent.split(""), []);
 
   // Memoize circle animation configs
   const circleAnimations = useMemo(
@@ -235,11 +229,11 @@ export default function Hero({ shouldAnimate }: HeroProps) {
         ease: "easeInOut" as const,
       },
     }),
-    [shouldAnimate]
+    [shouldAnimate],
   );
 
   return (
-    <motion.div
+    <m.div
       ref={ref}
       className={`w-full h-screen overflow-hidden flex flex-col items-center justify-center relative black-linear ${
         isInteractionLocked ? "pointer-events-none" : "pointer-events-auto"
@@ -247,7 +241,7 @@ export default function Hero({ shouldAnimate }: HeroProps) {
       style={{ opacity }}
     >
       {/* Mountain - rendered via SceneLayer so order/data-driven */}
-      <motion.div
+      <m.div
         className="absolute bottom-0 w-screen pointer-events-none"
         style={{ y: backgroundY, z: 0 }}
       >
@@ -260,19 +254,19 @@ export default function Hero({ shouldAnimate }: HeroProps) {
               initial: { opacity: 0 },
               animate: shouldAnimate ? { opacity: 1 } : { opacity: 0 },
               transition: mountainTransitions.mountain1,
-              style: { x: xBack, y: yBack },
+              style: { x: xMid, y: yMid },
             },
             "hill-c-f": {
               initial: { opacity: 0 },
               animate: shouldAnimate ? { opacity: 1 } : { opacity: 0 },
               transition: mountainTransitions.mountain2,
-              style: { x: xBack, y: yBack },
+              style: { x: xFront, y: yFront },
             },
             "hill-r-f": {
               initial: { opacity: 0 },
               animate: shouldAnimate ? { opacity: 1 } : { opacity: 0 },
               transition: mountainTransitions.mountain3,
-              style: { x: xBack, y: yBack },
+              style: { x: xFront, y: yFront },
             },
             "hill-l-f": {
               initial: { opacity: 0 },
@@ -282,7 +276,7 @@ export default function Hero({ shouldAnimate }: HeroProps) {
             },
           }}
         />
-      </motion.div>
+      </m.div>
 
       {/* Circle-World */}
       <IkigaiCircle
@@ -346,19 +340,19 @@ export default function Hero({ shouldAnimate }: HeroProps) {
       />
 
       {/* Logo */}
-      <motion.div
+      <m.div
         className="relative flex flex-col items-center justify-center scale-50 md:scale-100"
         variants={containerVariants}
         initial="hidden"
         animate={shouldAnimate ? "visible" : "hidden"}
         style={{ x: xBack, y: yBack }}
       >
-        <motion.div
+        <m.div
           initial={{ opacity: 0 }}
           animate={shouldAnimate ? { opacity: 1 } : { opacity: 0 }}
           transition={{ duration: 2, delay: 1.5 }}
         >
-          <motion.div
+          <m.div
             variants={lottieGlowVariants}
             animate={isLottieComplete ? "glowing" : "initial"}
           >
@@ -369,20 +363,20 @@ export default function Hero({ shouldAnimate }: HeroProps) {
               play={shouldPlayLottie}
               onComplete={handleLottieComplete}
             />
-          </motion.div>
-        </motion.div>
+          </m.div>
+        </m.div>
         <h2 className="typo-h3-serif text-white whitespace-nowrap">
           {textChars.map((char, index) => (
-            <motion.span
-              key={index}
+            <m.span
+              key={`char-${index}-${char}`}
               variants={charVariants}
               style={{ display: "inline-block" }}
             >
               {char === " " ? "\u00A0" : char}
-            </motion.span>
+            </m.span>
           ))}
         </h2>
-      </motion.div>
-    </motion.div>
+      </m.div>
+    </m.div>
   );
 }

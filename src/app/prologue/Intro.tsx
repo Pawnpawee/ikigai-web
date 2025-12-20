@@ -1,9 +1,8 @@
 "use client";
-import { motion, useScroll, useTransform } from "framer-motion";
-import { useRef } from "react";
+import { m, useScroll, useTransform } from "framer-motion";
 import Image from "next/image";
+import { useRef } from "react";
 import WordByWordAnimation from "../components/text/WordByWordAnimation";
-
 
 const INTRO_TEXT = `คำถามอิคิไกทั้งสี่ข้อ — "สิ่งที่รัก, สิ่งที่ถนัด, สิ่งที่โลกต้องการ และ สิ่งที่สร้างรายได้” 
 เป็นเพียงเครื่องมือการสำรวจเพื่อช่วยให้คุณสะท้อนตัวเอง ซึ่งเป็นภาพ ณ ตอนนี้เท่านั้น 
@@ -23,17 +22,21 @@ export default function Intro() {
   const scrollToOpacity = useTransform(
     scrollYProgress,
     [0, 0.05, 0.9, 1],
-    [0, 1, 1, 0]
+    [0, 1, 1, 0],
   );
 
   const zIndex = useTransform(
     scrollYProgress,
     [0, 0.1, 0.9, 1],
-    [-1, 10, 10, -1]
+    [-1, 10, 10, -1],
   );
 
   const starOpacity = useTransform(scrollYProgress, [0.04, 0.08], [1, 0]);
-  const starScale = useTransform(scrollYProgress, [0.04, 0.1 , 0.11], [1.5, 8 , 1.5]);
+  const starScale = useTransform(
+    scrollYProgress,
+    [0.04, 0.1, 0.11],
+    [1.5, 8, 1.5],
+  );
   const starRotate = useTransform(scrollYProgress, [0.04, 0.1], [0, 180]);
 
   const introOpacity = useTransform(scrollYProgress, [0.07, 0.12], [0, 1]);
@@ -41,28 +44,28 @@ export default function Intro() {
   const introBlur = useTransform(
     scrollYProgress,
     [0.07, 0.1],
-    ["blur(12px)", "blur(0px)"]
+    ["blur(12px)", "blur(0px)"],
   );
 
   const introGlow = useTransform(
     scrollYProgress,
     [0.07, 0.12],
-    ["0px 0px 0px rgba(255,255,255,0)", "0px 0px 10px rgba(255,255,255,0.6)"]
+    ["0px 0px 0px rgba(255,255,255,0)", "0px 0px 10px rgba(255,255,255,0.6)"],
   );
 
   return (
-    <motion.div ref={ref} className="h-[250vh] w-full relative">
-      <motion.div
+    <m.div ref={ref} className="h-[250vh] w-full relative">
+      <m.div
         className="fixed top-0 h-full  flex items-center justify-center text-center w-screen overflow-hidden"
         style={{ zIndex }}
       >
-        <motion.div
+        <m.div
           style={{ opacity: scrollToOpacity }}
           className="w-full px-4 flex flex-col items-center"
         >
           <div className="relative h-20 w-full flex items-center justify-center mb-8">
             {" "}
-            <motion.div
+            <m.div
               style={{
                 opacity: starOpacity,
                 scale: starScale,
@@ -79,8 +82,8 @@ export default function Intro() {
                   className="object-contain"
                 />
               </div>
-            </motion.div>
-            <motion.h2
+            </m.div>
+            <m.h2
               style={{
                 opacity: introOpacity,
                 scale: introScale,
@@ -91,7 +94,7 @@ export default function Intro() {
               className="typo-h2-serif text-white absolute"
             >
               Intro
-            </motion.h2>
+            </m.h2>
           </div>
 
           <WordByWordAnimation
@@ -100,8 +103,8 @@ export default function Intro() {
             as="div"
             className="typo-p-lg text-white text-center w-70 sm:w-full mx-auto"
           />
-        </motion.div>
-      </motion.div>
-    </motion.div>
+        </m.div>
+      </m.div>
+    </m.div>
   );
 }

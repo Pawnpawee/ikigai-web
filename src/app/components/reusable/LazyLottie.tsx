@@ -1,18 +1,29 @@
 "use client";
 
-import React, { memo, useEffect, useRef, useState } from "react";
+import {
+  type MotionValue,
+  useMotionValue,
+  useMotionValueEvent,
+} from "framer-motion";
+import type { LottieComponentProps, LottieRefCurrentProps } from "lottie-react";
 import dynamic from "next/dynamic";
-import { LottieRefCurrentProps, LottieComponentProps } from "lottie-react";
-import { MotionValue, useMotionValueEvent } from "framer-motion";
+import type React from "react";
+import { memo, useEffect, useRef, useState } from "react";
 
 const Lottie = dynamic(() => import("lottie-react"), {
   ssr: false,
   loading: () => <div className="w-full h-full bg-transparent" />,
 });
 
+interface LottieAnimationData {
+  w: number;
+  h: number;
+  [key: string]: unknown;
+}
+
 interface LazyLottieProps
   extends Omit<LottieComponentProps, "animationData" | "src"> {
-  src: string | object;
+  src: string | LottieAnimationData;
   className?: string;
   getRef?: (ref: LottieRefCurrentProps | null) => void;
   play?: boolean;
@@ -38,7 +49,8 @@ const LazyLottie: React.FC<LazyLottieProps> = memo(
     ...props
   }) => {
     const lottieRef = useRef<LottieRefCurrentProps>(null);
-    const [animationData, setAnimationData] = useState<any>(null);
+    const [animationData, setAnimationData] =
+      useState<LottieAnimationData | null>(null);
     const [isLoaded, setIsLoaded] = useState(false);
 
     //? 1. Data Logic
@@ -74,7 +86,7 @@ const LazyLottie: React.FC<LazyLottieProps> = memo(
       if (getRef && lottieRef.current) {
         getRef(lottieRef.current);
       }
-    }, [getRef, isLoaded]);
+    }, [getRef]);
 
     //? 3. Playback Logic
     useEffect(() => {
@@ -97,16 +109,17 @@ const LazyLottie: React.FC<LazyLottieProps> = memo(
       return () => {
         clearTimeout(timeoutId);
       };
-    }, [play, isLoaded, delay]);
+    }, [play, delay, isLoaded]);
 
     //? 4. Scroll Logic
+    const fallbackMotionValue = useMotionValue(0);
+
     useMotionValueEvent(
-      scrollYProgress || ({ get: () => 0, on: () => () => {} } as any),
+      scrollYProgress || fallbackMotionValue,
       "change",
-      (latest: number) => {
+      () => {
         if (!lottieRef.current || !scrollYProgress || !isLoaded) return;
-        const [start, end] = triggerRange;
-      }
+      },
     );
 
     if (!isLoaded || !animationData) {
@@ -136,7 +149,7 @@ const LazyLottie: React.FC<LazyLottieProps> = memo(
         />
       </div>
     );
-  }
+  },
 );
 
 LazyLottie.displayName = "LazyLottie";

@@ -1,6 +1,6 @@
 // WordByWordAnimation.tsx
 "use client";
-import { motion, useTransform, MotionValue } from "framer-motion";
+import { type MotionValue, m, useTransform } from "framer-motion";
 import { createElement, type FC } from "react";
 
 interface WordByWordAnimationProps {
@@ -12,13 +12,23 @@ interface WordByWordAnimationProps {
 }
 
 interface AnimatedWordProps {
-  opacity: MotionValue<number>;
+  scrollYProgress: MotionValue<number>;
+  start: number;
+  end: number;
   children: string;
 }
 
-const AnimatedWord: FC<AnimatedWordProps> = ({ opacity, children }) => {
+const AnimatedWord: FC<AnimatedWordProps> = ({
+  scrollYProgress,
+  start,
+  end,
+  children,
+}) => {
+  //? Hook called at top level of AnimatedWord component
+  const opacity = useTransform(scrollYProgress, [start, end], [0, 1]);
+
   return (
-    <motion.span
+    <m.span
       style={{
         opacity,
       }}
@@ -30,7 +40,7 @@ const AnimatedWord: FC<AnimatedWordProps> = ({ opacity, children }) => {
       "
     >
       {children}
-    </motion.span>
+    </m.span>
   );
 };
 
@@ -43,16 +53,15 @@ const WordByWordAnimation: FC<WordByWordAnimationProps> = ({
 }) => {
   const allWords = text.split(/\s+/).filter(Boolean);
   const totalWords = allWords.length;
-  let wordCounter = 0;
-
   const lines = text.split("\n");
+  let wordCounter = 0;
 
   return createElement(
     as,
     { className, style },
     lines.map((line, lineIndex) => (
       <span
-        key={lineIndex}
+        key={`line-${lineIndex}-${line}`}
         className="flex flex-wrap items-center justify-center whitespace-pre-line select-none py-1"
       >
         {line.split(" ").map((word, wordIndexInLine) => {
@@ -60,20 +69,25 @@ const WordByWordAnimation: FC<WordByWordAnimationProps> = ({
 
           const start = wordCounter / totalWords;
           const end = (wordCounter + 1) / totalWords;
-
-          //? Scroll Logic กลับมาเป็น Opacity แบบเรียบง่ายตามเดิม
-          const opacity = useTransform(scrollYProgress, [start, end], [0, 1]);
-
           wordCounter++;
 
           return (
-            <span key={wordIndexInLine} className="mr-2 relative">
-              <AnimatedWord opacity={opacity}>{word}</AnimatedWord>
+            <span
+              key={`word-${wordIndexInLine}-${word}`}
+              className="mr-2 relative"
+            >
+              <AnimatedWord
+                scrollYProgress={scrollYProgress}
+                start={start}
+                end={end}
+              >
+                {word}
+              </AnimatedWord>
             </span>
           );
         })}
       </span>
-    ))
+    )),
   );
 };
 

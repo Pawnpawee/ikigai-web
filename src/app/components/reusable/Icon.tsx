@@ -1,5 +1,5 @@
-import React from "react";
-import { motion } from "framer-motion";
+import { m } from "framer-motion";
+import type { CSSProperties } from "react";
 
 interface IconProps {
   src: string;
@@ -8,7 +8,7 @@ interface IconProps {
   size?: number | string;
   color?: string;
   className?: string;
-  style?: React.CSSProperties;
+  style?: CSSProperties;
   onClick?: () => void;
   withHoverEffect?: boolean;
 }
@@ -24,7 +24,7 @@ export default function Icon({
   onClick,
   withHoverEffect = false,
 }: IconProps) {
-  const Component = withHoverEffect ? motion.img : "img";
+  const Component = withHoverEffect ? m.img : "img";
 
   const hoverProps = withHoverEffect
     ? {

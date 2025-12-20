@@ -1,8 +1,8 @@
 "use client";
-import { motion, AnimatePresence } from "framer-motion";
-import { useAssetLoader } from "@/app/contexts/AssetLoaderContext";
-import { useEffect } from "react";
+import { AnimatePresence, m } from "framer-motion";
 import { useLenis } from "lenis/react";
+import { useEffect } from "react";
+import { useAssetLoader } from "@/app/contexts/AssetLoaderContext";
 
 export default function Preloader() {
   const { isLoading, progress } = useAssetLoader();
@@ -19,7 +19,7 @@ export default function Preloader() {
   return (
     <AnimatePresence mode="wait">
       {isLoading && (
-        <motion.div
+        <m.div
           key="preloader"
           initial={{ opacity: 1 }}
           exit={{
@@ -29,19 +29,19 @@ export default function Preloader() {
           className="fixed inset-0 z-999 flex flex-col items-center justify-center bg-[#0b1e23] text-white"
         >
           {/* Logo หรือ Text */}
-          <motion.div
+          <m.div
             animate={{ scale: [1, 1.05, 1], opacity: [0.8, 1, 0.8] }}
             transition={{ repeat: Infinity, duration: 2 }}
             className="mb-8 flex flex-col items-center"
           >
             <h1 className="typo-h2-serif text-4xl md:text-6xl mb-2">IKIGAI</h1>
             <p className="typo-p-sm text-slate-400">Life of Journey</p>
-          </motion.div>
+          </m.div>
 
           {/* Loading Bar Container */}
           <div className="w-64 h-1 bg-slate-800 rounded-full overflow-hidden relative">
             {/* Progress Line */}
-            <motion.div
+            <m.div
               className="absolute top-0 left-0 h-full bg-linear-to-r from-blue-500 to-purple-500"
               initial={{ width: "0%" }}
               animate={{ width: `${progress}%` }}
@@ -53,7 +53,7 @@ export default function Preloader() {
           <p className="mt-4 typo-p-sm text-slate-500 font-mono">
             Loading Resources... {progress}%
           </p>
-        </motion.div>
+        </m.div>
       )}
     </AnimatePresence>
   );

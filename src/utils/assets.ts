@@ -2,6 +2,16 @@
 
 // 1. ใส่ path ของรูปที่ไฟล์ใหญ่ๆ หรือรูปที่อยู่ใน Scene แรกๆ ลงในนี้
 export const ASSETS_TO_PRELOAD = [
+  //Icon
+  "/assets/Icon/mute.svg",
+  "/assets/Icon/music.svg",
+  "/assets/Icon/menu.svg",
+  "/assets/Icon/love.svg",
+  "/assets/Icon/skill.svg",
+  "/assets/Icon/world.svg",
+  "/assets/Icon/paid.svg",
+  "/assets/Icon/star.svg",
+
   // Hero Scene
   "/assets/Scene/Hero/hill-c-b.webp",
   "/assets/Scene/Hero/hill-c-f.webp",
@@ -11,7 +21,6 @@ export const ASSETS_TO_PRELOAD = [
   "/assets/Scene/Hero/skill-circle.webp",
   "/assets/Scene/Hero/world-circle.webp",
   "/assets/Scene/Hero/paid-circle.webp",
-
 ];
 
 export const getAssetUrl = (path: string): string => {
