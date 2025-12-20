@@ -1,4 +1,4 @@
-import { SceneItemData } from "@/app/components/scene/SceneLayer";
+import { SceneItemData } from "../components/reusable/SceneLayer";
 
 // Mountains / hero background layers (order bottom -> top)
 export const SCENE_HERO_ITEMS: SceneItemData[] = [
@@ -30,4 +30,3 @@ export const SCENE_HERO_ITEMS: SceneItemData[] = [
   },
 ];
 
-export default SCENE_HERO_ITEMS;

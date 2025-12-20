@@ -1,7 +1,7 @@
 @import "tailwindcss";
 
 @theme inline {
-  /* Palette colors (from palette.ts). Shades generate e.g. text-orange-500/bg-orange-500. */
+ 
   --color-black: #101518;
   --color-white: #fcf7f1;
 
@@ -243,7 +243,6 @@
 
 /* Typography utilities */
 @utility typo-h1 {
-  font-family: var(--font-anuphan);
   font-weight: 700;
   font-size: 40px;
   line-height: 1.5;
@@ -255,13 +254,11 @@
   line-height: 1.5;
 }
 @utility typo-text-h1 {
-  font-family: var(--font-anuphan);
   font-weight: 400;
   font-size: 40px;
   line-height: 1.5;
 }
 @utility typo-h2 {
-  font-family: var(--font-anuphan);
   font-weight: 700;
   font-size: 32px;
   line-height: 1.5;
@@ -275,14 +272,12 @@
   letter-spacing: 1.5;
 }
 @utility typo-text-h2 {
-  font-family: var(--font-anuphan);
   font-weight: 400;
   font-size: 32px;
   line-height: 1.5;
   letter-spacing: 1.5;
 }
 @utility typo-h3 {
-  font-family: var(--font-anuphan);
   font-weight: 700;
   font-size: 20px;
   line-height: 1.5;
@@ -296,21 +291,18 @@
   letter-spacing: 1.5;
 }
 @utility typo-text-h3 {
-  font-family: var(--font-anuphan);
   font-weight: 400;
   font-size: 20px;
   line-height: 1.5;
   letter-spacing: 1.5;
 }
 @utility typo-h4 {
-  font-family: var(--font-anuphan);
   font-weight: 600;
   font-size: 20px;
   line-height: 1.5;
   letter-spacing: 1.5;
 }
 @utility typo-text-h4 {
-  font-family: var(--font-anuphan);
   font-weight: 400;
   font-size: 20px;
   line-height: 1.5;
@@ -323,49 +315,41 @@
   line-height: 1.5;
 }
 @utility typo-h5 {
-  font-family: var(--font-anuphan);
   font-weight: 600;
   font-size: 16px;
   line-height: 1.5;
 }
 @utility typo-text-h5 {
-  font-family: var(--font-anuphan);
   font-weight: 400;
   font-size: 16px;
   line-height: 1.5;
 }
 @utility typo-h6 {
-  font-family: var(--font-anuphan);
   font-weight: 600;
   font-size: 14px;
   line-height: 1.5;
 }
 @utility typo-text-h6 {
-  font-family: var(--font-anuphan);
   font-weight: 400;
   font-size: 14px;
   line-height: 1.5;
 }
 @utility typo-p-lg {
-  font-family: var(--font-anuphan);
   font-weight: 400;
   font-size: 16px;
   line-height: 1.5;
 }
 @utility typo-p-md {
-  font-family: var(--font-anuphan);
   font-weight: 400;
   font-size: 14px;
   line-height: 1.5;
 }
 @utility typo-p-sm {
-  font-family: var(--font-anuphan);
   font-weight: 400;
   font-size: 12px;
   line-height: 1.5;
 }
 @utility typo-p-xsm {
-  font-family: var(--font-anuphan);
   font-weight: 400;
   font-size: 10px;
   line-height: 1.5;
@@ -561,20 +545,24 @@ button:not([disabled]) {
   cursor: pointer;
 }
 
-/* --- Minimalist Custom Scrollbar --- */
-::-webkit-scrollbar-track {
-  background: transparent;
-}
-
-::-webkit-scrollbar-thumb {
-  background-color: #4b5563;
-  border-radius: 20px;
+@media (pointer: fine) {
+  body,
+  a,
+  button,
+  input,
+  textarea,
+  select,
+  [role="button"],
+  .cursor-pointer {
+    cursor: none !important;
+  }
 }
 
 ::-webkit-scrollbar {
-  width: 12px;
+  display: none;
 }
 
-::-webkit-scrollbar-thumb:hover {
-  background-color: #6b7280;
+* {
+  -ms-overflow-style: none; /* IE and Edge */
+  scrollbar-width: none;
 }

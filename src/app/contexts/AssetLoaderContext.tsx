@@ -14,11 +14,11 @@ export const AssetLoaderProvider = ({
 }: {
   children: React.ReactNode;
 }) => {
+
   const [isLoading, setIsLoading] = useState(true);
   const [progress, setProgress] = useState(0);
 
   useEffect(() => {
-    // ถ้าไม่มีรายการให้โหลด ก็ปิดเลย
     if (ASSETS_TO_PRELOAD.length === 0) {
       setIsLoading(false);
       return;
@@ -32,14 +32,11 @@ export const AssetLoaderProvider = ({
       const percent = Math.round((loadedCount / total) * 100);
       setProgress(percent);
 
-      // เมื่อโหลดครบทุกไฟล์
       if (loadedCount >= total) {
-        // หน่วงเวลานิดนึงให้ user เห็นว่าครบ 100% แล้วค่อยปิด
         setTimeout(() => setIsLoading(false), 800);
       }
     };
 
-    // วนลูปสั่ง Browser ให้ดาวน์โหลดไฟล์ทั้งหมดมาเก็บใน Cache
     ASSETS_TO_PRELOAD.forEach((path) => {
       const img = new Image();
       img.src = getAssetUrl(path);

@@ -3,75 +3,138 @@ import React, {
   useEffect,
   useState,
   useMemo,
-  useCallback,
+  useLayoutEffect,
 } from "react";
-import Image from "next/image";
 import {
   motion,
   useScroll,
   useTransform,
   Variants,
-  useInView,
+  useMotionValue, 
   useSpring,
-  useWillChange,
 } from "framer-motion";
-import LazyLottie from "@/app/components/ui/LazyLottie";
+import LazyLottie from "@/app/components/reusable/LazyLottie";
 import { useAudio } from "@/app/contexts/AudioContext";
-import { useSoundEffect } from "@/app/hooks/useSoundEffect";
-import { useAssetLoader } from "@/app/contexts/AssetLoaderContext";
-import { useAnimationReady } from "@/app/hooks/useAnimationReady";
-import { useLottieWithSound } from "@/app/hooks/useLottieWithSound";
-import IkigaiCircle from "./IkigaiCircle";
-import SceneLayer from "@/app/components/scene/SceneLayer";
+
 import { SCENE_HERO_ITEMS } from "@/app/data/scene_hero.data";
-import StarryBackground from "../components/ui/StarryBackground";
+import { useUI } from "../contexts/UIStarContext";
+import IkigaiCircle from "../components/reusable/IkigaiCircle";
+import SceneLayer from "../components/reusable/SceneLayer";
 
-export default function Hero() {
+interface HeroProps {
+  shouldAnimate: boolean; 
+}
+
+export default function Hero({ shouldAnimate }: HeroProps) {
   const ref = useRef<HTMLDivElement>(null);
-  const isInView = useInView(ref, { once: false, amount: 0.1 });
-  const { animationsStarted } = useAudio();
-  const { isLoading: isAssetsLoading } = useAssetLoader();
 
-  // ใช้ custom hook สำหรับ sound effect
-  const { playSoundEffect, stopSoundEffect } = useSoundEffect({
-    soundPath: "/assets/Sound/12/magical-sparkling.mp3",
-    fadeDurationMs: 500,
-    soundDurationMs: 2500,
-  });
+  const { playSfx } = useAudio();
 
-  // ใช้ custom hook สำหรับ Lottie animation + sound synchronization
-  const { lottieRef, isLottieComplete, hasPlayedOnce } = useLottieWithSound({
-    isInView,
-    animationsStarted,
-    isAssetsLoading,
-    playSoundEffect,
-    stopSoundEffect,
-    animationDurationInSeconds: 3,
-    initialDelayMs: 2000,
-    glowOffsetMs: 1200,
-  });
+  const [isLottieComplete, setIsLottieComplete] = useState(false);
+  const [shouldPlayLottie, setShouldPlayLottie] = useState(false);
+
+  const [isInteractionLocked, setIsInteractionLocked] = useState(true);
+
+  const { setShowStars } = useUI();
+
+  const mouseX = useMotionValue(0.5);
+  const mouseY = useMotionValue(0.5);
+
+  useEffect(() => {
+    const handleMouseMove = (e: MouseEvent) => {
+      const x = e.clientX / window.innerWidth;
+      const y = e.clientY / window.innerHeight;
+
+      mouseX.set(x);
+      mouseY.set(y);
+    };
+
+    window.addEventListener("mousemove", handleMouseMove);
+    return () => window.removeEventListener("mousemove", handleMouseMove);
+  }, [mouseX, mouseY]);
+
+  const springConfig = { damping: 50, stiffness: 400 };
+  const smoothMouseX = useSpring(mouseX, springConfig);
+  const smoothMouseY = useSpring(mouseY, springConfig);
+
+  // ภูเขาหลังสุด (ขยับน้อยมาก)
+  const xBack = useTransform(smoothMouseX, [0, 1], [15, -15]);
+  const yBack = useTransform(smoothMouseY, [0, 1], [10, -10]);
+
+  // ภูเขากลาง (ขยับปานกลาง)
+  const xMid = useTransform(smoothMouseX, [0, 1], [30, -30]);
+  const yMid = useTransform(smoothMouseY, [0, 1], [15, -15]);
+
+  // ภูเขาหน้าสุด (ขยับเยอะสุด ดูใกล้ตา)
+  const xFront = useTransform(smoothMouseX, [0, 1], [45, -45]);
+  const yFront = useTransform(smoothMouseY, [0, 1], [20, -20]);
+
+  useEffect(() => {
+    if (shouldAnimate) {
+      setShowStars(true);
+      const timer = setTimeout(() => {
+        setShouldPlayLottie(true);
+        playSfx("/assets/Sound/12/magical-sparkling.mp3");
+      }, 2000);
+
+      return () => clearTimeout(timer);
+    }
+  }, [shouldAnimate]);
+
+  useEffect(() => {
+    if (shouldAnimate) {
+      const timer = setTimeout(() => {
+        setIsInteractionLocked(false);
+      }, 3000);
+      return () => clearTimeout(timer);
+    }
+  }, [shouldAnimate]);
+
+  useLayoutEffect(() => {
+    if (isInteractionLocked) {
+      document.documentElement.style.setProperty(
+        "overflow",
+        "hidden",
+        "important"
+      );
+      document.documentElement.style.setProperty(
+        "height",
+        "100vh",
+        "important"
+      );
+      document.body.style.setProperty("overflow", "hidden", "important");
+      document.body.style.setProperty("height", "100vh", "important");
+    } else {
+      // ล้าง CSS ออก
+      document.documentElement.style.removeProperty("overflow");
+      document.documentElement.style.removeProperty("height");
+      document.body.style.removeProperty("overflow");
+      document.body.style.removeProperty("height");
+    }
+
+    // Cleanup function (สำคัญมาก เผื่อเปลี่ยนหน้า)
+    return () => {
+      document.documentElement.style.removeProperty("overflow");
+      document.documentElement.style.removeProperty("height");
+      document.body.style.removeProperty("overflow");
+      document.body.style.removeProperty("height");
+    };
+  }, [isInteractionLocked]);
+
+  const handleLottieComplete = () => {
+    setIsLottieComplete(true);
+  };
 
   const { scrollYProgress } = useScroll({
     target: ref,
     offset: ["start start", "end start"],
   });
 
-  // ⭐ แก้ไข 1: ใช้ useSpring เพื่อลดอาการสั่น (Smooth ค่า input)
-  // mass/stiffness/damping นี้คือสูตรนุ่มนวลที่นิยมใช้กับ Parallax
-  const smoothScroll = useSpring(scrollYProgress, {
-    mass: 0.1,
-    stiffness: 100,
-    damping: 20,
-    restDelta: 0.001,
-  });
-
-  // ⭐ แก้ไข 2: ใช้ willChange บอก Browser ให้เตรียม GPU รอไว้
-  const willChange = useWillChange();
-
   const backgroundY = useTransform(scrollYProgress, [0, 1], ["0%", "100%"]);
   const opacity = useTransform(scrollYProgress, [1, 0], [0, 1]);
 
   const textContent = "LIFE OF JOURNEY";
+
   const containerVariants: Variants = useMemo(
     () => ({
       hidden: { opacity: 0 },
@@ -83,7 +146,7 @@ export default function Hero() {
         },
       },
     }),
-    [],
+    []
   );
   const charVariants: Variants = useMemo(
     () => ({
@@ -93,28 +156,13 @@ export default function Hero() {
         x: 0,
       },
     }),
-    [],
+    []
   );
 
   const circle1_rotate = useTransform(scrollYProgress, [0, 1], [-180, 0]);
   const circle2_rotate = useTransform(scrollYProgress, [0, 1], [90, 0]);
   const circle3_rotate = useTransform(scrollYProgress, [0, 1], [0, 90]);
   const circle4_rotate = useTransform(scrollYProgress, [0, 1], [-90, 0]);
-
-  // ⭐ Log rotate values
-  useEffect(() => {
-    const unsubscribe1 = circle1_rotate.on("change", (v) => console.log("circle1_rotate:", v));
-    const unsubscribe2 = circle2_rotate.on("change", (v) => console.log("circle2_rotate:", v));
-    const unsubscribe3 = circle3_rotate.on("change", (v) => console.log("circle3_rotate:", v));
-    const unsubscribe4 = circle4_rotate.on("change", (v) => console.log("circle4_rotate:", v));
-    
-    return () => {
-      unsubscribe1();
-      unsubscribe2();
-      unsubscribe3();
-      unsubscribe4();
-    };
-  }, [circle1_rotate, circle2_rotate, circle3_rotate, circle4_rotate]);
 
   const lottieGlowVariants: Variants = useMemo(
     () => ({
@@ -132,7 +180,7 @@ export default function Hero() {
         },
       },
     }),
-    [],
+    []
   );
 
   // Memoize mountain transitions
@@ -143,14 +191,11 @@ export default function Hero() {
       mountain3: { duration: 1.5, delay: 0.5 },
       mountain4: { duration: 1.5 },
     }),
-    [],
+    []
   );
 
   // Memoize text split
   const textChars = useMemo(() => textContent.split(""), [textContent]);
-
-  // Use reusable animation ready hook
-  const shouldAnimate = useAnimationReady();
 
   // Memoize circle animation configs
   const circleAnimations = useMemo(
@@ -183,28 +228,28 @@ export default function Hero() {
         type: "tween" as const,
         duration: 2,
         ease: "easeInOut" as const,
-        delay: 2.0,
       },
       circleImgTransition: {
         type: "tween" as const,
         duration: 2,
         ease: "easeInOut" as const,
-        delay: 2.0,
       },
     }),
-    [shouldAnimate],
+    [shouldAnimate]
   );
 
   return (
     <motion.div
       ref={ref}
-      className="w-full h-screen overflow-hidden flex flex-col items-center justify-center relative black-linear "
+      className={`w-full h-screen overflow-hidden flex flex-col items-center justify-center relative black-linear ${
+        isInteractionLocked ? "pointer-events-none" : "pointer-events-auto"
+      }`}
       style={{ opacity }}
     >
       {/* Mountain - rendered via SceneLayer so order/data-driven */}
       <motion.div
         className="absolute bottom-0 w-screen pointer-events-none"
-        style={{ y: backgroundY, willChange, z: 0 }}
+        style={{ y: backgroundY, z: 0 }}
       >
         <SceneLayer
           items={SCENE_HERO_ITEMS}
@@ -215,21 +260,25 @@ export default function Hero() {
               initial: { opacity: 0 },
               animate: shouldAnimate ? { opacity: 1 } : { opacity: 0 },
               transition: mountainTransitions.mountain1,
+              style: { x: xBack, y: yBack },
             },
             "hill-c-f": {
               initial: { opacity: 0 },
               animate: shouldAnimate ? { opacity: 1 } : { opacity: 0 },
               transition: mountainTransitions.mountain2,
+              style: { x: xBack, y: yBack },
             },
             "hill-r-f": {
               initial: { opacity: 0 },
               animate: shouldAnimate ? { opacity: 1 } : { opacity: 0 },
               transition: mountainTransitions.mountain3,
+              style: { x: xBack, y: yBack },
             },
             "hill-l-f": {
               initial: { opacity: 0 },
               animate: shouldAnimate ? { opacity: 1 } : { opacity: 0 },
               transition: mountainTransitions.mountain4,
+              style: { x: xBack, y: yBack },
             },
           }}
         />
@@ -237,7 +286,7 @@ export default function Hero() {
 
       {/* Circle-World */}
       <IkigaiCircle
-        className="scale-40 sm:scale-50 md:scale-80 lg:scale-100"
+        className="scale-50 md:scale-100"
         imageSrc="/assets/Scene/Hero/world-circle.webp"
         iconSrc="/assets/Icon/world.svg"
         text="สิ่งที่โลกต้องการ"
@@ -252,7 +301,7 @@ export default function Hero() {
 
       {/* Circle-Paid */}
       <IkigaiCircle
-        className="scale-40 sm:scale-50 md:scale-80 lg:scale-100"
+        className="scale-50 md:scale-100"
         imageSrc="/assets/Scene/Hero/paid-circle.webp"
         iconSrc="/assets/Icon/paid.svg"
         text="สิ่งที่สร้างรายได้"
@@ -267,7 +316,7 @@ export default function Hero() {
 
       {/* Circle-Skill */}
       <IkigaiCircle
-        className="scale-40 sm:scale-50 md:scale-80 lg:scale-100"
+        className="scale-50 md:scale-100"
         imageSrc="/assets/Scene/Hero/skill-circle.webp"
         iconSrc="/assets/Icon/skill.svg"
         text="สิ่งที่ถนัด"
@@ -282,7 +331,7 @@ export default function Hero() {
 
       {/* Circle-Love */}
       <IkigaiCircle
-        className="scale-40 sm:scale-50 md:scale-80 lg:scale-100"
+        className="scale-50 md:scale-100"
         imageSrc="/assets/Scene/Hero/love-circle.webp"
         iconSrc="/assets/Icon/love.svg"
         text="สิ่งที่รัก"
@@ -298,14 +347,15 @@ export default function Hero() {
 
       {/* Logo */}
       <motion.div
-        className="relative flex flex-col items-center justify-center scale-40 sm:scale-50 md:scale-80 lg:scale-100"
+        className="relative flex flex-col items-center justify-center scale-50 md:scale-100"
         variants={containerVariants}
         initial="hidden"
-        animate={isInView && animationsStarted ? "visible" : "hidden"}
+        animate={shouldAnimate ? "visible" : "hidden"}
+        style={{ x: xBack, y: yBack }}
       >
         <motion.div
           initial={{ opacity: 0 }}
-          animate={isInView && shouldAnimate ? { opacity: 1 } : { opacity: 0 }}
+          animate={shouldAnimate ? { opacity: 1 } : { opacity: 0 }}
           transition={{ duration: 2, delay: 1.5 }}
         >
           <motion.div
@@ -313,12 +363,11 @@ export default function Hero() {
             animate={isLottieComplete ? "glowing" : "initial"}
           >
             <LazyLottie
-              src="/assets/Icon/logo_ikigai_animate.lottie"
-              className="h-[100px] aspect-770/200 mx-auto"
+              src="/assets/Scene/Hero/logo_ikigai_animate.json"
+              className="h-[100px]"
               loop={false}
-              getRef={(ref) => {
-                lottieRef.current = ref;
-              }}
+              play={shouldPlayLottie}
+              onComplete={handleLottieComplete}
             />
           </motion.div>
         </motion.div>
@@ -334,7 +383,6 @@ export default function Hero() {
           ))}
         </h2>
       </motion.div>
-      <StarryBackground />
     </motion.div>
   );
 }

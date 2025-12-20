@@ -1,43 +1,41 @@
 "use client";
-import React, { useState, useEffect } from "react";
-import WelcomeSoundModal from "./components/ui/WelcomeSoundModal";
-import { useAudio, AudioProvider } from "./contexts/AudioContext";
-import { AssetLoaderProvider } from "./contexts/AssetLoaderContext";
-import Preloader from "./components/ui/Preloader";
+import React from "react";
+import {
+  AssetLoaderProvider,
+} from "./contexts/AssetLoaderContext";
+import Preloader from "./components/Preloader";
+import {
+  LazyMotion,
+  domAnimation,
+  useScroll,
+  useTransform,
+} from "framer-motion";
+import { getLenisOptions } from "@/utils/lenisConfig";
+import Navbar from "./components/Navbar";
+import GifCursor from "./components/GifCursor";
+import ScrollTo from "./components/ScrollTo";
+import { useDevice } from "./contexts/DeviceContext";
 import ReactLenis from "lenis/react";
 
-function AppContent({ children }: { children: React.ReactNode }) {
-  const [showWelcomeModal, setShowWelcomeModal] = useState(false);
-  const { startAudio, pauseAudio, userConsented, isInitialized } = useAudio();
+function AppLogic({ children }: { children: React.ReactNode }) {
 
-  useEffect(() => {
-    if (isInitialized) {
-      if (!userConsented) {
-        setShowWelcomeModal(true);
-      }
-    }
-  }, [userConsented, isInitialized]);
-
-  const handleAccept = () => {
-    setShowWelcomeModal(false);
-    startAudio();
-  };
-
-  const handleDecline = () => {
-    setShowWelcomeModal(false);
-    pauseAudio();
-  };
+  const { scrollYProgress } = useScroll();
+  const scrollToOpacity = useTransform(
+    scrollYProgress,
+    [0, 0.8, 0.95, 1],
+    [1, 1, 0, 0]
+  );
 
   return (
     <>
-      <Preloader /> {/* Preloader จะเรียก useLenis() ข้างในเพื่อสั่งหยุด scroll */}
-      <WelcomeSoundModal
-        isOpen={showWelcomeModal}
-        onAccept={handleAccept}
-        onDecline={handleDecline}
-      />
-      {/* เนื้อหาหลักของเว็บ */}
-      {children}
+      <Preloader />
+      {/* //todo: wait for design */}
+      <GifCursor />
+      {/* //todo: wait for design */}
+
+      <Navbar />
+      <ScrollTo opacity={scrollToOpacity} />
+      <main className="relative w-full">{children}</main>
     </>
   );
 }
@@ -47,37 +45,20 @@ export default function AppWrapper({
 }: {
   children: React.ReactNode;
 }) {
-  // Detect mobile
-  const [isMobile, setIsMobile] = useState(false);
+  const { isMobile } = useDevice();
 
-  useEffect(() => {
-    const checkMobile = () => {
-      setIsMobile(window.innerWidth < 768);
-    };
-    
-    // Check on mount
-    checkMobile();
-    
-    // Check on resize
-    window.addEventListener('resize', checkMobile);
-    return () => window.removeEventListener('resize', checkMobile);
-  }, []);
-
-  const lenisOptions = {
-    wheelMultiplier: isMobile ? 0.4 : 0.6, // ลดความเร็วบนมือถือ
-    touchMultiplier: 1.5, // ลดความไวของ touch
-    duration: isMobile ? 1.8 : 1.2, // เพิ่มระยะเวลา animation บนมือถือ
-    lerp: isMobile ? 0.05 : 0.1, // ลด lerp = ทำให้นุ่มนวลขึ้น
-    smoothWheel: true,
-    smoothTouch: true, // เปิด smooth touch
-  };
+  //? ใช้ useMemo เพื่อป้องกันการ create object ใหม่ทุกครั้งที่ re-render (Performance)
+  const lenisOptions = React.useMemo(
+    () => getLenisOptions(isMobile),
+    [isMobile]
+  );
 
   return (
-    // 1. AssetLoader อยู่บนสุด (โหลดของ)
     <AssetLoaderProvider>
-      {/* 3. Lenis ครอบทั้งหมดเพื่อให้ทุก Component เข้าถึง lenis instance ได้ */}
       <ReactLenis root options={lenisOptions}>
-        <AppContent>{children}</AppContent>
+        <LazyMotion features={domAnimation}>
+          <AppLogic>{children}</AppLogic>
+        </LazyMotion>
       </ReactLenis>
     </AssetLoaderProvider>
   );
