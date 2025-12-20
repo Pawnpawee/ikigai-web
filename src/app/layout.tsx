@@ -32,6 +32,10 @@ export const metadata: Metadata = {
   title: "Ikigai - Life Of Journey",
   description:
     "Discover Your Ikigai: Uncover the intersection of passion, mission, vocation, and profession to find purpose and fulfillment in life.",
+  robots: {
+    index: true, // อนุญาตให้ Index
+    follow: true, // อนุญาตให้ตาม Link ต่อ
+  },
 };
 
 export default function RootLayout({

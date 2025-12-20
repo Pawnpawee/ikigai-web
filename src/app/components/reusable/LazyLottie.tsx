@@ -28,7 +28,6 @@ interface LazyLottieProps
   getRef?: (ref: LottieRefCurrentProps | null) => void;
   play?: boolean;
   scrollYProgress?: MotionValue<number>;
-  triggerRange?: [number, number];
   delay?: number;
   onComplete?: () => void;
   ignoreAspectRatio?: boolean;
@@ -41,7 +40,6 @@ const LazyLottie: React.FC<LazyLottieProps> = memo(
     getRef,
     play = false,
     scrollYProgress,
-    triggerRange = [0, 1],
     loop = true,
     delay = 0,
     onComplete,
