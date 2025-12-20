@@ -28,14 +28,6 @@ const nextConfig: NextConfig = {
     ],
   },
 
-  webpack: (config) => {
-    //? บังคับให้ใช้ lottie-web ภาค Light (ตัด Canvas/HTML renderer และ Expressions หนักๆ ออก)
-    config.resolve.alias = {
-      ...config.resolve.alias,
-      "lottie-web": "lottie-web/build/player/lottie_light",
-    };
-    return config;
-  },
 };
 
 export default withBundleAnalyzer(nextConfig);
