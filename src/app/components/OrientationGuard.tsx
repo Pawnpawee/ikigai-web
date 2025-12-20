@@ -10,12 +10,7 @@ export default function OrientationGuard() {
   return (
     <AnimatePresence>
       {isInvalidOrientation && (
-        <m.div
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          exit={{ opacity: 0 }}
-          className="fixed inset-0 z-99 bg-black text-white flex flex-col items-center justify-center p-6 text-center"
-        >
+        <m.div className="fixed inset-0 z-99 bg-black text-white flex flex-col items-center justify-center p-6 text-center">
           {/* Icon หมุนจอ */}
           <div className="text-6xl mb-6 animate-pulse">📱🔄</div>
 

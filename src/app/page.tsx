@@ -2,7 +2,6 @@
 
 import { useEffect, useState } from "react";
 import WelcomeSoundModal from "./components/modal/WelcomeSoundModal";
-import { useAssetLoader } from "./contexts/AssetLoaderContext";
 import { useAudio } from "./contexts/AudioContext";
 import Hero from "./prologue/Hero";
 import Intro from "./prologue//Intro";
@@ -10,8 +9,6 @@ import Intro from "./prologue//Intro";
 export default function Home() {
   const [showWelcomeModal, setShowWelcomeModal] = useState(false);
   const { start, stop } = useAudio();
-
-  const { isLoading } = useAssetLoader();
 
   const [shouldAnimate, setShouldAnimate] = useState(false);
 
@@ -22,9 +19,9 @@ export default function Home() {
     if (!hasSettings) {
       setShowWelcomeModal(true);
     } else {
-      if (!isLoading) setShouldAnimate(true);
+      setShouldAnimate(true);
     }
-  }, [isLoading]);
+  }, []);
 
   const handleAcceptSoundModal = () => {
     setShowWelcomeModal(false);

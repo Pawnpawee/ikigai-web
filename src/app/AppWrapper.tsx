@@ -10,9 +10,7 @@ import React from "react";
 import { getLenisOptions } from "@/utils/lenisConfig";
 import GifCursor from "./components/GifCursor";
 import Navbar from "./components/Navbar";
-import Preloader from "./components/Preloader";
 import ScrollTo from "./components/ScrollTo";
-import { AssetLoaderProvider } from "./contexts/AssetLoaderContext";
 import { useDevice } from "./contexts/DeviceContext";
 
 function AppLogic({ children }: { children: React.ReactNode }) {
@@ -25,8 +23,6 @@ function AppLogic({ children }: { children: React.ReactNode }) {
 
   return (
     <>
-      <Preloader />
-      {/* //todo: wait for design */}
       <GifCursor />
       {/* //todo: wait for design */}
 
@@ -51,12 +47,10 @@ export default function AppWrapper({
   );
 
   return (
-    <AssetLoaderProvider>
-      <ReactLenis root options={lenisOptions}>
-        <LazyMotion features={domAnimation}>
-          <AppLogic>{children}</AppLogic>
-        </LazyMotion>
-      </ReactLenis>
-    </AssetLoaderProvider>
+    <ReactLenis root options={lenisOptions}>
+      <LazyMotion features={domAnimation}>
+        <AppLogic>{children}</AppLogic>
+      </LazyMotion>
+    </ReactLenis>
   );
 }

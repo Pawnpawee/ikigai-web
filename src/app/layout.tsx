@@ -30,6 +30,8 @@ const luxuriousScript = Luxurious_Script({
 
 export const metadata: Metadata = {
   title: "Ikigai - Life Of Journey",
+  description:
+    "Discover Your Ikigai: Uncover the intersection of passion, mission, vocation, and profession to find purpose and fulfillment in life.",
 };
 
 export default function RootLayout({

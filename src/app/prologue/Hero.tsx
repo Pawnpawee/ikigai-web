@@ -13,6 +13,7 @@ import { useAudio } from "@/app/contexts/AudioContext";
 import { SCENE_HERO_ITEMS } from "@/app/data/scene_hero.data";
 import IkigaiCircle from "../components/reusable/IkigaiCircle";
 import SceneLayer from "../components/reusable/SceneLayer";
+import { useDevice } from "../contexts/DeviceContext";
 import { useUI } from "../contexts/UIStarContext";
 
 interface HeroProps {
@@ -33,6 +34,8 @@ export default function Hero({ shouldAnimate }: HeroProps) {
 
   const mouseX = useMotionValue(0.5);
   const mouseY = useMotionValue(0.5);
+
+  const { isMobile } = useDevice();
 
   useEffect(() => {
     const handleMouseMove = (e: MouseEvent) => {
@@ -254,25 +257,25 @@ export default function Hero({ shouldAnimate }: HeroProps) {
               initial: { opacity: 0 },
               animate: shouldAnimate ? { opacity: 1 } : { opacity: 0 },
               transition: mountainTransitions.mountain1,
-              style: { x: xMid, y: yMid },
+              style: isMobile ? {} : { x: xMid, y: yMid },
             },
             "hill-c-f": {
               initial: { opacity: 0 },
               animate: shouldAnimate ? { opacity: 1 } : { opacity: 0 },
               transition: mountainTransitions.mountain2,
-              style: { x: xFront, y: yFront },
+              style: isMobile ? {} : { x: xFront, y: yFront },
             },
             "hill-r-f": {
               initial: { opacity: 0 },
               animate: shouldAnimate ? { opacity: 1 } : { opacity: 0 },
               transition: mountainTransitions.mountain3,
-              style: { x: xFront, y: yFront },
+              style: isMobile ? {} : { x: xFront, y: yFront },
             },
             "hill-l-f": {
               initial: { opacity: 0 },
               animate: shouldAnimate ? { opacity: 1 } : { opacity: 0 },
               transition: mountainTransitions.mountain4,
-              style: { x: xBack, y: yBack },
+              style: isMobile ? {} : { x: xBack, y: yBack },
             },
           }}
         />
@@ -365,7 +368,7 @@ export default function Hero({ shouldAnimate }: HeroProps) {
             />
           </m.div>
         </m.div>
-        <h2 className="typo-h3-serif text-white whitespace-nowrap">
+        <p className="typo-h2-serif text-white whitespace-nowrap">
           {textChars.map((char, index) => (
             <m.span
               key={`char-${index}-${char}`}
@@ -375,7 +378,7 @@ export default function Hero({ shouldAnimate }: HeroProps) {
               {char === " " ? "\u00A0" : char}
             </m.span>
           ))}
-        </h2>
+        </p>
       </m.div>
     </m.div>
   );

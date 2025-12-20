@@ -21,7 +21,7 @@ const nextConfig: NextConfig = {
     optimizePackageImports: [
       "react-icons",
       "lottie-react",
-      "howler",
+      "react-howler",
       "framer-motion",
     ],
   },
