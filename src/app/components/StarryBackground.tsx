@@ -1,7 +1,7 @@
 // app/components/layout/GlobalBackground.tsx
 "use client";
 
-import { AnimatePresence, m } from "framer-motion";
+import { m } from "framer-motion";
 import { useEffect, useState } from "react";
 import { useUI } from "@/app/contexts/UIStarContext";
 import LazyLottie from "./reusable/LazyLottie";
@@ -17,7 +17,7 @@ const StarryBackground = () => {
   if (!isMounted) return null;
 
   return (
-    <AnimatePresence>
+    <>
       {showStars && (
         <m.div
           key="global-starry-bg"
@@ -33,7 +33,7 @@ const StarryBackground = () => {
           />
         </m.div>
       )}
-    </AnimatePresence>
+    </>
   );
 };
 

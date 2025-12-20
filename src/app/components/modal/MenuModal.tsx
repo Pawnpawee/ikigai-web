@@ -1,5 +1,5 @@
 "use client";
-import { AnimatePresence, m } from "framer-motion";
+import { m } from "framer-motion";
 import Link from "next/link";
 import type { ChangeEvent } from "react";
 import { useAudio } from "@/app/contexts/AudioContext";
@@ -22,7 +22,7 @@ export default function MenuModal({ isOpen, onClose }: MenuModalProps) {
     setSfxVolume(newVolume);
   };
   return (
-    <AnimatePresence>
+    <>
       {isOpen && (
         <>
           {/* Backdrop */}
@@ -334,6 +334,6 @@ export default function MenuModal({ isOpen, onClose }: MenuModalProps) {
           </m.div>
         </>
       )}
-    </AnimatePresence>
+    </>
   );
 }

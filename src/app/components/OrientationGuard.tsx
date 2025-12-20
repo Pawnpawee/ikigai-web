@@ -1,14 +1,14 @@
 // components/OrientationGuard.tsx
 "use client";
 
-import { AnimatePresence, m } from "framer-motion";
+import { m } from "framer-motion";
 import { useDevice } from "@/app/contexts/DeviceContext";
 
 export default function OrientationGuard() {
   const { isInvalidOrientation } = useDevice();
 
   return (
-    <AnimatePresence>
+    <>
       {isInvalidOrientation && (
         <m.div className="fixed inset-0 z-99 bg-black text-white flex flex-col items-center justify-center p-6 text-center">
           {/* Icon หมุนจอ */}
@@ -25,6 +25,6 @@ export default function OrientationGuard() {
           </p>
         </m.div>
       )}
-    </AnimatePresence>
+    </>
   );
 }

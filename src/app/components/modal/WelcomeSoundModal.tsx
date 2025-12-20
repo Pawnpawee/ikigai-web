@@ -1,5 +1,5 @@
 "use client";
-import { AnimatePresence, m } from "framer-motion";
+import { m } from "framer-motion";
 
 interface WelcomeSoundModalProps {
   isOpen: boolean;
@@ -13,7 +13,7 @@ export default function WelcomeSoundModal({
   onDecline,
 }: WelcomeSoundModalProps) {
   return (
-    <AnimatePresence>
+    <>
       {isOpen && (
         <>
           {/* Backdrop */}
@@ -116,6 +116,6 @@ export default function WelcomeSoundModal({
           </m.div>
         </>
       )}
-    </AnimatePresence>
+    </>
   );
 }
