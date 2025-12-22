@@ -27,7 +27,6 @@ const nextConfig: NextConfig = {
       "framer-motion",
     ],
   },
-
 };
 
 export default withBundleAnalyzer(nextConfig);

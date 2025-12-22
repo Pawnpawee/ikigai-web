@@ -54,17 +54,13 @@ export default function Hero({ shouldAnimate }: HeroProps) {
   const smoothMouseX = useSpring(mouseX, springConfig);
   const smoothMouseY = useSpring(mouseY, springConfig);
 
-  // ภูเขาหลังสุด (ขยับน้อยมาก)
+  // ภูเขาหลังสุด
   const xBack = useTransform(smoothMouseX, [0, 1], [15, -15]);
-  const yBack = useTransform(smoothMouseY, [0, 1], [10, -10]);
+  const yBack = useTransform(smoothMouseY, [0, 1], [5, -5]);
 
-  // ภูเขากลาง (ขยับปานกลาง)
-  const xMid = useTransform(smoothMouseX, [0, 1], [30, -30]);
-  const yMid = useTransform(smoothMouseY, [0, 1], [15, -15]);
-
-  // ภูเขาหน้าสุด (ขยับเยอะสุด ดูใกล้ตา)
-  const xFront = useTransform(smoothMouseX, [0, 1], [45, -45]);
-  const yFront = useTransform(smoothMouseY, [0, 1], [20, -20]);
+  // ภูเขาหน้าสุด 
+  const xFront = useTransform(smoothMouseX, [0, 1], [5, -5]);
+  const yFront = useTransform(smoothMouseY, [0, 1], [5, -5]);
 
   useEffect(() => {
     if (shouldAnimate) {
@@ -175,6 +171,7 @@ export default function Hero({ shouldAnimate }: HeroProps) {
         transition: {
           duration: 1.5,
         },
+        willChange: "filter",
       },
     }),
     [],
@@ -235,6 +232,48 @@ export default function Hero({ shouldAnimate }: HeroProps) {
     [shouldAnimate],
   );
 
+  const itemOverrides = useMemo(
+    () => ({
+      "hill-c-b": {
+        initial: { opacity: 0 },
+        animate: shouldAnimate ? { opacity: 1 } : { opacity: 0 },
+        transition: mountainTransitions.mountain1,
+        style: isMobile ? {} : { x: xBack, y: yBack, willChange: "transform" },
+      },
+      "hill-c-f": {
+        initial: { opacity: 0 },
+        animate: shouldAnimate ? { opacity: 1 } : { opacity: 0 },
+        transition: mountainTransitions.mountain2,
+        style: isMobile ? {} : { x: xBack, y: yBack, willChange: "transform" },
+      },
+      "hill-r-f": {
+        initial: { opacity: 0 },
+        animate: shouldAnimate ? { opacity: 1 } : { opacity: 0 },
+        transition: mountainTransitions.mountain3,
+        style: isMobile
+          ? {}
+          : { x: xFront, y: yFront, willChange: "transform" },
+      },
+      "hill-l-f": {
+        initial: { opacity: 0 },
+        animate: shouldAnimate ? { opacity: 1 } : { opacity: 0 },
+        transition: mountainTransitions.mountain4,
+        style: isMobile
+          ? {}
+          : { x: xFront, y: yFront, willChange: "transform" },
+      },
+    }),
+    [
+      shouldAnimate,
+      isMobile,
+      xFront,
+      yFront,
+      xBack,
+      yBack,
+      mountainTransitions,
+    ],
+  );
+
   return (
     <m.div
       ref={ref}
@@ -252,32 +291,7 @@ export default function Hero({ shouldAnimate }: HeroProps) {
           items={SCENE_HERO_ITEMS}
           animations={{}}
           containerAspectRatio="1920 / 1080"
-          itemOverrides={{
-            "hill-c-b": {
-              initial: { opacity: 0 },
-              animate: shouldAnimate ? { opacity: 1 } : { opacity: 0 },
-              transition: mountainTransitions.mountain1,
-              style: isMobile ? {} : { x: xMid, y: yMid },
-            },
-            "hill-c-f": {
-              initial: { opacity: 0 },
-              animate: shouldAnimate ? { opacity: 1 } : { opacity: 0 },
-              transition: mountainTransitions.mountain2,
-              style: isMobile ? {} : { x: xFront, y: yFront },
-            },
-            "hill-r-f": {
-              initial: { opacity: 0 },
-              animate: shouldAnimate ? { opacity: 1 } : { opacity: 0 },
-              transition: mountainTransitions.mountain3,
-              style: isMobile ? {} : { x: xFront, y: yFront },
-            },
-            "hill-l-f": {
-              initial: { opacity: 0 },
-              animate: shouldAnimate ? { opacity: 1 } : { opacity: 0 },
-              transition: mountainTransitions.mountain4,
-              style: isMobile ? {} : { x: xBack, y: yBack },
-            },
-          }}
+          itemOverrides={itemOverrides}
         />
       </m.div>
 

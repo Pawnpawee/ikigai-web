@@ -1,5 +1,5 @@
 "use client";
-import { Howl, Howler } from "howler";
+import type { Howler as HowlerType, Howl as HowlType } from "howler";
 import type React from "react";
 import {
   createContext,
@@ -18,8 +18,8 @@ interface AudioContextType {
   currentBgMusic: string | null;
 
   // Actions
-  start: () => void;
-  stop: () => void;
+  start: () => Promise<void>; //? เปลี่ยนเป็น Promise เพราะต้องรอ load library
+  stop: () => Promise<void>;
   setBgMusic: (src: string | null) => void;
   setVolume: (vol: number) => void;
   setSfxVolume: (vol: number) => void;
@@ -30,13 +30,34 @@ const AudioContext = createContext<AudioContextType | undefined>(undefined);
 
 export function AudioProvider({ children }: { children: React.ReactNode }) {
   // --- Refs & State ---
-  const soundRef = useRef<Howl | null>(null);
+  //? ใช้ Ref เก็บ Class และ Object ที่โหลดมาแบบ Dynamic
+  const HowlRef = useRef<typeof HowlType | null>(null);
+  const HowlerRef = useRef<typeof HowlerType | null>(null);
+
+  const soundRef = useRef<HowlType | null>(null);
   const isMutedRef = useRef(true);
 
   const [isMuted, setIsMuted] = useState(true);
   const [volume, setVolume] = useState(30);
   const [sfxVolume, setSfxVolumeState] = useState(30);
   const [currentBgMusic, setCurrentBgMusic] = useState<string | null>(null);
+
+  const loadHowler = useCallback(async () => {
+    if (HowlRef.current && HowlerRef.current) {
+      return { Howl: HowlRef.current, Howler: HowlerRef.current };
+    }
+
+    try {
+      //? จุดสำคัญ: import('howler') จะสร้าง Network Request แยกออกมา
+      const mod = await import("howler");
+      HowlRef.current = mod.Howl;
+      HowlerRef.current = mod.Howler;
+      return { Howl: mod.Howl, Howler: mod.Howler };
+    } catch (error) {
+      console.error("Failed to load audio library:", error);
+      return null;
+    }
+  }, []);
 
   // --- Helper: Save to LocalStorage ---
   const saveSettings = useCallback(
@@ -54,39 +75,37 @@ export function AudioProvider({ children }: { children: React.ReactNode }) {
 
   // --- Initialization ---
   useEffect(() => {
+    //? Logic นี้ทำงานทันทีเพื่อ UI State แต่จะไม่แตะ Howler จนกว่าจะโหลดเสร็จ
     const saved = localStorage.getItem("audioSettings");
     if (saved) {
-      const {
-        isMuted: savedMuted,
-        volume: savedVol,
-        sfxVolume: savedSfxVol,
-      } = JSON.parse(saved);
-
-      // ตั้งค่า Volume เริ่มต้น
-      if (savedVol !== undefined) {
-        setVolume(savedVol);
-        Howler.volume(savedVol / 100);
-      }
-
-      // ตั้งค่า SFX Volume
-      if (savedSfxVol !== undefined) {
-        setSfxVolumeState(savedSfxVol);
-      }
-
-      // ตั้งค่า Mute
-      if (savedMuted === true) {
+      const parsed = JSON.parse(saved);
+      if (parsed.volume !== undefined) setVolume(parsed.volume);
+      if (parsed.sfxVolume !== undefined) setSfxVolumeState(parsed.sfxVolume);
+      if (parsed.isMuted === true) {
         setIsMuted(true);
         isMutedRef.current = true;
-        Howler.mute(true);
+      } else {
+        setIsMuted(false);
+        isMutedRef.current = false;
       }
     } else {
-      // Default state
       setIsMuted(false);
       isMutedRef.current = false;
-      Howler.mute(false);
     }
 
-    const timer = setTimeout(() => {
+    //? ย้ายการ Init Audio ไปทำแบบ Async
+    const initAudio = async () => {
+      const lib = await loadHowler();
+      if (!lib) return;
+
+      const { Howler, Howl } = lib;
+
+      // Apply saved settings to Howler global
+      const savedVol = saved ? JSON.parse(saved).volume : 30;
+      Howler.volume(savedVol / 100);
+      Howler.mute(isMutedRef.current);
+
+      // Start Default BG Music
       const defaultBgMusic = "/assets/Sound/bg-music.mp3";
 
       const bgSound = new Howl({
@@ -96,24 +115,31 @@ export function AudioProvider({ children }: { children: React.ReactNode }) {
 
       soundRef.current = bgSound;
       setCurrentBgMusic(defaultBgMusic);
-    }, 100);
+    };
+
+    //? Delay การโหลดออกไปเล็กน้อยเพื่อให้หน้าเว็บ Render เสร็จก่อน (User Experience ดีขึ้น)
+    const timer = setTimeout(() => {
+      initAudio();
+    }, 1000); // รอ 1 วินาที หรือรอจนกว่า user จะ interact ก็ได้
 
     return () => {
       clearTimeout(timer);
-      Howler.unload();
+      if (HowlerRef.current) HowlerRef.current.unload();
     };
-  }, []);
+  }, [loadHowler]);
 
   // --- Actions ---
 
   // 1. Start: เปิดเสียง (Unmute)
-  const start = () => {
+  const start = async () => {
+    const lib = await loadHowler();
+    if (!lib) return;
+
     setIsMuted(false);
     isMutedRef.current = false;
-    Howler.mute(false);
+    lib.Howler.mute(false);
     saveSettings({ isMuted: false });
 
-    // Resume ถ้ามีเพลงค้างอยู่
     if (soundRef.current && !soundRef.current.playing()) {
       soundRef.current.play();
       soundRef.current.fade(0, volume / 100, 100);
@@ -121,18 +147,25 @@ export function AudioProvider({ children }: { children: React.ReactNode }) {
   };
 
   // 2. Stop: ปิดเสียง (Mute)
-  const stop = () => {
+  const stop = async () => {
+    const lib = await loadHowler();
+    if (!lib) return;
+
     setIsMuted(true);
     isMutedRef.current = true;
-    Howler.mute(true);
+    lib.Howler.mute(true);
     saveSettings({ isMuted: true });
   };
 
   // 3. Set Volume
   const updateVolume = (vol: number) => {
     setVolume(vol);
-    Howler.volume(vol / 100);
     saveSettings({ volume: vol });
+
+    //? เช็คก่อนว่าโหลด Library หรือยัง ถ้ายังไม่โหลดก็แค่เซฟ state ไว้
+    if (HowlerRef.current) {
+      HowlerRef.current.volume(vol / 100);
+    }
   };
 
   // 3.5. Set SFX Volume
@@ -142,12 +175,15 @@ export function AudioProvider({ children }: { children: React.ReactNode }) {
   };
 
   // 4. Set Background Music
-  const setBgMusic = (src: string | null) => {
+  const setBgMusic = async (src: string | null) => {
     if (currentBgMusic === src) return;
 
-    const prevSound = soundRef.current;
+    //? โหลด Library ก่อน
+    const lib = await loadHowler();
+    if (!lib) return;
+    const { Howl } = lib;
 
-    // Step A: Fade Out ตัวเก่า
+    const prevSound = soundRef.current;
     if (prevSound) {
       prevSound.fade(prevSound.volume(), 0, 1000);
       prevSound.once("fade", () => {
@@ -156,10 +192,8 @@ export function AudioProvider({ children }: { children: React.ReactNode }) {
       });
     }
 
-    // Step B: เล่นตัวใหม่
     if (src) {
       setCurrentBgMusic(src);
-
       const newSound = new Howl({
         src: [src],
         loop: true,
@@ -167,10 +201,8 @@ export function AudioProvider({ children }: { children: React.ReactNode }) {
         autoplay: false,
         onloaderror: (_id, err) => console.error("Load Error:", err),
         onplayerror: (_id, err) => {
-          console.warn("Play Error:", err);
-          soundRef.current?.once("unlock", () => {
-            soundRef.current?.play();
-          });
+          // Error handling logic
+          console.warn("Play error", err);
         },
       });
 
@@ -187,8 +219,13 @@ export function AudioProvider({ children }: { children: React.ReactNode }) {
   };
 
   const playSfx = useCallback(
-    (src: string, options?: { volumeMultiplier?: number }) => {
+    async (src: string, options?: { volumeMultiplier?: number }) => {
       if (isMutedRef.current) return;
+
+      //? Load on demand: ถ้า User ยังไม่เคยเปิดเสียง Sfx จะโหลด library ตอนนี้
+      const lib = await loadHowler();
+      if (!lib) return;
+      const { Howl } = lib;
 
       try {
         new Howl({
@@ -201,7 +238,7 @@ export function AudioProvider({ children }: { children: React.ReactNode }) {
         console.error("Failed to play SFX:", error);
       }
     },
-    [sfxVolume],
+    [sfxVolume, loadHowler],
   );
 
   return (

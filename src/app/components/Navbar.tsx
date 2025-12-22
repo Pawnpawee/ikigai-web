@@ -16,11 +16,11 @@ export default function Navbar() {
     ? "/assets/Icon/mute.svg"
     : "/assets/Icon/music.svg";
 
-  const handleMusicClick = () => {
+  const handleMusicClick = async () => {
     if (isMuted) {
-      start(); // ถ้าเงียบอยู่ -> ให้เริ่มเล่น (Unmute & Play)
+      await start(); // ถ้าเงียบอยู่ -> ให้เริ่มเล่น (Unmute & Play)
     } else {
-      stop(); // ถ้าเล่นอยู่ -> ให้หยุด (Mute & Pause)
+      await stop(); // ถ้าเล่นอยู่ -> ให้หยุด (Mute & Pause)
     }
   };
 

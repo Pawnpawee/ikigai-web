@@ -33,8 +33,14 @@ export const metadata: Metadata = {
   description:
     "Discover Your Ikigai: Uncover the intersection of passion, mission, vocation, and profession to find purpose and fulfillment in life.",
   robots: {
-    index: true, // อนุญาตให้ Index
-    follow: true, // อนุญาตให้ตาม Link ต่อ
+    index: true, //? อนุญาตให้ index หน้านี้
+    follow: true, //? อนุญาตให้ bot ตาม link ในหน้านี้ไปหน้าอื่นต่อได้
+    nocache: true,
+    googleBot: {
+      index: true,
+      follow: true,
+      noimageindex: false,
+    },
   },
 };
 

@@ -95,5 +95,8 @@ src/
 
 
 Clean up ด้วย
+npx knip
 npm run lint
 npx biome check --write
+
+Animate ค่า opacity, transform (scale, rotate, x, y) แทนการเปลี่ยน layout properties เช่น width, height, margin, padding เพื่อประสิทธิภาพที่ดีกว่า

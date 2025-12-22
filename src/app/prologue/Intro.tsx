@@ -70,7 +70,7 @@ export default function Intro() {
                 opacity: starOpacity,
                 scale: starScale,
                 rotate: starRotate,
-                willChange: "transform, opacity, filter",
+                willChange: "transform, opacity",
               }}
               className="absolute flex items-center justify-center"
             >
