@@ -58,7 +58,7 @@ export default function Hero({ shouldAnimate }: HeroProps) {
   const xBack = useTransform(smoothMouseX, [0, 1], [15, -15]);
   const yBack = useTransform(smoothMouseY, [0, 1], [5, -5]);
 
-  // ภูเขาหน้าสุด 
+  // ภูเขาหน้าสุด
   const xFront = useTransform(smoothMouseX, [0, 1], [5, -5]);
   const yFront = useTransform(smoothMouseY, [0, 1], [5, -5]);
 
