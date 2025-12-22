@@ -23,15 +23,15 @@ export default function Home() {
     }
   }, []);
 
-  const handleAcceptSoundModal = async () => {
+  const handleAcceptSoundModal = () => {
     setShowWelcomeModal(false);
-    await start();
+    start();
     setShouldAnimate(true);
   };
 
-  const handleDeclineSoundModal = async () => {
+  const handleDeclineSoundModal = () => {
     setShowWelcomeModal(false);
-    await stop();
+    stop();
     setShouldAnimate(true);
   };
 
