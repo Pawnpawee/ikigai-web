@@ -145,9 +145,9 @@ export default function Sleeping() {
 
   const textSectionProgress = useTransform(
     scrollYProgress,
-    [0.5625, 0.8], 
-    [0, 1] // ส่งค่า 0-1 แบบ Linear
-);
+    [0.5625, 0.8],
+    [0, 1], // ส่งค่า 0-1 แบบ Linear
+  );
 
   const ry = useTransform(
     scrollYProgress,

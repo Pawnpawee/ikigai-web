@@ -4,7 +4,7 @@ import { type MotionValue, m, useTransform } from "framer-motion";
 
 interface SubtitleScrollProps {
   subtitles: string[];
-  //? ค่า 0-1 ของช่วงเวลานั้นๆ 
+  //? ค่า 0-1 ของช่วงเวลานั้นๆ
   progress: MotionValue<number>;
   className?: string;
 }
@@ -20,7 +20,6 @@ export default function SubtitleScroll({
   return (
     <div className={`relative ${className}`}>
       {subtitles.map((subtitle, index) => {
-        
         const startFadeIn = index * portionSize;
         const fullyVisible = startFadeIn + portionSize * 0.2;
         const startFadeOut = (index + 1) * portionSize - portionSize * 0.2;
@@ -34,7 +33,7 @@ export default function SubtitleScroll({
 
         return (
           <m.div
-            key={subtitle} 
+            key={subtitle}
             className="absolute inset-0 flex justify-center items-center px-8"
             style={{ opacity }}
           >
