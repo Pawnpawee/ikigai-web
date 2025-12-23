@@ -1,0 +1,86 @@
+import type { SceneItemData } from "../components/reusable/SceneLayer";
+
+//? Scene 1 dimensions from Figma: 1920x2160, converted to percentage for 1920x1080 aspect ratio
+//? Total 10 images in this scene (excluding human)
+export const SCENE_1_ITEMS: SceneItemData[] = [
+  {
+    id: "table",
+    src: "/assets/Scene/Scene1/table.webp",
+    alt: "Desk table",
+    style: { left: "2.29%", top: "86.54%", width: "96.30%", height: "39.27%" },
+    animGroup: 10,
+  },
+  {
+    id: "poster1",
+    src: "/assets/Scene/Scene1/poster1.webp",
+    alt: "Wall poster group 1",
+    style: { left: "7.03%", top: "-4.16%", width: "87.50%", height: "37.26%" },
+    animGroup: 1,
+  },
+  {
+    id: "poster2",
+    src: "/assets/Scene/Scene1/poster2.webp",
+    alt: "Wall poster group 2",
+    style: { left: "11.31%", top: "10.23%", width: "53.82%", height: "34.27%" },
+    animGroup: 2,
+  },
+  {
+    id: "poster3",
+    src: "/assets/Scene/Scene1/poster3.webp",
+    alt: "Wall poster group 3",
+    style: { left: "48.03%", top: "38.40%", width: "50.12%", height: "30.69%" },
+    animGroup: 3,
+  },
+  {
+    id: "poster4",
+    src: "/assets/Scene/Scene1/poster4.webp",
+    alt: "Wall poster group 4",
+    style: { left: "-1.51%", top: "53.79%", width: "26.55%", height: "22.83%" },
+    animGroup: 4,
+  },
+  {
+    id: "poster5",
+    src: "/assets/Scene/Scene1/poster5.webp",
+    alt: "Wall poster group 5",
+    style: { left: "79.31%", top: "72.21%", width: "24.01%", height: "10.07%" },
+    animGroup: 5,
+  },
+  {
+    id: "poster8",
+    src: "/assets/Scene/Scene1/poster8.webp",
+    alt: "Wall poster",
+    style: { left: "105.38%", top: "59.01%", width: "12.81%", height: "8.81%" },
+    animGroup: 5,
+  },
+  {
+    id: "computer",
+    src: "/assets/Scene/Scene1/Computer.webp",
+    alt: "Computer workstation",
+    style: { left: "25.06%", top: "57.14%", width: "49.88%", height: "35.14%" },
+    animGroup: 11,
+  },
+  {
+    id: "light",
+    src: "/assets/Scene/Scene1/light.webp",
+    alt: "Lamp light",
+    style: { left: "23.84%", top: "61.59%", width: "51.00%", height: "29.94%" },
+    animGroup: 99,
+    className: "mix-blend-screen",
+  },
+  {
+    id: "set1",
+    src: "/assets/Scene/Scene1/set1.webp",
+    alt: "Desk items set 1: book, pen, pencil box, post-it",
+    style: { left: "74.60%", top: "83.84%", width: "18.31%", height: "10.81%" },
+    animGroup: 14,
+  },
+  {
+    id: "set2",
+    src: "/assets/Scene/Scene1/set2.webp",
+    alt: "Desk items set 2: lamp, book, paper",
+    style: { left: "5.91%", top: "56.03%", width: "24.92%", height: "38.69%" },
+    animGroup: 13,
+  },
+];
+
+export default SCENE_1_ITEMS;

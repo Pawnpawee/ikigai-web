@@ -1,24 +1,37 @@
 import type { Metadata } from "next";
-import { Geist, Geist_Mono } from "next/font/google";
+import { Anuphan, Bentham, Luxurious_Script } from "next/font/google";
 import "./globals.css";
-import { AudioProvider } from "./contexts/AudioContext";
 import AppWrapper from "./AppWrapper";
+import OrientationGuard from "./components/OrientationGuard";
+import StarryBackground from "./components/StarryBackground";
+import { AudioProvider } from "./contexts/AudioContext";
+import { DeviceProvider } from "./contexts/DeviceContext";
+import { UIStarProvider } from "./contexts/UIStarContext";
 
-const geistSans = Geist({
-  variable: "--font-geist-sans",
-  subsets: ["latin"],
+const anuphan = Anuphan({
+  variable: "--font-anuphan",
+  subsets: ["thai", "latin"],
+  display: "swap",
 });
 
-const geistMono = Geist_Mono({
-  variable: "--font-geist-mono",
+const bentham = Bentham({
+  variable: "--font-bentham",
+  weight: "400",
   subsets: ["latin"],
+  display: "swap",
+});
+
+const luxuriousScript = Luxurious_Script({
+  variable: "--font-luxurious-script",
+  weight: "400",
+  subsets: ["latin"],
+  display: "swap",
 });
 
 export const metadata: Metadata = {
   title: "Ikigai - Life Of Journey",
   description:
-    '"Ikigai: The Journey of Life" is an AI-powered interactive website designed to help graduating students and first-time job seekers discover their purpose. It combines interactive storytelling with a specialized AI to guide users in finding their "Ikigai," preparing them for a confident and meaningful transition into the working world.',
-  viewport: "width=device-width, initial-scale=1, viewport-fit=cover",
+    "Discover Your Ikigai: Uncover the intersection of passion, mission, vocation, and profession to find purpose and fulfillment in life.",
 };
 
 export default function RootLayout({
@@ -29,11 +42,18 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body
-        className={`${geistSans.variable} ${geistMono.variable} antialiased`}
+        className={`${anuphan.variable} ${bentham.variable} ${luxuriousScript.variable} antialiased`}
       >
-        <AudioProvider>
-          <AppWrapper>{children}</AppWrapper>
-        </AudioProvider>
+        <DeviceProvider>
+          <OrientationGuard />
+          {/* //todo: wait for design */}
+          <AudioProvider>
+            <UIStarProvider>
+              <StarryBackground />
+              <AppWrapper>{children}</AppWrapper>
+            </UIStarProvider>
+          </AudioProvider>
+        </DeviceProvider>
       </body>
     </html>
   );

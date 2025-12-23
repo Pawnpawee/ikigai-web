@@ -1,221 +1,54 @@
-@import url("https://fonts.googleapis.com/css2?family=Anuphan:wght@100..700&family=Bentham&family=Luxurious+Script&display=swap");
 @import "tailwindcss";
 
 @theme inline {
-  /* Palette colors (from palette.ts). Shades generate e.g. text-orange-500/bg-orange-500. */
   --color-black: #101518;
   --color-white: #fcf7f1;
-
-  /* App semantic colors */
   --color-background: var(--color-black);
   --color-foreground: var(--color-white);
+  --color-overlay: #15237b;
 
-  /* Orange */
-  --color-orange-100: #ffe3de;
-  --color-orange-200: #ffc7bd;
-  --color-orange-300: #feaa9d;
-  --color-orange-400: #fe8e7c;
-  --color-orange-500: #fe725b;
-  --color-orange-600: #cb5b49;
-  --color-orange-700: #984437;
-  --color-orange-800: #662e24;
-  --color-orange-900: #331712;
-  --color-orange: var(--color-orange-500);
-
-  /* Yellow */
-  --color-yellow-100: #fff2ce;
-  --color-yellow-200: #ffe49e;
-  --color-yellow-300: #ffd76d;
-  --color-yellow-400: #ffc93d;
-  --color-yellow-500: #ffbc0c;
-  --color-yellow-600: #cc960a;
-  --color-yellow-700: #997107;
-  --color-yellow-800: #664b05;
-  --color-yellow-900: #332602;
-  --color-yellow: var(--color-yellow-500);
-
-  /* Blue */
-  --color-blue-100: #d6e3f3;
   --color-blue-200: #aec7e7;
-  --color-blue-300: #85abdb;
-  --color-blue-400: #5d8fcf;
-  --color-blue-500: #3473c3;
-  --color-blue-600: #2a5c9c;
-  --color-blue-700: #1f4575;
-  --color-blue-800: #152e4e;
   --color-blue-900: #0a1727;
-  --color-blue: var(--color-blue-500);
-
-  /* Red */
-  --color-red-100: #fbd9dc;
-  --color-red-200: #f7b3b9;
-  --color-red-300: #f48d97;
-  --color-red-400: #f06774;
-  --color-red-500: #ec4151;
-  --color-red-600: #bd3441;
-  --color-red-700: #8e2731;
-  --color-red-800: #5e1a20;
-  --color-red-900: #2f0d10;
-  --color-red: var(--color-red-500);
-
-  /* Purple */
-  --color-purple-100: #e8d6ff;
-  --color-purple-200: #d1adfe;
-  --color-purple-300: #bb83fe;
-  --color-purple-400: #a45afd;
-  --color-purple-500: #8d31fd;
-  --color-purple-600: #7127ca;
-  --color-purple-700: #551d98;
-  --color-purple-800: #381465;
-  --color-purple-900: #1c0a33;
-  --color-purple: var(--color-purple-500);
-
-  /* Magenta */
-  --color-magenta-100: #fcdcff;
-  --color-magenta-200: #f9b9fe;
-  --color-magenta-300: #f595fe;
-  --color-magenta-400: #f272fd;
-  --color-magenta-500: #ef4ffd;
-  --color-magenta-600: #bf3fca;
-  --color-magenta-700: #8f2f98;
-  --color-magenta-800: #602065;
-  --color-magenta-900: #301033;
-  --color-magenta: var(--color-magenta-500);
-
-  /* Brown */
-  --color-brown-100: #f3dccf;
-  --color-brown-200: #e7b99f;
-  --color-brown-300: #da956e;
-  --color-brown-400: #ce723e;
-  --color-brown-500: #c24f0e;
-  --color-brown-600: #9b3f0b;
-  --color-brown-700: #742f08;
-  --color-brown-800: #4e2006;
-  --color-brown-900: #271003;
-  --color-brown: var(--color-brown-500);
-
-  /* Green */
-  --color-green-100: #d7e6db;
-  --color-green-200: #afccb8;
-  --color-green-300: #88b394;
-  --color-green-400: #609971;
-  --color-green-500: #38804d;
-  --color-green-600: #2d663e;
-  --color-green-700: #224d2e;
-  --color-green-800: #16331f;
-  --color-green-900: #0b1a0f;
-  --color-green: var(--color-green-500);
-
-  /* Lime */
-  --color-lime-100: #f9fbd6;
-  --color-lime-200: #f3f8ac;
-  --color-lime-300: #edf483;
-  --color-lime-400: #e7f159;
-  --color-lime-500: #e1ed30;
-  --color-lime-600: #b4be26;
-  --color-lime-700: #878e1d;
-  --color-lime-800: #5a5f13;
-  --color-lime-900: #2d2f0a;
-  --color-lime: var(--color-lime-500);
-
-  /* Slate */
-  --color-slate-100: #e7eaed;
-  --color-slate-200: #cfd5dc;
-  --color-slate-300: #b7c0ca;
-  --color-slate-400: #9fabb9;
-  --color-slate-500: #8796a7;
-  --color-slate-600: #6c7b86;
-  --color-slate-700: #515c64;
-  --color-slate-800: #363e43;
-  --color-slate-900: #1b1f21;
-  --color-slate: var(--color-slate-500);
-
-  /* Gradients */
-  --white-linear: linear-gradient(
-    180deg,
-    var(--color-slate-200) 0%,
-    var(--color-slate-100) 100%
-  );
-  --white-radial: radial-gradient(
-    circle,
-    var(--color-slate-200) 0%,
-    var(--color-slate-100) 100%
-  );
 
   --black-linear: linear-gradient(
     180deg,
     var(--color-black) 0%,
     var(--color-blue-900) 100%
   );
-  --black-radial: radial-gradient(
-    circle,
-    var(--color-black) 0%,
-    var(--color-blue-900) 100%
-  );
 
-  --primary-linear: linear-gradient(
-    180deg,
-    var(--color-blue-500) 0%,
-    var(--color-orange-500) 100%
-  );
-  --primary-radial: radial-gradient(
-    circle,
-    var(--color-blue-500) 0%,
-    var(--color-orange-500) 100%
-  );
-
-  --love-linear: linear-gradient(
-    180deg,
-    var(--color-red-500) 0%,
-    var(--color-red-300) 100%
-  );
-  --love-radial: radial-gradient(
-    circle,
-    var(--color-red-500) 0%,
-    var(--color-red-300) 100%
-  );
-
-  --skill-linear: linear-gradient(
-    180deg,
-    var(--color-purple-500) 0%,
-    var(--color-magenta-500) 100%
-  );
-  --skill-radial: radial-gradient(
-    circle,
-    var(--color-purple-500) 0%,
-    var(--color-magenta-500) 100%
-  );
-
-  --world-linear: linear-gradient(
-    180deg,
-    var(--color-green-500) 0%,
-    var(--color-lime-500) 100%
-  );
-  --world-radial: radial-gradient(
-    circle,
-    var(--color-green-500) 0%,
-    var(--color-lime-500) 100%
-  );
-
-  --paid-linear: linear-gradient(
-    180deg,
-    var(--color-brown-400) 0%,
-    var(--color-yellow-400) 100%
-  );
-  --paid-radial: radial-gradient(
-    circle,
-    var(--color-brown-400) 0%,
-    var(--color-yellow-400) 100%
-  );
-
-  /* Fonts */
   --font-anuphan: "Anuphan", sans-serif;
   --font-bentham: "Bentham", serif;
+
+  --animate-bounce-slow: bounce-slow 3s infinite ease-out;
+  --animate-fade-loop: fade-loop 4s infinite ease-out;
+}
+
+@keyframes bounce-slow {
+  0%,
+  20%,
+  80%,
+  100% {
+    transform: translateY(0);
+    opacity: 0;
+  }
+  40% {
+    transform: translateY(20px);
+    opacity: 1;
+  }
+}
+
+@keyframes fade-loop {
+  0%,
+  100% {
+    opacity: 0;
+  }
+  50% {
+    opacity: 1;
+  }
 }
 
 /* Typography utilities */
 @utility typo-h1 {
-  font-family: var(--font-anuphan);
   font-weight: 700;
   font-size: 40px;
   line-height: 1.5;
@@ -227,13 +60,11 @@
   line-height: 1.5;
 }
 @utility typo-text-h1 {
-  font-family: var(--font-anuphan);
   font-weight: 400;
   font-size: 40px;
   line-height: 1.5;
 }
 @utility typo-h2 {
-  font-family: var(--font-anuphan);
   font-weight: 700;
   font-size: 32px;
   line-height: 1.5;
@@ -247,42 +78,37 @@
   letter-spacing: 1.5;
 }
 @utility typo-text-h2 {
-  font-family: var(--font-anuphan);
   font-weight: 400;
   font-size: 32px;
   line-height: 1.5;
   letter-spacing: 1.5;
 }
 @utility typo-h3 {
-  font-family: var(--font-anuphan);
   font-weight: 700;
-  font-size: 24px;
+  font-size: 20px;
   line-height: 1.5;
   letter-spacing: 1.5;
 }
 @utility typo-h3-serif {
   font-family: var(--font-bentham);
   font-weight: 500;
-  font-size: 24px;
+  font-size: 20px;
   line-height: 1.5;
   letter-spacing: 1.5;
 }
 @utility typo-text-h3 {
-  font-family: var(--font-anuphan);
   font-weight: 400;
-  font-size: 24px;
+  font-size: 20px;
   line-height: 1.5;
   letter-spacing: 1.5;
 }
 @utility typo-h4 {
-  font-family: var(--font-anuphan);
   font-weight: 600;
   font-size: 20px;
   line-height: 1.5;
   letter-spacing: 1.5;
 }
 @utility typo-text-h4 {
-  font-family: var(--font-anuphan);
   font-weight: 400;
   font-size: 20px;
   line-height: 1.5;
@@ -295,49 +121,41 @@
   line-height: 1.5;
 }
 @utility typo-h5 {
-  font-family: var(--font-anuphan);
   font-weight: 600;
   font-size: 16px;
   line-height: 1.5;
 }
 @utility typo-text-h5 {
-  font-family: var(--font-anuphan);
   font-weight: 400;
   font-size: 16px;
   line-height: 1.5;
 }
 @utility typo-h6 {
-  font-family: var(--font-anuphan);
   font-weight: 600;
   font-size: 14px;
   line-height: 1.5;
 }
 @utility typo-text-h6 {
-  font-family: var(--font-anuphan);
   font-weight: 400;
   font-size: 14px;
   line-height: 1.5;
 }
 @utility typo-p-lg {
-  font-family: var(--font-anuphan);
   font-weight: 400;
   font-size: 16px;
   line-height: 1.5;
 }
 @utility typo-p-md {
-  font-family: var(--font-anuphan);
   font-weight: 400;
   font-size: 14px;
   line-height: 1.5;
 }
 @utility typo-p-sm {
-  font-family: var(--font-anuphan);
   font-weight: 400;
   font-size: 12px;
   line-height: 1.5;
 }
 @utility typo-p-xsm {
-  font-family: var(--font-anuphan);
   font-weight: 400;
   font-size: 10px;
   line-height: 1.5;
@@ -503,10 +321,24 @@
   );
 }
 
+@utility bg-s4 {
+  background: linear-gradient(
+    0deg,
+    #3473c3 1.58%,
+    #316cb7 6.64%,
+    #25548a 26.85%,
+    #1b4165 47.06%,
+    #143148 68.54%,
+    #0f2633 88.75%,
+    #0c2027 108.96%,
+    #0b1e23 127.91%
+  );
+}
+
 body {
   background: var(--color-background);
-  color: var(--foreground);
-  font-family: "Anuphan", Arial, Helvetica, sans-serif;
+  color: var(--color-foreground);
+  font-family: var(--font-anuphan), Arial, Helvetica, sans-serif;
   overflow-x: hidden;
 }
 
@@ -519,20 +351,24 @@ button:not([disabled]) {
   cursor: pointer;
 }
 
-/* --- Minimalist Custom Scrollbar --- */
-::-webkit-scrollbar-track {
-  background: transparent;
-}
-
-::-webkit-scrollbar-thumb {
-  background-color: #4b5563;
-  border-radius: 20px;
+@media (pointer: fine) {
+  body,
+  a,
+  button,
+  input,
+  textarea,
+  select,
+  [role="button"],
+  .cursor-pointer {
+    cursor: none;
+  }
 }
 
 ::-webkit-scrollbar {
-  width: 12px;
+  display: none;
 }
 
-::-webkit-scrollbar-thumb:hover {
-  background-color: #6b7280;
+* {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
 }

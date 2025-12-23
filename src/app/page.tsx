@@ -1,49 +1,53 @@
 "use client";
 
-import Hero from "./prologue/components/Hero";
-import Navbar from "./components/ui/Navbar";
-import { ReactLenis, useLenis } from "lenis/react";
-import MouseFollower from "./components/ui/MouseFollower";
-import Intro from "./prologue/components/Intro";
-import IntoDark from "./prologue/components/IntoDark/IntoDark";
-import ScrollTo from "./components/ui/ScrollTo";
-import { useScroll, useTransform } from "framer-motion";
-import { useEffect } from "react";
-import StarryBackground from "./components/star/StarryBackground";
-import Dreaming from "./prologue/components/Dreaming";
-import JobApplication from "./prologue/components/JobApplication/JobApplication";
+import { useEffect, useState } from "react";
+import WelcomeSoundModal from "./components/modal/WelcomeSoundModal";
+import { useAudio } from "./contexts/AudioContext";
+import Hero from "./prologue/Hero";
+import Intro from "./prologue//Intro";
+import JobApplication from "./prologue/JobApplication";
 
 export default function Home() {
-  const lenis = useLenis();
+  const [showWelcomeModal, setShowWelcomeModal] = useState(false);
+  const { start, stop } = useAudio();
+
+  const [shouldAnimate, setShouldAnimate] = useState(false);
+
+  //? ควบคุม Modal
   useEffect(() => {
-    if (lenis) {
-      lenis.scrollTo(0, { immediate: true });
+    const hasSettings = localStorage.getItem("audioSettings");
+
+    if (!hasSettings) {
+      setShowWelcomeModal(true);
+    } else {
+      setShouldAnimate(true);
     }
-  }, [lenis]);
+  }, []);
 
-  const { scrollYProgress } = useScroll();
+  const handleAcceptSoundModal = () => {
+    setShowWelcomeModal(false);
+    start();
+    setShouldAnimate(true);
+  };
 
-  const scrollToOpacity = useTransform(
-    scrollYProgress,
-    [0, 0.8, 0.95, 1],
-    [1, 1, 0, 0]
-  );
+  const handleDeclineSoundModal = () => {
+    setShowWelcomeModal(false);
+    stop();
+    setShouldAnimate(true);
+  };
 
   return (
-    <main className="flex flex-col justify-between h-full">
-      <ReactLenis root options={{ lerp: 0.05 }}>
-        <StarryBackground />
-        
-        <MouseFollower />
-        <Navbar />
-        <ScrollTo opacity={scrollToOpacity} />
+    <div>
+      <WelcomeSoundModal
+        isOpen={showWelcomeModal}
+        onAccept={handleAcceptSoundModal}
+        onDecline={handleDeclineSoundModal}
+      />
+      {/* //todo: wait for design */}
 
-        <Hero />
-        <Intro />
-        <JobApplication/>
-        <Dreaming />
-        <IntoDark />
-      </ReactLenis>
-    </main>
+      <Hero shouldAnimate={shouldAnimate} />
+      <Intro />
+      <JobApplication />
+    </div>
   );
 }

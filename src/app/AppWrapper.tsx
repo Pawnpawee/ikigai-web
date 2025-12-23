@@ -1,43 +1,56 @@
 "use client";
-import React, { useState, useEffect } from "react";
-import WelcomeSoundModal from "./components/ui/WelcomeSoundModal";
-import { useAudio } from "./contexts/AudioContext";
+import {
+  domAnimation,
+  LazyMotion,
+  useScroll,
+  useTransform,
+} from "framer-motion";
+import ReactLenis from "lenis/react";
+import React from "react";
+import { getLenisOptions } from "@/utils/lenisConfig";
+import GifCursor from "./components/GifCursor";
+import Navbar from "./components/Navbar";
+import ScrollTo from "./components/ScrollTo";
+import { useDevice } from "./contexts/DeviceContext";
+
+function AppLogic({ children }: { children: React.ReactNode }) {
+  const { scrollYProgress } = useScroll();
+  const scrollToOpacity = useTransform(
+    scrollYProgress,
+    [0, 0.8, 0.95, 1],
+    [1, 1, 0, 0],
+  );
+
+  return (
+    <>
+      <GifCursor />
+      {/* //todo: wait for design */}
+
+      <Navbar />
+      <ScrollTo opacity={scrollToOpacity} />
+      <main className="relative w-full">{children}</main>
+    </>
+  );
+}
 
 export default function AppWrapper({
   children,
 }: {
   children: React.ReactNode;
 }) {
-  const [showWelcomeModal, setShowWelcomeModal] = useState(false);
-  const { startAudio, pauseAudio, userConsented } = useAudio();
+  const { isMobile } = useDevice();
 
-  useEffect(() => {
-    // แสดง modal เมื่อโหลดหน้าครั้งแรก
-    if (!userConsented) {
-      setShowWelcomeModal(true);
-    }
-  }, [userConsented]);
-
-  const handleAccept = () => {
-    setShowWelcomeModal(false);
-
-    startAudio();
-  };
-
-  const handleDecline = () => {
-    setShowWelcomeModal(false);
-
-    pauseAudio();
-  };
+  //? ใช้ useMemo เพื่อป้องกันการ create object ใหม่ทุกครั้งที่ re-render (Performance)
+  const lenisOptions = React.useMemo(
+    () => getLenisOptions(isMobile),
+    [isMobile],
+  );
 
   return (
-    <>
-      <WelcomeSoundModal
-        isOpen={showWelcomeModal}
-        onAccept={handleAccept}
-        onDecline={handleDecline}
-      />
-      {children}
-    </>
+    <ReactLenis root options={lenisOptions}>
+      <LazyMotion features={domAnimation}>
+        <AppLogic>{children}</AppLogic>
+      </LazyMotion>
+    </ReactLenis>
   );
 }

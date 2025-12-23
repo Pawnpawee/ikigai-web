@@ -1,114 +1,208 @@
 "use client";
-import React, { createContext, useContext, useEffect, useRef, useState } from "react";
+import { Howl, Howler } from "howler";
+import type React from "react";
+import {
+  createContext,
+  useCallback,
+  useContext,
+  useEffect,
+  useRef,
+  useState,
+} from "react";
 
 interface AudioContextType {
+  // State
   isMuted: boolean;
   volume: number;
   sfxVolume: number;
-  isPlaying: boolean;
-  userConsented: boolean;
-  animationsStarted: boolean;
-  setIsMuted: (muted: boolean) => void;
-  setVolume: (volume: number) => void;
-  setSfxVolume: (volume: number) => void;
-  togglePlay: () => void;
-  startAudio: () => void;
-  pauseAudio: () => void;
+  currentBgMusic: string | null;
+
+  // Actions
+  start: () => void;
+  stop: () => void;
+  setBgMusic: (src: string | null) => void;
+  setVolume: (vol: number) => void;
+  setSfxVolume: (vol: number) => void;
+  playSfx: (src: string, options?: { volumeMultiplier?: number }) => void;
 }
 
 const AudioContext = createContext<AudioContextType | undefined>(undefined);
 
 export function AudioProvider({ children }: { children: React.ReactNode }) {
-  const audioRef = useRef<HTMLAudioElement | null>(null);
-  const [isMuted, setIsMuted] = useState(false);
+  // --- Refs & State ---
+  const soundRef = useRef<Howl | null>(null);
+  const isMutedRef = useRef(true);
+
+  const [isMuted, setIsMuted] = useState(true);
   const [volume, setVolume] = useState(30);
-  const [sfxVolume, setSfxVolume] = useState(50);
-  const [isPlaying, setIsPlaying] = useState(false);
-  const [isInitialized, setIsInitialized] = useState(false);
-  const [userConsented, setUserConsented] = useState(false);
-  const [animationsStarted, setAnimationsStarted] = useState(false);
+  const [sfxVolume, setSfxVolumeState] = useState(50);
+  const [currentBgMusic, setCurrentBgMusic] = useState<string | null>(null);
 
-  // สร้าง audio element ครั้งเดียว
+  // --- Helper: Save to LocalStorage ---
+  const saveSettings = useCallback(
+    (settings: { isMuted?: boolean; volume?: number; sfxVolume?: number }) => {
+      try {
+        const old = JSON.parse(localStorage.getItem("audioSettings") || "{}");
+        const merged = { ...old, ...settings };
+        localStorage.setItem("audioSettings", JSON.stringify(merged));
+      } catch (e) {
+        console.error("Save settings failed", e);
+      }
+    },
+    [],
+  );
+
+  // --- Initialization ---
   useEffect(() => {
-    const audio = new Audio("/assets/Sound/bg-music.mp3");
-    audio.loop = true;
-    audio.volume = volume / 100;
-    audio.muted = isMuted;
-    audioRef.current = audio;
+    const saved = localStorage.getItem("audioSettings");
+    if (saved) {
+      const {
+        isMuted: savedMuted,
+        volume: savedVol,
+        sfxVolume: savedSfxVol,
+      } = JSON.parse(saved);
 
-    console.log("Audio initialized:", audio.src);
+      // ตั้งค่า Volume เริ่มต้น
+      if (savedVol !== undefined) {
+        setVolume(savedVol);
+        Howler.volume(savedVol / 100);
+      }
+
+      // ตั้งค่า SFX Volume
+      if (savedSfxVol !== undefined) {
+        setSfxVolumeState(savedSfxVol);
+      }
+
+      // ตั้งค่า Mute
+      if (savedMuted === true) {
+        setIsMuted(true);
+        isMutedRef.current = true;
+        Howler.mute(true);
+      }
+    } else {
+      // Default state
+      setIsMuted(false);
+      isMutedRef.current = false;
+      Howler.mute(false);
+    }
+
+    const timer = setTimeout(() => {
+      const defaultBgMusic = "/assets/Sound/bg-music.mp3";
+
+      const bgSound = new Howl({
+        src: [defaultBgMusic],
+        loop: true,
+      });
+
+      soundRef.current = bgSound;
+      setCurrentBgMusic(defaultBgMusic);
+    }, 100);
 
     return () => {
-      if (audioRef.current) {
-        audioRef.current.pause();
-        audioRef.current.src = "";
-      }
+      clearTimeout(timer);
+      Howler.unload();
     };
   }, []);
 
-  // อัพเดท mute
-  useEffect(() => {
-    if (audioRef.current) {
-      audioRef.current.muted = isMuted;
-      console.log("Muted:", isMuted);
+  // --- Actions ---
+
+  // 1. Start: เปิดเสียง (Unmute)
+  const start = () => {
+    setIsMuted(false);
+    isMutedRef.current = false;
+    Howler.mute(false);
+    saveSettings({ isMuted: false });
+
+    // Resume ถ้ามีเพลงค้างอยู่
+    if (soundRef.current && !soundRef.current.playing()) {
+      soundRef.current.play();
+      soundRef.current.fade(0, volume / 100, 100);
     }
-  }, [isMuted]);
+  };
 
-  // อัพเดท volume
-  useEffect(() => {
-    if (audioRef.current) {
-      audioRef.current.volume = volume / 100;
-      console.log("Volume:", volume);
+  // 2. Stop: ปิดเสียง (Mute)
+  const stop = () => {
+    setIsMuted(true);
+    isMutedRef.current = true;
+    Howler.mute(true);
+    saveSettings({ isMuted: true });
+  };
+
+  // 3. Set Volume
+  const updateVolume = (vol: number) => {
+    setVolume(vol);
+    Howler.volume(vol / 100);
+    saveSettings({ volume: vol });
+  };
+
+  // 3.5. Set SFX Volume
+  const setSfxVolume = (vol: number) => {
+    setSfxVolumeState(vol);
+    saveSettings({ sfxVolume: vol });
+  };
+
+  // 4. Set Background Music
+  const setBgMusic = (src: string | null) => {
+    if (currentBgMusic === src) return;
+
+    const prevSound = soundRef.current;
+
+    // Step A: Fade Out ตัวเก่า
+    if (prevSound) {
+      prevSound.fade(prevSound.volume(), 0, 1000);
+      prevSound.once("fade", () => {
+        prevSound.stop();
+        prevSound.unload();
+      });
     }
-  }, [volume]);
 
-  // อัพเดท SFX volume
-  useEffect(() => {
-    console.log("SFX Volume:", sfxVolume);
-  }, [sfxVolume]);
+    // Step B: เล่นตัวใหม่
+    if (src) {
+      setCurrentBgMusic(src);
 
-  const startAudio = async () => {
-    if (audioRef.current && !isInitialized) {
+      const newSound = new Howl({
+        src: [src],
+        loop: true,
+        volume: 0,
+        autoplay: false,
+        onloaderror: (_id, err) => console.error("Load Error:", err),
+        onplayerror: (_id, err) => {
+          console.warn("Play Error:", err);
+          soundRef.current?.once("unlock", () => {
+            soundRef.current?.play();
+          });
+        },
+      });
+
+      soundRef.current = newSound;
+      newSound.play();
+
+      if (!isMuted) {
+        newSound.fade(0, volume / 100, 1500);
+      }
+    } else {
+      setCurrentBgMusic(null);
+      soundRef.current = null;
+    }
+  };
+
+  const playSfx = useCallback(
+    (src: string, options?: { volumeMultiplier?: number }) => {
+      if (isMutedRef.current) return;
+
       try {
-        console.log("Starting audio...");
-        setIsMuted(false); // ตั้งค่า mute เป็น false เมื่อผู้ใช้เลือกเปิดเสียง
-        await audioRef.current.play();
-        setIsPlaying(true);
-        setIsInitialized(true);
-        setUserConsented(true);
-        setAnimationsStarted(true);
-        console.log("Audio started successfully!");
-      } catch (error) {
-        console.error("Audio start failed:", error);
-      }
-    }
-  };
-
-  const pauseAudio = () => {
-    if (audioRef.current) {
-      audioRef.current.pause();
-      setIsPlaying(false);
-      setIsMuted(true); // ตั้งค่า mute เป็น true เมื่อผู้ใช้เลือกไม่เปิดเสียง
-      setUserConsented(true);
-      setAnimationsStarted(true);
-      console.log("Audio muted by user choice");
-    }
-  };
-
-  const togglePlay = () => {
-    if (audioRef.current) {
-      if (isPlaying) {
-        audioRef.current.pause();
-        setIsPlaying(false);
-      } else {
-        audioRef.current.play().then(() => {
-          setIsPlaying(true);
-        }).catch((error) => {
-          console.log("Play failed:", error);
+        new Howl({
+          src: [src],
+          loop: false,
+          volume: (sfxVolume / 100) * (options?.volumeMultiplier ?? 1.0),
+          autoplay: true,
         });
+      } catch (error) {
+        console.error("Failed to play SFX:", error);
       }
-    }
-  };
+    },
+    [sfxVolume],
+  );
 
   return (
     <AudioContext.Provider
@@ -116,15 +210,13 @@ export function AudioProvider({ children }: { children: React.ReactNode }) {
         isMuted,
         volume,
         sfxVolume,
-        isPlaying,
-        userConsented,
-        animationsStarted,
-        setIsMuted,
-        setVolume,
+        currentBgMusic,
+        start,
+        stop,
+        setBgMusic,
+        setVolume: updateVolume,
         setSfxVolume,
-        togglePlay,
-        startAudio,
-        pauseAudio,
+        playSfx,
       }}
     >
       {children}
@@ -132,10 +224,8 @@ export function AudioProvider({ children }: { children: React.ReactNode }) {
   );
 }
 
-export function useAudio() {
+export const useAudio = () => {
   const context = useContext(AudioContext);
-  if (context === undefined) {
-    throw new Error("useAudio must be used within an AudioProvider");
-  }
+  if (!context) throw new Error("useAudio must be used within AudioProvider");
   return context;
-}
+};
