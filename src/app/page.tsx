@@ -4,8 +4,9 @@ import { useEffect, useState } from "react";
 import WelcomeSoundModal from "./components/modal/WelcomeSoundModal";
 import { useAudio } from "./contexts/AudioContext";
 import Hero from "./prologue/Hero";
-import Intro from "./prologue//Intro";
+import Intro from "./prologue/Intro";
 import JobApplication from "./prologue/JobApplication";
+import Sleeping from "./prologue/Sleeping";
 
 export default function Home() {
   const [showWelcomeModal, setShowWelcomeModal] = useState(false);
@@ -48,6 +49,7 @@ export default function Home() {
       <Hero shouldAnimate={shouldAnimate} />
       <Intro />
       <JobApplication />
+      <Sleeping />
     </div>
   );
 }

@@ -114,3 +114,101 @@ const isJobApplicationVisible = latest > 0.2 && latest < 0.6;
     }
 
 });
+
+Context: เรากำลังพัฒนา Next.js Project ที่เน้น Animation ประสิทธิภาพสูง (Framer Motion) โดยใช้โครงสร้างแบบ Data-Driven และ Clean Architecture
+
+กฎเหล็ก (Rules):
+
+ห้าม Hardcode Style: ให้ย้าย Config ทุกอย่างไปไว้ในไฟล์ data.ts
+
+ห้าม Logic ซ้ำซ้อน: ใช้ SceneLayer จัดการ Parallax และ Responsive Logic ภายใน
+
+Lottie Performance: ใช้ playTrigger เพื่อเล่นเฉพาะตอนมองเห็น (Opacity > 0) ห้ามปล่อยเล่นค้างไว้
+
+Helper Hooks: หากมี Animation ที่ใช้ Logic ซ้ำๆ (เช่น Pop-up) ให้สร้าง Helper Function
+
+1. การเตรียม Data (scene_NAME.data.ts)
+   ให้สร้างไฟล์ Data โดยใช้ Interface SceneItemData ตามโครงสร้างนี้:
+
+TypeScript
+
+import type { SceneItemData } from "../components/reusable/SceneLayer";
+
+export const SCENE_ITEMS: SceneItemData[] = [
+{
+id: "item-id",
+src: "/path/to/image.webp",
+alt: "Description",
+// Desktop Style (ใช้ % เสมอ)
+style: { left: "10%", top: "20%", width: "30%", height: "auto" },
+
+    // Mobile Style (Override เฉพาะค่าที่เปลี่ยน)
+    mobileStyle: { width: "50%", left: "0%" },
+
+    // Animation Config (สำหรับ Hero/Parallax)
+    motionConfig: {
+      parallaxDepth: 15, // ความลึกเมาส์ (ยิ่งมากยิ่งขยับเยอะ)
+      delay: 0.5,        // Delay ตอนปรากฏ
+      duration: 1.5      // ความเร็วตอนปรากฏ
+    },
+
+    // Scroll Animation Group (สำหรับ JobApplication Scroll)
+    animGroup: 1,
+    priority: true, // ใส่ true ถ้าเป็นภาพหลัก (LCP)
+
+},
+// ... items อื่นๆ
+]; 2. การใช้งาน SceneLayer
+ใน Component หลัก (Hero.tsx, JobApplication.tsx) ให้เรียกใช้ดังนี้:
+
+TypeScript
+
+// กรณี Hero (Parallax Mouse + Auto Fade-in)
+<SceneLayer
+items={SCENE_ITEMS}
+parallaxMouse={{ x: smoothMouseX, y: smoothMouseY }} // ส่งเมาส์เข้าไป
+shouldAnimate={shouldAnimate} // Trigger ให้เริ่ม Fade-in
+containerAspectRatio="1920 / 1080"
+/>
+
+// กรณี Scroll Story (Scroll Timeline)
+<SceneLayer
+items={SCENE_ITEMS}
+animations={animations} // Map ค่า y/opacity จาก useTransform
+containerAspectRatio="1920 / 2160"
+/> 3. การใช้งาน LazyLottie (Lottie Files)
+เลือกใช้ 1 ใน 2 โหมดนี้เท่านั้น:
+
+Mode A: Loop เมื่อมองเห็น (แนะนำ) ใช้สำหรับตัวละครหรือ Prop ที่ขยับตลอดเวลา
+
+TypeScript
+
+<LazyLottie
+src="..."
+loop={true}
+playTrigger={opacityMotionValue} // เล่นเมื่อ opacity > 0, หยุดเมื่อ = 0
+/>
+Mode B: สั่งงานด้วย Boolean (Manual) ใช้สำหรับ Logo หรือ Intro ที่เล่นครั้งเดียวจบ
+
+TypeScript
+
+<LazyLottie
+src="..."
+loop={false}
+play={shouldPlayState} // true = เล่น, false = หยุด
+/> 4. การจัดการ Animation ซ้ำๆ (Helper Pattern)
+หากต้องทำ Pop-up items หลายชิ้น ให้สร้าง Helper ในไฟล์นั้นๆ:
+
+TypeScript
+
+// Helper Function
+const usePopUpAnimation = (progress: MotionValue<number>, start: number, end: number) => ({
+y: useTransform(progress, [start, end, 1], [100, 0, 0]),
+opacity: useTransform(progress, [start, end, 1], [0, 1, 1]),
+});
+
+// Usage
+const animations = {
+1: usePopUpAnimation(scrollYProgress, 0.1, 0.2),
+2: usePopUpAnimation(scrollYProgress, 0.2, 0.3),
+};
