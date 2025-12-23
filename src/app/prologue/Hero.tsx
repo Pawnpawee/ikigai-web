@@ -1,8 +1,6 @@
 import {
   m,
-  useMotionValue,
   useScroll,
-  useSpring,
   useTransform,
   type Variants,
 } from "framer-motion";
@@ -13,8 +11,8 @@ import { useAudio } from "@/app/contexts/AudioContext";
 import { SCENE_HERO_ITEMS } from "@/app/data/scene_hero.data";
 import IkigaiCircle from "../components/reusable/IkigaiCircle";
 import SceneLayer from "../components/reusable/SceneLayer";
-import { useDevice } from "../contexts/DeviceContext";
 import { useUI } from "../contexts/UIStarContext";
+import { useMouseParallax } from "../hooks/useMouseParallax";
 
 interface HeroProps {
   shouldAnimate: boolean;
@@ -32,35 +30,9 @@ export default function Hero({ shouldAnimate }: HeroProps) {
 
   const { setShowStars } = useUI();
 
-  const mouseX = useMotionValue(0.5);
-  const mouseY = useMotionValue(0.5);
-
-  const { isMobile } = useDevice();
-
-  useEffect(() => {
-    const handleMouseMove = (e: MouseEvent) => {
-      const x = e.clientX / window.innerWidth;
-      const y = e.clientY / window.innerHeight;
-
-      mouseX.set(x);
-      mouseY.set(y);
-    };
-
-    window.addEventListener("mousemove", handleMouseMove);
-    return () => window.removeEventListener("mousemove", handleMouseMove);
-  }, [mouseX, mouseY]);
-
-  const springConfig = { damping: 50, stiffness: 400 };
-  const smoothMouseX = useSpring(mouseX, springConfig);
-  const smoothMouseY = useSpring(mouseY, springConfig);
-
-  // ภูเขาหลังสุด
-  const xBack = useTransform(smoothMouseX, [0, 1], [15, -15]);
-  const yBack = useTransform(smoothMouseY, [0, 1], [5, -5]);
-
-  // ภูเขาหน้าสุด
-  const xFront = useTransform(smoothMouseX, [0, 1], [5, -5]);
-  const yFront = useTransform(smoothMouseY, [0, 1], [5, -5]);
+  const { smoothMouseX, smoothMouseY } = useMouseParallax();
+  const logoParallaxX = useTransform(smoothMouseX, [0, 1], [15, -15]);
+  const logoParallaxY = useTransform(smoothMouseY, [0, 1], [5, -5]);
 
   useEffect(() => {
     if (shouldAnimate) {
@@ -177,17 +149,6 @@ export default function Hero({ shouldAnimate }: HeroProps) {
     [],
   );
 
-  // Memoize mountain transitions
-  const mountainTransitions = useMemo(
-    () => ({
-      mountain1: { duration: 1.5, delay: 1.5 },
-      mountain2: { duration: 1.5, delay: 2.5 },
-      mountain3: { duration: 1.5, delay: 0.5 },
-      mountain4: { duration: 1.5 },
-    }),
-    [],
-  );
-
   // Memoize text split
   const textChars = useMemo(() => textContent.split(""), []);
 
@@ -232,48 +193,6 @@ export default function Hero({ shouldAnimate }: HeroProps) {
     [shouldAnimate],
   );
 
-  const itemOverrides = useMemo(
-    () => ({
-      "hill-c-b": {
-        initial: { opacity: 0 },
-        animate: shouldAnimate ? { opacity: 1 } : { opacity: 0 },
-        transition: mountainTransitions.mountain1,
-        style: isMobile ? {} : { x: xBack, y: yBack, willChange: "transform" },
-      },
-      "hill-c-f": {
-        initial: { opacity: 0 },
-        animate: shouldAnimate ? { opacity: 1 } : { opacity: 0 },
-        transition: mountainTransitions.mountain2,
-        style: isMobile ? {} : { x: xBack, y: yBack, willChange: "transform" },
-      },
-      "hill-r-f": {
-        initial: { opacity: 0 },
-        animate: shouldAnimate ? { opacity: 1 } : { opacity: 0 },
-        transition: mountainTransitions.mountain3,
-        style: isMobile
-          ? {}
-          : { x: xFront, y: yFront, willChange: "transform" },
-      },
-      "hill-l-f": {
-        initial: { opacity: 0 },
-        animate: shouldAnimate ? { opacity: 1 } : { opacity: 0 },
-        transition: mountainTransitions.mountain4,
-        style: isMobile
-          ? {}
-          : { x: xFront, y: yFront, willChange: "transform" },
-      },
-    }),
-    [
-      shouldAnimate,
-      isMobile,
-      xFront,
-      yFront,
-      xBack,
-      yBack,
-      mountainTransitions,
-    ],
-  );
-
   return (
     <m.div
       ref={ref}
@@ -289,9 +208,8 @@ export default function Hero({ shouldAnimate }: HeroProps) {
       >
         <SceneLayer
           items={SCENE_HERO_ITEMS}
-          animations={{}}
+          parallaxMouse={{ x: smoothMouseX, y: smoothMouseY }}
           containerAspectRatio="1920 / 1080"
-          itemOverrides={itemOverrides}
         />
       </m.div>
 
@@ -362,7 +280,7 @@ export default function Hero({ shouldAnimate }: HeroProps) {
         variants={containerVariants}
         initial="hidden"
         animate={shouldAnimate ? "visible" : "hidden"}
-        style={{ x: xBack, y: yBack }}
+        style={{ x: logoParallaxX, y: logoParallaxY }}
       >
         <m.div
           initial={{ opacity: 0 }}

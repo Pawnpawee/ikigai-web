@@ -100,3 +100,13 @@ npm run lint
 npx biome check --write
 
 Animate ค่า opacity, transform (scale, rotate, x, y) แทนการเปลี่ยน layout properties เช่น width, height, margin, padding เพื่อประสิทธิภาพที่ดีกว่า
+
+เปิดปิด show star
+ useMotionValueEvent(scrollYProgress, "change", (latest) => {
+    const isJobApplicationVisible = latest > 0.2 && latest < 0.6;
+
+    if (isJobApplicationVisible) {
+      setShowStars(false);
+    }
+  });
+

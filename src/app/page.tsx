@@ -5,6 +5,7 @@ import WelcomeSoundModal from "./components/modal/WelcomeSoundModal";
 import { useAudio } from "./contexts/AudioContext";
 import Hero from "./prologue/Hero";
 import Intro from "./prologue//Intro";
+import JobApplication from "./prologue/JobApplication";
 
 export default function Home() {
   const [showWelcomeModal, setShowWelcomeModal] = useState(false);
@@ -46,6 +47,7 @@ export default function Home() {
 
       <Hero shouldAnimate={shouldAnimate} />
       <Intro />
+      <JobApplication />
     </div>
   );
 }

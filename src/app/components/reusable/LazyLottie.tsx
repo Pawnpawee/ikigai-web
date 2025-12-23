@@ -27,8 +27,8 @@ interface LazyLottieProps
   className?: string;
   getRef?: (ref: LottieRefCurrentProps | null) => void;
   play?: boolean;
+  playTrigger?: MotionValue<number>;
   scrollYProgress?: MotionValue<number>;
-  delay?: number;
   onComplete?: () => void;
   ignoreAspectRatio?: boolean;
 }
@@ -39,9 +39,9 @@ const LazyLottie: React.FC<LazyLottieProps> = memo(
     className,
     getRef,
     play = false,
+    playTrigger,
     scrollYProgress,
     loop = true,
-    delay = 0,
     onComplete,
     ignoreAspectRatio = false,
     ...props
@@ -51,7 +51,12 @@ const LazyLottie: React.FC<LazyLottieProps> = memo(
       useState<LottieAnimationData | null>(null);
     const [isLoaded, setIsLoaded] = useState(false);
 
-    //? 1. Data Logic
+    const isPlayingRef = useRef(false);
+
+    // สร้าง Fallback MotionValue ไว้เสมอ 
+    const fallbackMotionValue = useMotionValue(0);
+
+    // Load Data Logic
     useEffect(() => {
       let isMounted = true;
       const loadData = async () => {
@@ -79,44 +84,59 @@ const LazyLottie: React.FC<LazyLottieProps> = memo(
       };
     }, [src]);
 
-    //? 2. Ref Logic
+    // Ref Expose Logic
     useEffect(() => {
       if (getRef && lottieRef.current) {
         getRef(lottieRef.current);
       }
     }, [getRef]);
 
-    //? 3. Playback Logic
+    // Logic: Play Trigger (แก้ตรงนี้)
+    useMotionValueEvent(
+      playTrigger || fallbackMotionValue,
+      "change",
+      (latest) => {
+        if (!playTrigger || !lottieRef.current || !isLoaded) return;
+
+        // ถ้าค่า > 0 และ "ยังไม่ได้เล่น" -> สั่งเล่น
+        if (latest > 0) {
+          if (!isPlayingRef.current) {
+            lottieRef.current.play();
+            isPlayingRef.current = true; // จำว่าเล่นแล้ว
+          }
+        }
+        // ถ้าค่า = 0 และ "กำลังเล่นอยู่" -> สั่งหยุด
+        else {
+          if (isPlayingRef.current) {
+            lottieRef.current.pause();
+            isPlayingRef.current = false; // จำว่าหยุดแล้ว
+          }
+        }
+      },
+    );
+
+    // Logic: Manual Play (ต้องอัปเดต isPlayingRef ด้วย)
     useEffect(() => {
-      if (!lottieRef.current || !isLoaded) return;
-      let timeoutId: NodeJS.Timeout | undefined;
+      if (!lottieRef.current || !isLoaded || playTrigger) return;
 
       if (play) {
-        if (delay > 0) {
-          timeoutId = setTimeout(() => {
-            lottieRef.current?.play();
-          }, delay);
-        } else {
-          lottieRef.current.play();
-        }
+        lottieRef.current.play();
+        isPlayingRef.current = true;
       } else {
-        clearTimeout(timeoutId);
         lottieRef.current.pause();
+        isPlayingRef.current = false;
       }
+    }, [play, isLoaded, playTrigger]);
 
-      return () => {
-        clearTimeout(timeoutId);
-      };
-    }, [play, delay, isLoaded]);
-
-    //? 4. Scroll Logic
-    const fallbackMotionValue = useMotionValue(0);
-
+    // 5. Logic: Scroll Seek
     useMotionValueEvent(
       scrollYProgress || fallbackMotionValue,
       "change",
-      () => {
+      (latest) => {
         if (!lottieRef.current || !scrollYProgress || !isLoaded) return;
+        const totalFrames = lottieRef.current.getDuration(true);
+        if (totalFrames === undefined) return;
+        lottieRef.current.goToAndStop(latest * totalFrames, true);
       },
     );
 
@@ -135,7 +155,7 @@ const LazyLottie: React.FC<LazyLottieProps> = memo(
         <Lottie
           lottieRef={lottieRef}
           animationData={animationData}
-          autoplay={play}
+          autoplay={false}
           loop={loop}
           onComplete={onComplete}
           rendererSettings={{

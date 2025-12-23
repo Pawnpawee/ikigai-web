@@ -35,7 +35,7 @@ export function AudioProvider({ children }: { children: React.ReactNode }) {
 
   const [isMuted, setIsMuted] = useState(true);
   const [volume, setVolume] = useState(30);
-  const [sfxVolume, setSfxVolumeState] = useState(30);
+  const [sfxVolume, setSfxVolumeState] = useState(50);
   const [currentBgMusic, setCurrentBgMusic] = useState<string | null>(null);
 
   // --- Helper: Save to LocalStorage ---
