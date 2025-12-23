@@ -64,8 +64,11 @@ export default function JobApplication2({
   );
 
   const moonY = useTransform(scrollYProgress, [0.9, 0.944, 1], [100, 0, 0]);
-  const moonOpacity = useTransform(scrollYProgress, [0.9, 0.944, 0.99, 1], [0, 1, 1, 0]);
-
+  const moonOpacity = useTransform(
+    scrollYProgress,
+    [0.9, 0.944, 0.99, 1],
+    [0, 1, 1, 0],
+  );
 
   //? AnimationMap must match animGroup values in scene_job_2.data.ts (16 items)
   const animations: AnimationMap = {

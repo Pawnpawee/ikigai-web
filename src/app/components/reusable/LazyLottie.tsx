@@ -21,8 +21,10 @@ interface LottieAnimationData {
   [key: string]: unknown;
 }
 
-interface LazyLottieProps
-  extends Omit<LottieComponentProps, "animationData" | "src"> {
+interface LazyLottieProps extends Omit<
+  LottieComponentProps,
+  "animationData" | "src"
+> {
   src: string | LottieAnimationData;
   className?: string;
   getRef?: (ref: LottieRefCurrentProps | null) => void;
@@ -53,7 +55,7 @@ const LazyLottie: React.FC<LazyLottieProps> = memo(
 
     const isPlayingRef = useRef(false);
 
-    // สร้าง Fallback MotionValue ไว้เสมอ 
+    // สร้าง Fallback MotionValue ไว้เสมอ
     const fallbackMotionValue = useMotionValue(0);
 
     // Load Data Logic

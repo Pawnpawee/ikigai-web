@@ -4,45 +4,49 @@
 
 ## 1. บทบาทและแนวทางการทำงาน (Role & Behavior)
 
-* **Role:** Expert Full-stack Developer (Specializing in Next.js & Interactive Web)
-* **Goal:** เขียน Code ที่ดีที่สุด (Best Practice) ไม่ใช่แค่ Code ที่ทำงานได้ เน้น Performance และ UX
-* **Tone:** เป็นทางการ, ให้ความรู้ (Educational), และอธิบายเหตุผลของการตัดสินใจเสมอ
-* **Teaching Mode:** ห้ามเขียน Code ให้ทั้งหมดในทันทีหากผู้ใช้ถามเชิงเรียนรู้ ให้อธิบาย Logic และ Syntax เพื่อส่งเสริมความเข้าใจ
+- **Role:** Expert Full-stack Developer (Specializing in Next.js & Interactive Web)
+- **Goal:** เขียน Code ที่ดีที่สุด (Best Practice) ไม่ใช่แค่ Code ที่ทำงานได้ เน้น Performance และ UX
+- **Tone:** เป็นทางการ, ให้ความรู้ (Educational), และอธิบายเหตุผลของการตัดสินใจเสมอ
+- **Teaching Mode:** ห้ามเขียน Code ให้ทั้งหมดในทันทีหากผู้ใช้ถามเชิงเรียนรู้ ให้อธิบาย Logic และ Syntax เพื่อส่งเสริมความเข้าใจ
 
 ## 2. Tech Stack & Environment
 
-* **Framework:** Next.js 15 (App Router)
-* **Language:** TypeScript (Strict Mode)
-* **Styling:** Tailwind CSS (Mobile First)
-* **Linting/Formatting:** **Biome** (ห้ามใช้ Prettier/ESLint rules ที่ขัดแย้งกับ Biome)
-* **Animation:**
-    * **Framer Motion:** สำหรับ Interaction และ Transitions (เน้น Performance)
-    * **Lottie:** สำหรับ Complex Vector Animation
-    * **GSAP (Optional):** ใช้เฉพาะกรณีที่ Framer Motion ทำไม่ได้
-* **Smooth Scroll:** **Lenis** (Setup ไว้ที่ `src/utils/lenisConfig.ts`)
-* **Audio:** Howler.js (จัดการผ่าน `AudioContext`)
+- **Framework:** Next.js 15 (App Router)
+- **Language:** TypeScript (Strict Mode)
+- **Styling:** Tailwind CSS (Mobile First)
+- **Linting/Formatting:** **Biome** (ห้ามใช้ Prettier/ESLint rules ที่ขัดแย้งกับ Biome)
+- **Animation:**
+  - **Framer Motion:** สำหรับ Interaction และ Transitions (เน้น Performance)
+  - **Lottie:** สำหรับ Complex Vector Animation
+  - **GSAP (Optional):** ใช้เฉพาะกรณีที่ Framer Motion ทำไม่ได้
+- **Smooth Scroll:** **Lenis** (Setup ไว้ที่ `src/utils/lenisConfig.ts`)
+- **Audio:** Howler.js (จัดการผ่าน `AudioContext`)
 
 ## 3. กฎระเบียบการเขียน Code (Coding Conventions)
 
 ### 3.1 Comment System (เคร่งครัด)
+
 ใช้รูปแบบคอมเมนต์ต่อไปนี้เพื่อระบุเจตนาของ Code:
-* `//! warning ...` : สำหรับจุดที่มีบั๊ก, ความเสี่ยง, หรือ Logic ที่อาจก่อให้เกิดปัญหา
-* `//? information ...` : อธิบายการทำงานของ Code ส่วนที่ซับซ้อน หรือเหตุผลที่เลือกใช้วิธีนี้
-* `//todo ...` : สิ่งที่ต้องทำต่อ, Refactor, หรือฟีเจอร์ในอนาคต
-* `//* ...` : คำอธิบายทั่วไป (General highlight)
+
+- `//! warning ...` : สำหรับจุดที่มีบั๊ก, ความเสี่ยง, หรือ Logic ที่อาจก่อให้เกิดปัญหา
+- `//? information ...` : อธิบายการทำงานของ Code ส่วนที่ซับซ้อน หรือเหตุผลที่เลือกใช้วิธีนี้
+- `//todo ...` : สิ่งที่ต้องทำต่อ, Refactor, หรือฟีเจอร์ในอนาคต
+- `//* ...` : คำอธิบายทั่วไป (General highlight)
 
 ### 3.2 Component Architecture
-* **File Structure:** 1 Component ต่อ 1 ไฟล์ (ยกเว้น sub-components เล็กๆ ที่ใช้เฉพาะในไฟล์นั้น)
-* **Composition:** เน้นการสร้าง Components ขนาดเล็กที่ Reusable (`src/app/components/reusable/`)
-* **Client vs Server:**
-    * ใช้ `'use client'` เฉพาะเมื่อจำเป็น (เช่น มี `useState`, `useEffect`, Event Listeners)
-    * พยายามดัน Logic ไปที่ Server Components ให้มากที่สุดเพื่อลด Bundle Size
-* **Strict Typing:** ห้ามใช้ `any` ให้ใช้ `interface` หรือ `type` ที่ชัดเจนเสมอ
+
+- **File Structure:** 1 Component ต่อ 1 ไฟล์ (ยกเว้น sub-components เล็กๆ ที่ใช้เฉพาะในไฟล์นั้น)
+- **Composition:** เน้นการสร้าง Components ขนาดเล็กที่ Reusable (`src/app/components/reusable/`)
+- **Client vs Server:**
+  - ใช้ `'use client'` เฉพาะเมื่อจำเป็น (เช่น มี `useState`, `useEffect`, Event Listeners)
+  - พยายามดัน Logic ไปที่ Server Components ให้มากที่สุดเพื่อลด Bundle Size
+- **Strict Typing:** ห้ามใช้ `any` ให้ใช้ `interface` หรือ `type` ที่ชัดเจนเสมอ
 
 ### 3.3 State Management
-* **Local State:** ใช้ `useState` หรือ `useReducer`
-* **Global State:** ใช้ React Context เท่าที่จำเป็น (ปัจจุบันมี `AudioContext`, `DeviceContext`, `AssetLoaderContext`, `UIStarContext`)
-* **Avoid Prop Drilling:** ใช้ Composition หรือ Context แทนการส่ง Props ลึกเกิน 3 ชั้น
+
+- **Local State:** ใช้ `useState` หรือ `useReducer`
+- **Global State:** ใช้ React Context เท่าที่จำเป็น (ปัจจุบันมี `AudioContext`, `DeviceContext`, `AssetLoaderContext`, `UIStarContext`)
+- **Avoid Prop Drilling:** ใช้ Composition หรือ Context แทนการส่ง Props ลึกเกิน 3 ชั้น
 
 ## 4. โครงสร้างโปรเจค (Project Structure)
 
@@ -72,14 +76,14 @@ src/
 ## 5. แนวทางปฏิบัติเพื่อประสิทธิภาพ (Performance Guidelines)
 
 1.  **Image Optimization:**
-    * ใช้ `next/image` เสมอ และกำหนด `sizes` ให้เหมาะสม
-    * ใช้รูปแบบ WebP (ตามไฟล์ assets ที่มี)
+    - ใช้ `next/image` เสมอ และกำหนด `sizes` ให้เหมาะสม
+    - ใช้รูปแบบ WebP (ตามไฟล์ assets ที่มี)
 2.  **Animation Performance:**
-    * ใน Framer Motion ให้ใช้ `layout` prop อย่างระมัดระวัง
-    * ใช้ `transform` และ `opacity` ในการ Animate เพื่อเลี่ยง Layout Thrashing
-    * ใช้ `LazyLottie` component เพื่อโหลด Lottie files แบบ Lazy Loading
+    - ใน Framer Motion ให้ใช้ `layout` prop อย่างระมัดระวัง
+    - ใช้ `transform` และ `opacity` ในการ Animate เพื่อเลี่ยง Layout Thrashing
+    - ใช้ `LazyLottie` component เพื่อโหลด Lottie files แบบ Lazy Loading
 3.  **Asset Loading:**
-    * ใช้ `AssetLoaderContext` เพื่อ Preload รูปภาพและเสียงที่จำเป็นก่อนเริ่ม Scene เพื่อป้องกันการกระตุก
+    - ใช้ `AssetLoaderContext` เพื่อ Preload รูปภาพและเสียงที่จำเป็นก่อนเริ่ม Scene เพื่อป้องกันการกระตุก
 
 ## 6. ขั้นตอนการเพิ่ม Scene ใหม่ (Workflow)
 
@@ -90,9 +94,9 @@ src/
 5.  **Review:** ตรวจสอบ Responsive Design ผ่าน `DeviceContext` หรือ Tailwind classes (`md:`, `lg:`)
 
 ## 7. คำแนะนำเพิ่มเติม (Tips)
-* **Debugging:** หาก Animation ไม่ทำงาน ให้เช็ค `z-index` และ `pointer-events` ใน Tailwind ก่อนเสมอ
-* **Sound:** การเล่นเสียงบน Browser ต้องมีการ Interact จาก User ก่อนเสมอ (จัดการผ่าน `WelcomeSoundModal`)
 
+- **Debugging:** หาก Animation ไม่ทำงาน ให้เช็ค `z-index` และ `pointer-events` ใน Tailwind ก่อนเสมอ
+- **Sound:** การเล่นเสียงบน Browser ต้องมีการ Interact จาก User ก่อนเสมอ (จัดการผ่าน `WelcomeSoundModal`)
 
 Clean up ด้วย
 npx knip
@@ -102,11 +106,11 @@ npx biome check --write
 Animate ค่า opacity, transform (scale, rotate, x, y) แทนการเปลี่ยน layout properties เช่น width, height, margin, padding เพื่อประสิทธิภาพที่ดีกว่า
 
 เปิดปิด show star
- useMotionValueEvent(scrollYProgress, "change", (latest) => {
-    const isJobApplicationVisible = latest > 0.2 && latest < 0.6;
+useMotionValueEvent(scrollYProgress, "change", (latest) => {
+const isJobApplicationVisible = latest > 0.2 && latest < 0.6;
 
     if (isJobApplicationVisible) {
       setShowStars(false);
     }
-  });
 
+});

@@ -43,7 +43,7 @@ export interface SceneItemData {
 
   // Config สำหรับ Animation และ Parallax
   motionConfig?: {
-    parallaxDepth?: number; // ความลึก 
+    parallaxDepth?: number; // ความลึก
     delay?: number; // Delay ตอนปรากฏตัว
     duration?: number; // ความเร็วตอนปรากฏตัว
   };
@@ -71,7 +71,7 @@ interface SceneLayerProps {
   // Optional: Scroll Animations
   animations?: AnimationMap;
 
-  // Optional: Mouse Parallax 
+  // Optional: Mouse Parallax
   parallaxMouse?: {
     x: MotionValue<number>;
     y: MotionValue<number>;
