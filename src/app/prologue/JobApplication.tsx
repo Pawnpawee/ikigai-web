@@ -1,6 +1,6 @@
 "use client";
 import {
-  motion,
+  m,
   useInView,
   useMotionValueEvent,
   useScroll,
@@ -105,19 +105,19 @@ export default function JobApplication() {
   });
 
   return (
-    <motion.div
+    <m.div
       ref={ref}
       className="w-screen relative h-[950vh]"
       style={{ opacity }}
     >
       {/* bg */}
-      <motion.div
+      <m.div
         className="absolute w-screen inset-0 bg-s1"
         style={{
           opacity: opacity_bg,
         }}
       />
-      <motion.div
+      <m.div
         className="
           sticky 
           w-[200%]                      
@@ -137,16 +137,16 @@ export default function JobApplication() {
       >
         <JobApplication1 scrollYProgress={scrollYProgress} />
         <JobApplication2 scrollYProgress={scrollYProgress} />
-      </motion.div>
+      </m.div>
 
       {/* Light overlay */}
-      <motion.div
+      <m.div
         className="absolute w-screen inset-0 mix-blend-soft-light pointer-events-none opacity-80"
         style={{
           backgroundColor: "var(--color-overlay)",
           opacity: opacity_bg,
         }}
       />
-    </motion.div>
+    </m.div>
   );
 }
