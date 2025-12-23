@@ -1,7 +1,15 @@
 "use client";
-import { motion, useInView, useScroll, useTransform } from "framer-motion";
+
+import {
+  m,
+  useInView,
+  useMotionTemplate,
+  useScroll,
+  useTransform,
+} from "framer-motion";
 import { Howl } from "howler";
 import { useEffect, useRef } from "react";
+
 import { useAudio } from "@/app/contexts/AudioContext";
 import { useDevice } from "@/app/contexts/DeviceContext";
 import Bubble from "../components/button/Bubble";
@@ -90,8 +98,8 @@ export default function Sleeping() {
   const set3Y = useTransform(scrollYProgress, [0.125, 0.1875], [100, 0]);
   const set3Opacity = useTransform(scrollYProgress, [0.125, 0.1875], [0, 1]);
 
-  const set5Y = useTransform(scrollYProgress, [0.25, 0.3125], [100, 0]);
-  const set5Opacity = useTransform(scrollYProgress, [0.25, 0.3125], [0, 1]);
+  const set4Y = useTransform(scrollYProgress, [0.25, 0.3125], [100, 0]);
+  const set4Opacity = useTransform(scrollYProgress, [0.25, 0.3125], [0, 1]);
 
   // ชุด Bubbles (250-450vh = 31.25-56.25%)
   const bubble1Y = useTransform(scrollYProgress, [0.3125, 0.375], [100, 0]);
@@ -123,11 +131,6 @@ export default function Sleeping() {
   );
 
   const scale = useTransform(scrollYProgress, [0.5625, 0.75], [1, 1.7]);
-  const top_zoom = useTransform(
-    scrollYProgress,
-    [0.5625, 0.75],
-    [isMobile ? "15%" : "8%", isMobile ? "15%" : "8%"],
-  );
 
   const z_move = useTransform(scale, (s) => {
     const scale = Number(s) || 1;
@@ -140,11 +143,18 @@ export default function Sleeping() {
     [0, 1, 1, 0],
   );
 
+  const textSectionProgress = useTransform(
+    scrollYProgress,
+    [0.5625, 0.8], 
+    [0, 1] // ส่งค่า 0-1 แบบ Linear
+);
+
   const ry = useTransform(
     scrollYProgress,
     [0, 0.75, 0.8, 0.85, 0.9, 0.95, 1],
     [200, 200, 0, 60, 0, 40, 0],
   );
+  const maskImageValue = useMotionTemplate`radial-gradient(ellipse 50% ${ry}% at 50% 50%, transparent 0%, var(--color-background) 100%)`;
 
   const blink_opacity = useTransform(
     scrollYProgress,
@@ -156,11 +166,11 @@ export default function Sleeping() {
     1: { y: set1Y, opacity: set1Opacity },
     2: { y: set2Y, opacity: set2Opacity },
     3: { y: set3Y, opacity: set3Opacity },
-    5: { y: set5Y, opacity: set5Opacity },
+    4: { y: set4Y, opacity: set4Opacity },
   };
 
   return (
-    <motion.div
+    <m.div
       ref={ref}
       className="relative w-screen h-[800vh]"
       style={{ opacity }}
@@ -175,10 +185,10 @@ export default function Sleeping() {
           perspectiveOrigin: "50% 50%",
         }}
       >
-        <motion.div
+        <m.div
           className="absolute aspect-video w-full portrait:w-[250%]"
           style={{
-            top: top_zoom,
+            top: isMobile ? "15%" : "8%",
             z: z_move,
           }}
         >
@@ -187,10 +197,10 @@ export default function Sleeping() {
             animations={animations}
             containerAspectRatio="16 / 9"
           />
-        </motion.div>
+        </m.div>
 
         {/* ชุด 6: Bubble "จะทำได้ไหม" */}
-        <motion.div
+        <m.div
           className="absolute mix-blend-screen pointer-events-none
              top-[19.13%] right-[2.5%] w-[180px] aspect-180/110
              landscape:top-[17.22%] landscape:left-[62.76%] landscape:w-[295px] landscape:aspect-[295/176.08]
@@ -201,10 +211,10 @@ export default function Sleeping() {
           }}
         >
           <Bubble text="จะทำได้ไหม" className="typo-text-h5" />
-        </motion.div>
+        </m.div>
 
         {/* ชุด 7: Bubble "จะมีงานทำหรือเปล่า" */}
-        <motion.div
+        <m.div
           className="absolute mix-blend-screen pointer-events-none
              top-[7.38%] left-[7.5%] w-[180px] aspect-180/110
              landscape:top-[30.87%] landscape:left-[18.94%] landscape:w-[295px] landscape:aspect-[295/176.08]
@@ -215,10 +225,10 @@ export default function Sleeping() {
           }}
         >
           <Bubble text="จะมีงานทำหรือเปล่า" className="typo-text-h5" />
-        </motion.div>
+        </m.div>
 
         {/* ชุด 8: Bubble "จะเก่งพอหรือเปล่า" */}
-        <motion.div
+        <m.div
           className="absolute mix-blend-screen pointer-events-none
              top-[61.25%] right-[3.5%] w-[180px] aspect-180/110
              landscape:top-[52.16%] landscape:left-[59.61%] landscape:w-[295px] landscape:aspect-[295/176.08]
@@ -229,10 +239,10 @@ export default function Sleeping() {
           }}
         >
           <Bubble text="จะเก่งพอหรือเปล่า" className="typo-text-h5" />
-        </motion.div>
+        </m.div>
 
         {/* ชุด 9: Bubble "จะเข้ากับคนอื่นได้ไหม" */}
-        <motion.div
+        <m.div
           className="absolute mix-blend-screen pointer-events-none
              top-[75.38%] left-[8.61%] w-[180px] aspect-180/110
              landscape:top-[67.08%] landscape:left-[26.29%] landscape:w-[295px] landscape:aspect-[295/176.08]
@@ -243,19 +253,19 @@ export default function Sleeping() {
           }}
         >
           <Bubble text="จะเข้ากับคนอื่นได้ไหม" className="typo-text-h5" />
-        </motion.div>
+        </m.div>
 
         {/* ชุด 10: Text "เห้อนอนดีกว่า" */}
-        <motion.div
+        <m.div
           className="fixed bottom-[15%] left-0 right-0"
           style={{ opacity: textOpacity }}
         >
           <SubtitleScroll
             subtitles={["เห้อ นอนดีกว่า"]}
-            scrollYProgress={textOpacity}
+            progress={textSectionProgress}
             className="w-full h-full"
           />
-        </motion.div>
+        </m.div>
       </div>
 
       {/* Light overlay */}
@@ -265,19 +275,11 @@ export default function Sleeping() {
       />
 
       {/* อนิเมชันกระพริบตา POV - พื้นหลังดำกับรูปวงรีตรงกลาง */}
-      <motion.div
+      <m.div
         className="fixed inset-0 bg-black pointer-events-none z-10 w-screen h-screen"
         style={{
-          maskImage: useTransform(
-            ry,
-            (value) =>
-              `radial-gradient(ellipse 50% ${value}% at 50% 50%, transparent 0%, var(--color-background) 100%)`,
-          ),
-          WebkitMaskImage: useTransform(
-            ry,
-            (value) =>
-              `radial-gradient(ellipse 50% ${value}% at 50% 50%, transparent 0%, var(--color-background) 100%)`,
-          ),
+          maskImage: maskImageValue,
+          WebkitMaskImage: maskImageValue, //? ใช้ตัวแปรเดียวกันได้เลย
           maskRepeat: "no-repeat",
           WebkitMaskRepeat: "no-repeat",
           maskPosition: "center",
@@ -285,6 +287,6 @@ export default function Sleeping() {
           opacity: blink_opacity,
         }}
       />
-    </motion.div>
+    </m.div>
   );
 }

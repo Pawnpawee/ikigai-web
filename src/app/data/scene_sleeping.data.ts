@@ -67,7 +67,7 @@ export const SCENE_SLEEPING_ITEMS: SceneItemData[] = [
     src: "/assets/Scene/Scene2/blanket.webp",
     alt: "blanket covering person",
     style: { left: "31.96%", top: "41.65%", width: "36.17%", height: "55.55%" },
-    animGroup: 5,
+    animGroup: 4,
   },
 ];
 
