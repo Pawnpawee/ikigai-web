@@ -1,9 +1,4 @@
-import {
-  m,
-  useScroll,
-  useTransform,
-  type Variants,
-} from "framer-motion";
+import { m, useScroll, useTransform, type Variants } from "framer-motion";
 import { useEffect, useMemo, useRef, useState } from "react";
 import LazyLottie from "@/app/components/reusable/LazyLottie";
 import { useAudio } from "@/app/contexts/AudioContext";

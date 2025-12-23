@@ -7,8 +7,8 @@ export const SCENE_HERO_ITEMS: SceneItemData[] = [
     alt: "Hill background",
     style: { left: "0%", bottom: "0%", width: "100%", height: "100%" },
     motionConfig: {
-      parallaxDepth: 15, 
-      delay: 1.5, 
+      parallaxDepth: 15,
+      delay: 1.5,
       duration: 1.5,
     },
   },
@@ -19,7 +19,7 @@ export const SCENE_HERO_ITEMS: SceneItemData[] = [
     style: { left: "0%", bottom: "0%", width: "100%", height: "100%" },
     motionConfig: {
       parallaxDepth: 15,
-      delay: 2.5, 
+      delay: 2.5,
       duration: 1.5,
     },
   },
@@ -29,8 +29,8 @@ export const SCENE_HERO_ITEMS: SceneItemData[] = [
     alt: "Hill right foreground",
     style: { left: "0%", bottom: "0%", width: "100%", height: "100%" },
     motionConfig: {
-      parallaxDepth: 5, 
-      delay: 0.5, 
+      parallaxDepth: 5,
+      delay: 0.5,
       duration: 1.5,
     },
   },
@@ -41,8 +41,8 @@ export const SCENE_HERO_ITEMS: SceneItemData[] = [
     style: { left: "0%", bottom: "0%", width: "100%", height: "100%" },
     priority: true, // ตัวหน้าสุด โหลดก่อนเสมอ
     motionConfig: {
-      parallaxDepth: 5, 
-      delay: 0, 
+      parallaxDepth: 5,
+      delay: 0,
       duration: 1.5,
     },
   },

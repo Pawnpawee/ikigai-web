@@ -1,6 +1,5 @@
 "use client";
 
-import { useDevice } from "@/app/contexts/DeviceContext";
 import {
   type MotionValue,
   m,
@@ -10,6 +9,8 @@ import {
 import Image from "next/image";
 import type React from "react";
 import { useMemo } from "react";
+
+import { useDevice } from "@/app/contexts/DeviceContext";
 
 const MotionImage = m.create(Image);
 
@@ -43,7 +44,7 @@ export interface SceneItemData {
 
   // Config สำหรับ Animation และ Parallax
   motionConfig?: {
-    parallaxDepth?: number; // ความลึก 
+    parallaxDepth?: number; // ความลึก
     delay?: number; // Delay ตอนปรากฏตัว
     duration?: number; // ความเร็วตอนปรากฏตัว
   };
@@ -71,7 +72,7 @@ interface SceneLayerProps {
   // Optional: Scroll Animations
   animations?: AnimationMap;
 
-  // Optional: Mouse Parallax 
+  // Optional: Mouse Parallax
   parallaxMouse?: {
     x: MotionValue<number>;
     y: MotionValue<number>;
