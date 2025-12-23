@@ -21,8 +21,10 @@ interface LottieAnimationData {
   [key: string]: unknown;
 }
 
-interface LazyLottieProps
-  extends Omit<LottieComponentProps, "animationData" | "src"> {
+interface LazyLottieProps extends Omit<
+  LottieComponentProps,
+  "animationData" | "src"
+> {
   src: string | LottieAnimationData;
   className?: string;
   getRef?: (ref: LottieRefCurrentProps | null) => void;
