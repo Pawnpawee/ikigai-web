@@ -14,7 +14,6 @@ import SceneLayer, {
 import SubtitleScroll from "../components/text/SubtitleScroll";
 import { SCENE_SLEEPING_ITEMS } from "../data/scene_sleeping.data";
 
-
 export default function Sleeping() {
   const ref = useRef<HTMLDivElement>(null);
   const isInView = useInView(ref, { once: false, amount: 0.1 });

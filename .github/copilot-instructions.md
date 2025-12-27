@@ -214,9 +214,10 @@ const animations = {
 };
 
 useMotionValueEvent(scrollYProgress, "change", (latest) => {
-    const isDecisionSectionVisible = latest < 1;
+const isDecisionSectionVisible = latest < 1;
 
     if (isDecisionSectionVisible) {
       setShowStars(true);
     }
-  });
+
+});

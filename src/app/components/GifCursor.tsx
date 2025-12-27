@@ -41,7 +41,7 @@ export default function GifCursor() {
       style={{
         x: mouseX,
         y: mouseY,
-        translateX: "-50%", 
+        translateX: "-50%",
         translateY: "-50%",
       }}
       animate={{
@@ -50,7 +50,11 @@ export default function GifCursor() {
       transition={{ type: "spring", stiffness: 300, damping: 20 }}
     >
       <Image
-        src={isHover ? "/assets/cursors/cursor-hover-w.svg" : "/assets/cursors/cursor-s.svg"}
+        src={
+          isHover
+            ? "/assets/cursors/cursor-hover-w.svg"
+            : "/assets/cursors/cursor-s.svg"
+        }
         alt="Spirit Cursor"
         width={60}
         height={60}

@@ -48,8 +48,7 @@ export default function EyelidOverlay({
   //? 4. Effect สำหรับโหมด Snooze (จำลองการกระพริบ)
   useEffect(() => {
     if (!isSnoozing) {
-        
-    }; // ข้ามถ้าใช้ External
+    } // ข้ามถ้าใช้ External
     if (!externalRy && isSnoozing) {
       const sequence = async () => {
         // วูบหลับ (Ry ลดเหลือ 10%)

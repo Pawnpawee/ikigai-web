@@ -70,4 +70,3 @@ export const SCENE_SLEEPING_ITEMS: SceneItemData[] = [
     animGroup: 4,
   },
 ];
-

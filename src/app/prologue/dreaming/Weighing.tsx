@@ -507,13 +507,16 @@ export default function Weighing() {
             opacity: videoOpacity,
           }}
         >
-          <m.div className="w-full h-full" style={{scale : isMobile ? 0.8 : 1,}}>
-          <LazyLottie
-            src="/assets/Scene/Scene4/human.json"
-            playTrigger={videoOpacity}
-            loop
+          <m.div
             className="w-full h-full"
-          />
+            style={{ scale: isMobile ? 0.8 : 1 }}
+          >
+            <LazyLottie
+              src="/assets/Scene/Scene4/human.json"
+              playTrigger={videoOpacity}
+              loop
+              className="w-full h-full"
+            />
           </m.div>
         </m.div>
       </div>

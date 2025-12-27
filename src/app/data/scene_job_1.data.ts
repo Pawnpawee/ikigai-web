@@ -82,4 +82,3 @@ export const SCENE_1_ITEMS: SceneItemData[] = [
     animGroup: 13,
   },
 ];
-
