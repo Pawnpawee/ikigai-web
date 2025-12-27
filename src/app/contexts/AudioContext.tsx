@@ -147,13 +147,10 @@ export function AudioProvider({ children }: { children: React.ReactNode }) {
 
     const prevSound = soundRef.current;
 
-    // Step A: Fade Out ตัวเก่า
+    // Step A: หยุดตัวเก่า
     if (prevSound) {
-      prevSound.fade(prevSound.volume(), 0, 1000);
-      prevSound.once("fade", () => {
-        prevSound.stop();
-        prevSound.unload();
-      });
+      prevSound.stop();
+      prevSound.unload();
     }
 
     // Step B: เล่นตัวใหม่
@@ -165,7 +162,6 @@ export function AudioProvider({ children }: { children: React.ReactNode }) {
         loop: true,
         volume: 0,
         autoplay: false,
-        onloaderror: (_id, err) => console.error("Load Error:", err),
         onplayerror: (_id, err) => {
           console.warn("Play Error:", err);
           soundRef.current?.once("unlock", () => {

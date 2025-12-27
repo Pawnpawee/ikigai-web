@@ -157,7 +157,7 @@ const LazyLottie: React.FC<LazyLottieProps> = memo(
         <Lottie
           lottieRef={lottieRef}
           animationData={animationData}
-          autoplay={false}
+          autoplay={play && !playTrigger}
           loop={loop}
           onComplete={onComplete}
           rendererSettings={{

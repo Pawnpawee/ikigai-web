@@ -97,7 +97,7 @@ export default function JobApplication() {
   );
 
   useMotionValueEvent(scrollYProgress, "change", (latest) => {
-    const isJobApplicationVisible = latest > 0.2 && latest < 0.6;
+    const isJobApplicationVisible = latest > 0.1;
 
     if (isJobApplicationVisible) {
       setShowStars(false);

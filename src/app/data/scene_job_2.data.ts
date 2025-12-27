@@ -118,4 +118,3 @@ export const SCENE_2_ITEMS: SceneItemData[] = [
   },
 ];
 
-export default SCENE_2_ITEMS;

@@ -1,4 +1,9 @@
-import { m, useScroll, useTransform, type Variants } from "framer-motion";
+import {
+  m,
+  useScroll,
+  useTransform,
+  type Variants,
+} from "framer-motion";
 import { useEffect, useMemo, useRef, useState } from "react";
 import LazyLottie from "@/app/components/reusable/LazyLottie";
 import { useAudio } from "@/app/contexts/AudioContext";
@@ -6,7 +11,6 @@ import { useAudio } from "@/app/contexts/AudioContext";
 import { SCENE_HERO_ITEMS } from "@/app/data/scene_hero.data";
 import IkigaiCircle from "../components/reusable/IkigaiCircle";
 import SceneLayer from "../components/reusable/SceneLayer";
-import { useUI } from "../contexts/UIStarContext";
 import { useMouseParallax } from "../hooks/useMouseParallax";
 
 interface HeroProps {
@@ -23,15 +27,12 @@ export default function Hero({ shouldAnimate }: HeroProps) {
 
   const [isInteractionLocked, setIsInteractionLocked] = useState(true);
 
-  const { setShowStars } = useUI();
-
   const { smoothMouseX, smoothMouseY } = useMouseParallax();
   const logoParallaxX = useTransform(smoothMouseX, [0, 1], [15, -15]);
   const logoParallaxY = useTransform(smoothMouseY, [0, 1], [5, -5]);
 
   useEffect(() => {
     if (shouldAnimate) {
-      setShowStars(true);
       const timer = setTimeout(() => {
         setShouldPlayLottie(true);
         playSfx("/assets/Sound/12/magical-sparkling.mp3");
@@ -39,7 +40,7 @@ export default function Hero({ shouldAnimate }: HeroProps) {
 
       return () => clearTimeout(timer);
     }
-  }, [shouldAnimate, setShowStars, playSfx]);
+  }, [shouldAnimate, playSfx]);
 
   useEffect(() => {
     if (shouldAnimate) {

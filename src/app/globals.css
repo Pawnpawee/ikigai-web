@@ -321,6 +321,18 @@
   );
 }
 
+@utility bg-s3 {
+  background: linear-gradient(
+    180deg,
+    #e79f66 7.01%,
+    #e69a64 18.1%,
+    #e38d5f 29.77%,
+    #de7756 42.62%,
+    #d7594a 54.87%,
+    #d65147 58.38%
+  );
+}
+
 @utility bg-s4 {
   background: linear-gradient(
     0deg,
@@ -335,6 +347,15 @@
   );
 }
 
+@utility bg-s5 {
+  background: linear-gradient(
+    180deg,
+    #101518 1.07%,
+    #0c1b1f 77.07%,
+    #0b1e23 99.78%
+  );
+}
+
 body {
   background: var(--color-background);
   color: var(--color-foreground);
@@ -346,10 +367,6 @@ p {
   padding: 0;
 }
 
-.btn,
-button:not([disabled]) {
-  cursor: pointer;
-}
 
 @media (pointer: fine) {
   body,

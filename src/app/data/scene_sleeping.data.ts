@@ -71,4 +71,3 @@ export const SCENE_SLEEPING_ITEMS: SceneItemData[] = [
   },
 ];
 
-export default SCENE_SLEEPING_ITEMS;

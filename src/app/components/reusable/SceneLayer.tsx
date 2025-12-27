@@ -205,7 +205,7 @@ export default function SceneLayer({
 }: SceneLayerProps) {
   return (
     <div
-      className="relative w-full"
+      className="relative w-full portrait:h-full"
       style={{ aspectRatio: containerAspectRatio }}
     >
       <div className="absolute inset-0">

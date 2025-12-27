@@ -25,6 +25,7 @@ export default function SubtitleScroll({
         const startFadeOut = (index + 1) * portionSize - portionSize * 0.2;
         const endFadeOut = (index + 1) * portionSize;
 
+        // biome-ignore lint/correctness/useHookAtTopLevel: <needs>
         const opacity = useTransform(
           progress,
           [startFadeIn, fullyVisible, startFadeOut, endFadeOut],

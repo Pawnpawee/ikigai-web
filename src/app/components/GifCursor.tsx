@@ -37,24 +37,23 @@ export default function GifCursor() {
 
   return (
     <m.div
-      className="fixed top-0 left-0 pointer-events-none z-9999 mix-blend-screen"
+      className="fixed top-0 left-0 pointer-events-none z-9999"
       style={{
         x: mouseX,
         y: mouseY,
-        translateX: "-50%", // จัดให้อยู่กึ่งกลางเมาส์
+        translateX: "-50%", 
         translateY: "-50%",
       }}
       animate={{
-        scale: isHover ? 1.5 : 1, // ขยายเมื่อ Hover
         opacity: 1,
       }}
       transition={{ type: "spring", stiffness: 300, damping: 20 }}
     >
       <Image
-        src="/assets/cursors/blue-spirit.gif"
+        src={isHover ? "/assets/cursors/cursor-hover-w.svg" : "/assets/cursors/cursor-s.svg"}
         alt="Spirit Cursor"
-        width={64}
-        height={64}
+        width={60}
+        height={60}
         priority={true}
         unoptimized={true}
         className="pointer-events-none select-none"
