@@ -165,7 +165,7 @@ export default function Hero({ shouldAnimate }: HeroProps) {
       className={`w-full h-screen overflow-hidden flex flex-col items-center justify-center relative ${
         isInteractionLocked ? "pointer-events-none" : "pointer-events-auto"
       }`}
-      style={{ opacity , background: "var(--black-linear)" }}
+      style={{ opacity, background: "var(--black-linear)" }}
     >
       {/* Mountain - rendered via SceneLayer so order/data-driven */}
       <m.div
