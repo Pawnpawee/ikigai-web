@@ -6,6 +6,7 @@ export const SCENE_DREAMING_ITEMS: SceneItemData[] = [
     src: "/assets/Scene/Scene3/desert1.webp",
     alt: "desert1",
     style: { bottom: "0%", left: "0%", width: "100%", height: "46.764%" },
+    sizes: "100vw",
     animGroup: 3,
   },
   {
@@ -18,6 +19,7 @@ export const SCENE_DREAMING_ITEMS: SceneItemData[] = [
       width: "67.19%",
       height: "40.766%",
     },
+    sizes: "(max-width: 768px) 70vw, 60vw",
     animGroup: 2,
   },
   {
@@ -25,6 +27,7 @@ export const SCENE_DREAMING_ITEMS: SceneItemData[] = [
     src: "/assets/Scene/Scene3/desert3.webp",
     alt: "desert3",
     style: { bottom: "0%", left: "0%", width: "100%", height: "32.394%" },
+    sizes: "100vw",
     animGroup: 1,
   },
 ];

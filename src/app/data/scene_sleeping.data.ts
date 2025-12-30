@@ -9,6 +9,7 @@ export const SCENE_SLEEPING_ITEMS: SceneItemData[] = [
     src: "/assets/Scene/Scene2/bg.webp",
     alt: "background room",
     style: { left: "0%", top: "0%", width: "100.06%", height: "100%" },
+    sizes: "100vw",
     priority: true,
   },
 
@@ -20,6 +21,7 @@ export const SCENE_SLEEPING_ITEMS: SceneItemData[] = [
     src: "/assets/Scene/Scene2/bed.webp",
     alt: "bed with person sleeping",
     style: { left: "8.68%", top: "7.79%", width: "82.7%", height: "92.21%" },
+    sizes: "(max-width: 768px) 90vw, 85vw",
     animGroup: 1,
   },
 
@@ -32,6 +34,7 @@ export const SCENE_SLEEPING_ITEMS: SceneItemData[] = [
     src: "/assets/Scene/Scene2/set1.webp",
     alt: "books and notes on table",
     style: { left: "11.4%", top: "16.34%", width: "78.61%", height: "53.13%" },
+    sizes: "(max-width: 768px) 85vw, 80vw",
     animGroup: 2,
   },
 
@@ -44,6 +47,7 @@ export const SCENE_SLEEPING_ITEMS: SceneItemData[] = [
     src: "/assets/Scene/Scene2/set2.webp",
     alt: "lamp and clock",
     style: { left: "17.91%", top: "17.13%", width: "63.22%", height: "9.78%" },
+    sizes: "(max-width: 768px) 70vw, 65vw",
     animGroup: 3,
   },
 
@@ -55,6 +59,7 @@ export const SCENE_SLEEPING_ITEMS: SceneItemData[] = [
     src: "/assets/Scene/Scene2/human.webp",
     alt: "person sleeping on bed",
     style: { left: "41.98%", top: "19.11%", width: "16.58%", height: "59.32%" },
+    sizes: "(max-width: 768px) 30vw, 20vw",
     animGroup: 2,
   },
 
@@ -67,7 +72,7 @@ export const SCENE_SLEEPING_ITEMS: SceneItemData[] = [
     src: "/assets/Scene/Scene2/blanket.webp",
     alt: "blanket covering person",
     style: { left: "31.96%", top: "41.65%", width: "36.17%", height: "55.55%" },
+    sizes: "(max-width: 768px) 50vw, 40vw",
     animGroup: 4,
   },
 ];
-

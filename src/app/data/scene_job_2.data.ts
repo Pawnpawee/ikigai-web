@@ -9,6 +9,7 @@ export const SCENE_2_ITEMS: SceneItemData[] = [
     src: "/assets/Scene/Scene1/table.webp",
     alt: "Desk table",
     style: { left: "1.15%", top: "73.06%", width: "48.15%", height: "78.54%" },
+    sizes: "(max-width: 768px) 50vw, 40vw",
   },
   {
     id: "poster1",
@@ -20,12 +21,14 @@ export const SCENE_2_ITEMS: SceneItemData[] = [
       width: "43.75%",
       height: "74.51%",
     },
+    sizes: "(max-width: 768px) 40vw, 30vw",
   },
   {
     id: "poster2",
     src: "/assets/Scene/Scene1/poster2.webp",
     alt: "Wall poster group 2",
     style: { left: "5.65%", top: "-79.54%", width: "26.92%", height: "68.54%" },
+    sizes: "(max-width: 768px) 30vw, 20vw",
   },
   {
     id: "poster3",
@@ -37,30 +40,35 @@ export const SCENE_2_ITEMS: SceneItemData[] = [
       width: "25.07%",
       height: "61.39%",
     },
+    sizes: "(max-width: 768px) 30vw, 20vw",
   },
   {
     id: "poster4",
     src: "/assets/Scene/Scene1/poster4.webp",
     alt: "Wall poster group 4",
     style: { left: "-0.76%", top: "7.57%", width: "13.28%", height: "45.67%" },
+    sizes: "(max-width: 768px) 20vw, 10vw",
   },
   {
     id: "poster5",
     src: "/assets/Scene/Scene1/poster5.webp",
     alt: "Wall poster group 5",
     style: { left: "39.66%", top: "44.42%", width: "12.01%", height: "20.15%" },
+    sizes: "(max-width: 768px) 20vw, 10vw",
   },
   {
     id: "poster8",
     src: "/assets/Scene/Scene1/poster8.webp",
     alt: "Wall poster",
     style: { left: "52.69%", top: "18.07%", width: "6.41%", height: "17.63%" },
+    sizes: "(max-width: 768px) 10vw, 5vw",
   },
   {
     id: "computer",
     src: "/assets/Scene/Scene1/Computer.webp",
     alt: "Computer workstation",
     style: { left: "12.53%", top: "14.28%", width: "24.94%", height: "70.28%" },
+    sizes: "(max-width: 768px) 25vw, 15vw",
   },
   {
     id: "light",
@@ -68,18 +76,21 @@ export const SCENE_2_ITEMS: SceneItemData[] = [
     alt: "Lamp light",
     style: { left: "11.92%", top: "23.17%", width: "25.50%", height: "59.89%" },
     className: "mix-blend-screen",
+    sizes: "(max-width: 768px) 25vw, 15vw",
   },
   {
     id: "set1",
     src: "/assets/Scene/Scene1/set1.webp",
     alt: "Desk items set 1: book, pen, pencil box, post-it",
     style: { left: "37.30%", top: "67.67%", width: "9.16%", height: "21.63%" },
+    sizes: "(max-width: 768px) 10vw, 5vw",
   },
   {
     id: "set2",
     src: "/assets/Scene/Scene1/set2.webp",
     alt: "Desk items set 2: lamp, book, paper",
     style: { left: "2.96%", top: "12.05%", width: "12.46%", height: "77.37%" },
+    sizes: "(max-width: 768px) 15vw, 5vw",
   },
   {
     id: "lightWindow",
@@ -87,6 +98,7 @@ export const SCENE_2_ITEMS: SceneItemData[] = [
     alt: "Window light glow",
     style: { left: "67.31%", top: "19.30%", width: "14.89%", height: "62.68%" },
     animGroup: 2,
+    sizes: "(max-width: 768px) 15vw, 10vw",
   },
   {
     id: "star",
@@ -94,6 +106,7 @@ export const SCENE_2_ITEMS: SceneItemData[] = [
     alt: "Stars and circles decoration",
     style: { left: "67.13%", top: "21.62%", width: "14.34%", height: "24.88%" },
     animGroup: 4,
+    sizes: "(max-width: 768px) 15vw, 10vw",
   },
   {
     id: "building2",
@@ -101,6 +114,7 @@ export const SCENE_2_ITEMS: SceneItemData[] = [
     alt: "Building exterior",
     style: { left: "67.31%", top: "37.61%", width: "14.89%", height: "44.37%" },
     animGroup: 4,
+    sizes: "(max-width: 768px) 15vw, 10vw",
   },
   {
     id: "building1",
@@ -108,6 +122,7 @@ export const SCENE_2_ITEMS: SceneItemData[] = [
     alt: "Building exterior",
     style: { left: "67.31%", top: "48.01%", width: "14.89%", height: "33.97%" },
     animGroup: 5,
+    sizes: "(max-width: 768px) 15vw, 10vw",
   },
   {
     id: "window",
@@ -115,6 +130,7 @@ export const SCENE_2_ITEMS: SceneItemData[] = [
     alt: "Window frame",
     style: { left: "60.95%", top: "6.22%", width: "28.09%", height: "88.73%" },
     animGroup: 1,
+    sizes: "(max-width: 768px) 30vw, 20vw",
   },
 ];
 

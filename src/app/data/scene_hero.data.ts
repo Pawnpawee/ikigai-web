@@ -11,6 +11,7 @@ export const SCENE_HERO_ITEMS: SceneItemData[] = [
       delay: 1.5,
       duration: 1.5,
     },
+    sizes: "100vw",
   },
   {
     id: "hill-c-f",
@@ -22,6 +23,7 @@ export const SCENE_HERO_ITEMS: SceneItemData[] = [
       delay: 2.5,
       duration: 1.5,
     },
+    sizes: "100vw",
   },
   {
     id: "hill-r-f",
@@ -33,6 +35,7 @@ export const SCENE_HERO_ITEMS: SceneItemData[] = [
       delay: 0.5,
       duration: 1.5,
     },
+    sizes: "100vw",
   },
   {
     id: "hill-l-f",
@@ -45,5 +48,6 @@ export const SCENE_HERO_ITEMS: SceneItemData[] = [
       delay: 0,
       duration: 1.5,
     },
+    sizes: "100vw",
   },
 ];

@@ -6,24 +6,26 @@ export const SCENE_WEIGHING_ITEMS: SceneItemData[] = [
     src: "/assets/Scene/Scene4/ground.webp",
     alt: "ground",
     style: {
-      width: "100%",
-      height: "52.3808%",
-      left: "-0.2%",
-      bottom: "-52.2419%",
+      width: "100.74%",
+      height: "153.37%",
+      right: "-0.74%",
+      bottom: "-52.26%",
     },
     animGroup: 2,
+    sizes: "100vw",
   },
   {
     id: "building",
     src: "/assets/Scene/Scene4/building.webp",
     alt: "Building",
     style: {
-      width: "52.8875%",
-      height: "90.8444%",
-      left: "23.5375%",
-      bottom: "-2.1333%",
+      width: "127.05%",
+      height: "110.55%",
+      left: "-13.53%",
+      bottom: "-9.8%",
     },
     animGroup: 4,
+    sizes: "100vw",
   },
   {
     id: "scale-2-1",
@@ -36,6 +38,7 @@ export const SCENE_WEIGHING_ITEMS: SceneItemData[] = [
       height: "2.30%",
     },
     animGroup: 69,
+    sizes: "(max-width: 768px) 15vw, 10vw",
   },
   {
     id: "scale_center",
@@ -43,6 +46,7 @@ export const SCENE_WEIGHING_ITEMS: SceneItemData[] = [
     alt: "Scale",
     style: { top: "45.77%", left: "41.95%", width: "16.11%", height: "31.79%" },
     animGroup: 6,
+    sizes: "(max-width: 768px) 20vw, 15vw",
   },
   {
     id: "heart_plate",
@@ -50,6 +54,7 @@ export const SCENE_WEIGHING_ITEMS: SceneItemData[] = [
     alt: "Heart Plate",
     style: { top: "62.68%", left: "41.95%", width: "3.38%", height: "1.54%" },
     animGroup: 66,
+    sizes: "(max-width: 768px) 5vw, 3vw",
   },
   {
     id: "feather_plate",
@@ -57,6 +62,7 @@ export const SCENE_WEIGHING_ITEMS: SceneItemData[] = [
     alt: "Feather Plate",
     style: { top: "63.02%", left: "53.56%", width: "3.38%", height: "1.54%" },
     animGroup: 67,
+    sizes: "(max-width: 768px) 5vw, 3vw",
   },
   {
     id: "heart",
@@ -64,6 +70,7 @@ export const SCENE_WEIGHING_ITEMS: SceneItemData[] = [
     alt: "Heart",
     style: { top: "58.44%", left: "42.18%", width: "3.50%", height: "4.99%" },
     animGroup: 7,
+    sizes: "(max-width: 768px) 5vw, 3vw",
   },
   {
     id: "feather",
@@ -71,6 +78,7 @@ export const SCENE_WEIGHING_ITEMS: SceneItemData[] = [
     alt: "Feather",
     style: { top: "58.76%", left: "54.60%", width: "3.42%", height: "4.96%" },
     animGroup: 8,
+    sizes: "(max-width: 768px) 5vw, 3vw",
   },
 
   {
@@ -81,5 +89,6 @@ export const SCENE_WEIGHING_ITEMS: SceneItemData[] = [
     animGroup: 68,
     className: "mix-blend-screen",
     priority: true,
+    sizes: "(max-width: 768px) 40vw, 30vw",
   },
 ];

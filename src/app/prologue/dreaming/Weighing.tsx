@@ -202,12 +202,6 @@ export default function Weighing() {
   // POV falling effect - extended to use additional 50vh (600-750vh = 0.6-0.75)
   const pov_y = useTransform(scrollYProgress, [0, 0.72, 0.75], [0, 0, -300]);
 
-  // Set 2
-  const set2Opacity = useTransform(
-    scrollYProgress,
-    [0.0667, 0.1333, 0.749, 0.75],
-    [0, 1, 1, 0],
-  );
 
   // Set 4
   const set4Opacity = useTransform(
@@ -216,14 +210,6 @@ export default function Weighing() {
     [0, 1, 1, 0],
   );
   const set4Y = useTransform(scrollYProgress, [0.2, 0.2667], [100, 0]);
-
-  // Set 5
-  const set5Opacity = useTransform(
-    scrollYProgress,
-    [0.2667, 0.3333, 0.749, 0.75],
-    [0, 1, 1, 0],
-  );
-  const set5Y = useTransform(scrollYProgress, [0.2667, 0.3333], [100, 0]);
 
   // Set 6
   const set6Opacity = useTransform(
@@ -435,21 +421,6 @@ export default function Weighing() {
                 animations={animations}
                 containerAspectRatio="16 / 9"
               >
-                {/* Set 1 full background */}
-                <m.div
-                  className="absolute inset-0 w-full h-full -z-1"
-                  style={{
-                    opacity: set2Opacity,
-                  }}
-                >
-                  <LazyLottie
-                    src="/assets/Scene/Scene4/s4-set1.json"
-                    loop
-                    playTrigger={set2Opacity}
-                    className="w-full h-full"
-                  />
-                </m.div>
-
                 {/* Set 4: Clothing */}
                 <m.div
                   className="absolute bottom-[-2.1333%] left-[23.5375%] w-[52.8875%] h-[90.8444%]"
@@ -462,36 +433,6 @@ export default function Weighing() {
                     src="/assets/Scene/Scene4/s4-clothing.json"
                     loop
                     playTrigger={set4Opacity}
-                    className="w-full h-full"
-                  />
-                </m.div>
-
-                {/* Set 5: Cat */}
-                <m.div
-                  className="absolute bottom-[-4.2%] right-[28.1%] w-[7.17%] h-[22.77%] scale-x-[-1]"
-                  style={{
-                    opacity: set5Opacity,
-                    y: set5Y,
-                  }}
-                >
-                  <LazyLottie
-                    src="/assets/Scene/Scene4/s4-cat.json"
-                    playTrigger={set5Opacity}
-                    loop
-                    className="w-full h-full"
-                  />
-                </m.div>
-                <m.div
-                  className="absolute bottom-[-4.3%] left-[28%] w-[7.17%] h-[22.77%] "
-                  style={{
-                    opacity: set5Opacity,
-                    y: set5Y,
-                  }}
-                >
-                  <LazyLottie
-                    src="/assets/Scene/Scene4/s4-cat.json"
-                    playTrigger={set5Opacity}
-                    loop
                     className="w-full h-full"
                   />
                 </m.div>
