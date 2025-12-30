@@ -17,7 +17,6 @@ export default function Hero({ shouldAnimate }: HeroProps) {
 
   const { playSfx } = useAudio();
 
-  const [isLottieComplete, setIsLottieComplete] = useState(false);
   const [shouldPlayLottie, setShouldPlayLottie] = useState(false);
 
   const [isInteractionLocked, setIsInteractionLocked] = useState(true);
@@ -77,10 +76,6 @@ export default function Hero({ shouldAnimate }: HeroProps) {
     };
   }, [isInteractionLocked]);
 
-  const handleLottieComplete = () => {
-    setIsLottieComplete(true);
-  };
-
   const { scrollYProgress } = useScroll({
     target: ref,
     offset: ["start start", "end start"],
@@ -119,26 +114,6 @@ export default function Hero({ shouldAnimate }: HeroProps) {
   const circle2_rotate = useTransform(scrollYProgress, [0, 1], [90, 0]);
   const circle3_rotate = useTransform(scrollYProgress, [0, 1], [0, 90]);
   const circle4_rotate = useTransform(scrollYProgress, [0, 1], [-90, 0]);
-
-  const lottieGlowVariants: Variants = useMemo(
-    () => ({
-      initial: {
-        filter: "drop-shadow(0px 0px 0px rgba(255,255,255,0))",
-      },
-      glowing: {
-        filter: [
-          "drop-shadow(0px 0px 0px rgba(255,255,255,0))",
-          "drop-shadow(0px 0px 5px rgba(255,255,255,1))",
-          "drop-shadow(0px 0px 0px rgba(255,255,255,0))",
-        ],
-        transition: {
-          duration: 1.5,
-        },
-        willChange: "filter",
-      },
-    }),
-    [],
-  );
 
   // Memoize text split
   const textChars = useMemo(() => textContent.split(""), []);
@@ -278,18 +253,13 @@ export default function Hero({ shouldAnimate }: HeroProps) {
           animate={shouldAnimate ? { opacity: 1 } : { opacity: 0 }}
           transition={{ duration: 2, delay: 1.5 }}
         >
-          <m.div
-            variants={lottieGlowVariants}
-            animate={isLottieComplete ? "glowing" : "initial"}
-          >
             <LazyLottie
-              src="/assets/Scene/Hero/logo_ikigai_animate.json"
+              src="/assets/Scene/Hero/logo.json"
               className="h-[100px]"
               loop={false}
               play={shouldPlayLottie}
-              onComplete={handleLottieComplete}
             />
-          </m.div>
+
         </m.div>
         <p className="font-bentham font-medium text-4xl text-white whitespace-nowrap">
           {textChars.map((char, index) => (

@@ -27,6 +27,16 @@ const nextConfig: NextConfig = {
       "framer-motion",
     ],
   },
+
+  webpack: (config) => {
+    //? information: บังคับให้ Webpack เปลี่ยน import 'lottie-web' ทั้งหมดไปเป็นรุ่น Light
+    config.resolve.alias = {
+      ...config.resolve.alias,
+      "lottie-web": "lottie-web/build/player/lottie_light",
+    };
+
+    return config;
+  },
 };
 
 export default withBundleAnalyzer(nextConfig);
