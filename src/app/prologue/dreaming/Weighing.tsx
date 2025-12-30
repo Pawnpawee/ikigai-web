@@ -202,7 +202,6 @@ export default function Weighing() {
   // POV falling effect - extended to use additional 50vh (600-750vh = 0.6-0.75)
   const pov_y = useTransform(scrollYProgress, [0, 0.72, 0.75], [0, 0, -300]);
 
-
   // Set 4
   const set4Opacity = useTransform(
     scrollYProgress,
