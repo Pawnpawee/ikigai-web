@@ -50,7 +50,7 @@ export default function GradientButton({
     if (isTransparentVariant) {
       return {
         border: "2px solid rgba(255, 255, 255, 1)",
-        background: "rgba(255, 255, 255, 0)", 
+        background: "rgba(255, 255, 255, 0)",
         boxShadow: "0 0 40px -20px var(--color-slate-100)",
       };
     }
@@ -79,7 +79,7 @@ export default function GradientButton({
         
         ${
           isTransparentVariant
-            ? "text-white hover:bg-white/10 hover:border-white" 
+            ? "text-white hover:bg-white/10 hover:border-white"
             : isWhiteVariant
               ? "text-black"
               : isSelected

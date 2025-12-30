@@ -93,4 +93,3 @@ export const SCENE_1_ITEMS: SceneItemData[] = [
     sizes: "(max-width: 768px) 25vw, 15vw",
   },
 ];
-

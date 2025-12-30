@@ -8,7 +8,6 @@ import SceneLayer, {
 } from "../components/reusable/SceneLayer";
 import { SCENE_1_ITEMS } from "../data/scene_job_1.data";
 
-
 interface JobApplication1Props {
   scrollYProgress: MotionValue<number>;
 }
