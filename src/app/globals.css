@@ -95,12 +95,7 @@
   );
 }
 @utility bg-s5 {
-  background: linear-gradient(
-    180deg,
-    #101518 1%,
-    #0c1b1f 77%,
-    #0b1e23 100%
-  );
+  background: linear-gradient(180deg, #101518 1%, #0c1b1f 77%, #0b1e23 100%);
 }
 body {
   background: var(--color-background);

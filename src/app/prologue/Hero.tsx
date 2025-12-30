@@ -253,13 +253,12 @@ export default function Hero({ shouldAnimate }: HeroProps) {
           animate={shouldAnimate ? { opacity: 1 } : { opacity: 0 }}
           transition={{ duration: 2, delay: 1.5 }}
         >
-            <LazyLottie
-              src="/assets/Scene/Hero/logo.json"
-              className="h-[100px]"
-              loop={false}
-              play={shouldPlayLottie}
-            />
-
+          <LazyLottie
+            src="/assets/Scene/Hero/logo.json"
+            className="h-[100px]"
+            loop={false}
+            play={shouldPlayLottie}
+          />
         </m.div>
         <p className="font-bentham font-medium text-4xl text-white whitespace-nowrap">
           {textChars.map((char, index) => (
