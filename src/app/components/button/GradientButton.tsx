@@ -74,7 +74,7 @@ export default function GradientButton({
         relative
         rounded-full
         px-14 py-4
-        typo-text-h4
+        text-xl
         transition-all
         
         ${

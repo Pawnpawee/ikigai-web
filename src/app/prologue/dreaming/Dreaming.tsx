@@ -163,7 +163,7 @@ export default function Dreaming() {
               text={text}
               scrollYProgress={textAnimationProgress}
               as="p"
-              className="typo-text-h4 text-white w-80 md:w-140 xl:w-full"
+              className="text-2xl portrait:text-xl text-white w-80 md:w-140 xl:w-full"
             />
           </m.div>
         </div>

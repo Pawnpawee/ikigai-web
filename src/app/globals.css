@@ -22,7 +22,6 @@
   --animate-bounce-slow: bounce-slow 3s infinite ease-out;
   --animate-fade-loop: fade-loop 4s infinite ease-out;
 }
-
 @keyframes bounce-slow {
   0%,
   20%,
@@ -36,7 +35,6 @@
     opacity: 1;
   }
 }
-
 @keyframes fade-loop {
   0%,
   100% {
@@ -46,254 +44,7 @@
     opacity: 1;
   }
 }
-
-/* Typography utilities */
-@utility typo-h1 {
-  font-weight: 700;
-  font-size: 40px;
-  line-height: 1.5;
-}
-@utility typo-h1-serif {
-  font-family: var(--font-bentham);
-  font-weight: 500;
-  font-size: 40px;
-  line-height: 1.5;
-}
-@utility typo-text-h1 {
-  font-weight: 400;
-  font-size: 40px;
-  line-height: 1.5;
-}
-@utility typo-h2 {
-  font-weight: 700;
-  font-size: 32px;
-  line-height: 1.5;
-  letter-spacing: 1.5;
-}
-@utility typo-h2-serif {
-  font-family: var(--font-bentham);
-  font-weight: 500;
-  font-size: 32px;
-  line-height: 1.5;
-  letter-spacing: 1.5;
-}
-@utility typo-text-h2 {
-  font-weight: 400;
-  font-size: 32px;
-  line-height: 1.5;
-  letter-spacing: 1.5;
-}
-@utility typo-h3 {
-  font-weight: 700;
-  font-size: 20px;
-  line-height: 1.5;
-  letter-spacing: 1.5;
-}
-@utility typo-h3-serif {
-  font-family: var(--font-bentham);
-  font-weight: 500;
-  font-size: 20px;
-  line-height: 1.5;
-  letter-spacing: 1.5;
-}
-@utility typo-text-h3 {
-  font-weight: 400;
-  font-size: 20px;
-  line-height: 1.5;
-  letter-spacing: 1.5;
-}
-@utility typo-h4 {
-  font-weight: 600;
-  font-size: 20px;
-  line-height: 1.5;
-  letter-spacing: 1.5;
-}
-@utility typo-text-h4 {
-  font-weight: 400;
-  font-size: 20px;
-  line-height: 1.5;
-  letter-spacing: 1.5;
-}
-@utility typo-h4-serif {
-  font-family: var(--font-bentham);
-  font-weight: 500;
-  font-size: 20px;
-  line-height: 1.5;
-}
-@utility typo-h5 {
-  font-weight: 600;
-  font-size: 16px;
-  line-height: 1.5;
-}
-@utility typo-text-h5 {
-  font-weight: 400;
-  font-size: 16px;
-  line-height: 1.5;
-}
-@utility typo-h6 {
-  font-weight: 600;
-  font-size: 14px;
-  line-height: 1.5;
-}
-@utility typo-text-h6 {
-  font-weight: 400;
-  font-size: 14px;
-  line-height: 1.5;
-}
-@utility typo-p-lg {
-  font-weight: 400;
-  font-size: 16px;
-  line-height: 1.5;
-}
-@utility typo-p-md {
-  font-weight: 400;
-  font-size: 14px;
-  line-height: 1.5;
-}
-@utility typo-p-sm {
-  font-weight: 400;
-  font-size: 12px;
-  line-height: 1.5;
-}
-@utility typo-p-xsm {
-  font-weight: 400;
-  font-size: 10px;
-  line-height: 1.5;
-}
-
-/* Responsive typography overrides */
-
-/* Responsive md (768px+) - Tablet Landscape */
-@media (min-width: 768px) {
-  .typo-h1,
-  .typo-text-h1,
-  .typo-h1-serif {
-    font-size: 48px;
-  }
-  .typo-h2,
-  .typo-text-h2,
-  .typo-h2-serif {
-    font-size: 40px;
-  }
-  .typo-h3,
-  .typo-h3-serif,
-  .typo-text-h3 {
-    font-size: 32px;
-  }
-  .typo-h4,
-  .typo-text-h4,
-  .typo-h4-serif {
-    font-size: 24px;
-  }
-  .typo-h5,
-  .typo-text-h5 {
-    font-size: 20px;
-  }
-  .typo-h6,
-  .typo-text-h6 {
-    font-size: 16px;
-  }
-  .typo-p-lg {
-    font-size: 20px;
-  }
-  .typo-p-md {
-    font-size: 16px;
-  }
-  .typo-p-sm {
-    font-size: 14px;
-  }
-  .typo-p-xsm {
-    font-size: 12px;
-  }
-}
-
-/* Responsive lg (1024px+) - Desktop - ใช้ขนาดเต็ม */
-@media (min-width: 1024px) {
-  .typo-h1,
-  .typo-text-h1,
-  .typo-h1-serif {
-    font-size: 60px;
-  }
-  .typo-h2,
-  .typo-text-h2,
-  .typo-h2-serif {
-    font-size: 48px;
-  }
-  .typo-h3,
-  .typo-text-h3,
-  .typo-h3-serif {
-    font-size: 40px;
-  }
-  .typo-h4,
-  .typo-text-h4,
-  .typo-h4-serif {
-    font-size: 32px;
-  }
-  .typo-h5,
-  .typo-text-h5 {
-    font-size: 24px;
-  }
-  .typo-h6,
-  .typo-text-h6 {
-    font-size: 20px;
-  }
-  .typo-p-lg {
-    font-size: 24px;
-  }
-  .typo-p-md {
-    font-size: 20px;
-  }
-  .typo-p-sm {
-    font-size: 16px;
-  }
-  .typo-p-xsm {
-    font-size: 14px;
-  }
-}
-
 /* Gradient utilities */
-@utility white-linear {
-  background: var(--white-linear);
-}
-@utility white-radial {
-  background: var(--white-radial);
-}
-@utility black-linear {
-  background: var(--black-linear);
-}
-@utility black-radial {
-  background: var(--black-radial);
-}
-@utility primary-linear {
-  background: var(--primary-linear);
-}
-@utility primary-radial {
-  background: var(--primary-radial);
-}
-@utility love-linear {
-  background: var(--love-linear);
-}
-@utility love-radial {
-  background: var(--love-radial);
-}
-@utility skill-linear {
-  background: var(--skill-linear);
-}
-@utility skill-radial {
-  background: var(--skill-radial);
-}
-@utility world-linear {
-  background: var(--world-linear);
-}
-@utility world-radial {
-  background: var(--world-radial);
-}
-@utility paid-linear {
-  background: var(--paid-linear);
-}
-@utility paid-radial {
-  background: var(--paid-radial);
-}
 @utility bg-s1 {
   background: linear-gradient(
     180deg,
@@ -309,7 +60,6 @@
     #000 100%
   );
 }
-
 @utility bg-s2 {
   background: linear-gradient(
     180deg,
@@ -320,7 +70,6 @@
     #000 99.7%
   );
 }
-
 @utility bg-s3 {
   background: linear-gradient(
     180deg,
@@ -332,7 +81,6 @@
     #d65147 58.38%
   );
 }
-
 @utility bg-s4 {
   background: linear-gradient(
     0deg,
@@ -346,7 +94,6 @@
     #0b1e23 127.91%
   );
 }
-
 @utility bg-s5 {
   background: linear-gradient(
     180deg,
@@ -355,18 +102,15 @@
     #0b1e23 99.78%
   );
 }
-
 body {
   background: var(--color-background);
   color: var(--color-foreground);
   font-family: var(--font-anuphan), Arial, Helvetica, sans-serif;
   overflow-x: hidden;
 }
-
 p {
   padding: 0;
 }
-
 @media (pointer: fine) {
   body,
   a,
@@ -379,11 +123,9 @@ p {
     cursor: none;
   }
 }
-
 ::-webkit-scrollbar {
   display: none;
 }
-
 * {
   -ms-overflow-style: none;
   scrollbar-width: none;

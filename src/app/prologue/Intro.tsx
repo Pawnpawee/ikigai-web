@@ -102,7 +102,7 @@ export default function Intro() {
                 textShadow: introGlow,
                 willChange: "transform, opacity, filter",
               }}
-              className="typo-h2-serif text-white absolute"
+              className="font-bentham font-medium text-5xl portrait:text-4xl text-white absolute"
             >
               Intro
             </m.h2>
@@ -112,7 +112,7 @@ export default function Intro() {
             text={INTRO_TEXT}
             scrollYProgress={textAnimationProgress}
             as="div"
-            className="typo-p-lg text-white text-center w-70 sm:w-full mx-auto"
+            className="text-2xl portrait:text-xl text-white text-center w-70 sm:w-full mx-auto"
           />
         </m.div>
       </m.div>

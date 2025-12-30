@@ -48,7 +48,7 @@ const WordByWordAnimation: FC<WordByWordAnimationProps> = ({
   text,
   scrollYProgress,
   as = "p",
-  className = "typo-p-md",
+  className = "text-sm",
   style,
 }) => {
   const allWords = text.split(/\s+/).filter(Boolean);

@@ -210,7 +210,7 @@ export default function Sleeping() {
             opacity: bubble1Opacity,
           }}
         >
-          <Bubble text="จะทำได้ไหม" className="typo-text-h5" />
+          <Bubble text="จะทำได้ไหม" className="text-2xl portrait:text-xl" />
         </m.div>
 
         {/* ชุด 7: Bubble "จะมีงานทำหรือเปล่า" */}
@@ -224,7 +224,7 @@ export default function Sleeping() {
             opacity: bubble2Opacity,
           }}
         >
-          <Bubble text="จะมีงานทำหรือเปล่า" className="typo-text-h5" />
+          <Bubble text="จะมีงานทำหรือเปล่า" className="text-2xl portrait:text-xl" />
         </m.div>
 
         {/* ชุด 8: Bubble "จะเก่งพอหรือเปล่า" */}
@@ -238,7 +238,7 @@ export default function Sleeping() {
             opacity: bubble3Opacity,
           }}
         >
-          <Bubble text="จะเก่งพอหรือเปล่า" className="typo-text-h5" />
+          <Bubble text="จะเก่งพอหรือเปล่า" className="text-2xl portrait:text-xl" />
         </m.div>
 
         {/* ชุด 9: Bubble "จะเข้ากับคนอื่นได้ไหม" */}
@@ -252,7 +252,7 @@ export default function Sleeping() {
             opacity: bubble4Opacity,
           }}
         >
-          <Bubble text="จะเข้ากับคนอื่นได้ไหม" className="typo-text-h5" />
+          <Bubble text="จะเข้ากับคนอื่นได้ไหม" className="text-2xl portrait:text-xl" />
         </m.div>
 
         {/* ชุด 10: Text "เห้อนอนดีกว่า" */}

@@ -69,10 +69,10 @@ export default function WelcomeSoundModal({
                 transition={{ delay: 0.3 }}
                 className="text-center mb-8"
               >
-                <h2 className="typo-h3 text-white mb-4">
+                <h2 className="text-xl font-bold text-white mb-4">
                   ประสบการณ์เสียงประกอบ
                 </h2>
-                <p className="typo-p-lg text-slate-300">
+                <p className="text-2xl portrait:text-xl text-slate-300">
                   เว็บไซต์นี้มีเสียงประกอบและเอฟเฟกต์เสียง
                   <br />
                   คุณต้องการเปิดเสียงหรือไม่?
@@ -90,7 +90,7 @@ export default function WelcomeSoundModal({
                 <button
                   type="button"
                   onClick={onDecline}
-                  className="flex-1 px-6 py-4 rounded-xl bg-slate-700 hover:bg-slate-600 text-white typo-h5 transition-colors border border-slate-600"
+                  className="flex-1 px-6 py-4 rounded-xl bg-slate-700 hover:bg-slate-600 text-white text-2xl portrait:text-xl font-semibold transition-colors border border-slate-600"
                 >
                   ไม่เปิด
                 </button>
@@ -99,7 +99,7 @@ export default function WelcomeSoundModal({
                 <button
                   type="button"
                   onClick={onAccept}
-                  className="flex-1 px-6 py-4 rounded-xl bg-linear-to-r from-blue-500 to-blue-600 hover:from-blue-600 hover:to-blue-700 text-white typo-h5 transition-all shadow-lg shadow-blue-500/30 hover:shadow-blue-500/50"
+                  className="flex-1 px-6 py-4 rounded-xl bg-linear-to-r from-blue-500 to-blue-600 hover:from-blue-600 hover:to-blue-700 text-white text-2xl portrait:text-xl font-semibold transition-all shadow-lg shadow-blue-500/30 hover:shadow-blue-500/50"
                 >
                   เปิดเสียง
                 </button>
@@ -110,7 +110,7 @@ export default function WelcomeSoundModal({
                 initial={{ opacity: 0 }}
                 animate={{ opacity: 1 }}
                 transition={{ delay: 0.5 }}
-                className="text-center text-slate-400 typo-p-sm mt-4"
+                className="text-center text-slate-400 text-xs mt-4"
               >
                 คุณสามารถเปลี่ยนการตั้งค่าได้ทุกเมื่อจากเมนู
               </m.p>

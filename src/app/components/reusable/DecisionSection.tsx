@@ -56,7 +56,7 @@ export default function DecisionSection({
           text={text}
           scrollYProgress={scrollYProgress} // ผูกกับ Scroll ให้ค่อยๆ ขึ้น
           as="h2"
-          className="typo-text-h3 text-white max-w-3xs md:max-w-4xl"
+          className="text-4xl portrait:text-2xl text-white max-w-3xs md:max-w-4xl"
         />
 
         {/* Buttons */}

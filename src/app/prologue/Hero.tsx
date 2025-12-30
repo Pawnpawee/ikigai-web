@@ -187,10 +187,10 @@ export default function Hero({ shouldAnimate }: HeroProps) {
   return (
     <m.div
       ref={ref}
-      className={`w-full h-screen overflow-hidden flex flex-col items-center justify-center relative black-linear ${
+      className={`w-full h-screen overflow-hidden flex flex-col items-center justify-center relative ${
         isInteractionLocked ? "pointer-events-none" : "pointer-events-auto"
       }`}
-      style={{ opacity }}
+      style={{ opacity , background: "var(--black-linear)" }}
     >
       {/* Mountain - rendered via SceneLayer so order/data-driven */}
       <m.div
@@ -291,7 +291,7 @@ export default function Hero({ shouldAnimate }: HeroProps) {
             />
           </m.div>
         </m.div>
-        <p className="typo-h2-serif text-white whitespace-nowrap">
+        <p className="font-bentham font-medium text-4xl text-white whitespace-nowrap">
           {textChars.map((char, index) => (
             <m.span
               key={`char-${index}-${char}`}
