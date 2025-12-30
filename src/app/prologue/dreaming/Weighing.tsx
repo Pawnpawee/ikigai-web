@@ -202,6 +202,7 @@ export default function Weighing() {
   // POV falling effect - extended to use additional 50vh (600-750vh = 0.6-0.75)
   const pov_y = useTransform(scrollYProgress, [0, 0.72, 0.75], [0, 0, -300]);
 
+
   // Set 4
   const set4Opacity = useTransform(
     scrollYProgress,
@@ -308,10 +309,6 @@ export default function Weighing() {
   const featherPlateY_set8 = useTransform(
     () => set8Y.get() + featherPlateY.get(),
   );
-  const heartPlateY_set6 = useTransform(() => set6Y.get() + heartPlateY.get());
-  const featherPlateY_set6 = useTransform(
-    () => set6Y.get() + featherPlateY.get(),
-  );
 
   const textOpacity = useTransform(
     scrollYProgress,
@@ -339,23 +336,14 @@ export default function Weighing() {
       69: { y: set6Y, opacity: set6Opacity, rotate: scaleRotate },
       // Group 6: main plates/scale intro
       6: { y: set6Y, opacity: set6Opacity },
-      // Heart and feather appear in their own groups
-      7: {
+      // Per-item combined transforms for plates
+      66: {
         y: heartPlateY_set7,
         opacity: set7Opacity,
       },
-      8: {
+      67: {
         y: featherPlateY_set8,
         opacity: set8Opacity,
-      },
-      // Per-item combined transforms for plates
-      66: {
-        y: heartPlateY_set6,
-        opacity: set6Opacity,
-      },
-      67: {
-        y: featherPlateY_set6,
-        opacity: set6Opacity,
       },
       // Light needs flicker opacity
       68: { y: set6Y, opacity: set6Opacity },
@@ -370,8 +358,6 @@ export default function Weighing() {
       set7Opacity,
       featherPlateY_set8,
       set8Opacity,
-      heartPlateY_set6,
-      featherPlateY_set6,
     ],
   );
 
@@ -447,17 +433,12 @@ export default function Weighing() {
             opacity: videoOpacity,
           }}
         >
-          <m.div
+          <LazyLottie
+            src="/assets/Scene/Scene4/human.json"
+            playTrigger={videoOpacity}
+            loop
             className="w-full h-full"
-            style={{ scale: isMobile ? 0.8 : 1 }}
-          >
-            <LazyLottie
-              src="/assets/Scene/Scene4/human.json"
-              playTrigger={videoOpacity}
-              loop
-              className="w-full h-full"
-            />
-          </m.div>
+          />
         </m.div>
       </div>
 
