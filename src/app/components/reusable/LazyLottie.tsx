@@ -2,6 +2,7 @@
 
 import {
   type MotionValue,
+  useInView,
   useMotionValue,
   useMotionValueEvent,
 } from "framer-motion";
@@ -21,10 +22,8 @@ interface LottieAnimationData {
   [key: string]: unknown;
 }
 
-interface LazyLottieProps extends Omit<
-  LottieComponentProps,
-  "animationData" | "src"
-> {
+interface LazyLottieProps
+  extends Omit<LottieComponentProps, "animationData" | "src"> {
   src: string | LottieAnimationData;
   className?: string;
   getRef?: (ref: LottieRefCurrentProps | null) => void;
@@ -48,6 +47,7 @@ const LazyLottie: React.FC<LazyLottieProps> = memo(
     ignoreAspectRatio = false,
     ...props
   }) => {
+    const containerRef = useRef<HTMLDivElement>(null);
     const lottieRef = useRef<LottieRefCurrentProps>(null);
     const [animationData, setAnimationData] =
       useState<LottieAnimationData | null>(null);
@@ -58,8 +58,15 @@ const LazyLottie: React.FC<LazyLottieProps> = memo(
     // สร้าง Fallback MotionValue ไว้เสมอ
     const fallbackMotionValue = useMotionValue(0);
 
-    // Load Data Logic
+    //? ใช้ useInView เพื่อตรวจสอบว่าเข้า viewport หรือยัง
+    const isInView = useInView(containerRef, {
+      once: true, //? โหลดครั้งเดียว ไม่ unload เมื่อออกจาก view
+    });
+
+    // Load Data Logic - โหลดเฉพาะเมื่อเข้า viewport
     useEffect(() => {
+      if (!isInView) return; //! หยุดการโหลดถ้ายังไม่เข้า viewport
+
       let isMounted = true;
       const loadData = async () => {
         if (typeof src === "string") {
@@ -84,7 +91,7 @@ const LazyLottie: React.FC<LazyLottieProps> = memo(
       return () => {
         isMounted = false;
       };
-    }, [src]);
+    }, [src, isInView]); //? เพิ่ม isInView เป็น dependency
 
     // Ref Expose Logic
     useEffect(() => {
@@ -114,7 +121,7 @@ const LazyLottie: React.FC<LazyLottieProps> = memo(
             isPlayingRef.current = false; // จำว่าหยุดแล้ว
           }
         }
-      },
+      }
     );
 
     // Logic: Manual Play (ต้องอัปเดต isPlayingRef ด้วย)
@@ -139,11 +146,16 @@ const LazyLottie: React.FC<LazyLottieProps> = memo(
         const totalFrames = lottieRef.current.getDuration(true);
         if (totalFrames === undefined) return;
         lottieRef.current.goToAndStop(latest * totalFrames, true);
-      },
+      }
     );
 
     if (!isLoaded || !animationData) {
-      return <div className={`pointer-events-none opacity-0 ${className}`} />;
+      return (
+        <div
+          ref={containerRef}
+          className={`pointer-events-none opacity-0 ${className}`}
+        />
+      );
     }
 
     const intrinsicStyle: React.CSSProperties = ignoreAspectRatio
@@ -153,7 +165,7 @@ const LazyLottie: React.FC<LazyLottieProps> = memo(
         };
 
     return (
-      <div className={className} style={intrinsicStyle}>
+      <div ref={containerRef} className={className} style={intrinsicStyle}>
         <Lottie
           lottieRef={lottieRef}
           animationData={animationData}
@@ -169,7 +181,7 @@ const LazyLottie: React.FC<LazyLottieProps> = memo(
         />
       </div>
     );
-  },
+  }
 );
 
 LazyLottie.displayName = "LazyLottie";

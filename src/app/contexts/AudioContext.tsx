@@ -24,6 +24,7 @@ interface AudioContextType {
   setVolume: (vol: number) => void;
   setSfxVolume: (vol: number) => void;
   playSfx: (src: string, options?: { volumeMultiplier?: number }) => void;
+  stopAllSfx: () => void; //? หยุดเสียง SFX ทั้งหมด
 }
 
 const AudioContext = createContext<AudioContextType | undefined>(undefined);
@@ -32,6 +33,8 @@ export function AudioProvider({ children }: { children: React.ReactNode }) {
   // --- Refs & State ---
   const soundRef = useRef<Howl | null>(null);
   const isMutedRef = useRef(true);
+  //? เก็บ SFX Howl instances ที่เล่นอยู่เพื่อให้สามารถ stop ได้
+  const sfxSoundsRef = useRef<Set<Howl>>(new Set());
 
   const [isMuted, setIsMuted] = useState(true);
   const [volume, setVolume] = useState(30);
@@ -49,7 +52,7 @@ export function AudioProvider({ children }: { children: React.ReactNode }) {
         console.error("Save settings failed", e);
       }
     },
-    [],
+    []
   );
 
   // --- Initialization ---
@@ -187,18 +190,34 @@ export function AudioProvider({ children }: { children: React.ReactNode }) {
       if (isMutedRef.current) return;
 
       try {
-        new Howl({
+        const sound = new Howl({
           src: [src],
           loop: false,
           volume: (sfxVolume / 100) * (options?.volumeMultiplier ?? 1.0),
           autoplay: true,
+          onend: () => {
+            //? เมื่อเล่นจบให้ลบออกจาก Set และ unload
+            sfxSoundsRef.current.delete(sound);
+            sound.unload();
+          },
         });
+        //? เก็บ reference ไว้เพื่อให้สามารถ stop ได้ภายหลัง
+        sfxSoundsRef.current.add(sound);
       } catch (error) {
         console.error("Failed to play SFX:", error);
       }
     },
-    [sfxVolume],
+    [sfxVolume]
   );
+
+  //? หยุดเสียง SFX ทั้งหมดที่กำลังเล่นอยู่
+  const stopAllSfx = useCallback(() => {
+    sfxSoundsRef.current.forEach((sound) => {
+      sound.stop();
+      sound.unload();
+    });
+    sfxSoundsRef.current.clear();
+  }, []);
 
   return (
     <AudioContext.Provider
@@ -213,6 +232,7 @@ export function AudioProvider({ children }: { children: React.ReactNode }) {
         setVolume: updateVolume,
         setSfxVolume,
         playSfx,
+        stopAllSfx,
       }}
     >
       {children}

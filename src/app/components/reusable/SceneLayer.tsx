@@ -18,6 +18,7 @@ const MotionImage = m.create(Image);
 export interface SceneItemData {
   id: string;
   src: string;
+  mobileSrc?: string; //? สำหรับรูปภาพที่แตกต่างใน Mobile
   alt: string;
 
   // Style หลัก (Desktop Default)
@@ -133,6 +134,11 @@ const SceneItem = ({
     return item.style;
   }, [isMobile, item.style, item.mobileStyle]);
 
+  //? เลือกใช้ src ตาม Device (Mobile หรือ Desktop)
+  const responsiveSrc = useMemo(() => {
+    return isMobile && item.mobileSrc ? item.mobileSrc : item.src;
+  }, [isMobile, item.mobileSrc, item.src]);
+
   const animateAnim = useMemo(() => {
     // ถ้าไม่มี shouldAnimate ส่งมา ให้ถือว่าแสดงเลย
     const shouldShow = shouldAnimate ?? true;
@@ -180,7 +186,7 @@ const SceneItem = ({
       style={mergedStyle}
     >
       <MotionImage
-        src={item.src}
+        src={responsiveSrc}
         alt={item.alt}
         fill
         loading={item.priority ? "eager" : "lazy"}

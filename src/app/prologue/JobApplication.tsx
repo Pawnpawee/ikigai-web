@@ -17,7 +17,7 @@ export default function JobApplication() {
   const ref = useRef<HTMLDivElement>(null);
   const isInView = useInView(ref, { once: false, amount: 0.1 });
   const { setShowStars } = useUI();
-  const { playSfx, sfxVolume, isMuted } = useAudio();
+  const { playSfx, stopAllSfx, sfxVolume, isMuted } = useAudio();
 
   //? Ref for looping clock sound
   const clockSoundRef = useRef<Howl | null>(null);
@@ -45,22 +45,29 @@ export default function JobApplication() {
     const clockSound = clockSoundRef.current;
     if (!clockSound) return;
 
-    if (isInView && !isMuted) {
-      if (!clockSound.playing()) {
-        clockSound.fade(0, sfxVolume / 100, 500);
-        clockSound.play();
-      }
-    } else {
+    //! ถ้าไม่อยู่ใน view หรือถูก mute ให้หยุดเสียงทันที
+    if (!isInView || isMuted) {
       if (clockSound.playing()) {
         clockSound.fade(clockSound.volume(), 0, 500);
         setTimeout(() => clockSound.stop(), 500);
+      }
+    }
+    //? ถ้าอยู่ใน view และไม่ถูก mute ให้เล่นเสียง
+    else {
+      if (!clockSound.playing()) {
+        clockSound.fade(0, sfxVolume / 100, 500);
+        clockSound.play();
       }
     }
   }, [isInView, isMuted, sfxVolume]);
 
   //? Alternating page-flip and typing sounds (play 1 time, pause 5 sec, alternate)
   useEffect(() => {
-    if (!isInView) return;
+    //! หยุดเสียง SFX ทั้งหมดถ้าไม่อยู่ใน view หรือถูก mute
+    if (!isInView || isMuted) {
+      stopAllSfx();
+      return;
+    }
 
     let isPageFlip = true;
     let timeoutId: NodeJS.Timeout;
@@ -81,19 +88,20 @@ export default function JobApplication() {
 
     return () => {
       if (timeoutId) clearTimeout(timeoutId);
+      stopAllSfx(); //? หยุดเสียงที่เหลือตอน cleanup
     };
-  }, [isInView, playSfx]);
+  }, [isInView, isMuted, playSfx, stopAllSfx]);
 
   const opacity = useTransform(
     scrollYProgress,
     [0, 0.2, 0.947, 1],
-    [0, 1, 1, 0],
+    [0, 1, 1, 0]
   );
 
   const opacity_bg = useTransform(
     scrollYProgress,
     [0, 0.2, 0.5, 0.97, 1],
-    [0, 0, 1, 1, 0],
+    [0, 0, 1, 1, 0]
   );
 
   useMotionValueEvent(scrollYProgress, "change", (latest) => {

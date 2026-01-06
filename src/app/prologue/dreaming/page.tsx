@@ -2,9 +2,8 @@
 "use client";
 
 import { m } from "framer-motion";
-import { Howl } from "howler";
 import { useRouter } from "next/navigation";
-import { useEffect, useLayoutEffect, useRef, useState } from "react";
+import { useEffect, useLayoutEffect, useState } from "react";
 
 import DecisionSection from "@/app/components/reusable/DecisionSection";
 import EyelidOverlay from "@/app/components/reusable/EyeLidOverlay";
@@ -14,7 +13,7 @@ import Weighing from "./Weighing";
 
 export default function DreamingPage() {
   const router = useRouter();
-  const { sfxVolume, isMuted, setBgMusic } = useAudio();
+  const { playSfx, isMuted, setBgMusic } = useAudio();
 
   useLayoutEffect(() => {
     if (typeof window !== "undefined") {
@@ -31,26 +30,18 @@ export default function DreamingPage() {
   ];
   const [snoozeCount, setSnoozeCount] = useState(0);
   const [secondaryBtnText, setSecondaryBtnText] = useState<string | null>(
-    "ยังก่อน",
+    "ยังก่อน"
   );
   const [isSnoozing, setIsSnoozing] = useState(false);
   const [decisionText, setDecisionText] = useState(
-    "คุณตกลงมาจุดสิ้นสุด.... คุณเจอกับบางอย่างกำลังเดินใกล้เข้ามาจะดูมันไหม",
+    "คุณตกลงมาจุดสิ้นสุด.... คุณเจอกับบางอย่างกำลังเดินใกล้เข้ามาจะดูมันไหม"
   );
-
-  const meowSoundRef = useRef<Howl | null>(null);
 
   useEffect(() => {
     if (!isMuted) {
       setBgMusic("/assets/Sound/3-4/egypt-jelly-dance.mp3");
     }
-
-    meowSoundRef.current = new Howl({
-      src: ["/assets/Sound/3-4/cat-meow.mp3"],
-      loop: false,
-      volume: sfxVolume / 100,
-    });
-  }, [isMuted, setBgMusic, sfxVolume]);
+  }, [isMuted, setBgMusic]);
 
   const handleNotLook = () => {
     // เริ่ม Effect ตาปรือ
@@ -64,13 +55,9 @@ export default function DreamingPage() {
         setDecisionText(notLookTexts[nextIndex]);
         setSnoozeCount((prev) => prev + 1);
 
+        //? เล่นเสียงแมวเมี่ยวตอนข้อความที่ 3
         if (nextIndex === 2 && !isMuted) {
-          const meowSound = meowSoundRef.current;
-
-          if (meowSound && !meowSound.playing()) {
-            meowSound.fade(0, sfxVolume / 100, 500);
-            meowSound.play();
-          }
+          playSfx("/assets/Sound/3-4/cat-meow.mp3");
         }
       } else {
         //? ข้อความหมดแล้ว บังคับตื่น
@@ -84,7 +71,7 @@ export default function DreamingPage() {
   };
 
   const handleLook = async () => {
-    router.push("/into-dark");
+    router.push("/prologue/into-dark");
   };
 
   return (

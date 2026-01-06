@@ -9,11 +9,22 @@
 
   --color-blue-200: #aec7e7;
   --color-blue-900: #0a1727;
+  --color-slate-100: #e7eaed;
 
   --black-linear: linear-gradient(
     180deg,
     var(--color-black) 0%,
     var(--color-blue-900) 100%
+  );
+   --white-linear: linear-gradient(
+    180deg,
+    var(--color-slate-200) 0%,
+    var(--color-slate-100) 100%
+  );
+  --white-radial: radial-gradient(
+    circle,
+    var(--color-slate-200) 0%,
+    var(--color-slate-100) 100%
   );
 
   --font-anuphan: "Anuphan", sans-serif;
