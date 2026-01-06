@@ -153,7 +153,16 @@ const LazyLottie: React.FC<LazyLottieProps> = memo(
           animationInstanceRef.current = null;
         }
       };
-    }, [animationData, loop, rendererSettings, getRef, onComplete, play, playTrigger, scrollYProgress]);
+    }, [
+      animationData,
+      loop,
+      rendererSettings,
+      getRef,
+      onComplete,
+      play,
+      playTrigger,
+      scrollYProgress,
+    ]);
 
     // 3. Logic: Play Trigger (Reactive Control)
     useMotionValueEvent(
@@ -169,7 +178,7 @@ const LazyLottie: React.FC<LazyLottieProps> = memo(
         } else {
           if (!anim.isPaused) anim.pause();
         }
-      }
+      },
     );
 
     // 4. Logic: Manual Play Prop Update
@@ -196,7 +205,7 @@ const LazyLottie: React.FC<LazyLottieProps> = memo(
 
         //? ใช้ true เพื่อบอกว่าเป็น Frame ไม่ใช่ Time
         anim.goToAndStop(targetFrame, true);
-      }
+      },
     );
 
     //? Placeholder ขณะรอโหลด (Skeleton)
@@ -225,7 +234,7 @@ const LazyLottie: React.FC<LazyLottieProps> = memo(
         aria-hidden="true"
       />
     );
-  }
+  },
 );
 
 LazyLottie.displayName = "LazyLottie";
