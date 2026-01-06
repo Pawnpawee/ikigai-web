@@ -1,7 +1,5 @@
 "use client";
 import { m } from "framer-motion";
-import { Howl } from "howler";
-import { useEffect, useRef } from "react";
 import { useAudio } from "@/app/contexts/AudioContext";
 
 interface GradientButtonProps {
@@ -21,28 +19,10 @@ export default function GradientButton({
 }: GradientButtonProps) {
   const isWhiteVariant = variant === "white";
   const isTransparentVariant = variant === "transparent";
-  const { sfxVolume, isMuted } = useAudio();
-
-  //? Ref for button click sound
-  const clickSoundRef = useRef<Howl | null>(null);
-
-  //? Initialize click sound
-  useEffect(() => {
-    clickSoundRef.current = new Howl({
-      src: ["/assets/Sound/Pop Select Button.wav"],
-      loop: false,
-      volume: sfxVolume / 100,
-    });
-
-    return () => {
-      clickSoundRef.current?.unload();
-    };
-  }, [sfxVolume]);
+  const { playSfx } = useAudio();
 
   const handleClick = () => {
-    if (clickSoundRef.current && !isMuted) {
-      clickSoundRef.current.play();
-    }
+    playSfx("/assets/Sound/Pop Select Button.mp3");
     onClick();
   };
 
@@ -81,10 +61,10 @@ export default function GradientButton({
           isTransparentVariant
             ? "text-white hover:bg-white/10 hover:border-white"
             : isWhiteVariant
-              ? "text-black"
-              : isSelected
-                ? "bg-linear-to-b from-slate-200 to-slate-100 border-slate-200 text-black border-4"
-                : "bg-linear-to-b from-slate-200/30 to-slate-100/30 border-slate-200/50 text-white border-4"
+            ? "text-black"
+            : isSelected
+            ? "bg-linear-to-b from-slate-200 to-slate-100 border-slate-200 text-black border-4"
+            : "bg-linear-to-b from-slate-200/30 to-slate-100/30 border-slate-200/50 text-white border-4"
         }
         ${className}
       `}

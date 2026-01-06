@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { Anuphan, Bentham, Luxurious_Script } from "next/font/google";
+import { Anuphan, Bentham } from "next/font/google";
 import "./globals.css";
 import AppWrapper from "./AppWrapper";
 import OrientationGuard from "./components/OrientationGuard";
@@ -21,13 +21,6 @@ const bentham = Bentham({
   display: "swap",
 });
 
-const luxuriousScript = Luxurious_Script({
-  variable: "--font-luxurious-script",
-  weight: "400",
-  subsets: ["latin"],
-  display: "swap",
-});
-
 export const metadata: Metadata = {
   title: "Ikigai - Life Of Journey",
   description:
@@ -41,9 +34,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body
-        className={`${anuphan.variable} ${bentham.variable} ${luxuriousScript.variable} antialiased`}
-      >
+      <body className={`${anuphan.variable} ${bentham.variable} antialiased`}>
         <DeviceProvider>
           <OrientationGuard />
           {/* //todo: wait for design */}

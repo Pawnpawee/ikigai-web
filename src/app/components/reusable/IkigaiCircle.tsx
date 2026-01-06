@@ -145,10 +145,11 @@ const IkigaiCircle = memo(
             <Image
               src={iconSrc}
               alt=""
-              width={0}
-              height={0}
-              className="h-10 md:h-14 w-auto"
-            />{" "}
+              width={56}
+              height={56}
+              quality={100}
+              sizes="(max-width: 768px) 40px, 56px"
+            />
             <p className="text-sm font-semibold text-white whitespace-nowrap shadow-black/50 drop-shadow-md">
               {text}
             </p>

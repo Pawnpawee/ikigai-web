@@ -141,7 +141,7 @@ export default function IntoDarkNameInput({
 
   return (
     <m.div
-      className="fixed top-0 h-screen w-screen bg-black overflow-x-hidden touch-pan-y"
+      className="fixed top-0 h-screen w-screen bg-black"
       style={{ opacity, zIndex }}
     >
       <m.div
