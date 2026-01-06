@@ -25,6 +25,7 @@ export default function SubtitleScroll({
         const startFadeOut = (index + 1) * portionSize - portionSize * 0.2;
         const endFadeOut = (index + 1) * portionSize;
 
+        // biome-ignore lint/correctness/useHookAtTopLevel: <needs>
         const opacity = useTransform(
           progress,
           [startFadeIn, fullyVisible, startFadeOut, endFadeOut],
@@ -38,7 +39,7 @@ export default function SubtitleScroll({
             style={{ opacity }}
           >
             <div className="bg-black/20 px-6 py-3 rounded-lg max-w-5xl">
-              <p className="typo-text-h5 text-white text-center leading-relaxed">
+              <p className="text-2xl portrait:text-xl text-white text-center leading-relaxed">
                 {subtitle}
               </p>
             </div>

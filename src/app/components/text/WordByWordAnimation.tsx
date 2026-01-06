@@ -36,7 +36,7 @@ const AnimatedWord: FC<AnimatedWordProps> = ({
         cursor-pointer
         transition-all duration-500 ease-out
         hover:drop-shadow-[0_0_10px_#ffffff]
-        hover:text-cyan-300
+        hover:text-shadow-amber-100
       "
     >
       {children}
@@ -48,7 +48,7 @@ const WordByWordAnimation: FC<WordByWordAnimationProps> = ({
   text,
   scrollYProgress,
   as = "p",
-  className = "typo-p-md",
+  className = "text-sm",
   style,
 }) => {
   const allWords = text.split(/\s+/).filter(Boolean);

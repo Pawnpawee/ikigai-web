@@ -2,37 +2,36 @@
 
 import {
   type MotionValue,
+  useInView,
   useMotionValue,
   useMotionValueEvent,
 } from "framer-motion";
-import type { LottieComponentProps, LottieRefCurrentProps } from "lottie-react";
-import dynamic from "next/dynamic";
+import type { AnimationConfig, AnimationItem } from "lottie-web";
 import type React from "react";
 import { memo, useEffect, useRef, useState } from "react";
 
-const Lottie = dynamic(() => import("lottie-react"), {
-  ssr: false,
-  loading: () => <div className="w-full h-full bg-transparent" />,
-});
-
-interface LottieAnimationData {
+//? Type Definition สำหรับ Animation Data (JSON)
+export interface LottieAnimationData {
   w: number;
   h: number;
+  ip: number; // In Point
+  op: number; // Out Point
+  fr: number; // Frame Rate
   [key: string]: unknown;
 }
 
-interface LazyLottieProps extends Omit<
-  LottieComponentProps,
-  "animationData" | "src"
-> {
+interface LazyLottieProps {
   src: string | LottieAnimationData;
   className?: string;
-  getRef?: (ref: LottieRefCurrentProps | null) => void;
+  //? เปลี่ยนจาก LottieRefCurrentProps เป็น AnimationItem (Core Type ของ lottie-web)
+  getRef?: (instance: AnimationItem | null) => void;
   play?: boolean;
   playTrigger?: MotionValue<number>;
   scrollYProgress?: MotionValue<number>;
+  loop?: boolean; //? Default true
   onComplete?: () => void;
   ignoreAspectRatio?: boolean;
+  rendererSettings?: AnimationConfig["rendererSettings"];
 }
 
 const LazyLottie: React.FC<LazyLottieProps> = memo(
@@ -46,37 +45,46 @@ const LazyLottie: React.FC<LazyLottieProps> = memo(
     loop = true,
     onComplete,
     ignoreAspectRatio = false,
-    ...props
+    rendererSettings,
   }) => {
-    const lottieRef = useRef<LottieRefCurrentProps>(null);
+    //? Container Ref สำหรับ Mount Lottie
+    const containerRef = useRef<HTMLDivElement>(null);
+    //? เก็บ Instance จริงของ Lottie ไว้จัดการ (แทน LottieRefCurrentProps)
+    const animationInstanceRef = useRef<AnimationItem | null>(null);
+
     const [animationData, setAnimationData] =
       useState<LottieAnimationData | null>(null);
     const [isLoaded, setIsLoaded] = useState(false);
 
-    const isPlayingRef = useRef(false);
-
-    // สร้าง Fallback MotionValue ไว้เสมอ
+    //? ใช้ Fallback กรณีไม่มี trigger ส่งมา
     const fallbackMotionValue = useMotionValue(0);
 
-    // Load Data Logic
+    //? ตรวจสอบ Viewport: โหลดเฉพาะเมื่อ User มองเห็น (Performance Optimization)
+    const isInView = useInView(containerRef, {
+      once: true,
+      amount: 0.1, // เห็นแค่ 10% ก็เริ่มโหลด
+    });
+
+    // 1. Data Fetching Logic
     useEffect(() => {
+      if (!isInView) return;
+
       let isMounted = true;
       const loadData = async () => {
         if (typeof src === "string") {
           try {
             const res = await fetch(src);
+            if (!res.ok) throw new Error("Network response was not ok");
             const data = await res.json();
             if (isMounted) {
               setAnimationData(data);
-              setIsLoaded(true);
             }
           } catch (error) {
-            console.error("Failed to load Lottie", error);
+            console.error("Failed to load Lottie JSON:", error);
           }
         } else {
           if (isMounted) {
             setAnimationData(src);
-            setIsLoaded(true);
           }
         }
       };
@@ -84,68 +92,133 @@ const LazyLottie: React.FC<LazyLottieProps> = memo(
       return () => {
         isMounted = false;
       };
-    }, [src]);
+    }, [src, isInView]);
 
-    // Ref Expose Logic
+    // 2. Lottie Initialization Logic (Core Replacement)
     useEffect(() => {
-      if (getRef && lottieRef.current) {
-        getRef(lottieRef.current);
-      }
-    }, [getRef]);
+      //? ถ้ายังไม่มี Data หรือ Container ยังไม่พร้อม ให้ข้ามไป
+      if (!animationData || !containerRef.current) return;
 
-    // Logic: Play Trigger (แก้ตรงนี้)
+      //? Cleanup Instance เก่าก่อนสร้างใหม่ (ป้องกัน Memory Leak)
+      if (animationInstanceRef.current) {
+        animationInstanceRef.current.destroy();
+      }
+
+      let lottieInstance: AnimationItem | null = null;
+
+      const initLottie = async () => {
+        try {
+          //? Dynamic Import: โหลด "lottie_light" โดยตรง (Key success factor!)
+          //? ตัด HTML/Canvas renderer ทิ้ง 100%
+          const lottieWeb = (
+            await import("lottie-web/build/player/lottie_light")
+          ).default;
+
+          if (!containerRef.current) return;
+
+          lottieInstance = lottieWeb.loadAnimation({
+            container: containerRef.current,
+            renderer: "svg", //? Light version รองรับแค่ SVG
+            loop: loop,
+            autoplay: play && !playTrigger && !scrollYProgress, //? Auto play ถ้าไม่มี Trigger อื่น
+            animationData: animationData,
+            rendererSettings: {
+              preserveAspectRatio: "xMidYMid slice",
+              className: "w-full h-full", //? ใส่ Class ให้ SVG เต็มพื้นที่
+              ...rendererSettings,
+            },
+          });
+
+          animationInstanceRef.current = lottieInstance;
+          setIsLoaded(true);
+
+          //? Expose Ref ออกไปข้างนอก
+          if (getRef) getRef(lottieInstance);
+
+          //? Bind Event Listeners
+          if (onComplete) {
+            lottieInstance.addEventListener("complete", onComplete);
+          }
+        } catch (error) {
+          console.error("Failed to initialize Lottie Light:", error);
+        }
+      };
+
+      initLottie();
+
+      //? Cleanup Function
+      return () => {
+        if (animationInstanceRef.current) {
+          animationInstanceRef.current.destroy();
+          animationInstanceRef.current = null;
+        }
+      };
+    }, [
+      animationData,
+      loop,
+      rendererSettings,
+      getRef,
+      onComplete,
+      play,
+      playTrigger,
+      scrollYProgress,
+    ]);
+
+    // 3. Logic: Play Trigger (Reactive Control)
     useMotionValueEvent(
       playTrigger || fallbackMotionValue,
       "change",
       (latest) => {
-        if (!playTrigger || !lottieRef.current || !isLoaded) return;
+        const anim = animationInstanceRef.current;
+        if (!anim || !isLoaded) return;
 
-        // ถ้าค่า > 0 และ "ยังไม่ได้เล่น" -> สั่งเล่น
+        //? ถ้ามี Trigger ให้ควบคุมการเล่น/หยุด ตามค่า
         if (latest > 0) {
-          if (!isPlayingRef.current) {
-            lottieRef.current.play();
-            isPlayingRef.current = true; // จำว่าเล่นแล้ว
-          }
-        }
-        // ถ้าค่า = 0 และ "กำลังเล่นอยู่" -> สั่งหยุด
-        else {
-          if (isPlayingRef.current) {
-            lottieRef.current.pause();
-            isPlayingRef.current = false; // จำว่าหยุดแล้ว
-          }
+          if (anim.isPaused) anim.play();
+        } else {
+          if (!anim.isPaused) anim.pause();
         }
       },
     );
 
-    // Logic: Manual Play (ต้องอัปเดต isPlayingRef ด้วย)
+    // 4. Logic: Manual Play Prop Update
     useEffect(() => {
-      if (!lottieRef.current || !isLoaded || playTrigger) return;
+      const anim = animationInstanceRef.current;
+      if (!anim || !isLoaded || playTrigger || scrollYProgress) return;
 
-      if (play) {
-        lottieRef.current.play();
-        isPlayingRef.current = true;
-      } else {
-        lottieRef.current.pause();
-        isPlayingRef.current = false;
-      }
-    }, [play, isLoaded, playTrigger]);
+      if (play) anim.play();
+      else anim.pause();
+    }, [play, isLoaded, playTrigger, scrollYProgress]);
 
-    // 5. Logic: Scroll Seek
+    // 5. Logic: Scroll Seek (Scrubbing)
     useMotionValueEvent(
       scrollYProgress || fallbackMotionValue,
       "change",
       (latest) => {
-        if (!lottieRef.current || !scrollYProgress || !isLoaded) return;
-        const totalFrames = lottieRef.current.getDuration(true);
-        if (totalFrames === undefined) return;
-        lottieRef.current.goToAndStop(latest * totalFrames, true);
+        const anim = animationInstanceRef.current;
+        if (!anim || !isLoaded) return;
+
+        //? คำนวณ Frame ตาม % การ scroll
+        //? goToAndStop(value, isFrame) -> ถ้า isFrame=true ต้องคำนวณเฟรม
+        const totalFrames = anim.totalFrames;
+        const targetFrame = latest * totalFrames;
+
+        //? ใช้ true เพื่อบอกว่าเป็น Frame ไม่ใช่ Time
+        anim.goToAndStop(targetFrame, true);
       },
     );
 
-    if (!isLoaded || !animationData) {
-      return <div className={`pointer-events-none opacity-0 ${className}`} />;
+    //? Placeholder ขณะรอโหลด (Skeleton)
+    if (!animationData) {
+      return (
+        <div
+          ref={containerRef}
+          className={`pointer-events-none opacity-0 ${className}`}
+        />
+      );
     }
 
+    //? Intrinsic Size เพื่อกัน Layout Shift (CLS)
     const intrinsicStyle: React.CSSProperties = ignoreAspectRatio
       ? {}
       : {
@@ -153,21 +226,13 @@ const LazyLottie: React.FC<LazyLottieProps> = memo(
         };
 
     return (
-      <div className={className} style={intrinsicStyle}>
-        <Lottie
-          lottieRef={lottieRef}
-          animationData={animationData}
-          autoplay={false}
-          loop={loop}
-          onComplete={onComplete}
-          rendererSettings={{
-            preserveAspectRatio: "xMidYMid slice",
-            className: "w-full h-full",
-          }}
-          {...props}
-          className="w-full h-full"
-        />
-      </div>
+      <div
+        ref={containerRef}
+        className={className}
+        style={intrinsicStyle}
+        //? Accessibility: ซ่อนจาก Screen Reader เพราะมักเป็นแค่ตกแต่ง
+        aria-hidden="true"
+      />
     );
   },
 );

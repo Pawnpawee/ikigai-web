@@ -11,7 +11,7 @@ interface UIContextType {
 const UIContext = createContext<UIContextType | undefined>(undefined);
 
 export const UIStarProvider = ({ children }: { children: React.ReactNode }) => {
-  const [showStars, setShowStars] = useState(false);
+  const [showStars, setShowStars] = useState(true);
 
   return (
     <UIContext.Provider value={{ showStars, setShowStars }}>

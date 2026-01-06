@@ -1,11 +1,12 @@
 "use client";
 import { type MotionValue, m, useTransform } from "framer-motion";
+import { useMemo } from "react";
 import LazyLottie from "../components/reusable/LazyLottie";
 import SceneLayer, {
   type AnimationMap,
 } from "../components/reusable/SceneLayer";
 import { useDevice } from "../contexts/DeviceContext";
-import SCENE_2_ITEMS from "../data/scene_job_2.data";
+import { SCENE_2_ITEMS } from "../data/scene_job_2.data";
 
 interface JobApplication2Props {
   scrollYProgress: MotionValue<number>;
@@ -14,12 +15,12 @@ interface JobApplication2Props {
 export default function JobApplication2({
   scrollYProgress,
 }: JobApplication2Props) {
-  const { isMobile: isPortrait } = useDevice();
+  const { isMobile } = useDevice();
 
   const x = useTransform(
     scrollYProgress,
     [0, 0.611, 0.75],
-    ["0%", "0%", `${isPortrait ? "-65%" : "-49.5%"}`],
+    ["0%", "0%", `${isMobile ? "-65%" : "-49.5%"}`],
   );
 
   const opacity = useTransform(
@@ -71,12 +72,23 @@ export default function JobApplication2({
   );
 
   //? AnimationMap must match animGroup values in scene_job_2.data.ts (16 items)
-  const animations: AnimationMap = {
-    1: { y: windowY, opacity: windowOpacity },
-    2: { opacity: lightWindowOpacity },
-    4: { y: building2Y, opacity: building2Opacity },
-    5: { y: building1Y, opacity: building1Opacity },
-  };
+  const animations: AnimationMap = useMemo(
+    () => ({
+      1: { y: windowY, opacity: windowOpacity },
+      2: { opacity: lightWindowOpacity },
+      4: { y: building2Y, opacity: building2Opacity },
+      5: { y: building1Y, opacity: building1Opacity },
+    }),
+    [
+      windowY,
+      windowOpacity,
+      lightWindowOpacity,
+      building2Y,
+      building2Opacity,
+      building1Y,
+      building1Opacity,
+    ],
+  );
 
   return (
     <m.div className="absolute bottom-0 left-0 w-full h-1/2">

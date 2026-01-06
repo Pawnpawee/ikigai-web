@@ -45,7 +45,9 @@ export default function MenuModal({ isOpen, onClose }: MenuModalProps) {
           >
             {/* Header */}
             <div className="flex items-center justify-between mb-6">
-              <h2 className="typo-h4 text-white">เมนู</h2>
+              <h2 className="text-2xl portrait:text-xl font-semibold text-white">
+                เมนู
+              </h2>
               <button
                 type="button"
                 onClick={onClose}
@@ -74,8 +76,10 @@ export default function MenuModal({ isOpen, onClose }: MenuModalProps) {
               {/* Background Music Volume */}
               <div className="space-y-3">
                 <div className="flex items-center justify-between">
-                  <span className="typo-p-lg text-white">ระดับเสียงประกอบ</span>
-                  <span className="typo-p-lg text-blue-400 font-semibold">
+                  <span className="text-2xl portrait:text-xl text-white">
+                    ระดับเสียงประกอบ
+                  </span>
+                  <span className="text-2xl portrait:text-xl text-blue-400 font-semibold">
                     {volume}%
                   </span>
                 </div>
@@ -147,8 +151,10 @@ export default function MenuModal({ isOpen, onClose }: MenuModalProps) {
               {/* Sound Effect Volume */}
               <div className="space-y-3">
                 <div className="flex items-center justify-between">
-                  <span className="typo-p-lg text-white">เสียง Effect</span>
-                  <span className="typo-p-lg text-orange-400 font-semibold">
+                  <span className="text-2xl portrait:text-xl text-white">
+                    เสียง Effect
+                  </span>
+                  <span className="text-2xl portrait:text-xl text-orange-400 font-semibold">
                     {sfxVolume}%
                   </span>
                 </div>
@@ -253,10 +259,10 @@ export default function MenuModal({ isOpen, onClose }: MenuModalProps) {
                   </div>
                   {/* Text */}
                   <div className="flex-1">
-                    <h3 className="typo-h6 text-white group-hover:text-blue-400 transition-colors">
+                    <h3 className="text-sm font-semibold text-white group-hover:text-blue-400 transition-colors">
                       นโยบายความเป็นส่วนตัว
                     </h3>
-                    <p className="typo-p-sm text-slate-400">
+                    <p className="text-xs text-slate-400">
                       ข้อมูลและความปลอดภัย
                     </p>
                   </div>
@@ -307,10 +313,10 @@ export default function MenuModal({ isOpen, onClose }: MenuModalProps) {
                   </div>
                   {/* Text */}
                   <div className="flex-1">
-                    <h3 className="typo-h6 text-white group-hover:text-purple-400 transition-colors">
+                    <h3 className="text-sm font-semibold text-white group-hover:text-purple-400 transition-colors">
                       เกี่ยวกับเรา
                     </h3>
-                    <p className="typo-p-sm text-slate-400">ข้อมูลและติดต่อ</p>
+                    <p className="text-xs text-slate-400">ข้อมูลและติดต่อ</p>
                   </div>
                   {/* Arrow */}
                   <svg

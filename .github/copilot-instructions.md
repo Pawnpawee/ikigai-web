@@ -212,3 +212,12 @@ const animations = {
 1: usePopUpAnimation(scrollYProgress, 0.1, 0.2),
 2: usePopUpAnimation(scrollYProgress, 0.2, 0.3),
 };
+
+useMotionValueEvent(scrollYProgress, "change", (latest) => {
+const isDecisionSectionVisible = latest < 1;
+
+    if (isDecisionSectionVisible) {
+      setShowStars(true);
+    }
+
+});

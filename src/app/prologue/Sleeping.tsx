@@ -1,23 +1,18 @@
 "use client";
 
-import {
-  m,
-  useInView,
-  useMotionTemplate,
-  useScroll,
-  useTransform,
-} from "framer-motion";
+import { m, useInView, useScroll, useTransform } from "framer-motion";
 import { Howl } from "howler";
-import { useEffect, useRef } from "react";
+import { useEffect, useMemo, useRef } from "react";
 
 import { useAudio } from "@/app/contexts/AudioContext";
 import { useDevice } from "@/app/contexts/DeviceContext";
 import Bubble from "../components/button/Bubble";
+import EyelidOverlay from "../components/reusable/EyeLidOverlay";
 import SceneLayer, {
   type AnimationMap,
 } from "../components/reusable/SceneLayer";
 import SubtitleScroll from "../components/text/SubtitleScroll";
-import SCENE_SLEEPING_ITEMS from "../data/scene_sleeping.data";
+import { SCENE_SLEEPING_ITEMS } from "../data/scene_sleeping.data";
 
 export default function Sleeping() {
   const ref = useRef<HTMLDivElement>(null);
@@ -57,16 +52,8 @@ export default function Sleeping() {
     const heartBeatSound = heartBeatSoundRef.current;
     if (!clockSound || !heartBeatSound) return;
 
-    if (isInView && !isMuted) {
-      if (!clockSound.playing()) {
-        clockSound.fade(0, sfxVolume / 100, 500);
-        clockSound.play();
-      }
-      if (!heartBeatSound.playing()) {
-        heartBeatSound.fade(0, sfxVolume / 100, 500);
-        heartBeatSound.play();
-      }
-    } else {
+    //! ถ้าไม่อยู่ใน view หรือถูก mute ให้หยุดเสียงทันที
+    if (!isInView || isMuted) {
       if (clockSound.playing()) {
         clockSound.fade(clockSound.volume(), 0, 500);
         setTimeout(() => clockSound.stop(), 500);
@@ -74,6 +61,17 @@ export default function Sleeping() {
       if (heartBeatSound.playing()) {
         heartBeatSound.fade(heartBeatSound.volume(), 0, 500);
         setTimeout(() => heartBeatSound.stop(), 500);
+      }
+    }
+    //? ถ้าอยู่ใน view และไม่ถูก mute ให้เล่นเสียง
+    else {
+      if (!clockSound.playing()) {
+        clockSound.fade(0, sfxVolume / 100, 500);
+        clockSound.play();
+      }
+      if (!heartBeatSound.playing()) {
+        heartBeatSound.fade(0, sfxVolume / 100, 500);
+        heartBeatSound.play();
       }
     }
   }, [isInView, isMuted, sfxVolume]);
@@ -154,20 +152,25 @@ export default function Sleeping() {
     [0, 0.75, 0.8, 0.85, 0.9, 0.95, 1],
     [200, 200, 0, 60, 0, 40, 0],
   );
-  const maskImageValue = useMotionTemplate`radial-gradient(ellipse 50% ${ry}% at 50% 50%, transparent 0%, var(--color-background) 100%)`;
 
-  const blink_opacity = useTransform(
-    scrollYProgress,
-    [0, 0.75, 0.8, 1],
-    [0, 0, 1, 1],
+  const animations: AnimationMap = useMemo(
+    () => ({
+      1: { y: set1Y, opacity: set1Opacity },
+      2: { y: set2Y, opacity: set2Opacity },
+      3: { y: set3Y, opacity: set3Opacity },
+      4: { y: set4Y, opacity: set4Opacity },
+    }),
+    [
+      set1Y,
+      set1Opacity,
+      set2Y,
+      set2Opacity,
+      set3Y,
+      set3Opacity,
+      set4Y,
+      set4Opacity,
+    ],
   );
-
-  const animations: AnimationMap = {
-    1: { y: set1Y, opacity: set1Opacity },
-    2: { y: set2Y, opacity: set2Opacity },
-    3: { y: set3Y, opacity: set3Opacity },
-    4: { y: set4Y, opacity: set4Opacity },
-  };
 
   return (
     <m.div
@@ -210,7 +213,7 @@ export default function Sleeping() {
             opacity: bubble1Opacity,
           }}
         >
-          <Bubble text="จะทำได้ไหม" className="typo-text-h5" />
+          <Bubble text="จะทำได้ไหม" className="text-2xl portrait:text-xl" />
         </m.div>
 
         {/* ชุด 7: Bubble "จะมีงานทำหรือเปล่า" */}
@@ -224,7 +227,10 @@ export default function Sleeping() {
             opacity: bubble2Opacity,
           }}
         >
-          <Bubble text="จะมีงานทำหรือเปล่า" className="typo-text-h5" />
+          <Bubble
+            text="จะมีงานทำหรือเปล่า"
+            className="text-2xl portrait:text-xl"
+          />
         </m.div>
 
         {/* ชุด 8: Bubble "จะเก่งพอหรือเปล่า" */}
@@ -238,7 +244,10 @@ export default function Sleeping() {
             opacity: bubble3Opacity,
           }}
         >
-          <Bubble text="จะเก่งพอหรือเปล่า" className="typo-text-h5" />
+          <Bubble
+            text="จะเก่งพอหรือเปล่า"
+            className="text-2xl portrait:text-xl"
+          />
         </m.div>
 
         {/* ชุด 9: Bubble "จะเข้ากับคนอื่นได้ไหม" */}
@@ -252,7 +261,10 @@ export default function Sleeping() {
             opacity: bubble4Opacity,
           }}
         >
-          <Bubble text="จะเข้ากับคนอื่นได้ไหม" className="typo-text-h5" />
+          <Bubble
+            text="จะเข้ากับคนอื่นได้ไหม"
+            className="text-2xl portrait:text-xl"
+          />
         </m.div>
 
         {/* ชุด 10: Text "เห้อนอนดีกว่า" */}
@@ -275,18 +287,7 @@ export default function Sleeping() {
       />
 
       {/* อนิเมชันกระพริบตา POV - พื้นหลังดำกับรูปวงรีตรงกลาง */}
-      <m.div
-        className="fixed inset-0 bg-black pointer-events-none z-10 w-screen h-screen"
-        style={{
-          maskImage: maskImageValue,
-          WebkitMaskImage: maskImageValue, //? ใช้ตัวแปรเดียวกันได้เลย
-          maskRepeat: "no-repeat",
-          WebkitMaskRepeat: "no-repeat",
-          maskPosition: "center",
-          WebkitMaskPosition: "center",
-          opacity: blink_opacity,
-        }}
-      />
+      <EyelidOverlay externalRy={ry} />
     </m.div>
   );
 }

@@ -1,8 +1,9 @@
 "use client";
-import { m, useScroll, useTransform } from "framer-motion";
+import { m, useMotionValueEvent, useScroll, useTransform } from "framer-motion";
 import Image from "next/image";
 import { useRef } from "react";
 import WordByWordAnimation from "../components/text/WordByWordAnimation";
+import { useUI } from "../contexts/UIStarContext";
 
 const INTRO_TEXT = `คำถามอิคิไกทั้งสี่ข้อ — "สิ่งที่รัก, สิ่งที่ถนัด, สิ่งที่โลกต้องการ และ สิ่งที่สร้างรายได้” 
 เป็นเพียงเครื่องมือการสำรวจเพื่อช่วยให้คุณสะท้อนตัวเอง ซึ่งเป็นภาพ ณ ตอนนี้เท่านั้น 
@@ -12,6 +13,8 @@ const INTRO_TEXT = `คำถามอิคิไกทั้งสี่ข้
 
 export default function Intro() {
   const ref = useRef<HTMLDivElement>(null);
+  const { setShowStars } = useUI();
+
   const { scrollYProgress } = useScroll({
     target: ref,
     offset: ["start start", "end end"],
@@ -53,6 +56,14 @@ export default function Intro() {
     ["0px 0px 0px rgba(255,255,255,0)", "0px 0px 10px rgba(255,255,255,0.6)"],
   );
 
+  useMotionValueEvent(scrollYProgress, "change", (latest) => {
+    const isIntroVisible = latest < 1;
+
+    if (isIntroVisible) {
+      setShowStars(true);
+    }
+  });
+
   return (
     <m.div ref={ref} className="h-[250vh] w-full relative">
       <m.div
@@ -91,7 +102,7 @@ export default function Intro() {
                 textShadow: introGlow,
                 willChange: "transform, opacity, filter",
               }}
-              className="typo-h2-serif text-white absolute"
+              className="font-bentham font-medium text-5xl portrait:text-4xl text-white absolute"
             >
               Intro
             </m.h2>
@@ -101,7 +112,7 @@ export default function Intro() {
             text={INTRO_TEXT}
             scrollYProgress={textAnimationProgress}
             as="div"
-            className="typo-p-lg text-white text-center w-70 sm:w-full mx-auto"
+            className="text-2xl portrait:text-xl text-white text-center w-70 sm:w-full mx-auto"
           />
         </m.div>
       </m.div>

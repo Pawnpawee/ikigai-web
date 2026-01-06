@@ -16,7 +16,7 @@ export default function ScrollTo({ opacity }: ScrollToProps) {
     >
       <div className="flex flex-col gap-0 items-center animate-fade-loop">
         <div className="flex gap-2 items-center relative shrink-0">
-          <p className="typo-p-md text-white">scroll to continue</p>
+          <p className="text-sm text-white">scroll to continue</p>
         </div>
 
         <div className="animate-bounce-slow">

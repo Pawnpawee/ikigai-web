@@ -1,11 +1,12 @@
 "use client";
 import { type MotionValue, m, useTransform } from "framer-motion";
+import { useMemo } from "react";
 
 import LazyLottie from "../components/reusable/LazyLottie";
 import SceneLayer, {
   type AnimationMap,
 } from "../components/reusable/SceneLayer";
-import SCENE_1_ITEMS from "../data/scene_job_1.data";
+import { SCENE_1_ITEMS } from "../data/scene_job_1.data";
 
 interface JobApplication1Props {
   scrollYProgress: MotionValue<number>;
@@ -124,18 +125,41 @@ export default function JobApplication1({
   );
 
   //? Animation Map - matches animGroup in scene_job_1.data.ts
-  const animations: AnimationMap = {
-    1: { y: poster1Y, opacity: poster1Opacity },
-    2: { y: poster2Y, opacity: poster2Opacity },
-    3: { y: poster3Y, opacity: poster3Opacity },
-    4: { y: poster4Y, opacity: poster4Opacity },
-    5: { y: poster5Y, opacity: poster5Opacity },
-    10: { y: tableY, opacity: tableOpacity },
-    11: { y: computerY, opacity: computerOpacity },
-    13: { y: set1Y, opacity: set1Opacity },
-    14: { y: set2Y, opacity: set2Opacity },
-    99: { y: 0, opacity: lightOp },
-  };
+  const animations: AnimationMap = useMemo(
+    () => ({
+      1: { y: poster1Y, opacity: poster1Opacity },
+      2: { y: poster2Y, opacity: poster2Opacity },
+      3: { y: poster3Y, opacity: poster3Opacity },
+      4: { y: poster4Y, opacity: poster4Opacity },
+      5: { y: poster5Y, opacity: poster5Opacity },
+      10: { y: tableY, opacity: tableOpacity },
+      11: { y: computerY, opacity: computerOpacity },
+      13: { y: set1Y, opacity: set1Opacity },
+      14: { y: set2Y, opacity: set2Opacity },
+      99: { y: 0, opacity: lightOp },
+    }),
+    [
+      poster1Y,
+      poster1Opacity,
+      poster2Y,
+      poster2Opacity,
+      poster3Y,
+      poster3Opacity,
+      poster4Y,
+      poster4Opacity,
+      poster5Y,
+      poster5Opacity,
+      tableY,
+      tableOpacity,
+      computerY,
+      computerOpacity,
+      set1Y,
+      set1Opacity,
+      set2Y,
+      set2Opacity,
+      lightOp,
+    ],
+  );
 
   return (
     <m.div

@@ -6,7 +6,6 @@ import { useAudio } from "@/app/contexts/AudioContext";
 import { SCENE_HERO_ITEMS } from "@/app/data/scene_hero.data";
 import IkigaiCircle from "../components/reusable/IkigaiCircle";
 import SceneLayer from "../components/reusable/SceneLayer";
-import { useUI } from "../contexts/UIStarContext";
 import { useMouseParallax } from "../hooks/useMouseParallax";
 
 interface HeroProps {
@@ -18,12 +17,9 @@ export default function Hero({ shouldAnimate }: HeroProps) {
 
   const { playSfx } = useAudio();
 
-  const [isLottieComplete, setIsLottieComplete] = useState(false);
   const [shouldPlayLottie, setShouldPlayLottie] = useState(false);
 
   const [isInteractionLocked, setIsInteractionLocked] = useState(true);
-
-  const { setShowStars } = useUI();
 
   const { smoothMouseX, smoothMouseY } = useMouseParallax();
   const logoParallaxX = useTransform(smoothMouseX, [0, 1], [15, -15]);
@@ -31,7 +27,6 @@ export default function Hero({ shouldAnimate }: HeroProps) {
 
   useEffect(() => {
     if (shouldAnimate) {
-      setShowStars(true);
       const timer = setTimeout(() => {
         setShouldPlayLottie(true);
         playSfx("/assets/Sound/12/magical-sparkling.mp3");
@@ -39,7 +34,7 @@ export default function Hero({ shouldAnimate }: HeroProps) {
 
       return () => clearTimeout(timer);
     }
-  }, [shouldAnimate, setShowStars, playSfx]);
+  }, [shouldAnimate, playSfx]);
 
   useEffect(() => {
     if (shouldAnimate) {
@@ -81,10 +76,6 @@ export default function Hero({ shouldAnimate }: HeroProps) {
     };
   }, [isInteractionLocked]);
 
-  const handleLottieComplete = () => {
-    setIsLottieComplete(true);
-  };
-
   const { scrollYProgress } = useScroll({
     target: ref,
     offset: ["start start", "end start"],
@@ -123,26 +114,6 @@ export default function Hero({ shouldAnimate }: HeroProps) {
   const circle2_rotate = useTransform(scrollYProgress, [0, 1], [90, 0]);
   const circle3_rotate = useTransform(scrollYProgress, [0, 1], [0, 90]);
   const circle4_rotate = useTransform(scrollYProgress, [0, 1], [-90, 0]);
-
-  const lottieGlowVariants: Variants = useMemo(
-    () => ({
-      initial: {
-        filter: "drop-shadow(0px 0px 0px rgba(255,255,255,0))",
-      },
-      glowing: {
-        filter: [
-          "drop-shadow(0px 0px 0px rgba(255,255,255,0))",
-          "drop-shadow(0px 0px 5px rgba(255,255,255,1))",
-          "drop-shadow(0px 0px 0px rgba(255,255,255,0))",
-        ],
-        transition: {
-          duration: 1.5,
-        },
-        willChange: "filter",
-      },
-    }),
-    [],
-  );
 
   // Memoize text split
   const textChars = useMemo(() => textContent.split(""), []);
@@ -191,10 +162,10 @@ export default function Hero({ shouldAnimate }: HeroProps) {
   return (
     <m.div
       ref={ref}
-      className={`w-full h-screen overflow-hidden flex flex-col items-center justify-center relative black-linear ${
+      className={`w-full h-screen overflow-hidden flex flex-col items-center justify-center relative ${
         isInteractionLocked ? "pointer-events-none" : "pointer-events-auto"
       }`}
-      style={{ opacity }}
+      style={{ opacity, background: "var(--black-linear)" }}
     >
       {/* Mountain - rendered via SceneLayer so order/data-driven */}
       <m.div
@@ -212,7 +183,7 @@ export default function Hero({ shouldAnimate }: HeroProps) {
       <IkigaiCircle
         className="scale-50 md:scale-100"
         imageSrc="/assets/Scene/Hero/world-circle.webp"
-        iconSrc="/assets/Icon/world.svg"
+        iconSrc="/assets/Icon/world.webp"
         text="สิ่งที่โลกต้องการ"
         rotateValue={circle4_rotate}
         initialAnimation={circleAnimations.circle4}
@@ -227,7 +198,7 @@ export default function Hero({ shouldAnimate }: HeroProps) {
       <IkigaiCircle
         className="scale-50 md:scale-100"
         imageSrc="/assets/Scene/Hero/paid-circle.webp"
-        iconSrc="/assets/Icon/paid.svg"
+        iconSrc="/assets/Icon/paid.webp"
         text="สิ่งที่สร้างรายได้"
         rotateValue={circle3_rotate}
         initialAnimation={circleAnimations.circle3}
@@ -242,7 +213,7 @@ export default function Hero({ shouldAnimate }: HeroProps) {
       <IkigaiCircle
         className="scale-50 md:scale-100"
         imageSrc="/assets/Scene/Hero/skill-circle.webp"
-        iconSrc="/assets/Icon/skill.svg"
+        iconSrc="/assets/Icon/skill.webp"
         text="สิ่งที่ถนัด"
         rotateValue={circle2_rotate}
         initialAnimation={circleAnimations.circle2}
@@ -257,7 +228,7 @@ export default function Hero({ shouldAnimate }: HeroProps) {
       <IkigaiCircle
         className="scale-50 md:scale-100"
         imageSrc="/assets/Scene/Hero/love-circle.webp"
-        iconSrc="/assets/Icon/love.svg"
+        iconSrc="/assets/Icon/love.webp"
         text="สิ่งที่รัก"
         rotateValue={circle1_rotate}
         initialAnimation={circleAnimations.circle1}
@@ -282,20 +253,14 @@ export default function Hero({ shouldAnimate }: HeroProps) {
           animate={shouldAnimate ? { opacity: 1 } : { opacity: 0 }}
           transition={{ duration: 2, delay: 1.5 }}
         >
-          <m.div
-            variants={lottieGlowVariants}
-            animate={isLottieComplete ? "glowing" : "initial"}
-          >
-            <LazyLottie
-              src="/assets/Scene/Hero/logo_ikigai_animate.json"
-              className="h-[100px]"
-              loop={false}
-              play={shouldPlayLottie}
-              onComplete={handleLottieComplete}
-            />
-          </m.div>
+          <LazyLottie
+            src="/assets/Scene/Hero/logo.json"
+            className="h-[100px]"
+            loop={false}
+            play={shouldPlayLottie}
+          />
         </m.div>
-        <p className="typo-h2-serif text-white whitespace-nowrap">
+        <p className="font-bentham font-medium text-4xl text-white whitespace-nowrap">
           {textChars.map((char, index) => (
             <m.span
               key={`char-${index}-${char}`}
