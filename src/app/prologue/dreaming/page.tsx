@@ -30,11 +30,11 @@ export default function DreamingPage() {
   ];
   const [snoozeCount, setSnoozeCount] = useState(0);
   const [secondaryBtnText, setSecondaryBtnText] = useState<string | null>(
-    "ยังก่อน"
+    "ยังก่อน",
   );
   const [isSnoozing, setIsSnoozing] = useState(false);
   const [decisionText, setDecisionText] = useState(
-    "คุณตกลงมาจุดสิ้นสุด.... คุณเจอกับบางอย่างกำลังเดินใกล้เข้ามาจะดูมันไหม"
+    "คุณตกลงมาจุดสิ้นสุด.... คุณเจอกับบางอย่างกำลังเดินใกล้เข้ามาจะดูมันไหม",
   );
 
   useEffect(() => {

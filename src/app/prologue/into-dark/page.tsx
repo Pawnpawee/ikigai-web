@@ -10,11 +10,11 @@ export default function IntoDarkPage() {
   const { setBgMusic, isMuted } = useAudio();
 
   useLayoutEffect(() => {
-      if (typeof window !== "undefined") {
-        window.history.scrollRestoration = "manual";
-        window.scrollTo(0, 0);
-      }
-    }, []);
+    if (typeof window !== "undefined") {
+      window.history.scrollRestoration = "manual";
+      window.scrollTo(0, 0);
+    }
+  }, []);
 
   // เปลี่ยนเพลงกลับไป default bg-music เมื่อเข้าหน้า IntoDark
   useEffect(() => {

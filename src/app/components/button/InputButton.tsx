@@ -1,4 +1,3 @@
-
 interface InputButtonProps {
   value: string;
   onChange: (value: string) => void;
