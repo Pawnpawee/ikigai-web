@@ -52,7 +52,7 @@ export function AudioProvider({ children }: { children: React.ReactNode }) {
         console.error("Save settings failed", e);
       }
     },
-    []
+    [],
   );
 
   // --- Initialization ---
@@ -207,7 +207,7 @@ export function AudioProvider({ children }: { children: React.ReactNode }) {
         console.error("Failed to play SFX:", error);
       }
     },
-    [sfxVolume]
+    [sfxVolume],
   );
 
   //? หยุดเสียง SFX ทั้งหมดที่กำลังเล่นอยู่

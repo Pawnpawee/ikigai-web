@@ -22,8 +22,10 @@ interface LottieAnimationData {
   [key: string]: unknown;
 }
 
-interface LazyLottieProps
-  extends Omit<LottieComponentProps, "animationData" | "src"> {
+interface LazyLottieProps extends Omit<
+  LottieComponentProps,
+  "animationData" | "src"
+> {
   src: string | LottieAnimationData;
   className?: string;
   getRef?: (ref: LottieRefCurrentProps | null) => void;
@@ -121,7 +123,7 @@ const LazyLottie: React.FC<LazyLottieProps> = memo(
             isPlayingRef.current = false; // จำว่าหยุดแล้ว
           }
         }
-      }
+      },
     );
 
     // Logic: Manual Play (ต้องอัปเดต isPlayingRef ด้วย)
@@ -146,7 +148,7 @@ const LazyLottie: React.FC<LazyLottieProps> = memo(
         const totalFrames = lottieRef.current.getDuration(true);
         if (totalFrames === undefined) return;
         lottieRef.current.goToAndStop(latest * totalFrames, true);
-      }
+      },
     );
 
     if (!isLoaded || !animationData) {
@@ -181,7 +183,7 @@ const LazyLottie: React.FC<LazyLottieProps> = memo(
         />
       </div>
     );
-  }
+  },
 );
 
 LazyLottie.displayName = "LazyLottie";
