@@ -83,7 +83,7 @@ export default function IntoDark() {
     setSelectedReasons((prev) =>
       prev.includes(reasonId)
         ? prev.filter((id) => id !== reasonId)
-        : [...prev, reasonId]
+        : [...prev, reasonId],
     );
   };
 
@@ -153,13 +153,13 @@ export default function IntoDark() {
     }
   };
 
-   useMotionValueEvent(scrollYProgress, "change", (latest) => {
-     const isJobApplicationVisible = latest > 0.1;
+  useMotionValueEvent(scrollYProgress, "change", (latest) => {
+    const isJobApplicationVisible = latest > 0.1;
 
-     if (isJobApplicationVisible) {
-       setShowStars(false);
-     }
-   });
+    if (isJobApplicationVisible) {
+      setShowStars(false);
+    }
+  });
 
   return (
     <div ref={ref} className="w-full relative bg-black touch-pan-y">

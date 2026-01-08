@@ -42,12 +42,12 @@ export default function IntoDarkChoices({
   const opacity = useTransform(
     scrollYProgress,
     [0.167, 0.179, 0.389, 0.7, 0.8],
-    [0, 1, 1, 1, 0]
+    [0, 1, 1, 1, 0],
   );
   const zIndex = useTransform(
     scrollYProgress,
     [0, 0.168, 0.179, 0.493, 0.5],
-    [-1, -1, 10, 10, -1]
+    [-1, -1, 10, 10, -1],
   );
 
   // Background gradients - Layer 1 (earliest)
@@ -55,7 +55,7 @@ export default function IntoDarkChoices({
   const bgGradient1Opacity = useTransform(
     scrollYProgress,
     [0.179, 0.213],
-    [0, 1]
+    [0, 1],
   );
 
   // Stars - Layer 2
@@ -68,7 +68,7 @@ export default function IntoDarkChoices({
   const catScale = useTransform(
     scrollYProgress,
     [0.226, 0.254, 0.282],
-    [0.9, 1, 1]
+    [0.9, 1, 1],
   );
 
   // Star lines - Layer 5
@@ -107,7 +107,7 @@ export default function IntoDarkChoices({
       catScale,
       starLinesOpacity,
       starLinesY,
-    ]
+    ],
   );
 
   return (
