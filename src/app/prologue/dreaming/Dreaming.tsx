@@ -138,8 +138,8 @@ export default function Dreaming() {
 
           {/* animal */}
           <m.div
-            className="absolute w-[29.17%] bottom-1/15 portrait:bottom-1/30"
-            style={{ right: animal_right, willChange: "transform" }}
+            className="absolute w-[29.17%] h-[29%] bottom-1/15 portrait:bottom-1/30"
+            style={{ right: animal_right }}
           >
             <LazyLottie
               src={"/assets/Scene/Scene3/camel.json"}
