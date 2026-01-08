@@ -1,16 +1,18 @@
 "use client";
 
-import { useScroll } from "framer-motion";
+import { useMotionValueEvent, useScroll } from "framer-motion";
 import { useLenis } from "lenis/react";
 import { useRouter } from "next/navigation";
 import { useEffect, useRef, useState } from "react";
-
+import { useUI } from "@/app/contexts/UIStarContext";
+import IntoDarkChoices from "./IntoDark_Choices";
 import IntoDarkNameInput from "./IntoDark_NameInput";
 
 export default function IntoDark() {
   const ref = useRef<HTMLDivElement>(null);
   const router = useRouter();
   const lenis = useLenis();
+  const { setShowStars } = useUI();
 
   const [playerName, setPlayerName] = useState("");
   const [selectedReasons, setSelectedReasons] = useState<number[]>([]);
@@ -28,11 +30,11 @@ export default function IntoDark() {
   useEffect(() => {
     if (!lenis || !ref.current) return;
 
-    const handleScroll = (e: any) => {
-      if (isNameConfirmed) return;
+    const handleScroll = (e: { scroll: number; animatedScroll: number }) => {
+      if (isNameConfirmed || !ref.current) return;
 
-      const scrollStart = ref.current!.offsetTop;
-      const sectionHeight = ref.current!.scrollHeight;
+      const scrollStart = ref.current.offsetTop;
+      const sectionHeight = ref.current.scrollHeight;
       const viewportHeight = window.innerHeight;
       const scrollableDistance = sectionHeight - viewportHeight;
 
@@ -81,7 +83,7 @@ export default function IntoDark() {
     setSelectedReasons((prev) =>
       prev.includes(reasonId)
         ? prev.filter((id) => id !== reasonId)
-        : [...prev, reasonId],
+        : [...prev, reasonId]
     );
   };
 
@@ -151,6 +153,14 @@ export default function IntoDark() {
     }
   };
 
+   useMotionValueEvent(scrollYProgress, "change", (latest) => {
+     const isJobApplicationVisible = latest > 0.1;
+
+     if (isJobApplicationVisible) {
+       setShowStars(false);
+     }
+   });
+
   return (
     <div ref={ref} className="w-full relative bg-black touch-pan-y">
       {/* 300vh */}
@@ -167,13 +177,13 @@ export default function IntoDark() {
 
       {/* 600vh - เพิ่มความยาวให้ scroll ได้มากขึ้น */}
       <div className="h-[600vh] w-full">
-        {/* <IntoDarkChoices
+        <IntoDarkChoices
           scrollYProgress={scrollYProgress}
           playerName={playerName}
           selectedReasons={selectedReasons}
           handleReasonToggle={handleReasonToggle}
           reasonsError={reasonsError}
-        /> */}
+        />
       </div>
 
       {/* 300vh - Ikigai Explanation */}
