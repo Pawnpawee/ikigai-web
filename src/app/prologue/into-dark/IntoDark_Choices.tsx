@@ -9,17 +9,8 @@ import MysteriousText from "@/app/components/reusable/MysteriousText";
 import SceneLayer, {
   type AnimationMap,
 } from "@/app/components/reusable/SceneLayer";
-import { SCENE_INTODARK_2_ITEMS } from "@/app/data/scene_intoDark_2";
+import { REASONS, SCENE_INTODARK_2_ITEMS } from "@/app/data/scene_intoDark_2";
 import { useDeviceCheck } from "@/app/hooks/useDeviceCheck";
-
-const REASONS = [
-  { id: 1, text: "เครียดเรื่องเรียน" },
-  { id: 2, text: "กลัวว่าตนเองจะไม่เก่งพอ" },
-  { id: 3, text: "กลัวจะไม่มีที่ทำงาน" },
-  { id: 4, text: "กลัวว่าทักษะตัวเองจะดีไม่พอ\nสำหรับการทำงาน" },
-  { id: 5, text: "กลัวไม่มีรายได้ต่อเนื่อง" },
-  { id: 6, text: "กลัวจะเข้ากับคนอื่นไม่ได้" },
-];
 
 interface ChoicesProps {
   scrollYProgress: MotionValue<number>;
@@ -42,20 +33,20 @@ export default function IntoDarkChoices({
   const opacity = useTransform(
     scrollYProgress,
     [0.167, 0.179, 0.389, 0.7, 0.8],
-    [0, 1, 1, 1, 0],
+    [0, 1, 1, 1, 0]
   );
   const zIndex = useTransform(
     scrollYProgress,
     [0, 0.168, 0.179, 0.493, 0.5],
-    [-1, -1, 10, 10, -1],
+    [-1, -1, 10, 10, -1]
   );
 
   // Background gradients - Layer 1 (earliest)
-  const bgGradient1Y = useTransform(scrollYProgress, [0.179, 0.213], [50, 0]);
-  const bgGradient1Opacity = useTransform(
+  const bgGradient = useTransform(scrollYProgress, [0.179, 0.213], [50, 0]);
+  const bgGradientOpacity = useTransform(
     scrollYProgress,
     [0.179, 0.213],
-    [0, 1],
+    [0, 1]
   );
 
   // Stars - Layer 2
@@ -68,12 +59,8 @@ export default function IntoDarkChoices({
   const catScale = useTransform(
     scrollYProgress,
     [0.226, 0.254, 0.282],
-    [0.9, 1, 1],
+    [0.9, 1, 1]
   );
-
-  // Star lines - Layer 5
-  const starLinesY = useTransform(scrollYProgress, [0.254, 0.31], [50, 0]);
-  const starLinesOpacity = useTransform(scrollYProgress, [0.254, 0.31], [0, 1]);
 
   // Text content - Layer 6
   const textOpacity = useTransform(scrollYProgress, [0.282, 0.327], [0, 1]);
@@ -92,22 +79,19 @@ export default function IntoDarkChoices({
   //? Animation Map - matches animGroup in scene_intoDark_2.data.ts
   const animations: AnimationMap = useMemo(
     () => ({
-      1: { opacity: bgGradient1Opacity, y: bgGradient1Y },
+      1: { opacity: bgGradientOpacity, y: bgGradient },
       2: { opacity: starsOpacity, y: starsY },
       4: { opacity: catOpacity, y: catY, scale: catScale },
-      5: { opacity: starLinesOpacity, y: starLinesY },
     }),
     [
-      bgGradient1Opacity,
-      bgGradient1Y,
+      bgGradientOpacity,
+      bgGradient,
       starsOpacity,
       starsY,
       catOpacity,
       catY,
       catScale,
-      starLinesOpacity,
-      starLinesY,
-    ],
+    ]
   );
 
   return (
@@ -119,7 +103,7 @@ export default function IntoDarkChoices({
         <SceneLayer
           items={SCENE_INTODARK_2_ITEMS}
           animations={animations}
-          containerAspectRatio={isMobile ? "1080 / 3840 " : "1920 / 2160"}
+          containerAspectRatio={isMobile ? "1080 / 3840" : "1920 / 2160"}
         >
           {/* Main Cat (Lottie) */}
           <m.div
@@ -152,7 +136,7 @@ export default function IntoDarkChoices({
           >
             {/* Welcome box with padding (node-id: 497:3459) */}
             <div
-              className={`flex flex-col items-center justify-center text-center text-white w-full  px-0 ${
+              className={`flex flex-col items-center justify-center text-center text-white w-full px-0 ${
                 isMobile
                   ? "pt-10 pb-[30px] lg:pt-[120px] lg:pb-[50px] gap-2"
                   : "py-[100px] 2xl:py-[150px] gap-4"
@@ -195,7 +179,7 @@ export default function IntoDarkChoices({
             <m.div
               className={`flex px-[5%] w-screen ${
                 isMobile
-                  ? "flex-col justify-center items-center gap-[15px] lg:gap-[50px] "
+                  ? "flex-col justify-center items-center gap-[15px] lg:gap-[50px]"
                   : "items-start justify-between"
               }`}
               style={{
@@ -223,7 +207,7 @@ export default function IntoDarkChoices({
                   onClick={() => handleReasonToggle(REASONS[5].id)}
                 />
               </div>
-              <div className="flex flex-col  gap-[15px] md:gap-[50px] xl:gap-[100px]">
+              <div className="flex flex-col gap-[15px] md:gap-[50px] xl:gap-[100px]">
                 {/* Choice button 2 (node-id: 478:907) */}
                 <ChoiceButton
                   text={REASONS[1].text}
@@ -259,7 +243,7 @@ export default function IntoDarkChoices({
               className="flex items-center justify-start portrait:justify-center self-stretch px-[11.98%]"
               style={{ opacity: text2Opacity }}
             >
-              <div className="text-white text-center whitespace-pre-line leading-normal  text-lg md:text-3xl">
+              <div className="text-white text-center whitespace-pre-line leading-normal text-lg md:text-3xl">
                 <MysteriousText
                   text={`โอ้… ถูกครอบงำจาก\nความกังวลสินะ`}
                   scrollYProgress={scrollYProgress}
@@ -271,7 +255,7 @@ export default function IntoDarkChoices({
 
             {/* Text 3 & 4 Container (node-id: 497:3450) */}
             <div
-              className={`flex text-white text-center leading-normal  text-lg md:text-3xl ${
+              className={`flex text-white text-center leading-normal text-lg md:text-3xl ${
                 isMobile
                   ? "flex-col gap-[2.31%] w-screen"
                   : "justify-between items-center w-[84.74%]"
@@ -307,7 +291,7 @@ export default function IntoDarkChoices({
               className="flex items-center justify-center w-full"
               style={{ opacity: text5Opacity }}
             >
-              <div className="leading-normal  text-lg md:text-3xl text-white">
+              <div className="leading-normal text-lg md:text-3xl text-white">
                 <MysteriousText
                   text="…เส้นทางทั้งสี่?"
                   scrollYProgress={scrollYProgress}
@@ -325,7 +309,7 @@ export default function IntoDarkChoices({
               initial={{ opacity: 0, y: -20 }}
               animate={{ opacity: 1, y: 0 }}
             >
-              <p className="text-red-500  text-lg md:text-2xl font-bold bg-black/50 px-6 py-3 rounded-lg">
+              <p className="text-red-500 text-lg md:text-2xl font-bold bg-black/50 px-6 py-3 rounded-lg">
                 {reasonsError}
               </p>
             </m.div>

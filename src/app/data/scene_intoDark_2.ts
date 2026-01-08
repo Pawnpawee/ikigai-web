@@ -1,5 +1,14 @@
 import type { SceneItemData } from "../components/reusable/SceneLayer";
 
+export const REASONS = [
+  { id: 1, text: "เครียดเรื่องเรียน" },
+  { id: 2, text: "กลัวว่าตนเองจะไม่เก่งพอ" },
+  { id: 3, text: "กลัวจะไม่มีที่ทำงาน" },
+  { id: 4, text: "กลัวว่าทักษะตัวเองจะดีไม่พอ\nสำหรับการทำงาน" },
+  { id: 5, text: "กลัวไม่มีรายได้ต่อเนื่อง" },
+  { id: 6, text: "กลัวจะเข้ากับคนอื่นไม่ได้" },
+];
+
 export const SCENE_INTODARK_2_ITEMS: SceneItemData[] = [
   {
     id: "bg-gradient-top",
