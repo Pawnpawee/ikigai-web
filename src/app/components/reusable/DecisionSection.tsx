@@ -56,11 +56,11 @@ export default function DecisionSection({
           text={text}
           scrollYProgress={scrollYProgress} // ผูกกับ Scroll ให้ค่อยๆ ขึ้น
           as="h2"
-          className="text-3xl portrait:text-xl leading-normal text-white max-w-3xs md:max-w-4xl"
+          className="text-xl md:text-3xl leading-normal text-white max-w-3xs md:max-w-4xl"
         />
 
         {/* Buttons */}
-        <div className="flex flex-wrap justify-center gap-8 mt-8">
+        <div className="flex flex-wrap justify-center gap-4 md:gap-8 mt-8">
           <GradientButton
             text={primaryButtonText} // ปุ่มไปต่อ
             isSelected={true}

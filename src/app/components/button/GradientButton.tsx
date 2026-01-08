@@ -31,14 +31,12 @@ export default function GradientButton({
       return {
         border: "2px solid rgba(255, 255, 255, 1)",
         background: "rgba(255, 255, 255, 0)",
-        boxShadow: "0 0 40px -20px var(--color-slate-100)",
       };
     }
     if (isWhiteVariant) {
       return {
         border: "4px solid var(--white-radial)",
         background: "var(--white-linear)",
-        boxShadow: "0 0 40px -20px var(--color-slate-100)",
       };
     }
     // Default variant
@@ -54,7 +52,7 @@ export default function GradientButton({
         relative
         rounded-full
         px-14 py-4
-        text-xl
+        text-lg md:text-2xl
         transition-all
         
         ${

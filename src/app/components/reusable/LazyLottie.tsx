@@ -11,7 +11,7 @@ import type React from "react";
 import { memo, useEffect, useRef, useState } from "react";
 
 //? Type Definition สำหรับ Animation Data (JSON)
-export interface LottieAnimationData {
+interface LottieAnimationData {
   w: number;
   h: number;
   ip: number; // In Point

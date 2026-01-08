@@ -45,7 +45,7 @@ export default function MenuModal({ isOpen, onClose }: MenuModalProps) {
           >
             {/* Header */}
             <div className="flex items-center justify-between mb-6">
-              <h2 className="text-2xl portrait:text-xl font-semibold text-white">
+              <h2 className="text-2xl xl:text-xl font-semibold text-white">
                 เมนู
               </h2>
               <button
@@ -76,10 +76,10 @@ export default function MenuModal({ isOpen, onClose }: MenuModalProps) {
               {/* Background Music Volume */}
               <div className="space-y-3">
                 <div className="flex items-center justify-between">
-                  <span className="text-2xl portrait:text-xl text-white">
+                  <span className="text-2xl xl:text-xl text-white">
                     ระดับเสียงประกอบ
                   </span>
-                  <span className="text-2xl portrait:text-xl text-blue-400 font-semibold">
+                  <span className="text-2xl xl:text-xl text-blue-400 font-semibold">
                     {volume}%
                   </span>
                 </div>
@@ -151,10 +151,10 @@ export default function MenuModal({ isOpen, onClose }: MenuModalProps) {
               {/* Sound Effect Volume */}
               <div className="space-y-3">
                 <div className="flex items-center justify-between">
-                  <span className="text-2xl portrait:text-xl text-white">
+                  <span className="text-2xl xl:text-xl text-white">
                     เสียง Effect
                   </span>
-                  <span className="text-2xl portrait:text-xl text-orange-400 font-semibold">
+                  <span className="text-2xl xl:text-xl text-orange-400 font-semibold">
                     {sfxVolume}%
                   </span>
                 </div>

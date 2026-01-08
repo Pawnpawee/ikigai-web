@@ -102,7 +102,7 @@ export default function Intro() {
                 textShadow: introGlow,
                 willChange: "transform, opacity, filter",
               }}
-              className="font-bentham font-medium text-5xl portrait:text-4xl text-white absolute"
+              className="font-bentham font-medium text-3xl md:text-5xl text-white absolute"
             >
               Intro
             </m.h2>
@@ -112,7 +112,7 @@ export default function Intro() {
             text={INTRO_TEXT}
             scrollYProgress={textAnimationProgress}
             as="div"
-            className="text-2xl portrait:text-xl text-white text-center w-70 sm:w-full mx-auto"
+            className="text-lg md:text-2xl text-white text-center w-70 md:w-150 xl:w-full mx-auto"
           />
         </m.div>
       </m.div>

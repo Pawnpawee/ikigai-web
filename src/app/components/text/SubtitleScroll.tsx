@@ -39,7 +39,7 @@ export default function SubtitleScroll({
             style={{ opacity }}
           >
             <div className="bg-black/20 px-6 py-3 rounded-lg max-w-5xl">
-              <p className="text-2xl portrait:text-xl text-white text-center leading-relaxed">
+              <p className="text-lg md:text-2xl text-white text-center leading-relaxed">
                 {subtitle}
               </p>
             </div>

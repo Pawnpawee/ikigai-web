@@ -62,7 +62,7 @@ const WordByWordAnimation: FC<WordByWordAnimationProps> = ({
     lines.map((line, lineIndex) => (
       <span
         key={`line-${lineIndex}-${line}`}
-        className="flex flex-wrap items-center justify-center whitespace-pre-line select-none py-1"
+        className="flex flex-wrap items-center justify-center whitespace-pre-line select-none"
       >
         {line.split(" ").map((word, wordIndexInLine) => {
           if (word === "") return null;

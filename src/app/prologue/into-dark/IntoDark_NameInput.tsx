@@ -141,11 +141,11 @@ export default function IntoDarkNameInput({
 
   return (
     <m.div
-      className="fixed top-0 h-screen w-screen bg-black"
+      className="fixed flex justify-center top-0 h-screen w-screen bg-black"
       style={{ opacity, zIndex }}
     >
       <m.div
-        className={`flex aspect-video portrait:aspect-9/16 items-center h-screen w-screen ${
+        className={`flex aspect-video portrait:aspect-9/16 items-center h-screen w-screen portrait:w-auto ${
           isMobile ? "justify-center" : "justify-end"
         }`}
       >
@@ -182,10 +182,10 @@ export default function IntoDarkNameInput({
           <m.div
             className="absolute"
             style={{
-              width: isMobile ? "70.52%" : "39.51%",
-              height: isMobile ? "40.34%" : "71.25%",
-              left: isMobile ? "14.32%" : "9.24%",
-              bottom: isMobile ? "12.36%" : "13.52%",
+              width: isMobile ? "70.28%" : "39.51%",
+              height: isMobile ? "40.10%" : "71.25%",
+              left: isMobile ? "14.54%" : "9.24%",
+              bottom: isMobile ? "12.50%" : "13.52%",
               opacity: set4Opacity,
               y: catY,
             }}
@@ -208,7 +208,7 @@ export default function IntoDarkNameInput({
             >
               {/* ชุด 5: Main heading text - ขึ้นทีละตัวอักษรแบบลึกลับ */}
               <m.div className="text-center" style={{ opacity: textOpacity }}>
-                <div className="text-white select-none leading-normal text-3xl portrait:text-xl">
+                <div className="text-white select-none leading-normal text-xl md:text-3xl">
                   <MysteriousText
                     text={`${
                       isMobile

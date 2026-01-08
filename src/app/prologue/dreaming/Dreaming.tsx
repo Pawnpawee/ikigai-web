@@ -138,8 +138,8 @@ export default function Dreaming() {
 
           {/* animal */}
           <m.div
-            className="absolute w-[29.17%] bottom-1/15 portrait:bottom-1/30"
-            style={{ right: animal_right, willChange: "transform" }}
+            className="absolute w-[29.17%] h-[29%] bottom-1/15 portrait:bottom-1/30"
+            style={{ right: animal_right }}
           >
             <LazyLottie
               src={"/assets/Scene/Scene3/camel.json"}
@@ -157,13 +157,13 @@ export default function Dreaming() {
         />
 
         {/* Text กลางจอ */}
-        <div className="absolute inset-0 flex items-center justify-center  text-center px-4">
+        <div className="absolute inset-0 flex items-center justify-center text-center px-4">
           <m.div style={{ opacity: set1Opacity }}>
             <WordByWordAnimation
               text={text}
               scrollYProgress={textAnimationProgress}
               as="p"
-              className="text-2xl portrait:text-xl text-white w-80 md:w-140 xl:w-full"
+              className="text-lg md:text-2xl text-white w-80 md:w-140 xl:w-full"
             />
           </m.div>
         </div>

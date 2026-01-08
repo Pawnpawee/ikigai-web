@@ -20,12 +20,10 @@ export default function InputButton({
 
   return (
     <div
-      className={`flex py-2 lg:py-4 px-6 lg:px-14 justify-center items-center gap-2.5 ${className}`}
+      className={`flex py-2 md:py-4 px-6 md:px-14 justify-center items-center gap-2.5 shadow-[0_0_60px_-20px_var(--tw-shadow-color)] shadow-slate-100 rounded-full select-none ${className}`}
       style={{
-        borderRadius: "512px",
         border: "4px solid var(--white-radial)",
         background: "var(--white-linear)",
-        boxShadow: "0 0 60px -20px var(--color-slate-100)",
         ...style,
       }}
       data-name="InputButton"
@@ -35,7 +33,7 @@ export default function InputButton({
         value={value}
         onChange={(e) => onChange(e.target.value)}
         placeholder={placeholder}
-        className="text-2xl portrait:text-xl text-center text-black bg-transparent border-none outline-none p-0"
+        className="text-lg md:text-2xl text-center text-black bg-transparent border-none outline-none p-0"
         style={{
           width: `${inputSize}ch`,
           minWidth: `${placeholderLength}ch`,
