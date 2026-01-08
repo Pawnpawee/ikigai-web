@@ -154,9 +154,9 @@ export default function IntoDark() {
   };
 
   useMotionValueEvent(scrollYProgress, "change", (latest) => {
-    const isJobApplicationVisible = latest > 0.1;
+    const isIntoDark = latest > 0.1;
 
-    if (isJobApplicationVisible) {
+    if (isIntoDark) {
       setShowStars(false);
     }
   });
