@@ -218,7 +218,6 @@ export default function Weighing() {
   );
   const set6Y = useTransform(scrollYProgress, [0.3333, 0.4], [100, 0]);
 
-
   // ============ ZOOM (400-500vh = 0.5333-0.6667) ============
   const containerScale = useTransform(
     scrollYProgress,
@@ -357,6 +356,7 @@ export default function Weighing() {
                     opacity: set4Opacity,
                     y: set4Y,
                   }}
+                  initial={{ opacity: 0, y: 100 }}
                 >
                   <LazyLottie
                     src="/assets/Scene/Scene4/s4-clothing.json"

@@ -70,6 +70,7 @@ export const SCENE_WEIGHING_ITEMS: SceneItemData[] = [
     },
     animGroup: 66,
     sizes: "(max-width: 768px) 5vw, 3vw",
+    priority: true,
   },
   {
     id: "feather_plate",
@@ -84,6 +85,7 @@ export const SCENE_WEIGHING_ITEMS: SceneItemData[] = [
     },
     animGroup: 67,
     sizes: "(max-width: 768px) 5vw, 3vw",
+    priority: true,
   },
   {
     id: "light_overlay",
