@@ -51,7 +51,8 @@ export default function GradientButton({
       className={`
         relative
         rounded-full
-        px-14 py-4
+        px-6 py-2
+        md:px-14 md:py-4
         text-lg md:text-2xl
         transition-all
         
@@ -59,10 +60,10 @@ export default function GradientButton({
           isTransparentVariant
             ? "text-white hover:bg-white/10 hover:border-white"
             : isWhiteVariant
-              ? "text-black"
-              : isSelected
-                ? "bg-linear-to-b from-slate-200 to-slate-100 border-slate-200 text-black border-4"
-                : "bg-linear-to-b from-slate-200/30 to-slate-100/30 border-slate-200/50 text-white border-4"
+            ? "text-black"
+            : isSelected
+            ? "bg-linear-to-b from-slate-200 to-slate-100 border-slate-200 text-black border-2 md:border-4"
+            : "bg-linear-to-b from-slate-200/30 to-slate-100/30 border-slate-200/50 text-white border-2 md:border-4"
         }
         ${className}
       `}

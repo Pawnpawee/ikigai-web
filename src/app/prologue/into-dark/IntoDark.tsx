@@ -6,6 +6,7 @@ import { useRouter } from "next/navigation";
 import { useEffect, useRef, useState } from "react";
 import { useUI } from "@/app/contexts/UIStarContext";
 import IntoDarkChoices from "./IntoDark_Choices";
+import IntoDarkHeard from "./IntoDark_Heard";
 import IntoDarkNameInput from "./IntoDark_NameInput";
 
 export default function IntoDark() {
@@ -187,16 +188,16 @@ export default function IntoDark() {
       </div>
 
       {/* 300vh - Ikigai Explanation */}
-      <div className="h-[300vh] w-full ">
-        {/* <IntoDarkHeard
+      <div className="h-[300vh] w-full">
+        <IntoDarkHeard
           scrollYProgress={scrollYProgress}
           hasHeard={hasHeard}
           setHasHeard={setHasHeard}
-        /> */}
+        />
       </div>
 
       {/* 600vh - Ikigai Submit */}
-      <div className="h-[600vh] w-full ">
+      <div className="h-[600vh] w-full">
         {/* <IntoDarkSubmit
           scrollYProgress={scrollYProgress}
           isLoading={isLoading}
