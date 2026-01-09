@@ -12,7 +12,7 @@ export const SCENE_WEIGHING_ITEMS: SceneItemData[] = [
       bottom: "-52.3%",
       zIndex: 0,
     },
-    animGroup: 2,
+    animGroup: 4,
     sizes: "100vw",
   },
   {

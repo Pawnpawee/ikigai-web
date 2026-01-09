@@ -62,7 +62,7 @@ const LazyLottie: React.FC<LazyLottieProps> = memo(
     //? ตรวจสอบ Viewport: โหลดเฉพาะเมื่อ User มองเห็น (Performance Optimization)
     const isInView = useInView(containerRef, {
       once: true,
-      amount: 0.1, // เห็นแค่ 10% ก็เริ่มโหลด
+      amount: 0.2, // เห็นแค่ 20% ก็เริ่มโหลด
     });
 
     // 1. Data Fetching Logic
