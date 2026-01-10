@@ -257,7 +257,7 @@ export default function IntoDarkChoices({
             <div
               className={`flex text-white text-center leading-normal text-lg md:text-3xl ${
                 isMobile
-                  ? "flex-col gap-[2.31%] w-screen"
+                  ? "flex-col gap-[50px] md:gap-[120px] w-screen"
                   : "justify-between items-center w-[84.74%]"
               }`}
             >

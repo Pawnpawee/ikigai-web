@@ -218,22 +218,6 @@ export default function Weighing() {
   );
   const set6Y = useTransform(scrollYProgress, [0.3333, 0.4], [100, 0]);
 
-  // Set 7: heart (300-350vh = 0.4-0.4667)
-  const set7Opacity = useTransform(
-    scrollYProgress,
-    [0.4, 0.4667, 0.749, 0.75],
-    [0, 1, 1, 0],
-  );
-  const set7Y = useTransform(scrollYProgress, [0.4, 0.4667], [50, 0]);
-
-  // Set 8: feather (350-400vh = 0.4667-0.5333)
-  const set8Opacity = useTransform(
-    scrollYProgress,
-    [0.4667, 0.5333, 0.749, 0.75],
-    [0, 1, 1, 0],
-  );
-  const set8Y = useTransform(scrollYProgress, [0.4667, 0.5333], [50, 0]);
-
   // ============ ZOOM (400-500vh = 0.5333-0.6667) ============
   const containerScale = useTransform(
     scrollYProgress,
@@ -255,58 +239,20 @@ export default function Weighing() {
     return 1000 * (1 - 1 / scale);
   });
 
-  // ============ SLOW MOVEMENT (500-580vh = 0.6667-0.7733) ============
-  // Heart side: slowly rotate down
-  const heartRotate_slow = useTransform(scrollYProgress, [0.55, 0.62], [0, -5]);
-  // Heart plate: slowly down (Y movement)
-  const heartPlateY_slow = useTransform(
-    scrollYProgress,
-    [0.55, 0.62],
-    isMobile ? [0, 5] : [0, 15],
-  );
-
-  // Feather plate: slowly up (Y movement)
-  const featherPlateY_slow = useTransform(
-    scrollYProgress,
-    [0.55, 0.62],
-    isMobile ? [0, -5] : [0, -15],
-  );
-
   // ============ FAST DROP (580-600vh = 0.7733-0.8) ============
   // Heart: fast rotate down with easeIn
-  const heartRotate_fast = useTransform(
-    scrollYProgress,
-    [0.62, 0.72],
-    [0, -15],
-  );
+  const heartRotate = useTransform(scrollYProgress, [0.62, 0.72], [0, -15]);
   // Heart plate: fast drop (Y movement)
-  const heartPlateY_fast = useTransform(
+  const heartPlateY = useTransform(
     scrollYProgress,
     [0.62, 0.72],
     isMobile ? [0, 8] : [0, 30],
   );
   // Feather plate: slight rise (Y movement)
-  const featherPlateY_fast = useTransform(
+  const featherPlateY = useTransform(
     scrollYProgress,
     [0.62, 0.72],
     isMobile ? [0, -3] : [0, -10],
-  );
-
-  // Combined positions
-  const scaleRotate = useTransform(
-    () => heartRotate_slow.get() + heartRotate_fast.get(),
-  );
-  const heartPlateY = useTransform(
-    () => heartPlateY_slow.get() + heartPlateY_fast.get(),
-  );
-  const featherPlateY = useTransform(
-    () => featherPlateY_slow.get() + featherPlateY_fast.get(),
-  );
-
-  // Combined transforms for animation groups
-  const heartPlateY_set7 = useTransform(() => set7Y.get() + heartPlateY.get());
-  const featherPlateY_set8 = useTransform(
-    () => set8Y.get() + featherPlateY.get(),
   );
 
   const textOpacity = useTransform(
@@ -332,17 +278,17 @@ export default function Weighing() {
     () => ({
       4: { y: set4Y, opacity: set4Opacity },
       // Scale with rotate
-      69: { y: set6Y, opacity: set6Opacity, rotate: scaleRotate },
+      69: { y: set6Y, opacity: set6Opacity, rotate: heartRotate },
       // Group 6: main plates/scale intro
       6: { y: set6Y, opacity: set6Opacity },
       // Per-item combined transforms for plates
       66: {
-        y: heartPlateY_set7,
-        opacity: set7Opacity,
+        y: heartPlateY,
+        opacity: set6Opacity,
       },
       67: {
-        y: featherPlateY_set8,
-        opacity: set8Opacity,
+        y: featherPlateY,
+        opacity: set6Opacity,
       },
       // Light needs flicker opacity
       68: { y: set6Y, opacity: set6Opacity },
@@ -352,11 +298,9 @@ export default function Weighing() {
       set4Opacity,
       set6Y,
       set6Opacity,
-      scaleRotate,
-      heartPlateY_set7,
-      set7Opacity,
-      featherPlateY_set8,
-      set8Opacity,
+      heartRotate,
+      heartPlateY,
+      featherPlateY,
     ],
   );
 
@@ -412,6 +356,7 @@ export default function Weighing() {
                     opacity: set4Opacity,
                     y: set4Y,
                   }}
+                  initial={{ opacity: 0, y: 100 }}
                 >
                   <LazyLottie
                     src="/assets/Scene/Scene4/s4-clothing.json"

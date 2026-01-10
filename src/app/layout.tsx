@@ -1,4 +1,4 @@
-import type { Metadata } from "next";
+import type { Metadata, Viewport } from "next";
 import { Anuphan, Bentham } from "next/font/google";
 import "./globals.css";
 import AppWrapper from "./AppWrapper";
@@ -25,6 +25,13 @@ export const metadata: Metadata = {
   title: "Ikigai - Life Of Journey",
   description:
     "Discover Your Ikigai: Uncover the intersection of passion, mission, vocation, and profession to find purpose and fulfillment in life.",
+};
+
+export const viewport: Viewport = {
+  width: "device-width",
+  initialScale: 1,
+  maximumScale: 1,
+  userScalable: false,
 };
 
 export default function RootLayout({

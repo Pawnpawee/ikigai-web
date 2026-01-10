@@ -62,7 +62,8 @@ const LazyLottie: React.FC<LazyLottieProps> = memo(
     //? ตรวจสอบ Viewport: โหลดเฉพาะเมื่อ User มองเห็น (Performance Optimization)
     const isInView = useInView(containerRef, {
       once: true,
-      amount: 0.1, // เห็นแค่ 10% ก็เริ่มโหลด
+      amount: 0,
+      margin: "200px 0px 0px 0px",
     });
 
     // 1. Data Fetching Logic
@@ -219,11 +220,10 @@ const LazyLottie: React.FC<LazyLottieProps> = memo(
     }
 
     //? Intrinsic Size เพื่อกัน Layout Shift (CLS)
-    const intrinsicStyle: React.CSSProperties = ignoreAspectRatio
-      ? {}
-      : {
-          aspectRatio: `${animationData.w} / ${animationData.h}`,
-        };
+    const intrinsicStyle: React.CSSProperties =
+      !ignoreAspectRatio && animationData
+        ? { aspectRatio: `${animationData.w} / ${animationData.h}` }
+        : {};
 
     return (
       <div

@@ -72,7 +72,7 @@ export default function WelcomeSoundModal({
                 <h2 className="text-xl font-bold text-white mb-4">
                   ประสบการณ์เสียงประกอบ
                 </h2>
-                <p className="text-2xl xl:text-xl text-slate-300">
+                <p className="text-xl md:text-2xl text-slate-300">
                   เว็บไซต์นี้มีเสียงประกอบและเอฟเฟกต์เสียง
                   <br />
                   คุณต้องการเปิดเสียงหรือไม่?
@@ -90,7 +90,7 @@ export default function WelcomeSoundModal({
                 <button
                   type="button"
                   onClick={onDecline}
-                  className="flex-1 px-6 py-4 rounded-xl bg-slate-700 hover:bg-slate-600 text-white text-2xl xl:text-xl font-semibold transition-colors border border-slate-600"
+                  className="flex-1 px-6 py-4 rounded-xl bg-slate-700 hover:bg-slate-600 text-white text-xl md:text-2xl font-semibold transition-colors border border-slate-600"
                 >
                   ไม่เปิด
                 </button>
@@ -99,7 +99,7 @@ export default function WelcomeSoundModal({
                 <button
                   type="button"
                   onClick={onAccept}
-                  className="flex-1 px-6 py-4 rounded-xl bg-linear-to-r from-blue-500 to-blue-600 hover:from-blue-600 hover:to-blue-700 text-white text-2xl xl:text-xl font-semibold transition-all shadow-lg shadow-blue-500/30 hover:shadow-blue-500/50"
+                  className="flex-1 px-6 py-4 rounded-xl bg-linear-to-r from-blue-500 to-blue-600 hover:from-blue-600 hover:to-blue-700 text-white text-xl md:text-2xl font-semibold transition-all shadow-lg shadow-blue-500/30 hover:shadow-blue-500/50"
                 >
                   เปิดเสียง
                 </button>

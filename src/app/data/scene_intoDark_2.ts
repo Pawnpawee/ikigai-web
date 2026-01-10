@@ -37,8 +37,8 @@ export const SCENE_INTODARK_2_ITEMS: SceneItemData[] = [
     mobileSrc: "/assets/Scene/Scene5/02/bg gradient bottom mobile.webp",
     alt: "Background gradient",
     style: {
-      left: "0%",
-      bottom: "0",
+      left: "0",
+      bottom: "-1%",
       width: "100%",
       height: "39.28%",
     },

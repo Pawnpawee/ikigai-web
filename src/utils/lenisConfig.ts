@@ -5,13 +5,13 @@ function easeOutQuart(x: number): number {
 }
 
 export const getLenisOptions = (isMobile: boolean) => ({
-  duration: isMobile ? 0 : 1.2,
+  duration: isMobile ? 1.5 : 1.2,
   easing: easeOutQuart,
   wheelMultiplier: 1.2,
-  touchMultiplier: 2,
+  touchMultiplier: isMobile ? 0.8 : 2,
   orientation: "vertical" as const,
   gestureOrientation: "vertical" as const,
   smoothWheel: true,
   smoothTouch: true,
-  touchInertiaMultiplier: 1.5,
+  touchInertiaMultiplier: isMobile ? 3 : 1.5,
 });

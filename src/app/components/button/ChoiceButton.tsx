@@ -19,7 +19,7 @@ export default function ChoiceButton({
       className={`flex justify-center items-center
         text-base md:text-2xl
         relative rounded-full px-10 text-center transition-all
-        border xl:border-[3px] border-solid whitespace-pre-line
+        border md:border-[3px] border-solid whitespace-pre-line
         
         max-w-2xs
         min-h-10
