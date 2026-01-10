@@ -30,7 +30,7 @@ function AnimatedChar({
   const opacity = useTransform(
     scrollYProgress,
     [charStart, extendedEnd],
-    [0, 1]
+    [0, 1],
   );
   const y = useTransform(scrollYProgress, [charStart, extendedEnd], [30, 0]);
 
@@ -62,7 +62,7 @@ export default function MysteriousText({
   // ใช้ Intl.Segmenter เพื่อแบ่ง grapheme clusters ที่ถูกต้อง (รวมสระกับพยัญชนะ)
   const segmenter = useMemo(
     () => new Intl.Segmenter("th", { granularity: "grapheme" }),
-    []
+    [],
   );
 
   //? Pre-calculate character data และ animation ranges
@@ -73,7 +73,7 @@ export default function MysteriousText({
 
     return textLines.map((line) => {
       const characters = [...segmenter.segment(line)].map(
-        (segment) => segment.segment
+        (segment) => segment.segment,
       );
 
       return {

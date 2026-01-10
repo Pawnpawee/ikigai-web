@@ -62,7 +62,7 @@ const LazyLottie: React.FC<LazyLottieProps> = memo(
     //? ตรวจสอบ Viewport: โหลดเฉพาะเมื่อ User มองเห็น (Performance Optimization)
     const isInView = useInView(containerRef, {
       once: true,
-      amount: 0, 
+      amount: 0,
       margin: "200px 0px 0px 0px",
     });
 

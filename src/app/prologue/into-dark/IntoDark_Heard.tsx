@@ -27,14 +27,14 @@ export default function IntoDarkHeard({
   const zIndex = useTransform(
     scrollYProgress,
     [0.497, 0.5, 0.665, 0.667],
-    [-1, 10, 10, -1]
+    [-1, 10, 10, -1],
   );
 
   // ชุด 2 (70-100vh): 0.539-0.556 - ปุ่ม เคยไม่เคย + Little Star 2
   const set2Opacity = useTransform(
     scrollYProgress,
     [0.539, 0.548, 0.556],
-    [0, 1, 1]
+    [0, 1, 1],
   );
   const set2Y = useTransform(scrollYProgress, [0.539, 0.548], [20, 0]);
 
@@ -42,10 +42,9 @@ export default function IntoDarkHeard({
   const set3Opacity = useTransform(
     scrollYProgress,
     [0.556, 0.564, 0.611],
-    [0, 1, 1]
+    [0, 1, 1],
   );
   const set3Y = useTransform(scrollYProgress, [0.556, 0.564], [30, 0]);
-
 
   //? Animation Map - matches animGroup in scene_intoDark_3.data.ts
   const animations: AnimationMap = useMemo(
@@ -53,12 +52,7 @@ export default function IntoDarkHeard({
       2: { opacity: set2Opacity, y: set2Y },
       3: { opacity: set3Opacity, y: set3Y },
     }),
-    [
-      set2Opacity,
-      set2Y,
-      set3Opacity,
-      set3Y,
-    ]
+    [set2Opacity, set2Y, set3Opacity, set3Y],
   );
 
   return (
