@@ -26,7 +26,7 @@ export default function IntoDarkHeard({
 
   const zIndex = useTransform(
     scrollYProgress,
-    [0.497, 0.5, 0.665, 0.667],
+    [0.497, 0.5, 0.666, 0.667],
     [-1, 10, 10, -1],
   );
 

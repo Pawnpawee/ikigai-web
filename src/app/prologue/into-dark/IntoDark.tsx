@@ -8,6 +8,7 @@ import { useUI } from "@/app/contexts/UIStarContext";
 import IntoDarkChoices from "./IntoDark_Choices";
 import IntoDarkHeard from "./IntoDark_Heard";
 import IntoDarkNameInput from "./IntoDark_NameInput";
+import IntoDarkSubmit from "./IntoDark_Submit";
 
 export default function IntoDark() {
   const ref = useRef<HTMLDivElement>(null);
@@ -198,11 +199,11 @@ export default function IntoDark() {
 
       {/* 600vh - Ikigai Submit */}
       <div className="h-[600vh] w-full">
-        {/* <IntoDarkSubmit
+        <IntoDarkSubmit
           scrollYProgress={scrollYProgress}
           isLoading={isLoading}
           handleSubmit={handleSubmit}
-        /> */}
+        />
       </div>
     </div>
   );

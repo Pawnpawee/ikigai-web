@@ -37,6 +37,7 @@ export default function GradientButton({
       return {
         border: "4px solid var(--white-radial)",
         background: "var(--white-linear)",
+        boxShadow: "0 0 40px -10px #CFD5DC"
       };
     }
     // Default variant
