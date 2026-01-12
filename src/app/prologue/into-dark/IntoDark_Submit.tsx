@@ -119,7 +119,7 @@ export default function IntoDarkSubmit({
             />
           </m.div>
 
-          <div className="flex flex-col px-5 xl:px-24 py-20 portrait:md:py-40 portrait:lg:py-60 portrait:md:gap-12 portrait:lg:gap-50 h-full ">
+          <div className="flex flex-col px-5 xl:px-24 py-20 portrait:md:py-40 portrait:lg:py-60 portrait:md:gap-12 portrait:lg:gap-50 h-full xl:gap-24">
             {/* SECTION 1: Description with Circle Ikigai */}
             <div className="flex flex-col items-center gap-4 self-stretch portrait:md:gap-12">
               <m.div
@@ -139,7 +139,7 @@ export default function IntoDarkSubmit({
               </m.div>
 
               {/* Circle Ikigai with 4 colored circles (reused IkigaiCircle component) */}
-              <div className="w-[400px] md:w-[735px] h-[400px] md:h-[735px]  flex flex-col items-center justify-center relative over">
+              <div className="w-[400px] md:w-[735px] h-[400px] md:h-[735px]  flex flex-col items-center justify-center relative">
                 {/* World Circle - Top Right */}
                 <IkigaiCircle
                   className="scale-50 md:scale-80 lg:scale-100"
