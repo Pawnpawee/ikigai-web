@@ -139,7 +139,7 @@ export default function IntoDark() {
     }
 
     try {
-      const response = await fetch("/api/save-progress", {
+      await fetch("/api/save-progress", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
@@ -164,7 +164,7 @@ export default function IntoDark() {
   });
 
   return (
-    <div ref={ref} className="w-full relative bg-black touch-pan-y">
+    <div ref={ref} className="w-full relative bg-black">
       {/* 300vh */}
       <div className="h-[300vh] w-full ">
         <IntoDarkNameInput
