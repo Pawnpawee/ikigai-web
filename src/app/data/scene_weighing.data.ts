@@ -42,6 +42,7 @@ export const SCENE_WEIGHING_ITEMS: SceneItemData[] = [
     },
     animGroup: 69,
     sizes: "(max-width: 768px) 15vw, 10vw",
+    priority: true,
   },
   {
     id: "scale_center",
