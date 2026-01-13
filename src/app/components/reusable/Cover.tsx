@@ -38,10 +38,6 @@ export default function Cover({
   const { setShowStars } = useUI();
   const { isMobile } = useDeviceCheck();
 
-  //? Animation Timeline (0-1 within 100vh)
-  // 1. bg opacity (0 → 0.1)
-  const bgOpacity = useTransform(scrollYProgress, [0, 0.1], [0, 1]);
-
   // 2. light blur (0.1 → 0.2)
   const lightBlurOpacity = useTransform(scrollYProgress, [0.1, 0.2], [0, 1]);
 
@@ -66,76 +62,74 @@ export default function Cover({
   );
 
   useMotionValueEvent(scrollYProgress, "change", (latest) => {
-    const isCover = latest > 0.1;
+    const isCoverVisible = latest > 0;
 
-    if (isCover) {
+    if (isCoverVisible) {
       setShowStars(true);
+    } else {
+      setShowStars(false);
     }
   });
+  const opacity = useTransform(scrollYProgress, [0, 0.1, 0.8, 1], [0, 1, 1, 0]);
 
   return (
-    <div className="fixed flex justify-center top-0 h-screen w-screen bg-black">
-      {/* Background Gradient */}
-      <m.div
-        className="absolute inset-0 w-full h-full"
-        style={{
-          background:
-            "linear-gradient(180deg, #0B1E23 0%, #091A1F 48%, #051115 89%, #040E11 100%)",
-          opacity: bgOpacity,
-        }}
-      />
+    <m.div
+      className="flex w-full h-full items-center justify-center bg-cover"
+      style={{ opacity }}
+    >
+      <div className="fixed flex justify-center items-center top-0 h-screen w-screen portrait:w-auto">
+        {/* Scene Items */}
+        <SceneLayer
+          items={items}
+          animations={animations}
+          containerAspectRatio={isMobile ? "1080 / 1920" : "1920 / 1080"}
+        >
+          <div className="flex w-full h-full items-center justify-center">
+            {/* Session Container */}
+            <m.div
+              className="flex flex-col gap-12 md:gap-16 xl:gap-24 items-center pt-12 xl:pt-24"
+              style={{
+                opacity: sessionTextOpacity,
+                y: sessionTextY,
+              }}
+            >
+              {/* Inner Container */}
+              <div className="flex flex-col gap-5 md:gap-8 xl:gap-12 items-center">
+                {/* Session Text */}
+                <p className="text-white text-2xl md:text-3xl xl:text-5xl leading-normal">
+                  {sessionText}
+                </p>
 
-      {/* Scene Items */}
-      <SceneLayer
-        items={items}
-        animations={animations}
-        containerAspectRatio={isMobile ? "1080 / 1920" : "1920 / 1080"}
-      >
-        <div className="flex w-full h-full items-center justify-center">
-          {/* Session Container */}
-          <m.div
-            className="flex flex-col gap-12 md:gap-16 xl:gap-24 items-center pt-12 xl:pt-24"
-            style={{
-              opacity: sessionTextOpacity,
-              y: sessionTextY,
-            }}
-          >
-            {/* Inner Container */}
-            <div className="flex flex-col gap-5 md:gap-8 xl:gap-12 items-center">
-              {/* Session Text */}
-              <p className="text-white text-2xl md:text-3xl xl:text-5xl leading-normal">
-                {sessionText}
-              </p>
+                {/* What You Love */}
+                <MotionImage
+                  src="/assets/Scene/Scene6/what_you_love.webp"
+                  alt="What You Love"
+                  width={700}
+                  height={100}
+                  className="w-2xs md:w-[500px] xl:w-[700px] h-auto"
+                  style={{
+                    opacity: titleOpacity,
+                  }}
+                  priority
+                />
+              </div>
 
               {/* What You Love */}
               <MotionImage
-                src="/assets/Scene/Scene6/what_you_love.webp"
-                alt="What You Love"
-                width={700}
-                height={100}
-                className="w-2xs md:w-[500px] xl:w-[700px] h-auto"
+                src="/assets/Icon/love.webp"
+                alt="love"
+                width={250}
+                height={250}
+                className="w-32 md:w-[200px] xl:w-[250px] h-auto"
                 style={{
                   opacity: titleOpacity,
                 }}
                 priority
               />
-            </div>
-
-            {/* What You Love */}
-            <MotionImage
-              src="/assets/Icon/love.webp"
-              alt="love"
-              width={250}
-              height={250}
-              className="w-32 md:w-[200px] xl:w-[250px] h-auto z-2"
-              style={{
-                opacity: titleOpacity,
-              }}
-              priority
-            />
-          </m.div>
-        </div>
-      </SceneLayer>
-    </div>
+            </m.div>
+          </div>
+        </SceneLayer>
+      </div>
+    </m.div>
   );
 }

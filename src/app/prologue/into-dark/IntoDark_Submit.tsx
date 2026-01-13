@@ -1,7 +1,7 @@
 ﻿"use client";
 
 import { type MotionValue, m, useTransform } from "framer-motion";
-import { useMemo } from "react";
+import { useEffect, useMemo, useState } from "react";
 import GradientButton from "@/app/components/button/GradientButton";
 import IkigaiCircle from "@/app/components/reusable/IkigaiCircle";
 import LazyLottie from "@/app/components/reusable/LazyLottie";
@@ -28,7 +28,7 @@ export default function IntoDarkSubmit({
   const zIndex = useTransform(
     scrollYProgress,
     [0, 0.666, 0.668, 1.0],
-    [-1, -1, 10, 10],
+    [-1, -1, 10, 10]
   );
 
   // ชุด 1: Cat animation (0.667-0.676)
@@ -45,22 +45,22 @@ export default function IntoDarkSubmit({
   const circle1_rotate = useTransform(
     scrollYProgress,
     [0.676, 0.73],
-    [0, -180],
+    [0, -180]
   ); // Love - Top
   const circle2_rotate = useTransform(scrollYProgress, [0.676, 0.73], [0, 90]); // Skill - Left
   const circle3_rotate = useTransform(scrollYProgress, [0.676, 0.73], [90, 0]); // Paid - Bottom
   const circle4_rotate = useTransform(scrollYProgress, [0.676, 0.73], [0, -90]); // World - Right
 
-  const subText_opacity = useTransform(scrollYProgress, [0.7, 0.75], [0, 1]);
-  const subText_y = useTransform(scrollYProgress, [0.7, 0.75], [30, 0]);
+  const subText_opacity = useTransform(scrollYProgress, [0.7, 0.73], [0, 1]);
+  const subText_y = useTransform(scrollYProgress, [0.7, 0.73], [30, 0]);
 
   // Text opacity animations - appear sequentially
   const text1_opacity = useTransform(scrollYProgress, [0.67, 0.69], [0, 1]); // "ถ้าเจ้าหาจุด..."
-  const text2_opacity = useTransform(scrollYProgress, [0.73, 0.75], [0, 1]); // Description set 1
-  const text3_opacity = useTransform(scrollYProgress, [0.76, 0.78], [0, 1]); // Description set 2
-  const text6_opacity = useTransform(scrollYProgress, [0.85, 0.87], [0, 1]); // "แต่เจ้าไม่ต้องกังวล..."
-  const text7_opacity = useTransform(scrollYProgress, [0.88, 0.9], [0, 1]); // "ไม่ใช่เรื่องแปลก"
-  const text8_opacity = useTransform(scrollYProgress, [0.91, 0.93], [0, 1]); // "เจ้าอยากจะลองไปตามหา..."
+  const text2_opacity = useTransform(scrollYProgress, [0.7, 0.77], [0, 1]); // Description
+
+  const text3_opacity = useTransform(scrollYProgress, [0.77, 0.8], [0, 1]); // "แต่เจ้าไม่ต้องกังวล..."
+
+  const text4_opacity = useTransform(scrollYProgress, [0.8, 0.83], [0, 1]); // "เจ้าอยากจะลองไปตามหา..."
 
   // Local animation config for IkigaiCircle reuse
   const circleTransition = {
@@ -83,11 +83,38 @@ export default function IntoDarkSubmit({
       2: { opacity: catOpacity, y: catY },
       3: { opacity: cloudOpacity },
     }),
-    [bgOpacity, catOpacity, catY, cloudOpacity],
+    [bgOpacity, catOpacity, catY, cloudOpacity]
+  );
+
+  const [isTallScreen, setIsTallScreen] = useState(false);
+
+  useEffect(() => {
+    //? Logic: ฟังก์ชันสำหรับตรวจสอบความสูงหน้าจอ
+    const checkScreenHeight = () => {
+      // เช็คว่ามีความสูงมากกว่า 700px หรือไม่
+      setIsTallScreen(window.innerHeight > 700);
+    };
+
+    // เรียกทำงานทันทีที่ Component mount
+    checkScreenHeight();
+
+    // เพิ่ม Event Listener เพื่อตรวจสอบตอน User ย่อ/ขยาย หน้าจอด้วย (Responsive)
+    window.addEventListener("resize", checkScreenHeight);
+
+    // Clean up function เพื่อคืน Memory เมื่อ Component ถูกทำลาย
+    return () => window.removeEventListener("resize", checkScreenHeight);
+  }, []);
+
+  const top = useTransform(
+    scrollYProgress,
+    [0.667, 0.75, 0.8, 0.85, 1],
+    isTallScreen
+      ? ["0vh", "-10vh", "-20vh", "-30vh", "-50vh"]
+      : ["0vh", "-30vh", "-50vh", "-80vh", "-100vh"]
   );
 
   return (
-    <m.div className="sticky top-0 w-full">
+    <m.div className="sticky top-0 w-full" style={{ top }}>
       <m.div
         className="flex items-center justify-center bg-black min-h-screen"
         style={{
@@ -133,8 +160,8 @@ export default function IntoDarkSubmit({
                       : `ถ้าเจ้าหาจุดที่ทั้งสี่สายมาบรรจบกันได้… จะเกิดเป็น`
                   }
                   scrollYProgress={scrollYProgress}
-                  startProgress={0.667}
-                  endProgress={0.7}
+                  startProgress={0.67}
+                  endProgress={0.69}
                 />
               </m.div>
 
@@ -195,7 +222,6 @@ export default function IntoDarkSubmit({
                 />
 
                 {/* Love Circle - Top */}
-
                 <IkigaiCircle
                   className="scale-50 md:scale-80 lg:scale-100"
                   imageSrc="/assets/Scene/Hero/love-circle.webp"
@@ -263,21 +289,8 @@ export default function IntoDarkSubmit({
                   <MysteriousText
                     text={
                       isMobile
-                        ? `พื้นที่ของ "ความหมาย" ในชีวิต \n และงานของแต่ละบุคคล ใช้เพื่อเตรียมความพร้อม \n และส่งเสริมการปรับตัวเข้าสู่สังคมการทำงาน`
-                        : `พื้นที่ของ "ความหมาย" ในชีวิตและงานของแต่ละบุคคล \n ใช้เพื่อเตรียมความพร้อมและส่งเสริมการปรับตัวเข้าสู่สังคมการทำงาน`
-                    }
-                    scrollYProgress={scrollYProgress}
-                    startProgress={0.7}
-                    endProgress={0.8}
-                  />
-                </m.div>
-
-                <m.div className="mb-0" style={{ opacity: text3_opacity }}>
-                  <MysteriousText
-                    text={
-                      isMobile
-                        ? ` หากได้ศึกษาหรือเข้าใจอิคิไก ก่อนที่จะเลือกเรียน\nหรือเลือกประกอบอาชีพก็จะมีประโยชน์มากยิ่งขึ้น\nและอาจพาเจ้า ออกจากความมัวมืดในคืนนี้ได้`
-                        : `หากได้ศึกษาหรือเข้าใจอิคิไก ก่อนที่จะเลือกเรียนหรือเลือกประกอบอาชีพ\n ก็จะมีประโยชน์มากยิ่งขึ้น และอาจพาเจ้าออกจากความมัวมืดในคืนนี้ได้`
+                        ? `พื้นที่ของ "ความหมาย" ในชีวิต \n และงานของแต่ละบุคคล ใช้เพื่อเตรียมความพร้อม \n และส่งเสริมการปรับตัวเข้าสู่สังคมการทำงาน \n หากได้ศึกษาหรือเข้าใจอิคิไก ก่อนที่จะเลือกเรียน\nหรือเลือกประกอบอาชีพก็จะมีประโยชน์มากยิ่งขึ้น\nและอาจพาเจ้า ออกจากความมัวมืดในคืนนี้ได้`
+                        : `พื้นที่ของ "ความหมาย" ในชีวิตและงานของแต่ละบุคคล \n ใช้เพื่อเตรียมความพร้อมและส่งเสริมการปรับตัวเข้าสู่สังคมการทำงาน \n หากได้ศึกษาหรือเข้าใจอิคิไก ก่อนที่จะเลือกเรียนหรือเลือกประกอบอาชีพ\n ก็จะมีประโยชน์มากยิ่งขึ้น และอาจพาเจ้าออกจากความมัวมืดในคืนนี้ได้`
                     }
                     scrollYProgress={scrollYProgress}
                     startProgress={0.7}
@@ -292,24 +305,16 @@ export default function IntoDarkSubmit({
               {/* Text Section */}
               <div className="flex flex-col items-start gap-14 portrait:md:gap-32 portrait:lg:gap-50">
                 <div className="text-base md:text-3xl leading-relaxed  text-center text-slate-100 w-full">
-                  <m.div className="mb-0" style={{ opacity: text6_opacity }}>
+                  <m.div className="mb-0" style={{ opacity: text3_opacity }}>
                     <MysteriousText
                       text={
                         isMobile
-                          ? `แต่เจ้าไม่ต้องกังวลไป\nการที่เจ้ายังไม่ค้นพบตัวเองตอนนี้`
-                          : `แต่เจ้าไม่ต้องกังวลไปการที่เจ้ายัง ไม่ค้นพบตัวเองตอนนี้`
+                          ? `แต่เจ้าไม่ต้องกังวลไป\nการที่เจ้ายังไม่ค้นพบตัวเองตอนนี้ \n ไม่ใช่เรื่องที่แปลกประหลาด`
+                          : `แต่เจ้าไม่ต้องกังวลไปการที่เจ้ายัง ไม่ค้นพบตัวเองตอนนี้ \n ไม่ใช่เรื่องที่แปลกประหลาด`
                       }
                       scrollYProgress={scrollYProgress}
-                      startProgress={0.667}
-                      endProgress={1}
-                    />
-                  </m.div>
-                  <m.div style={{ opacity: text7_opacity }}>
-                    <MysteriousText
-                      text={`ไม่ใช่เรื่องที่แปลกประหลาด`}
-                      scrollYProgress={scrollYProgress}
-                      startProgress={0.667}
-                      endProgress={1}
+                      startProgress={0.78}
+                      endProgress={0.83}
                     />
                   </m.div>
                 </div>
@@ -318,24 +323,14 @@ export default function IntoDarkSubmit({
                 <div className="flex flex-col items-center justify-between w-full gap-5 xl:gap-10 portrait:md:gap-16 portrait:lg:gap-30">
                   <m.div
                     className="text-base md:text-3xl leading-relaxed text-center text-slate-100 w-full"
-                    style={{ opacity: text8_opacity }}
+                    style={{ opacity: text4_opacity }}
                   >
-                    <div className="mb-0">
-                      <MysteriousText
-                        text={`เจ้าอยากจะลองไปตามหาอิคิไก`}
-                        scrollYProgress={scrollYProgress}
-                        startProgress={0.667}
-                        endProgress={1}
-                      />
-                    </div>
-                    <div>
-                      <MysteriousText
-                        text={`ของเจ้าดูบ้างไหมล่ะ`}
-                        scrollYProgress={scrollYProgress}
-                        startProgress={0.667}
-                        endProgress={1}
-                      />
-                    </div>
+                    <MysteriousText
+                      text={`เจ้าอยากจะลองไปตามหาอิคิไก \n ของเจ้าดูบ้างไหมล่ะ`}
+                      scrollYProgress={scrollYProgress}
+                      startProgress={0.83}
+                      endProgress={0.86}
+                    />
                   </m.div>
 
                   <GradientButton

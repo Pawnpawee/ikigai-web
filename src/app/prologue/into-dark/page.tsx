@@ -16,10 +16,9 @@ export default function IntoDarkPage() {
     }
   }, []);
 
-  // เปลี่ยนเพลงกลับไป default bg-music เมื่อเข้าหน้า IntoDark
   useEffect(() => {
     if (!isMuted) {
-      setBgMusic("/assets/Sound/bg-music.mp3");
+      setBgMusic("/assets/Sound/5/mysterious-dark-background.mp3");
     }
   }, [setBgMusic, isMuted]);
 

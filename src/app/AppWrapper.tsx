@@ -15,10 +15,11 @@ import { useDevice } from "./contexts/DeviceContext";
 
 function AppLogic({ children }: { children: React.ReactNode }) {
   const { scrollYProgress } = useScroll();
+
   const scrollToOpacity = useTransform(
     scrollYProgress,
-    [0, 0.8, 0.95, 1],
-    [1, 1, 0, 0],
+    [0, 0.9, 0.999, 1],
+    [1, 1, 0, 0]
   );
 
   return (
@@ -43,7 +44,7 @@ export default function AppWrapper({
   //? ใช้ useMemo เพื่อป้องกันการ create object ใหม่ทุกครั้งที่ re-render (Performance)
   const lenisOptions = React.useMemo(
     () => getLenisOptions(isMobile),
-    [isMobile],
+    [isMobile]
   );
 
   return (

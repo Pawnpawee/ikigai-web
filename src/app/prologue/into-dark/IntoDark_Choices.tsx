@@ -33,12 +33,12 @@ export default function IntoDarkChoices({
   const opacity = useTransform(
     scrollYProgress,
     [0.167, 0.179, 0.389, 0.7, 0.8],
-    [0, 1, 1, 1, 0],
+    [0, 1, 1, 1, 0]
   );
   const zIndex = useTransform(
     scrollYProgress,
     [0, 0.168, 0.179, 0.493, 0.5],
-    [-1, -1, 10, 10, -1],
+    [-1, -1, 10, 10, -1]
   );
 
   // Background gradients - Layer 1 (earliest)
@@ -46,7 +46,7 @@ export default function IntoDarkChoices({
   const bgGradientOpacity = useTransform(
     scrollYProgress,
     [0.179, 0.213],
-    [0, 1],
+    [0, 1]
   );
 
   // Stars - Layer 2
@@ -59,7 +59,7 @@ export default function IntoDarkChoices({
   const catScale = useTransform(
     scrollYProgress,
     [0.226, 0.254, 0.282],
-    [0.9, 1, 1],
+    [0.9, 1, 1]
   );
 
   // Text content - Layer 6
@@ -91,7 +91,7 @@ export default function IntoDarkChoices({
       catOpacity,
       catY,
       catScale,
-    ],
+    ]
   );
 
   return (
@@ -171,7 +171,9 @@ export default function IntoDarkChoices({
               </div>
               {/* Subtitle text (node-id: 497:3461) */}
               <div className="text-sm md:text-xl w-full">
-                <p>(ตอบอย่างน้อย 1 ข้อ)</p>
+                <p className={reasonsError ? "text-red-500 font-bold" : ""}>
+                  {reasonsError || "(ตอบอย่างน้อย 1 ข้อ)"}
+                </p>
               </div>
             </div>
 
@@ -193,18 +195,30 @@ export default function IntoDarkChoices({
                   text={REASONS[0].text}
                   isSelected={selectedReasons.includes(REASONS[0].id)}
                   onClick={() => handleReasonToggle(REASONS[0].id)}
+                  className="max-w-2xs
+        min-h-10
+        lg:max-w-md lg:min-w-md
+        lg:min-h-28 px-10"
                 />
                 {/* Choice button 3 (node-id: 478:911) */}
                 <ChoiceButton
                   text={REASONS[2].text}
                   isSelected={selectedReasons.includes(REASONS[2].id)}
                   onClick={() => handleReasonToggle(REASONS[2].id)}
+                  className="max-w-2xs
+        min-h-10
+        lg:max-w-md lg:min-w-md
+        lg:min-h-28 px-10"
                 />
                 {/* Choice button 6 (node-id: 478:912) */}
                 <ChoiceButton
                   text={REASONS[5].text}
                   isSelected={selectedReasons.includes(REASONS[5].id)}
                   onClick={() => handleReasonToggle(REASONS[5].id)}
+                  className="max-w-2xs
+        min-h-10
+        lg:max-w-md lg:min-w-md
+        lg:min-h-28 px-10"
                 />
               </div>
               <div className="flex flex-col gap-[15px] md:gap-[50px] xl:gap-[100px]">
@@ -213,18 +227,30 @@ export default function IntoDarkChoices({
                   text={REASONS[1].text}
                   isSelected={selectedReasons.includes(REASONS[1].id)}
                   onClick={() => handleReasonToggle(REASONS[1].id)}
+                  className="max-w-2xs
+        min-h-10
+        lg:max-w-md lg:min-w-md
+        lg:min-h-28 px-10"
                 />
                 {/* Choice button 5 (node-id: 478:908) */}
                 <ChoiceButton
                   text={REASONS[4].text}
                   isSelected={selectedReasons.includes(REASONS[4].id)}
                   onClick={() => handleReasonToggle(REASONS[4].id)}
+                  className="max-w-2xs
+        min-h-10
+        lg:max-w-md lg:min-w-md
+        lg:min-h-28 px-10"
                 />
                 {/* Choice button 4 (node-id: 478:909) */}
                 <ChoiceButton
                   text={REASONS[3].text}
                   isSelected={selectedReasons.includes(REASONS[3].id)}
                   onClick={() => handleReasonToggle(REASONS[3].id)}
+                  className="max-w-2xs
+        min-h-10
+        lg:max-w-md lg:min-w-md
+        lg:min-h-28 px-10"
                 />
               </div>
             </m.div>
@@ -301,19 +327,6 @@ export default function IntoDarkChoices({
               </div>
             </m.div>
           </m.div>
-
-          {/* Error Message */}
-          {reasonsError && (
-            <m.div
-              className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 text-center z-10 pointer-events-none"
-              initial={{ opacity: 0, y: -20 }}
-              animate={{ opacity: 1, y: 0 }}
-            >
-              <p className="text-red-500 text-lg md:text-2xl font-bold bg-black/50 px-6 py-3 rounded-lg">
-                {reasonsError}
-              </p>
-            </m.div>
-          )}
         </SceneLayer>
       </m.div>
     </div>

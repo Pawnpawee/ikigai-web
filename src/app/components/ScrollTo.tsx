@@ -12,11 +12,11 @@ export default function ScrollTo({ opacity }: ScrollToProps) {
   return (
     <m.div
       className="box-border flex flex-col gap-2 items-center justify-center px-8 md:px-14 py-0 fixed bottom-[env(safe-area-inset-bottom)] z-50 w-screen h-[70px] md:h-[100px]"
-      style={{ opacity, pointerEvents: opacity.get() <= 0 ? "none" : "auto" }}
+      style={{ opacity }}
     >
       <div className="flex flex-col gap-0 items-center animate-fade-loop">
         <div className="flex gap-2 items-center relative shrink-0">
-          <p className="text-sm text-white">scroll to continue</p>
+          <p className="text-base text-white">scroll to continue</p>
         </div>
 
         <div className="animate-bounce-slow">

@@ -133,7 +133,7 @@ export default function IntoDark() {
 
     if (selectedReasons.length === 0) {
       setReasonsError("กรุณาเลือกเหตุผลอย่างน้อย 1 ข้อ");
-      scrollToProgress(0.334); // Middle of Choices section (0.167-0.500)
+      scrollToProgress(0.35); // Middle of Choices section (0.167-0.500)
       setIsLoading(false);
       return;
     }
@@ -156,7 +156,7 @@ export default function IntoDark() {
   };
 
   useMotionValueEvent(scrollYProgress, "change", (latest) => {
-    const isIntoDark = latest > 0.1;
+    const isIntoDark = latest > 0;
 
     if (isIntoDark) {
       setShowStars(false);
@@ -198,7 +198,7 @@ export default function IntoDark() {
       </div>
 
       {/* 600vh - Ikigai Submit */}
-      <div className="h-[600vh] w-full">
+      <div className="relative h-[600vh] w-full">
         <IntoDarkSubmit
           scrollYProgress={scrollYProgress}
           isLoading={isLoading}

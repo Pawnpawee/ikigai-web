@@ -3,7 +3,7 @@ import type { SceneItemData } from "../components/reusable/SceneLayer";
 export const COVER_SESSION1_ITEMS: SceneItemData[] = [
   {
     id: "light-blur",
-    src: "/assets/Scene/Scene6/light_blur.webp",
+    src: "/assets/Scene/Scene6/01/light_blur.webp",
     alt: "Light blur effect",
     style: {
       width: "97.81%",
@@ -22,7 +22,7 @@ export const COVER_SESSION1_ITEMS: SceneItemData[] = [
 
   {
     id: "light",
-    src: "/assets/Scene/Scene6/light_love.webp",
+    src: "/assets/Scene/Scene6/01/light_love.webp",
     alt: "Light blur effect",
     style: {
       width: "29.70%",
