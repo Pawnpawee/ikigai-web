@@ -1,7 +1,7 @@
 ﻿"use client";
 
 import { type MotionValue, m, useTransform } from "framer-motion";
-import { useEffect, useMemo, useState } from "react";
+import { useMemo} from "react";
 import GradientButton from "@/app/components/button/GradientButton";
 import IkigaiCircle from "@/app/components/reusable/IkigaiCircle";
 import LazyLottie from "@/app/components/reusable/LazyLottie";
@@ -86,31 +86,12 @@ export default function IntoDarkSubmit({
     [bgOpacity, catOpacity, catY, cloudOpacity]
   );
 
-  const [isTallScreen, setIsTallScreen] = useState(false);
 
-  useEffect(() => {
-    //? Logic: ฟังก์ชันสำหรับตรวจสอบความสูงหน้าจอ
-    const checkScreenHeight = () => {
-      // เช็คว่ามีความสูงมากกว่า 700px หรือไม่
-      setIsTallScreen(window.innerHeight > 700);
-    };
-
-    // เรียกทำงานทันทีที่ Component mount
-    checkScreenHeight();
-
-    // เพิ่ม Event Listener เพื่อตรวจสอบตอน User ย่อ/ขยาย หน้าจอด้วย (Responsive)
-    window.addEventListener("resize", checkScreenHeight);
-
-    // Clean up function เพื่อคืน Memory เมื่อ Component ถูกทำลาย
-    return () => window.removeEventListener("resize", checkScreenHeight);
-  }, []);
 
   const top = useTransform(
     scrollYProgress,
     [0.667, 0.75, 0.8, 0.85, 1],
-    isTallScreen
-      ? ["0vh", "-10vh", "-20vh", "-30vh", "-50vh"]
-      : ["0vh", "-30vh", "-50vh", "-80vh", "-100vh"]
+ ["0vh", "-30vh", "-50vh", "-80vh", "-100vh"]
   );
 
   return (

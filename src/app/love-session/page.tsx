@@ -10,12 +10,11 @@ import {
 } from "@/app/data/cover_session1.data";
 import { useAudio } from "../contexts/AudioContext";
 import { useUI } from "../contexts/UIStarContext";
-import { useDeviceCheck } from "../hooks/useDeviceCheck";
 import S6_1 from "./s6_1";
 import S6_4 from "./s6_4";
 
 export default function SessionLovePage() {
-  const { isMobile } = useDeviceCheck();
+
   //? Cover Section (0-200vh)
   const coverRef = useRef<HTMLDivElement>(null);
   const { setShowStars } = useUI();
@@ -56,8 +55,6 @@ export default function SessionLovePage() {
     }
   }, [setBgMusic, isMuted]);
 
-  const poslock = isMobile ? 1 : 0.985;
-
   //? Scroll lock effect สำหรับ s6_1
   useEffect(() => {
     if (!lenis || !s6_1Ref.current) return;
@@ -71,7 +68,7 @@ export default function SessionLovePage() {
       const scrollableDistance = sectionHeight - viewportHeight;
 
       //? Lock ที่ poslock % ของ s6_1 section
-      const lockThreshold = scrollStart + scrollableDistance * poslock;
+      const lockThreshold = scrollStart + scrollableDistance * 0.985;
       //! Tolerance เพื่อป้องกันการวนลูป (5px)
       const tolerance = 5;
 
@@ -83,7 +80,7 @@ export default function SessionLovePage() {
             //? Reset flag หลังจาก scroll เสร็จ
             setTimeout(() => {
               isScrollingRef.current = false;
-            }, 100);
+            }, 0);
           },
         });
       }
@@ -94,7 +91,7 @@ export default function SessionLovePage() {
     return () => {
       lenis.off("scroll", handleScroll);
     };
-  }, [lenis, isS6_1Completed, poslock]);
+  }, [lenis, isS6_1Completed]);
 
   //? Handler: Auto-scroll to s6_4 เมื่อ s6_1 completed
   const handleS6_1Completed = () => {

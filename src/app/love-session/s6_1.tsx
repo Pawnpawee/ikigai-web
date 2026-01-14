@@ -1,7 +1,7 @@
 "use client";
 
 import { type MotionValue, m, useTransform } from "framer-motion";
-import { useEffect, useMemo, useState } from "react";
+import { useMemo, useState } from "react";
 import {
   HiCheck,
   HiOutlineChevronDown,
@@ -49,8 +49,6 @@ export default function S6_1({
   // Main container
   const opacity = useTransform(
     scrollYProgress,
-    isMobile?
-    [0, 0.05, 1, 1]:
     [0, 0.05, 0.985, 1],
     [0, 1, 1, 0]
   );
@@ -260,31 +258,10 @@ export default function S6_1({
     });
   })();
 
-  const [isTallScreen, setIsTallScreen] = useState(false);
-
-  useEffect(() => {
-    //? Logic: ฟังก์ชันสำหรับตรวจสอบความสูงหน้าจอ
-    const checkScreenHeight = () => {
-      // เช็คว่ามีความสูงมากกว่า 700px หรือไม่
-      setIsTallScreen(window.innerHeight > 700);
-    };
-
-    // เรียกทำงานทันทีที่ Component mount
-    checkScreenHeight();
-
-    // เพิ่ม Event Listener เพื่อตรวจสอบตอน User ย่อ/ขยาย หน้าจอด้วย (Responsive)
-    window.addEventListener("resize", checkScreenHeight);
-
-    // Clean up function เพื่อคืน Memory เมื่อ Component ถูกทำลาย
-    return () => window.removeEventListener("resize", checkScreenHeight);
-  }, []);
-
   const top = useTransform(
     scrollYProgress,
     [0, 0.3, 0.6, 0.8, 1],
-    isTallScreen
-      ? ["0vh", "-10vh", "-20vh", "-30vh", "-50vh"]
-      : ["0vh", "-30vh", "-50vh", "-80vh", "-100vh"]
+    ["0vh", "-30vh", "-50vh", "-80vh", "-100vh"]
   );
 
   return (
