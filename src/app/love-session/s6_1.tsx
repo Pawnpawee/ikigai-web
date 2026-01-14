@@ -49,6 +49,8 @@ export default function S6_1({
   // Main container
   const opacity = useTransform(
     scrollYProgress,
+    isMobile?
+    [0, 0.05, 1, 1]:
     [0, 0.05, 0.985, 1],
     [0, 1, 1, 0]
   );

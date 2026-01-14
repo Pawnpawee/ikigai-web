@@ -35,8 +35,8 @@ export default function IntoDarkSubmit({
 
   const bgOpacity = useTransform(scrollYProgress, [0.69, 0.72], [0, 1]);
 
-  const catOpacity = useTransform(scrollYProgress, [0.667, 0.676], [0, 1]);
-  const catY = useTransform(scrollYProgress, [0.667, 0.676], [50, 0]);
+  const catOpacity = useTransform(scrollYProgress, [0.667, 0.83], [0, 1]);
+  const catY = useTransform(scrollYProgress, [0.667, 0.83], [50, 0]);
 
   // ชุด 2: Cloud animation (0.676-0.69)
   const cloudOpacity = useTransform(scrollYProgress, [0.676, 0.69], [0, 1]);
@@ -142,7 +142,7 @@ export default function IntoDarkSubmit({
               src="/assets/Scene/Scene5/04/s5-4-cat-starline.json"
               className="w-full h-full"
               loop
-              playTrigger={catOpacity}
+              play={true}
             />
           </m.div>
 

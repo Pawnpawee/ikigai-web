@@ -4,13 +4,18 @@ import { useMotionValueEvent, useScroll } from "framer-motion";
 import { useLenis } from "lenis/react";
 import { useEffect, useLayoutEffect, useRef, useState } from "react";
 import Cover from "@/app/components/reusable/Cover";
-import { COVER_SESSION1_CONFIG, COVER_SESSION1_ITEMS } from "@/app/data/cover_session1.data";
+import {
+  COVER_SESSION1_CONFIG,
+  COVER_SESSION1_ITEMS,
+} from "@/app/data/cover_session1.data";
 import { useAudio } from "../contexts/AudioContext";
 import { useUI } from "../contexts/UIStarContext";
+import { useDeviceCheck } from "../hooks/useDeviceCheck";
 import S6_1 from "./s6_1";
 import S6_4 from "./s6_4";
 
 export default function SessionLovePage() {
+  const { isMobile } = useDeviceCheck();
   //? Cover Section (0-200vh)
   const coverRef = useRef<HTMLDivElement>(null);
   const { setShowStars } = useUI();
@@ -35,6 +40,8 @@ export default function SessionLovePage() {
   const { setBgMusic, isMuted } = useAudio();
   const lenis = useLenis();
   const [isS6_1Completed, setIsS6_1Completed] = useState(false);
+  //! Flag เพื่อป้องกัน infinite loop ใน scroll lock
+  const isScrollingRef = useRef(false);
 
   useLayoutEffect(() => {
     if (typeof window !== "undefined") {
@@ -49,23 +56,36 @@ export default function SessionLovePage() {
     }
   }, [setBgMusic, isMuted]);
 
+  const poslock = isMobile ? 1 : 0.985;
+
   //? Scroll lock effect สำหรับ s6_1
   useEffect(() => {
     if (!lenis || !s6_1Ref.current) return;
 
     const handleScroll = (e: { scroll: number; animatedScroll: number }) => {
-      if (isS6_1Completed || !s6_1Ref.current) return;
+      if (isS6_1Completed || !s6_1Ref.current || isScrollingRef.current) return;
 
       const scrollStart = s6_1Ref.current.offsetTop;
       const sectionHeight = s6_1Ref.current.scrollHeight;
       const viewportHeight = window.innerHeight;
       const scrollableDistance = sectionHeight - viewportHeight;
 
-      //? Lock ที่ 95% ของ s6_1 section
-      const lockThreshold = scrollStart + scrollableDistance * 0.985;
+      //? Lock ที่ poslock % ของ s6_1 section
+      const lockThreshold = scrollStart + scrollableDistance * poslock;
+      //! Tolerance เพื่อป้องกันการวนลูป (5px)
+      const tolerance = 5;
 
-      if (e.animatedScroll > lockThreshold) {
-        lenis.scrollTo(lockThreshold, { immediate: true });
+      if (e.animatedScroll > lockThreshold + tolerance) {
+        isScrollingRef.current = true;
+        lenis.scrollTo(lockThreshold, {
+          immediate: true,
+          onComplete: () => {
+            //? Reset flag หลังจาก scroll เสร็จ
+            setTimeout(() => {
+              isScrollingRef.current = false;
+            }, 100);
+          },
+        });
       }
     };
 
@@ -74,7 +94,7 @@ export default function SessionLovePage() {
     return () => {
       lenis.off("scroll", handleScroll);
     };
-  }, [lenis, isS6_1Completed]);
+  }, [lenis, isS6_1Completed, poslock]);
 
   //? Handler: Auto-scroll to s6_4 เมื่อ s6_1 completed
   const handleS6_1Completed = () => {

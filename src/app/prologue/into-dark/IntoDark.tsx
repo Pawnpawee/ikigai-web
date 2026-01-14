@@ -23,6 +23,8 @@ export default function IntoDark() {
   const [nameError, setNameError] = useState("");
   const [reasonsError, setReasonsError] = useState("");
   const [isNameConfirmed, setIsNameConfirmed] = useState(false);
+  //! Flag เพื่อป้องกัน infinite loop ใน scroll lock
+  const isScrollingRef = useRef(false);
 
   const { scrollYProgress } = useScroll({
     target: ref,
@@ -33,28 +35,34 @@ export default function IntoDark() {
     if (!lenis || !ref.current) return;
 
     const handleScroll = (e: { scroll: number; animatedScroll: number }) => {
-      if (isNameConfirmed || !ref.current) return;
+      if (isNameConfirmed || !ref.current || isScrollingRef.current) return;
 
       const scrollStart = ref.current.offsetTop;
       const sectionHeight = ref.current.scrollHeight;
       const viewportHeight = window.innerHeight;
       const scrollableDistance = sectionHeight - viewportHeight;
 
-      // 0.150 คือตำแหน่งประมาณ 90% ของ NameInput section (270vh/1800vh)
+      //? Lock ที่ 0.15 (ประมาณ 90% ของ NameInput section)
       const lockThreshold = scrollStart + scrollableDistance * 0.15;
+      //! Tolerance เพื่อป้องกันการวนลูป (5px)
+      const tolerance = 5;
 
-      // ตรวจสอบตำแหน่งปัจจุบัน (e.scroll หรือ e.animatedScroll)
-      // ถ้าเกินจุด Lock ให้ดีดกลับไปที่จุด Lock ทันที
-      if (e.animatedScroll > lockThreshold) {
-        // immediate: true คือการวาร์ปไปเลย ไม่ต้อง smooth เพื่อความรู้สึกว่า "ติด" จริงๆ
-        lenis.scrollTo(lockThreshold, { immediate: true });
+      if (e.animatedScroll > lockThreshold + tolerance) {
+        isScrollingRef.current = true;
+        lenis.scrollTo(lockThreshold, {
+          immediate: true,
+          onComplete: () => {
+            //? Reset flag หลังจาก scroll เสร็จ
+            setTimeout(() => {
+              isScrollingRef.current = false;
+            }, 100);
+          },
+        });
       }
     };
 
-    // ผูก Event Listener กับ Lenis
     lenis.on("scroll", handleScroll);
 
-    // Cleanup เมื่อ Component หายไป หรือ State เปลี่ยน
     return () => {
       lenis.off("scroll", handleScroll);
     };
@@ -85,7 +93,7 @@ export default function IntoDark() {
     setSelectedReasons((prev) =>
       prev.includes(reasonId)
         ? prev.filter((id) => id !== reasonId)
-        : [...prev, reasonId],
+        : [...prev, reasonId]
     );
   };
 
