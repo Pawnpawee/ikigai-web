@@ -42,7 +42,7 @@ export default function GifCursor() {
         x: mouseX,
         y: mouseY,
         translateX: "-50%",
-        translateY: "-50%",
+        translateY: "-35%",
       }}
       animate={{
         opacity: 1,

@@ -1,5 +1,6 @@
 "use client";
 import { m } from "framer-motion";
+import Image from "next/image";
 import Link from "next/link";
 import type { ChangeEvent } from "react";
 import { useAudio } from "@/app/contexts/AudioContext";
@@ -21,6 +22,7 @@ export default function MenuModal({ isOpen, onClose }: MenuModalProps) {
     const newVolume = Number(e.target.value);
     setSfxVolume(newVolume);
   };
+
   return (
     <>
       {isOpen && (
@@ -31,7 +33,7 @@ export default function MenuModal({ isOpen, onClose }: MenuModalProps) {
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
             transition={{ duration: 0.3 }}
-            className="fixed inset-0 bg-black/60 z-100"
+            className="fixed inset-0 bg-black/60 z-99"
             onClick={onClose}
           />
 
@@ -41,302 +43,210 @@ export default function MenuModal({ isOpen, onClose }: MenuModalProps) {
             animate={{ scale: 1, opacity: 1 }}
             exit={{ scale: 0.8, opacity: 0 }}
             transition={{ type: "spring", stiffness: 300, damping: 25 }}
-            className="fixed left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 w-full max-w-md bg-slate-900 rounded-2xl shadow-2xl z-101 p-6"
+            className="flex w-screen h-screen items-center justify-center z-100 fixed caret-transparent"
           >
-            {/* Header */}
-            <div className="flex items-center justify-between mb-6">
-              <h2 className="text-xl md:text-2xl font-semibold text-white">
-                เมนู
-              </h2>
-              <button
-                type="button"
-                onClick={onClose}
-                className="text-white hover:text-slate-300 transition-colors"
-                aria-label="ปิดเมนู"
-              >
-                <svg
-                  width="32"
-                  height="32"
-                  viewBox="0 0 24 24"
-                  fill="none"
-                  stroke="currentColor"
-                  strokeWidth="2"
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
+            <div className="bg-[#1b1f21] flex flex-col items-center rounded-2xl md:rounded-4xl px-2.5 py-5 md:py-10 gap-5 md:gap-10">
+              {/* Header */}
+              <div className="flex items-center justify-center w-full gap-2.5 pl-16 pr-0">
+                <h2 className="flex-1 text-xl md:text-3xl text-white text-center">
+                  เมนู
+                </h2>
+                <button
+                  type="button"
+                  onClick={onClose}
+                  className="px-5 hover:opacity-70 transition-opacity"
+                  aria-label="ปิดเมนู"
                 >
-                  <title>Close icon</title>
-                  <line x1="18" y1="6" x2="6" y2="18" />
-                  <line x1="6" y1="6" x2="18" y2="18" />
-                </svg>
-              </button>
-            </div>
+                  <Image
+                    src="/assets/Icon/close.webp"
+                    alt="Close"
+                    width={27}
+                    height={27}
+                    className="h-4 md:h-[27px] w-auto"
+                  />
+                </button>
+              </div>
 
-            {/* Volume Controls Section */}
-            <div className="mb-6 space-y-6 pb-6 border-b border-slate-700">
-              {/* Background Music Volume */}
-              <div className="space-y-3">
-                <div className="flex items-center justify-between">
-                  <span className="text-xl md:text-2xl text-white">
+              {/* Volume Controls Section */}
+              <div className="flex flex-col gap-5 md:gap-10 px-4 md:px-9 w-full">
+                {/* SFX Volume (เอฟเฟกต์) */}
+                <div className="flex flex-col gap-2.5">
+                  <p className="text-lg md:text-2xl text-white">
+                    ระดับเสียงเอฟเฟกต์
+                  </p>
+                  <div className="flex items-center gap-7.5">
+                    <Image
+                      src="/assets/Icon/mute_icon.webp"
+                      alt="Mute"
+                      width={27}
+                      height={37}
+                      className="h-5 md:h-[37px] w-auto"
+                    />
+                    <input
+                      type="range"
+                      min="0"
+                      max="100"
+                      value={sfxVolume}
+                      onChange={handleSfxVolumeChange}
+                      className="flex-1 h-1.5 appearance-none rounded-full
+                        [&::-webkit-slider-thumb]:appearance-none
+                        [&::-webkit-slider-thumb]:w-6
+                        [&::-webkit-slider-thumb]:h-6
+                        [&::-webkit-slider-thumb]:rounded-full
+                        [&::-webkit-slider-thumb]:bg-white
+                        [&::-webkit-slider-thumb]:
+                        [&::-webkit-slider-thumb]:border-2
+                        [&::-webkit-slider-thumb]:border-white
+                        [&::-moz-range-thumb]:w-6
+                        [&::-moz-range-thumb]:h-6
+                        [&::-moz-range-thumb]:rounded-full
+                        [&::-moz-range-thumb]:bg-white
+                        [&::-moz-range-thumb]:
+                        [&::-moz-range-thumb]:border-2
+                        [&::-moz-range-thumb]:border-white
+                        [&::-webkit-slider-runnable-track]:h-6
+                        [&::-webkit-slider-runnable-track]:rounded-full
+                        [&::-moz-range-track]:h-6
+                        [&::-moz-range-track]:rounded-full"
+                      style={{
+                        background: `linear-gradient(to right, #FF6B6B 0%, #FF6B6B ${sfxVolume}%, #5A6268 ${sfxVolume}%, #5A6268 100%)`,
+                      }}
+                    />
+                    <Image
+                      src="/assets/Icon/unmute_icon.webp"
+                      alt="Unmute"
+                      width={43}
+                      height={37}
+                      className="h-5 md:h-[37px] w-auto"
+                    />
+                  </div>
+                </div>
+
+                {/* Background Music Volume (ประกอบ) */}
+                <div className="flex flex-col gap-2.5">
+                  <p className="text-lg md:text-2xl text-white">
                     ระดับเสียงประกอบ
-                  </span>
-                  <span className="text-xl md:text-2xl text-blue-400 font-semibold">
-                    {volume}%
-                  </span>
+                  </p>
+                  <div className="flex items-center gap-7.5">
+                    <Image
+                      src="/assets/Icon/mute_icon.webp"
+                      alt="Mute"
+                      width={27}
+                      height={37}
+                      className="h-5 md:h-[37px] w-auto"
+                    />
+                    <input
+                      type="range"
+                      min="0"
+                      max="100"
+                      value={volume}
+                      onChange={handleVolumeChange}
+                      className="flex-1 h-1.5 appearance-none  rounded-full
+                        [&::-webkit-slider-thumb]:appearance-none
+                        [&::-webkit-slider-thumb]:w-6
+                        [&::-webkit-slider-thumb]:h-6
+                        [&::-webkit-slider-thumb]:rounded-full
+                        [&::-webkit-slider-thumb]:bg-white
+                        [&::-webkit-slider-thumb]:
+                        [&::-webkit-slider-thumb]:border-2
+                        [&::-webkit-slider-thumb]:border-white
+                        [&::-moz-range-thumb]:w-6
+                        [&::-moz-range-thumb]:h-6
+                        [&::-moz-range-thumb]:rounded-full
+                        [&::-moz-range-thumb]:bg-white
+                        [&::-moz-range-thumb]:
+                        [&::-moz-range-thumb]:border-2
+                        [&::-moz-range-thumb]:border-white
+                        [&::-webkit-slider-runnable-track]:h-6
+                        [&::-webkit-slider-runnable-track]:rounded-full
+                        [&::-moz-range-track]:h-
+                        [&::-moz-range-track]:rounded-full"
+                      style={{
+                        background: `linear-gradient(to right, #4A9EFF 0%, #4A9EFF ${volume}%, #5A6268 ${volume}%, #5A6268 100%)`,
+                      }}
+                    />
+                    <Image
+                      src="/assets/Icon/unmute_icon.webp"
+                      alt="Unmute"
+                      width={43}
+                      height={37}
+                      className="h-5 md:h-[37px] w-auto"
+                    />
+                  </div>
                 </div>
 
-                <div className="flex items-center gap-4">
-                  {/* Volume Icon Low */}
-                  <svg
-                    width="20"
-                    height="20"
-                    viewBox="0 0 24 24"
-                    fill="none"
-                    stroke="currentColor"
-                    strokeWidth="2"
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    className="text-slate-400 shrink-0"
+                {/* Divider */}
+                <div className="w-full h-px bg-[#4a5157]" />
+
+                {/* Privacy Policy */}
+                <Link href="/privacy-policy" onClick={onClose}>
+                  <m.div
+                    whileHover={{ scale: 1.01 }}
+                    whileTap={{ scale: 0.99 }}
+                    className="bg-[#363e43] hover:bg-[#404a50] rounded-2xl p-4 md:p-8 flex items-center justify-between transition-colors "
                   >
-                    <title>Volume low</title>
-                    <polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5" />
-                  </svg>
+                    <div className="flex items-center gap-5 md:gap-[45px]">
+                      <Image
+                        src="/assets/Icon/privacy_icon.webp"
+                        alt="Privacy"
+                        width={46}
+                        height={56}
+                        className="h-[25px] md:h-14 w-auto"
+                      />
+                      <div className="flex flex-col px-2.5">
+                        <p className="text-base md:text-xl text-white">
+                          นโยบายความเป็นส่วนตัว
+                        </p>
+                        <p className="text-sm md:text-lg text-white">
+                          ข้อมูลและความปลอดภัย
+                        </p>
+                      </div>
+                    </div>
+                    <Image
+                      src="/assets/Icon/next_btn.webp"
+                      alt="Next"
+                      width={19}
+                      height={25}
+                      className="h-[13px] md:h-[25px] w-auto"
+                    />
+                  </m.div>
+                </Link>
 
-                  {/* Slider */}
-                  <input
-                    type="range"
-                    min="0"
-                    max="100"
-                    value={volume}
-                    onChange={handleVolumeChange}
-                    className="w-full h-2 bg-slate-700 rounded-lg appearance-none cursor-pointer
-                      [&::-webkit-slider-thumb]:appearance-none
-                      [&::-webkit-slider-thumb]:w-4
-                      [&::-webkit-slider-thumb]:h-4
-                      [&::-webkit-slider-thumb]:rounded-full
-                      [&::-webkit-slider-thumb]:bg-blue-500
-                      [&::-webkit-slider-thumb]:cursor-pointer
-                      [&::-webkit-slider-thumb]:hover:bg-blue-400
-                      [&::-moz-range-thumb]:w-4
-                      [&::-moz-range-thumb]:h-4
-                      [&::-moz-range-thumb]:rounded-full
-                      [&::-moz-range-thumb]:bg-blue-500
-                      [&::-moz-range-thumb]:cursor-pointer
-                      [&::-moz-range-thumb]:border-0
-                      [&::-moz-range-thumb]:hover:bg-blue-400"
-                    style={{
-                      background: `linear-gradient(to right, #3b82f6 0%, #3b82f6 ${volume}%, #334155 ${volume}%, #334155 100%)`,
-                    }}
-                  />
-
-                  {/* Volume Icon High */}
-                  <svg
-                    width="20"
-                    height="20"
-                    viewBox="0 0 24 24"
-                    fill="none"
-                    stroke="currentColor"
-                    strokeWidth="2"
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    className="text-slate-400 shrink-0"
+                {/* About */}
+                <Link href="/about" onClick={onClose}>
+                  <m.div
+                    whileHover={{ scale: 1.01 }}
+                    whileTap={{ scale: 0.99 }}
+                    className="bg-[#363e43] hover:bg-[#404a50] rounded-2xl p-4 md:p-8 flex items-center justify-between transition-colors "
                   >
-                    <title>Volume high</title>
-                    <polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5" />
-                    <path d="M15.54 8.46a5 5 0 0 1 0 7.07" />
-                    <path d="M19.07 4.93a10 10 0 0 1 0 14.14" />
-                  </svg>
-                </div>
-              </div>
-
-              {/* Sound Effect Volume */}
-              <div className="space-y-3">
-                <div className="flex items-center justify-between">
-                  <span className="text-xl md:text-2xl text-white">
-                    เสียง Effect
-                  </span>
-                  <span className="text-xl md:text-2xl text-orange-400 font-semibold">
-                    {sfxVolume}%
-                  </span>
-                </div>
-
-                <div className="flex items-center gap-4">
-                  {/* SFX Icon */}
-                  <svg
-                    width="20"
-                    height="20"
-                    viewBox="0 0 24 24"
-                    fill="none"
-                    stroke="currentColor"
-                    strokeWidth="2"
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    className="text-slate-400 shrink-0"
-                  >
-                    <title>Music note</title>
-                    <path d="M9 18V5l12-2v13" />
-                    <circle cx="6" cy="18" r="3" />
-                    <circle cx="18" cy="16" r="3" />
-                  </svg>
-
-                  {/* SFX Slider */}
-                  <input
-                    type="range"
-                    min="0"
-                    max="100"
-                    value={sfxVolume}
-                    onChange={handleSfxVolumeChange}
-                    className="w-full h-2 bg-slate-700 rounded-lg appearance-none cursor-pointer
-                      [&::-webkit-slider-thumb]:appearance-none
-                      [&::-webkit-slider-thumb]:w-4
-                      [&::-webkit-slider-thumb]:h-4
-                      [&::-webkit-slider-thumb]:rounded-full
-                      [&::-webkit-slider-thumb]:bg-orange-500
-                      [&::-webkit-slider-thumb]:cursor-pointer
-                      [&::-webkit-slider-thumb]:hover:bg-orange-400
-                      [&::-moz-range-thumb]:w-4
-                      [&::-moz-range-thumb]:h-4
-                      [&::-moz-range-thumb]:rounded-full
-                      [&::-moz-range-thumb]:bg-orange-500
-                      [&::-moz-range-thumb]:cursor-pointer
-                      [&::-moz-range-thumb]:border-0
-                      [&::-moz-range-thumb]:hover:bg-orange-400"
-                    style={{
-                      background: `linear-gradient(to right, #f97316 0%, #f97316 ${sfxVolume}%, #334155 ${sfxVolume}%, #334155 100%)`,
-                    }}
-                  />
-
-                  {/* Sparkle Icon */}
-                  <svg
-                    width="20"
-                    height="20"
-                    viewBox="0 0 24 24"
-                    fill="none"
-                    stroke="currentColor"
-                    strokeWidth="2"
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    className="text-slate-400 shrink-0"
-                  >
-                    <title>Sparkle</title>
-                    <path d="M12 2v4" />
-                    <path d="M12 18v4" />
-                    <path d="M4.93 4.93l2.83 2.83" />
-                    <path d="M16.24 16.24l2.83 2.83" />
-                    <path d="M2 12h4" />
-                    <path d="M18 12h4" />
-                    <path d="M4.93 19.07l2.83-2.83" />
-                    <path d="M16.24 7.76l2.83-2.83" />
-                  </svg>
-                </div>
+                    <div className="flex items-center gap-5 md:gap-[45px]">
+                      <Image
+                        src="/assets/Icon/person_icon.webp"
+                        alt="About"
+                        width={47}
+                        height={47}
+                        className="h-[25px] md:h-14 w-auto"
+                      />
+                      <div className="flex flex-col px-2.5">
+                        <p className="text-base md:text-xl text-white">
+                          เกี่ยวกับเรา
+                        </p>
+                        <p className="text-sm md:text-lg text-white">
+                          ข้อมูลและติดต่อ
+                        </p>
+                      </div>
+                    </div>
+                    <Image
+                      src="/assets/Icon/next_btn.webp"
+                      alt="Next"
+                      width={19}
+                      height={25}
+                      className="h-[13px] md:h-[25px] w-auto"
+                    />
+                  </m.div>
+                </Link>
               </div>
             </div>
-
-            {/* Menu Items */}
-            <nav className="flex flex-col gap-4">
-              {/* Privacy Policy Button */}
-              <Link href="/privacy-policy" onClick={onClose} className="group">
-                <m.div
-                  whileHover={{ scale: 1.02 }}
-                  whileTap={{ scale: 0.98 }}
-                  className="flex items-center gap-4 p-6 bg-slate-800 rounded-xl hover:bg-slate-700 transition-colors cursor-pointer"
-                >
-                  {/* Icon */}
-                  <div className="flex items-center justify-center w-16 h-16 bg-blue-500/20 rounded-full shrink-0">
-                    <svg
-                      width="32"
-                      height="32"
-                      viewBox="0 0 24 24"
-                      fill="none"
-                      stroke="currentColor"
-                      strokeWidth="2"
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      className="text-blue-400"
-                    >
-                      <title>Shield icon</title>
-                      <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z" />
-                    </svg>
-                  </div>
-                  {/* Text */}
-                  <div className="flex-1">
-                    <h3 className="text-sm font-semibold text-white group-hover:text-blue-400 transition-colors">
-                      นโยบายความเป็นส่วนตัว
-                    </h3>
-                    <p className="text-xs text-slate-400">
-                      ข้อมูลและความปลอดภัย
-                    </p>
-                  </div>
-                  {/* Arrow */}
-                  <svg
-                    width="24"
-                    height="24"
-                    viewBox="0 0 24 24"
-                    fill="none"
-                    stroke="currentColor"
-                    strokeWidth="2"
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    className="text-slate-400 group-hover:text-blue-400 transition-colors"
-                  >
-                    <title>Arrow right</title>
-                    <line x1="5" y1="12" x2="19" y2="12" />
-                    <polyline points="12 5 19 12 12 19" />
-                  </svg>
-                </m.div>
-              </Link>
-
-              {/* About Button */}
-              <Link href="/about" onClick={onClose} className="group">
-                <m.div
-                  whileHover={{ scale: 1.02 }}
-                  whileTap={{ scale: 0.98 }}
-                  className="flex items-center gap-4 p-6 bg-slate-800 rounded-xl hover:bg-slate-700 transition-colors cursor-pointer"
-                >
-                  {/* Icon */}
-                  <div className="flex items-center justify-center w-16 h-16 bg-purple-500/20 rounded-full shrink-0">
-                    <svg
-                      width="32"
-                      height="32"
-                      viewBox="0 0 24 24"
-                      fill="none"
-                      stroke="currentColor"
-                      strokeWidth="2"
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      className="text-purple-400"
-                    >
-                      <title>Info icon</title>
-                      <circle cx="12" cy="12" r="10" />
-                      <line x1="12" y1="16" x2="12" y2="12" />
-                      <line x1="12" y1="8" x2="12.01" y2="8" />
-                    </svg>
-                  </div>
-                  {/* Text */}
-                  <div className="flex-1">
-                    <h3 className="text-sm font-semibold text-white group-hover:text-purple-400 transition-colors">
-                      เกี่ยวกับเรา
-                    </h3>
-                    <p className="text-xs text-slate-400">ข้อมูลและติดต่อ</p>
-                  </div>
-                  {/* Arrow */}
-                  <svg
-                    width="24"
-                    height="24"
-                    viewBox="0 0 24 24"
-                    fill="none"
-                    stroke="currentColor"
-                    strokeWidth="2"
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    className="text-slate-400 group-hover:text-purple-400 transition-colors"
-                  >
-                    <title>Arrow right</title>
-                    <line x1="5" y1="12" x2="19" y2="12" />
-                    <polyline points="12 5 19 12 12 19" />
-                  </svg>
-                </m.div>
-              </Link>
-            </nav>
           </m.div>
         </>
       )}
