@@ -1,3 +1,4 @@
+import { useAudio } from "@/app/contexts/AudioContext";
 import { m } from "framer-motion";
 
 interface Props {
@@ -13,9 +14,16 @@ export default function ChoiceButton({
   onClick,
   className = "",
 }: Props) {
+  const { playSfx } = useAudio();
+
+  const handleClick = () => {
+    playSfx("/assets/Sound/Pop Select Button.mp3");
+    onClick();
+  };
+
   return (
     <m.button
-      onClick={onClick}
+      onClick={handleClick}
       className={`flex justify-center items-center
         text-base md:text-2xl
         relative rounded-full text-center transition-all

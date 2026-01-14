@@ -257,7 +257,7 @@ export default function IntoDarkNameInput({
                       whileHover={{ scale: 1.05 }}
                       whileTap={{ scale: 0.95 }}
                       onClick={onConfirm}
-                      className="h-full p-4 border border-white/30 bg-white/10 rounded-full text-white hover:bg-white/20 backdrop-blur-sm transition-all flex items-center cursor-pointer text-3xl portrait:text-xl origin-center"
+                      className="h-full p-4 border border-white/30 bg-white/10 rounded-full text-white hover:bg-white/20 backdrop-blur-sm transition-all flex items-center text-3xl portrait:text-xl origin-center"
                     >
                       <HiCheck />
                     </m.button>

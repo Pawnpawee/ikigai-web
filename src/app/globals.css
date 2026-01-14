@@ -139,6 +139,20 @@
   );
 }
 
+@utility bg-s6-4 {
+  background: linear-gradient(
+    180deg,
+    #485b83 0%,
+    #4b5c84 18%,
+    #566288 35%,
+    #696c8f 51%,
+    #837a99 67%,
+    #a58ba6 82%,
+    #cea1b5 97%,
+    #d6a5b8 100%
+  );
+}
+
 body {
   background: var(--color-background);
   color: var(--color-foreground);
@@ -157,9 +171,10 @@ p {
   select,
   [role="button"],
   .cursor-pointer {
-    cursor: none;
+    cursor: none !important;
   }
 }
+
 ::-webkit-scrollbar {
   display: none;
 }

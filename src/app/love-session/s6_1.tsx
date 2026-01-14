@@ -1,11 +1,6 @@
 "use client";
 
-import {
-  type MotionValue,
-  m,
-  useMotionValueEvent,
-  useTransform,
-} from "framer-motion";
+import { type MotionValue, m, useTransform } from "framer-motion";
 import { useEffect, useMemo, useState } from "react";
 import {
   HiCheck,
@@ -27,6 +22,7 @@ import LazyLottie from "../components/reusable/LazyLottie";
 interface S6_1Props {
   scrollYProgress: MotionValue<number>;
   playerName?: string;
+  onCompleted?: () => void;
 }
 
 const MIN_SELECTIONS = 1;
@@ -36,6 +32,7 @@ const STEP2_MAX_SELECTIONS = 3;
 export default function S6_1({
   scrollYProgress,
   playerName = "เจ้า",
+  onCompleted,
 }: S6_1Props) {
   const { isMobile } = useDeviceCheck();
 
@@ -50,7 +47,11 @@ export default function S6_1({
 
   //? Animation Timeline (0-1 within 300vh)
   // Main container
-  const opacity = useTransform(scrollYProgress, [0, 0.05, 0.85], [0, 1, 1]);
+  const opacity = useTransform(
+    scrollYProgress,
+    [0, 0.05, 0.985, 1],
+    [0, 1, 1, 0]
+  );
   const zIndex = useTransform(
     scrollYProgress,
     [0, 0.049, 0.05, 0.95, 0.951],
@@ -256,7 +257,6 @@ export default function S6_1({
       return unselectedIndex <= unselectedCount - itemsToRemove;
     });
   })();
-
 
   const [isTallScreen, setIsTallScreen] = useState(false);
 
@@ -533,7 +533,21 @@ export default function S6_1({
                     </m.div>
 
                     {/* Proceed Button Container */}
-                    <div className="flex w-full justify-end py-2 px-6">
+                    <m.div
+                      className="flex w-full justify-end py-2 px-6"
+                      initial={{ opacity: 0, y: 20 }}
+                      animate={{
+                        opacity:
+                          step === 1 && totalSelected === MAX_SELECTIONS
+                            ? 1
+                            : 0,
+                        y:
+                          step === 1 && totalSelected === MAX_SELECTIONS
+                            ? 0
+                            : 20,
+                      }}
+                      transition={{ duration: 0.5, ease: "easeOut" }}
+                    >
                       {/* Proceed Button */}
                       {step === 1 && totalSelected === MAX_SELECTIONS && (
                         <GradientButton
@@ -546,39 +560,62 @@ export default function S6_1({
                           <HiOutlineChevronDown className="ml-2" />
                         </GradientButton>
                       )}
-                    </div>
+                    </m.div>
 
                     <div className="flex w-full justify-between p-6">
-                      {step === 2 && (
-                        <GradientButton
-                          text="กลับไป"
-                          isSelected={true}
-                          onClick={handleBacktoStep1}
-                          variant="white"
-                          className="text-2xl"
-                        >
-                          <HiOutlineChevronUp className="ml-2" />
-                        </GradientButton>
-                      )}
+                      <m.div
+                        initial={{ opacity: 0, y: 20 }}
+                        animate={{
+                          opacity: step === 2 ? 1 : 0,
+                          y: step === 2 ? 0 : 20,
+                        }}
+                        transition={{ duration: 0.5, ease: "easeOut" }}
+                      >
+                        {step === 2 && (
+                          <GradientButton
+                            text="กลับไป"
+                            isSelected={true}
+                            onClick={handleBacktoStep1}
+                            variant="white"
+                            className="text-2xl"
+                          >
+                            <HiOutlineChevronUp className="ml-2" />
+                          </GradientButton>
+                        )}
+                      </m.div>
 
                       {/* Proceed Button for Step 2 */}
-                      {secondStepSelection.length === STEP2_MAX_SELECTIONS && (
-                        <GradientButton
-                          text="ไปต่อ"
-                          isSelected={true}
-                          onClick={() => {
-                            console.log(
-                              "Selected final 3:",
-                              secondStepSelection
-                            );
-                            // TODO: Navigate to next scene
-                          }}
-                          variant="white"
-                          className="text-2xl"
-                        >
-                          <HiOutlineChevronDown className="ml-2" />
-                        </GradientButton>
-                      )}
+                      <m.div
+                        initial={{ opacity: 0, y: 20 }}
+                        animate={{
+                          opacity:
+                            secondStepSelection.length === STEP2_MAX_SELECTIONS
+                              ? 1
+                              : 0,
+                          y:
+                            secondStepSelection.length === STEP2_MAX_SELECTIONS
+                              ? 0
+                              : 20,
+                        }}
+                        transition={{ duration: 0.5, ease: "easeOut" }}
+                      >
+                        {secondStepSelection.length ===
+                          STEP2_MAX_SELECTIONS && (
+                          <GradientButton
+                            text="ไปต่อ"
+                            isSelected={true}
+                            onClick={() => {
+                              if (onCompleted) {
+                                onCompleted();
+                              }
+                            }}
+                            variant="white"
+                            className="text-2xl"
+                          >
+                            <HiOutlineChevronDown className="ml-2" />
+                          </GradientButton>
+                        )}
+                      </m.div>
                     </div>
                   </div>
                 </div>
@@ -745,7 +782,21 @@ export default function S6_1({
                     </m.div>
 
                     {/* Proceed Button Container */}
-                    <div className="flex w-full justify-center py-2 px-6">
+                    <m.div
+                      className="flex w-full justify-center py-2 px-6"
+                      initial={{ opacity: 0, y: 20 }}
+                      animate={{
+                        opacity:
+                          step === 1 && totalSelected === MAX_SELECTIONS
+                            ? 1
+                            : 0,
+                        y:
+                          step === 1 && totalSelected === MAX_SELECTIONS
+                            ? 0
+                            : 20,
+                      }}
+                      transition={{ duration: 0.5, ease: "easeOut" }}
+                    >
                       {/* Proceed Button */}
                       {step === 1 && totalSelected === MAX_SELECTIONS && (
                         <GradientButton
@@ -758,39 +809,66 @@ export default function S6_1({
                           <HiOutlineChevronDown className="ml-2" />
                         </GradientButton>
                       )}
-                    </div>
+                    </m.div>
 
-                    <div className="flex w-full justify-center py-2 px-6 gap-5">
-                      {step === 2 && (
-                        <GradientButton
-                          text="กลับไป"
-                          isSelected={true}
-                          onClick={handleBacktoStep1}
-                          variant="white"
-                          className="text-lg md:text-2xl lg:text-3xl"
-                        >
-                          <HiOutlineChevronUp className="ml-2" />
-                        </GradientButton>
-                      )}
-
-                      {/* Proceed Button for Step 2 */}
-                      {secondStepSelection.length === STEP2_MAX_SELECTIONS && (
-                        <GradientButton
-                          text="ไปต่อ"
-                          isSelected={true}
-                          onClick={() => {
-                            console.log(
-                              "Selected final 3:",
-                              secondStepSelection
-                            );
-                            // TODO: Navigate to next scene
+                    <div className="flex justify-center py-2 px-6">
+                      <div className="flex flex-col gap-5 md:gap-10">
+                        <m.div
+                          initial={{ opacity: 0, y: 20 }}
+                          animate={{
+                            opacity: step === 2 ? 1 : 0,
+                            y: step === 2 ? 0 : 20,
                           }}
-                          variant="white"
-                          className="text-lg md:text-2xl lg:text-3xl"
+                          transition={{ duration: 0.5, ease: "easeOut" }}
                         >
-                          <HiOutlineChevronDown className="ml-2" />
-                        </GradientButton>
-                      )}
+                          {step === 2 && (
+                            <GradientButton
+                              text="กลับไป"
+                              isSelected={true}
+                              onClick={handleBacktoStep1}
+                              variant="white"
+                              className="text-lg md:text-2xl lg:text-3xl"
+                            >
+                              <HiOutlineChevronUp className="ml-2" />
+                            </GradientButton>
+                          )}
+                        </m.div>
+
+                        {/* Proceed Button for Step 2 */}
+                        <m.div
+                          initial={{ opacity: 0, y: 20 }}
+                          animate={{
+                            opacity:
+                              secondStepSelection.length ===
+                              STEP2_MAX_SELECTIONS
+                                ? 1
+                                : 0,
+                            y:
+                              secondStepSelection.length ===
+                              STEP2_MAX_SELECTIONS
+                                ? 0
+                                : 20,
+                          }}
+                          transition={{ duration: 0.5, ease: "easeOut" }}
+                        >
+                          {secondStepSelection.length ===
+                            STEP2_MAX_SELECTIONS && (
+                            <GradientButton
+                              text="ไปต่อ"
+                              isSelected={true}
+                              onClick={() => {
+                                if (onCompleted) {
+                                  onCompleted();
+                                }
+                              }}
+                              variant="white"
+                              className="text-lg md:text-2xl lg:text-3xl"
+                            >
+                              <HiOutlineChevronDown className="ml-2" />
+                            </GradientButton>
+                          )}
+                        </m.div>
+                      </div>
                     </div>
                   </div>
                 </>

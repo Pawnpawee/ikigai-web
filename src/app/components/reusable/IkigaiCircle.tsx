@@ -104,7 +104,7 @@ const IkigaiCircle = memo(
         }}
       >
         <m.div
-          className="relative w-[320px] md:w-[380px] h-auto cursor-pointer"
+          className="relative w-[320px] md:w-[380px] h-auto"
           style={{
             y: yOffset,
             pointerEvents: "auto",

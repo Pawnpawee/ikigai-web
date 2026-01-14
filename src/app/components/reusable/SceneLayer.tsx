@@ -60,6 +60,7 @@ export interface SceneItemData {
 export type AnimationMap = Record<
   number,
   {
+    x?: MotionValue<number> | number;
     y?: MotionValue<number> | number;
     opacity?: MotionValue<number> | number;
     rotate?: MotionValue<number> | number;
@@ -120,7 +121,9 @@ const SceneItem = ({
 
   // Logic การตัดสินใจ (Decision Logic)
   // Mobile Check: ถ้าเป็น Mobile ให้ค่าเป็น undefined (ไม่ขยับ)
-  const activeParallaxX = !isMobile && depth ? parallaxX : undefined;
+  // Conflict Check: ถ้า Scroll คุม X อยู่แล้ว (groupAnim.x) ให้ปิด Parallax X
+  const activeParallaxX =
+    !isMobile && !groupAnim?.x && depth ? parallaxX : undefined;
 
   // Conflict Check: ถ้า Scroll คุม Y อยู่แล้ว (groupAnim.y) ให้ปิด Parallax Y
   const activeParallaxY =
@@ -151,7 +154,7 @@ const SceneItem = ({
       delay: item.motionConfig?.delay || 0,
       ease: "easeInOut" as const,
     }),
-    [item.motionConfig],
+    [item.motionConfig]
   );
 
   // 2.5 Merge ทุกอย่างเข้าด้วยกัน
@@ -161,8 +164,8 @@ const SceneItem = ({
     transform: "translateZ(0)", // บังคับ GPU Layer พื้นฐาน
 
     // Dynamic Styles (Animation)
+    x: groupAnim?.x || activeParallaxX, // Scroll ชนะ Parallax
     y: groupAnim?.y || activeParallaxY, // Scroll ชนะ Parallax
-    x: activeParallaxX, // Parallax X
     opacity: groupAnim?.opacity, // Scroll Opacity (ถ้ามี)
     rotate: groupAnim?.rotate, // Scroll Rotate (ถ้ามี)
     zIndex: groupAnim?.zIndex || item.style.zIndex,
@@ -173,8 +176,8 @@ const SceneItem = ({
     willChange: isMobile
       ? "auto"
       : depth || groupAnim
-        ? "transform, opacity"
-        : "auto",
+      ? "transform, opacity"
+      : "auto",
   };
 
   return (

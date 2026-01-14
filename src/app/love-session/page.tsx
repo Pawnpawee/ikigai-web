@@ -1,12 +1,14 @@
 "use client";
 
 import { useMotionValueEvent, useScroll } from "framer-motion";
-import { useEffect, useLayoutEffect, useRef } from "react";
+import { useLenis } from "lenis/react";
+import { useEffect, useLayoutEffect, useRef, useState } from "react";
 import Cover from "@/app/components/reusable/Cover";
 import { COVER_SESSION1_ITEMS } from "@/app/data/cover_session1.data";
 import { useAudio } from "../contexts/AudioContext";
-import S6_1 from "./s6_1";
 import { useUI } from "../contexts/UIStarContext";
+import S6_1 from "./s6_1";
+import S6_4 from "./s6_4";
 
 export default function SessionLovePage() {
   //? Cover Section (0-200vh)
@@ -17,14 +19,22 @@ export default function SessionLovePage() {
     offset: ["start start", "end end"],
   });
 
-  //? S6_1 Section (300-900vh)
-  const s6Ref = useRef<HTMLDivElement>(null);
-  const { scrollYProgress: s6Progress } = useScroll({
-    target: s6Ref,
+  // //? S6_1 Section (300-900vh)
+  const s6_1Ref = useRef<HTMLDivElement>(null);
+  const { scrollYProgress: s6_1Progress } = useScroll({
+    target: s6_1Ref,
+    offset: ["start start", "end end"],
+  });
+
+  const s6_4Ref = useRef<HTMLDivElement>(null);
+  const { scrollYProgress: s6_4Progress } = useScroll({
+    target: s6_4Ref,
     offset: ["start start", "end end"],
   });
 
   const { setBgMusic, isMuted } = useAudio();
+  const lenis = useLenis();
+  const [isS6_1Completed, setIsS6_1Completed] = useState(false);
 
   useLayoutEffect(() => {
     if (typeof window !== "undefined") {
@@ -39,7 +49,47 @@ export default function SessionLovePage() {
     }
   }, [setBgMusic, isMuted]);
 
-  useMotionValueEvent(s6Progress, "change", (latest) => {
+  //? Scroll lock effect สำหรับ s6_1
+  useEffect(() => {
+    if (!lenis || !s6_1Ref.current) return;
+
+    const handleScroll = (e: { scroll: number; animatedScroll: number }) => {
+      if (isS6_1Completed || !s6_1Ref.current) return;
+
+      const scrollStart = s6_1Ref.current.offsetTop;
+      const sectionHeight = s6_1Ref.current.scrollHeight;
+      const viewportHeight = window.innerHeight;
+      const scrollableDistance = sectionHeight - viewportHeight;
+
+      //? Lock ที่ 95% ของ s6_1 section
+      const lockThreshold = scrollStart + scrollableDistance * 0.985;
+
+      if (e.animatedScroll > lockThreshold) {
+        lenis.scrollTo(lockThreshold, { immediate: true });
+      }
+    };
+
+    lenis.on("scroll", handleScroll);
+
+    return () => {
+      lenis.off("scroll", handleScroll);
+    };
+  }, [lenis, isS6_1Completed]);
+
+  //? Handler: Auto-scroll to s6_4 เมื่อ s6_1 completed
+  const handleS6_1Completed = () => {
+    setIsS6_1Completed(true);
+
+    if (s6_4Ref.current && lenis) {
+      const scrollStart = s6_4Ref.current.offsetTop;
+      const scrollableDistance =
+        s6_4Ref.current.scrollHeight - window.innerHeight;
+      const scrollTarget = scrollStart + scrollableDistance * 0.05;
+      lenis.scrollTo(scrollTarget, { duration: 1.5 });
+    }
+  };
+
+  useMotionValueEvent(s6_1Progress, "change", (latest) => {
     const isScene6 = latest > 0;
 
     if (isScene6) {
@@ -59,8 +109,16 @@ export default function SessionLovePage() {
       </div>
 
       {/* S6_1 Section - 600vh */}
-      <div ref={s6Ref} className="h-[600vh] w-full">
-        <S6_1 scrollYProgress={s6Progress} />
+      <div ref={s6_1Ref} className="h-[600vh] w-full">
+        <S6_1
+          scrollYProgress={s6_1Progress}
+          onCompleted={handleS6_1Completed}
+        />
+      </div>
+
+      {/* S6_4 Section - 700vh */}
+      <div ref={s6_4Ref} className="h-[700vh] w-full">
+        <S6_4 scrollYProgress={s6_4Progress} />
       </div>
     </div>
   );
