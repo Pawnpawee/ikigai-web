@@ -4,7 +4,7 @@ import { useMotionValueEvent, useScroll } from "framer-motion";
 import { useLenis } from "lenis/react";
 import { useEffect, useLayoutEffect, useRef, useState } from "react";
 import Cover from "@/app/components/reusable/Cover";
-import { COVER_SESSION1_ITEMS } from "@/app/data/cover_session1.data";
+import { COVER_SESSION1_CONFIG, COVER_SESSION1_ITEMS } from "@/app/data/cover_session1.data";
 import { useAudio } from "../contexts/AudioContext";
 import { useUI } from "../contexts/UIStarContext";
 import S6_1 from "./s6_1";
@@ -104,7 +104,9 @@ export default function SessionLovePage() {
         <Cover
           scrollYProgress={coverProgress}
           items={COVER_SESSION1_ITEMS}
-          sessionText="session 1"
+          titleImage={COVER_SESSION1_CONFIG.titleImage}
+          iconImage={COVER_SESSION1_CONFIG.iconImage}
+          sessionText={COVER_SESSION1_CONFIG.sessionText}
         />
       </div>
 

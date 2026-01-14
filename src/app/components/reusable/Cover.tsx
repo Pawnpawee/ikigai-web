@@ -17,9 +17,31 @@ import { useDeviceCheck } from "@/app/hooks/useDeviceCheck";
 
 const MotionImage = m.create(Image);
 
+//? Light blur layer - ค่าคงที่สำหรับทุก session
+const LIGHT_BLUR_ITEM: SceneItemData = {
+  id: "light-blur",
+  src: "/assets/Scene/Scene6/01/light_blur.webp",
+  alt: "Light blur effect",
+  style: {
+    width: "97.81%",
+    height: "55.56%",
+    left: "1.09%",
+    top: "0",
+  },
+  mobileStyle: {
+    left: "-36.94%",
+    width: "173.89%",
+    height: "31.25%",
+    top: "0%",
+  },
+  animGroup: 2,
+};
+
 interface CoverProps {
   scrollYProgress: MotionValue<number>;
   items: SceneItemData[];
+  titleImage: string; //? Path สำหรับรูปภาพหัวข้อ (เช่น "what you love")
+  iconImage: string; //? Path สำหรับไอคอน (เช่น "love icon")
   sessionText?: string; //? Text สำหรับ session (เช่น "session 1", "session 2")
   bgGradient?: string; //? Custom gradient สำหรับแต่ละ session
 }
@@ -33,10 +55,15 @@ interface CoverProps {
 export default function Cover({
   scrollYProgress,
   items,
+  titleImage,
+  iconImage,
   sessionText = "session 1",
 }: CoverProps) {
   const { setShowStars } = useUI();
   const { isMobile } = useDeviceCheck();
+
+  //? รวม light-blur layer กับ items ที่ส่งเข้ามา
+  const allItems = useMemo(() => [LIGHT_BLUR_ITEM, ...items], [items]);
 
   // 2. light blur (0.1 → 0.2)
   const lightBlurOpacity = useTransform(scrollYProgress, [0.1, 0.2], [0, 1]);
@@ -80,7 +107,7 @@ export default function Cover({
       <div className="fixed flex justify-center items-center top-0 h-screen w-screen portrait:w-auto">
         {/* Scene Items */}
         <SceneLayer
-          items={items}
+          items={allItems}
           animations={animations}
           containerAspectRatio={isMobile ? "1080 / 1920" : "1920 / 1080"}
         >
@@ -102,7 +129,7 @@ export default function Cover({
 
                 {/* What You Love */}
                 <MotionImage
-                  src="/assets/Scene/Scene6/what_you_love.webp"
+                  src={titleImage}
                   alt="What You Love"
                   width={700}
                   height={100}
@@ -114,9 +141,9 @@ export default function Cover({
                 />
               </div>
 
-              {/* What You Love */}
+              {/* Icon */}
               <MotionImage
-                src="/assets/Icon/love.webp"
+                src={iconImage}
                 alt="love"
                 width={250}
                 height={250}

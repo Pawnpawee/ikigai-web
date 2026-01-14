@@ -1,25 +1,18 @@
 import type { SceneItemData } from "../components/reusable/SceneLayer";
 
-export const COVER_SESSION1_ITEMS: SceneItemData[] = [
-  {
-    id: "light-blur",
-    src: "/assets/Scene/Scene6/01/light_blur.webp",
-    alt: "Light blur effect",
-    style: {
-      width: "97.81%",
-      height: "55.56%",
-      left: "1.09%",
-      top: "0",
-    },
-    mobileStyle: {
-      left: "-36.94%",
-      width: "173.89%",
-      height: "31.25%",
-      top: "0%",
-    },
-    animGroup: 2,
-  },
+export interface CoverDataConfig {
+  titleImage: string;
+  iconImage: string;
+  sessionText?: string;
+}
 
+export const COVER_SESSION1_CONFIG: CoverDataConfig = {
+  titleImage: "/assets/Scene/Scene6/01/what_you_love.webp",
+  iconImage: "/assets/Icon/love.webp",
+  sessionText: "session 1",
+};
+
+export const COVER_SESSION1_ITEMS: SceneItemData[] = [
   {
     id: "light",
     src: "/assets/Scene/Scene6/01/light_love.webp",
