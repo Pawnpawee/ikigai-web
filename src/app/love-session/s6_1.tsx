@@ -640,7 +640,9 @@ export default function S6_1({
                   </div>
 
                   {/* Choices (scroll ได้) - Mobile */}
-                  <div className="flex flex-col gap-5 overflow-y-auto overflow-x-hidden w-full mt-5 ">
+                  <div
+                    className="flex flex-col gap-2 md:gap-5 overflow-y-auto overflow-x-hidden w-full mt-5"
+                  >
                     <m.div
                       className="flex flex-wrap gap-[14px_18px] md:gap-[30px_40px] lg:gap-[40px_30px]    items-start justify-center"
                       style={{

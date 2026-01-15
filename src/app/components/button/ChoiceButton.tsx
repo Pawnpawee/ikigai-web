@@ -1,5 +1,5 @@
-import { useAudio } from "@/app/contexts/AudioContext";
 import { m } from "framer-motion";
+import { useAudio } from "@/app/contexts/AudioContext";
 
 interface Props {
   text: string;

@@ -2,7 +2,7 @@
 
 import { useMotionValueEvent, useScroll } from "framer-motion";
 import { useLenis } from "lenis/react";
-import { useRouter } from "next/navigation";
+
 import { useEffect, useRef, useState } from "react";
 import { useUI } from "@/app/contexts/UIStarContext";
 import IntoDarkChoices from "./IntoDark_Choices";
@@ -12,7 +12,6 @@ import IntoDarkSubmit from "./IntoDark_Submit";
 
 export default function IntoDark() {
   const ref = useRef<HTMLDivElement>(null);
-  const router = useRouter();
   const lenis = useLenis();
   const { setShowStars } = useUI();
 
@@ -156,7 +155,7 @@ export default function IntoDark() {
         }),
       });
 
-      router.push("/love-session");
+      window.location.href = "/love-session";
     } catch (error) {
       console.error("Error submitting data:", error);
       setIsLoading(false);

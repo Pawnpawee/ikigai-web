@@ -18,7 +18,7 @@ function AppLogic({ children }: { children: React.ReactNode }) {
 
   const scrollToOpacity = useTransform(
     scrollYProgress,
-    [0, 0.9, 0.999, 1],
+    [0, 0.9, 0.98, 1],
     [1, 1, 0, 0]
   );
 

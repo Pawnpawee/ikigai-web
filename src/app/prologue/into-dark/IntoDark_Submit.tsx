@@ -1,7 +1,7 @@
 ﻿"use client";
 
 import { type MotionValue, m, useTransform } from "framer-motion";
-import { useMemo} from "react";
+import { useMemo } from "react";
 import GradientButton from "@/app/components/button/GradientButton";
 import IkigaiCircle from "@/app/components/reusable/IkigaiCircle";
 import LazyLottie from "@/app/components/reusable/LazyLottie";
@@ -58,9 +58,9 @@ export default function IntoDarkSubmit({
   const text1_opacity = useTransform(scrollYProgress, [0.67, 0.69], [0, 1]); // "ถ้าเจ้าหาจุด..."
   const text2_opacity = useTransform(scrollYProgress, [0.7, 0.77], [0, 1]); // Description
 
-  const text3_opacity = useTransform(scrollYProgress, [0.77, 0.8], [0, 1]); // "แต่เจ้าไม่ต้องกังวล..."
+  const text3_opacity = useTransform(scrollYProgress, [0.87, 0.92], [0, 1]); // "แต่เจ้าไม่ต้องกังวล..."
 
-  const text4_opacity = useTransform(scrollYProgress, [0.8, 0.83], [0, 1]); // "เจ้าอยากจะลองไปตามหา..."
+  const text4_opacity = useTransform(scrollYProgress, [0.93, 0.98], [0, 1]); // "เจ้าอยากจะลองไปตามหา..."
 
   // Local animation config for IkigaiCircle reuse
   const circleTransition = {
@@ -86,12 +86,10 @@ export default function IntoDarkSubmit({
     [bgOpacity, catOpacity, catY, cloudOpacity]
   );
 
-
-
   const top = useTransform(
     scrollYProgress,
-    [0.667, 0.75, 0.8, 0.85, 1],
- ["0vh", "-30vh", "-50vh", "-80vh", "-100vh"]
+    [0.667, 0.7, 1],
+    ["0vh", "-50vh", "-100vh"]
   );
 
   return (
@@ -117,13 +115,14 @@ export default function IntoDarkSubmit({
               right: isMobile ? "2.93%" : undefined,
               bottom: isMobile ? "4.18%" : "0.98%",
               y: catY,
+              opacity: catOpacity,
             }}
           >
             <LazyLottie
               src="/assets/Scene/Scene5/04/s5-4-cat-starline.json"
               className="w-full h-full"
               loop
-              play={true}
+              playTrigger={catOpacity}
             />
           </m.div>
 
@@ -164,6 +163,7 @@ export default function IntoDarkSubmit({
                   tooltipRotate={90}
                   circleImgTransition={circleImgTransition}
                   transition={circleTransition}
+                  alwaysShowTooltip={true}
                 />
 
                 {/* Paid Circle - Bottom */}
@@ -182,6 +182,7 @@ export default function IntoDarkSubmit({
                   tooltipRotate={0}
                   circleImgTransition={circleImgTransition}
                   transition={circleTransition}
+                  alwaysShowTooltip={true}
                 />
 
                 {/* Skill Circle - Left */}
@@ -200,6 +201,7 @@ export default function IntoDarkSubmit({
                   tooltipRotate={-90}
                   circleImgTransition={circleImgTransition}
                   transition={circleTransition}
+                  alwaysShowTooltip={true}
                 />
 
                 {/* Love Circle - Top */}
@@ -218,6 +220,7 @@ export default function IntoDarkSubmit({
                   tooltipRotate={180}
                   circleImgTransition={circleImgTransition}
                   transition={circleTransition}
+                  alwaysShowTooltip={true}
                 />
 
                 {/* Intersect Text - Center labels */}
@@ -294,8 +297,8 @@ export default function IntoDarkSubmit({
                           : `แต่เจ้าไม่ต้องกังวลไปการที่เจ้ายัง ไม่ค้นพบตัวเองตอนนี้ \n ไม่ใช่เรื่องที่แปลกประหลาด`
                       }
                       scrollYProgress={scrollYProgress}
-                      startProgress={0.78}
-                      endProgress={0.83}
+                      startProgress={0.87}
+                      endProgress={0.92}
                     />
                   </m.div>
                 </div>
@@ -309,8 +312,8 @@ export default function IntoDarkSubmit({
                     <MysteriousText
                       text={`เจ้าอยากจะลองไปตามหาอิคิไก \n ของเจ้าดูบ้างไหมล่ะ`}
                       scrollYProgress={scrollYProgress}
-                      startProgress={0.83}
-                      endProgress={0.86}
+                      startProgress={0.93}
+                      endProgress={0.98}
                     />
                   </m.div>
 

@@ -3,7 +3,6 @@ import { m, useMotionValue } from "framer-motion";
 import Image from "next/image";
 import { useEffect, useState } from "react";
 import { useDevice } from "@/app/contexts/DeviceContext";
-import LazyLottie from "./reusable/LazyLottie";
 
 export default function GifCursor() {
   const { isMobile } = useDevice();
@@ -50,24 +49,19 @@ export default function GifCursor() {
       }}
       transition={{ type: "spring", stiffness: 300, damping: 20 }}
     >
-      {isHover ? (
-        <Image
-          src="/assets/cursors/cursor-hover-w.svg"
-          alt="Spirit Cursor Hover"
-          width={60}
-          height={60}
-          priority={true}
-          unoptimized={true}
-          className="w-full h-full object-contain"
-        />
-      ) : (
-        <LazyLottie
-          src="/assets/cursor.json"
-          className="w-[60px] h-auto"
-          loop
-          play={true}
-        />
-      )}
+      <Image
+        src={
+          isHover
+            ? "/assets/cursors/cursor-hover-w.svg"
+            : "/assets/cursors/cursor.webp"
+        }
+        alt="Spirit Cursor"
+        width={60}
+        height={60}
+        priority={true}
+        unoptimized={true}
+        className="pointer-events-none select-none"
+      />
     </m.div>
   );
 }

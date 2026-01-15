@@ -75,6 +75,7 @@ export default function GradientButton({
         md:px-14 md:py-4
         text-lg md:text-2xl
         transition-all
+        caret-transparent
         
         ${
           isTransparentVariant

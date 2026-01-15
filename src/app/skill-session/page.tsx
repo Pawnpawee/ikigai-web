@@ -1,5 +1,6 @@
 "use client";
 
+import { useScroll } from "framer-motion";
 import { useEffect, useLayoutEffect, useRef } from "react";
 import Cover from "@/app/components/reusable/Cover";
 import {
@@ -7,7 +8,6 @@ import {
   COVER_SESSION2_ITEMS,
 } from "@/app/data/cover_session2.data";
 import { useAudio } from "../contexts/AudioContext";
-import { useScroll } from "framer-motion";
 
 export default function SessionLovePage() {
   //? Cover Section (0-200vh)

@@ -1,6 +1,6 @@
 import type { SceneItemData } from "../components/reusable/SceneLayer";
 
-export interface CoverDataConfig {
+interface CoverDataConfig {
   titleImage: string;
   iconImage: string;
   sessionText?: string;

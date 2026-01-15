@@ -35,6 +35,7 @@ interface IkigaiCircleProps {
     delay?: number;
   };
   yOffset?: number;
+  alwaysShowTooltip?: boolean;
 }
 
 const IkigaiCircle = memo(
@@ -51,6 +52,7 @@ const IkigaiCircle = memo(
     transition,
     yOffset = -180,
     opacity,
+    alwaysShowTooltip = false,
   }: IkigaiCircleProps) => {
     const [isHovered, setIsHovered] = useState(false);
     const [animationComplete, setAnimationComplete] = useState(false);
@@ -65,7 +67,7 @@ const IkigaiCircle = memo(
         hidden: { opacity: 0, transition: { duration: 0.2 } },
         visible: { opacity: 0.8, transition: { duration: 0.3 } },
       }),
-      [],
+      []
     );
 
     // Local m value fallbacks when parent doesn't provide them
@@ -80,12 +82,9 @@ const IkigaiCircle = memo(
     useEffect(() => {
       if (shouldAnimate && transition) {
         const delay = transition.delay || 0;
-        const timer = setTimeout(
-          () => {
-            setAnimationComplete(true);
-          },
-          (transition.duration + delay) * 1000,
-        );
+        const timer = setTimeout(() => {
+          setAnimationComplete(true);
+        }, (transition.duration + delay) * 1000);
         return () => clearTimeout(timer);
       }
     }, [shouldAnimate, transition]);
@@ -134,6 +133,7 @@ const IkigaiCircle = memo(
             style={{ rotate: tooltipRotate }}
             initial={{ opacity: 0 }}
             animate={
+              (shouldAnimate && alwaysShowTooltip) ||
               (shouldAnimate && isHovered && !isMobile) ||
               (shouldAnimate && isMobile)
                 ? { opacity: 1 }
@@ -157,7 +157,7 @@ const IkigaiCircle = memo(
         </m.div>
       </m.div>
     );
-  },
+  }
 );
 
 IkigaiCircle.displayName = "IkigaiCircle";
