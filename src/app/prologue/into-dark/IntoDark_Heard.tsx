@@ -70,15 +70,12 @@ export default function IntoDarkHeard({
 
           {/* Main Cat - Set 5 */}
           <m.div
-            className="absolute -z-1
-            /* Mobile Styles (ค่า Default) */
-            w-[60.95%] h-[34.44%] 
-            right-[-8.45%] bottom-[11.44%]
-
-            /* Desktop Styles (ทำงานเมื่อจอใหญ่กว่า md) */
-            md:w-[34.28%] md:h-[61.24%] 
-            md:right-[2.98%] md:bottom-[12.10%]"
+            className="absolute"
             style={{
+              width: isMobile ? "60.95%" : "34.28%",
+              height: isMobile ? "34.44%" : "61.24%",
+              right: isMobile ? "-8.45%" : "2.98%",
+              bottom: isMobile ? "11.44%" : "12.10%",
               opacity: set3Opacity,
               y: set3Y,
             }}
