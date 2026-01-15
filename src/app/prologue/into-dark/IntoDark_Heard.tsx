@@ -58,7 +58,7 @@ export default function IntoDarkHeard({
   return (
     <div className="sticky top-0 h-screen w-screen flex justify-center items-center bg-s5-3">
       <m.div
-        className="relative flex justify-start items-center w-screen  portrait:w-auto h-full"
+        className="relative flex justify-start items-center w-screen portrait:w-auto h-full"
         style={{ zIndex }}
       >
         <SceneLayer
@@ -70,7 +70,7 @@ export default function IntoDarkHeard({
 
           {/* Main Cat - Set 5 */}
           <m.div
-            className="absolute"
+            className="absolute -z-1"
             style={{
               width: isMobile ? "60.95%" : "34.28%",
               height: isMobile ? "34.44%" : "61.24%",
