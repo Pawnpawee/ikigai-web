@@ -67,7 +67,7 @@ const IkigaiCircle = memo(
         hidden: { opacity: 0, transition: { duration: 0.2 } },
         visible: { opacity: 0.8, transition: { duration: 0.3 } },
       }),
-      []
+      [],
     );
 
     // Local m value fallbacks when parent doesn't provide them
@@ -82,9 +82,12 @@ const IkigaiCircle = memo(
     useEffect(() => {
       if (shouldAnimate && transition) {
         const delay = transition.delay || 0;
-        const timer = setTimeout(() => {
-          setAnimationComplete(true);
-        }, (transition.duration + delay) * 1000);
+        const timer = setTimeout(
+          () => {
+            setAnimationComplete(true);
+          },
+          (transition.duration + delay) * 1000,
+        );
         return () => clearTimeout(timer);
       }
     }, [shouldAnimate, transition]);
@@ -157,7 +160,7 @@ const IkigaiCircle = memo(
         </m.div>
       </m.div>
     );
-  }
+  },
 );
 
 IkigaiCircle.displayName = "IkigaiCircle";

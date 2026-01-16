@@ -99,7 +99,7 @@ export default function IntoDark() {
     setSelectedReasons((prev) =>
       prev.includes(reasonId)
         ? prev.filter((id) => id !== reasonId)
-        : [...prev, reasonId]
+        : [...prev, reasonId],
     );
   };
 

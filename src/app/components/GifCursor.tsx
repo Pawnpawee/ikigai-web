@@ -24,7 +24,7 @@ export default function GifCursor() {
       // เช็คว่า Hover ปุ่มไหม
       const target = e.target as HTMLElement;
       const isInteractive = target.closest(
-        "button, a, input, textarea, [role='button'], .cursor-pointer"
+        "button, a, input, textarea, [role='button'], .cursor-pointer",
       );
       setIsHover(!!isInteractive);
     };

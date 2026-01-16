@@ -55,7 +55,11 @@ export default function SessionLovePage() {
   useEffect(() => {
     if (!lenis || !ref.current) return;
 
-    const handleScroll = (e: { scroll: number; animatedScroll: number; velocity: number }) => {
+    const handleScroll = (e: {
+      scroll: number;
+      animatedScroll: number;
+      velocity: number;
+    }) => {
       if (isS6_1Completed || !ref.current || isResettingScroll.current) return;
 
       const scrollStart = ref.current.offsetTop;

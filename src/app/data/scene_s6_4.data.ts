@@ -59,7 +59,7 @@ export const SCENE_S6_4_ITEMS: SceneItemData[] = [
       width: "70.68%", // (763.362 / 1080) * 100
       height: "116.13%", // (2229.686 / 1920) * 100
       left: "-83.71%", // (-904.103 / 1080) * 100
-      top: "-15%", 
+      top: "-15%",
     },
     animGroup: 2,
   },
@@ -117,9 +117,8 @@ export const SCENE_S6_4_ITEMS: SceneItemData[] = [
       width: "70.68%", // (763.362 / 1080) * 100
       height: "116.13%", // (2229.686 / 1920) * 100
       left: "-83.71%", // (-904.103 / 1080) * 100
-      top: "-15%", 
+      top: "-15%",
     },
     animGroup: 4,
   },
- 
 ];

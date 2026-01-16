@@ -81,10 +81,10 @@ export default function GradientButton({
           isTransparentVariant
             ? "text-white hover:bg-white/10 hover:border-white"
             : isWhiteVariant
-            ? "text-black"
-            : isSelected
-            ? "bg-linear-to-b from-slate-200 to-slate-100 border-slate-200 text-black border-2 md:border-4"
-            : "bg-linear-to-b from-slate-200/30 to-slate-100/30 border-slate-200/50 text-white border-2 md:border-4"
+              ? "text-black"
+              : isSelected
+                ? "bg-linear-to-b from-slate-200 to-slate-100 border-slate-200 text-black border-2 md:border-4"
+                : "bg-linear-to-b from-slate-200/30 to-slate-100/30 border-slate-200/50 text-white border-2 md:border-4"
         }
         ${className}
         ${disabled ? "grayscale pointer-events-none" : ""} 

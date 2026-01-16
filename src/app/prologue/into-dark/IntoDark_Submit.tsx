@@ -28,7 +28,7 @@ export default function IntoDarkSubmit({
   const zIndex = useTransform(
     scrollYProgress,
     [0, 0.666, 0.668, 1.0],
-    [-1, -1, 10, 10]
+    [-1, -1, 10, 10],
   );
 
   // ชุด 1: Cat animation (0.667-0.676)
@@ -45,7 +45,7 @@ export default function IntoDarkSubmit({
   const circle1_rotate = useTransform(
     scrollYProgress,
     [0.676, 0.73],
-    [0, -180]
+    [0, -180],
   ); // Love - Top
   const circle2_rotate = useTransform(scrollYProgress, [0.676, 0.73], [0, 90]); // Skill - Left
   const circle3_rotate = useTransform(scrollYProgress, [0.676, 0.73], [90, 0]); // Paid - Bottom
@@ -83,13 +83,13 @@ export default function IntoDarkSubmit({
       2: { opacity: catOpacity, y: catY },
       3: { opacity: cloudOpacity },
     }),
-    [bgOpacity, catOpacity, catY, cloudOpacity]
+    [bgOpacity, catOpacity, catY, cloudOpacity],
   );
 
   const top = useTransform(
     scrollYProgress,
     [0.667, 0.7, 1],
-    ["0vh", "-50vh", "-100vh"]
+    ["0vh", "-50vh", "-100vh"],
   );
 
   return (

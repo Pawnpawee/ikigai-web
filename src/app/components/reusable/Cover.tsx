@@ -85,7 +85,7 @@ export default function Cover({
       3: { opacity: titleOpacity },
       4: { opacity: iconOpacity },
     }),
-    [lightBlurOpacity, titleOpacity, iconOpacity]
+    [lightBlurOpacity, titleOpacity, iconOpacity],
   );
 
   useMotionValueEvent(scrollYProgress, "change", (latest) => {

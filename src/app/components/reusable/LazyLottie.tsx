@@ -163,7 +163,7 @@ const LazyLottie: React.FC<LazyLottieProps> = memo(
         } else {
           if (!anim.isPaused) anim.pause();
         }
-      }
+      },
     );
 
     useEffect(() => {
@@ -180,7 +180,7 @@ const LazyLottie: React.FC<LazyLottieProps> = memo(
         const anim = animationInstanceRef.current;
         if (!anim || !isLoaded) return;
         anim.goToAndStop(latest * anim.totalFrames, true);
-      }
+      },
     );
 
     //? Intrinsic Style: ยังคงใส่ไว้เผื่อช่วยเรื่อง Ratio ได้บ้าง
@@ -201,7 +201,7 @@ const LazyLottie: React.FC<LazyLottieProps> = memo(
         />
       </div>
     );
-  }
+  },
 );
 
 LazyLottie.displayName = "LazyLottie";

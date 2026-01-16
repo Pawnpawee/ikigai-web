@@ -19,7 +19,7 @@ function AppLogic({ children }: { children: React.ReactNode }) {
   const scrollToOpacity = useTransform(
     scrollYProgress,
     [0, 0.9, 0.98, 1],
-    [1, 1, 0, 0]
+    [1, 1, 0, 0],
   );
 
   return (
@@ -44,7 +44,7 @@ export default function AppWrapper({
   //? ใช้ useMemo เพื่อป้องกันการ create object ใหม่ทุกครั้งที่ re-render (Performance)
   const lenisOptions = React.useMemo(
     () => getLenisOptions(isMobile),
-    [isMobile]
+    [isMobile],
   );
 
   return (

@@ -154,7 +154,7 @@ const SceneItem = ({
       delay: item.motionConfig?.delay || 0,
       ease: "easeInOut" as const,
     }),
-    [item.motionConfig]
+    [item.motionConfig],
   );
 
   // 2.5 Merge ทุกอย่างเข้าด้วยกัน
@@ -176,8 +176,8 @@ const SceneItem = ({
     willChange: isMobile
       ? "auto"
       : depth || groupAnim
-      ? "transform, opacity"
-      : "auto",
+        ? "transform, opacity"
+        : "auto",
   };
 
   return (
