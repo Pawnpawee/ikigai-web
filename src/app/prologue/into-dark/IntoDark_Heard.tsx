@@ -56,7 +56,7 @@ export default function IntoDarkHeard({
   );
 
   return (
-    <div className="sticky top-0 h-screen w-screen flex justify-center items-center bg-s5-3">
+    <div className="sticky top-0 h-screen w-screen flex justify-center items-center overflow-hidden bg-s5-3">
       <m.div
         className="relative flex justify-start items-center w-screen portrait:w-auto h-full"
         style={{ zIndex }}

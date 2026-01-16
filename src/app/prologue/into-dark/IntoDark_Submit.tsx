@@ -93,7 +93,7 @@ export default function IntoDarkSubmit({
   );
 
   return (
-    <m.div className="sticky top-0 w-full" style={{ top }}>
+    <m.div className="sticky top-0 w-full overflow-hidden" style={{ top }}>
       <m.div
         className="flex items-center justify-center bg-black min-h-screen"
         style={{

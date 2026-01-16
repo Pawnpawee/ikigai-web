@@ -95,7 +95,7 @@ export default function IntoDarkChoices({
   );
 
   return (
-    <div className="sticky top-0 w-full pointer-events-none">
+    <div className="sticky top-0 w-full overflow-hidden">
       <m.div
         className="flex items-center justify-center bg-black min-h-screen"
         style={{ opacity, zIndex }}

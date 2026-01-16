@@ -196,7 +196,7 @@ export default function IntoDarkNameInput({
               playTrigger={set4Opacity}
             />
           </m.div>
-          <div className="flex items-center justify-end portrait:justify-center h-full w-full">
+          <div className="flex items-center justify-end portrait:justify-center h-full w-full overflow-hidden">
             {/* Text and Input */}
             <div
               className={`flex flex-col items-center ${
