@@ -6,7 +6,6 @@ import {
   useMotionValueEvent,
   useTransform,
 } from "framer-motion";
-import { useRouter } from "next/navigation";
 import { useMemo, useRef, useState } from "react";
 import { HiOutlineChevronDown } from "react-icons/hi";
 import ChoiceButton from "@/app/components/button/ChoiceButton";
@@ -27,7 +26,6 @@ interface S6_4Props {
 export default function S6_4({ scrollYProgress }: S6_4Props) {
   const { isMobile } = useDeviceCheck();
   const { playSfx } = useAudio();
-  const router = useRouter();
   const hasPlayedSound = useRef(false);
 
   const [selectedChoice, setSelectedChoice] = useState<string | null>(null);
@@ -154,7 +152,7 @@ export default function S6_4({ scrollYProgress }: S6_4Props) {
 
   //? Handle continue button click
   const handleContinue = () => {
-    router.push("/skill-session");
+    window.location.href = "/skill-session";
   };
 
   const choices = [

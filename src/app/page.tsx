@@ -1,6 +1,5 @@
 "use client";
 
-import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import WelcomeSoundModal from "./components/modal/WelcomeSoundModal";
 import DecisionSection from "./components/reusable/DecisionSection";
@@ -16,8 +15,6 @@ export default function Home() {
   const { start, stop } = useAudio();
 
   const [shouldAnimate, setShouldAnimate] = useState(false);
-
-  const router = useRouter();
 
   //? ควบคุม Modal
   useEffect(() => {
@@ -80,7 +77,7 @@ export default function Home() {
   };
 
   const handleWakeUp = () => {
-    router.push("/prologue/dreaming");
+    window.location.href = "/prologue/dreaming";
   };
 
   return (
