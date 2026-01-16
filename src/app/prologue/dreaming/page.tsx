@@ -1,8 +1,6 @@
-// app/dreaming/page.tsx
 "use client";
 
 import { m } from "framer-motion";
-import { useRouter } from "next/navigation";
 import { useEffect, useLayoutEffect, useState } from "react";
 
 import DecisionSection from "@/app/components/reusable/DecisionSection";
@@ -12,7 +10,6 @@ import Dreaming from "./Dreaming";
 import Weighing from "./Weighing";
 
 export default function DreamingPage() {
-  const router = useRouter();
   const { playSfx, isMuted, setBgMusic } = useAudio();
 
   useLayoutEffect(() => {
@@ -71,7 +68,7 @@ export default function DreamingPage() {
   };
 
   const handleLook = async () => {
-    router.push("/prologue/into-dark");
+    window.location.href = "/love-session";
   };
 
   return (

@@ -49,12 +49,14 @@ export default function SessionLovePage() {
     }
   }, [setBgMusic, isMuted]);
 
+  const isResettingScroll = useRef(false);
+
   //? Scroll lock effect สำหรับ s6_1
   useEffect(() => {
     if (!lenis || !ref.current) return;
 
-    const handleScroll = (e: { scroll: number; animatedScroll: number }) => {
-      if (isS6_1Completed || !ref.current) return;
+    const handleScroll = (e: { scroll: number; animatedScroll: number; velocity: number }) => {
+      if (isS6_1Completed || !ref.current || isResettingScroll.current) return;
 
       const scrollStart = ref.current.offsetTop;
       const sectionHeight = ref.current.scrollHeight;
@@ -66,9 +68,21 @@ export default function SessionLovePage() {
       // S6_1 lock at 90%: (200 + 600*0.9) / 1500 = 740/1500 ≈ 0.72
       const lockThreshold = scrollStart + scrollableDistance * 0.5;
 
-      if (e.animatedScroll > lockThreshold) {
+      const tolerance = 2;
+
+      if (e.animatedScroll > lockThreshold + tolerance && e.velocity > 0) {
+        isResettingScroll.current = true;
+
         lenis.scrollTo(lockThreshold, {
           immediate: true,
+          force: true,
+          lock: true,
+
+          onComplete: () => {
+            requestAnimationFrame(() => {
+              isResettingScroll.current = false;
+            });
+          },
         });
       }
     };

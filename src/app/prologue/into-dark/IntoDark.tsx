@@ -28,23 +28,41 @@ export default function IntoDark() {
     offset: ["start start", "end end"],
   });
 
+  const isResettingScroll = useRef(false);
+
+  //? Scroll lock effect สำหรับ s6_1
   useEffect(() => {
     if (!lenis || !ref.current) return;
 
-    const handleScroll = (e: { scroll: number; animatedScroll: number }) => {
-      if (isNameConfirmed || !ref.current) return;
+    const handleScroll = (e: {
+      scroll: number;
+      animatedScroll: number;
+      velocity: number;
+    }) => {
+      if (isNameConfirmed || !ref.current || isResettingScroll.current) return;
 
       const scrollStart = ref.current.offsetTop;
       const sectionHeight = ref.current.scrollHeight;
       const viewportHeight = window.innerHeight;
       const scrollableDistance = sectionHeight - viewportHeight;
 
-      //? Lock ที่ 0.15 (ประมาณ 90% ของ NameInput section)
       const lockThreshold = scrollStart + scrollableDistance * 0.15;
 
-      if (e.animatedScroll > lockThreshold) {
+      const tolerance = 2;
+
+      if (e.animatedScroll > lockThreshold + tolerance && e.velocity > 0) {
+        isResettingScroll.current = true;
+
         lenis.scrollTo(lockThreshold, {
           immediate: true,
+          force: true,
+          lock: true,
+
+          onComplete: () => {
+            requestAnimationFrame(() => {
+              isResettingScroll.current = false;
+            });
+          },
         });
       }
     };
