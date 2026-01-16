@@ -68,7 +68,7 @@ export default function DreamingPage() {
   };
 
   const handleLook = async () => {
-    window.location.href = "/love-session";
+    window.location.href = "/prologue/into-dark";
   };
 
   return (
