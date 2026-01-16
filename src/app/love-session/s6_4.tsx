@@ -165,7 +165,7 @@ export default function S6_4({ scrollYProgress }: S6_4Props) {
 
   return (
     <m.div
-      className="fixed flex justify-center top-0 h-screen w-screen bg-s6-4"
+      className="fixed flex justify-center top-0 h-screen w-screen bg-s6-4 overflow-hidden"
       style={{ opacity, zIndex }}
     >
       <m.div

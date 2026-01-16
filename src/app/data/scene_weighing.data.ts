@@ -57,6 +57,7 @@ export const SCENE_WEIGHING_ITEMS: SceneItemData[] = [
     },
     animGroup: 6,
     sizes: "(max-width: 768px) 20vw, 15vw",
+    priority: true,
   },
   {
     id: "heart_plate",

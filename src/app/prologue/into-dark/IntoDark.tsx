@@ -54,7 +54,7 @@ export default function IntoDark() {
             //? Reset flag หลังจาก scroll เสร็จ
             setTimeout(() => {
               isScrollingRef.current = false;
-            }, 0);
+            }, 100);
           },
         });
       }

@@ -200,12 +200,12 @@ export default function Weighing() {
   );
 
   // POV falling effect - extended to use additional 50vh (600-750vh = 0.6-0.75)
-  const pov_y = useTransform(scrollYProgress, [0, 0.72, 0.75], [0, 0, -300]);
+  const pov_y = useTransform(scrollYProgress, [0, 0.75, 0.78], [0, 0, -300]);
 
   // Set 4
   const set4Opacity = useTransform(
     scrollYProgress,
-    [0.2, 0.2667, 0.749, 0.75],
+    [0.2, 0.2667, 0.749, 0.78],
     [0, 1, 1, 0],
   );
   const set4Y = useTransform(scrollYProgress, [0.2, 0.2667], [100, 0]);
@@ -213,7 +213,7 @@ export default function Weighing() {
   // Set 6
   const set6Opacity = useTransform(
     scrollYProgress,
-    [0.3333, 0.4, 0.749, 0.75],
+    [0.3333, 0.4, 0.749, 0.78],
     [0, 1, 1, 0],
   );
   const set6Y = useTransform(scrollYProgress, [0.3333, 0.4], [100, 0]);
@@ -257,20 +257,20 @@ export default function Weighing() {
 
   const textOpacity = useTransform(
     scrollYProgress,
-    [0, 0.2, 0.75, 0.8],
+    [0, 0.2, 0.75, 0.85],
     [0, 1, 1, 0],
   );
 
   const textAnimationProgress = useTransform(
     scrollYProgress,
-    [0, 0.25, 0.8],
+    [0, 0.25, 0.85],
     [0, 0, 1],
   );
 
   // ============ VIDEO SECTION (750-1000vh = 0.75-1.0) ============
   const videoOpacity = useTransform(
     scrollYProgress,
-    [0.72, 0.75, 0.98, 1],
+    [0.75, 0.8, 0.98, 1],
     [0, 1, 1, 0],
   );
 
