@@ -4,6 +4,7 @@ interface InputButtonProps {
   placeholder?: string;
   className?: string;
   style?: React.CSSProperties;
+  maxLength?: number;
 }
 
 export default function InputButton({
@@ -12,6 +13,7 @@ export default function InputButton({
   placeholder = "พิมพ์ข้อความ...",
   className = "",
   style = {},
+  maxLength,
 }: InputButtonProps) {
   const segmenter = new Intl.Segmenter("th", { granularity: "grapheme" });
   const placeholderLength = [...segmenter.segment(placeholder)].length;
@@ -20,7 +22,7 @@ export default function InputButton({
 
   return (
     <div
-      className={`flex py-2 md:py-4 px-6 md:px-14 justify-center items-center gap-2.5 shadow-[0_0_60px_-20px_var(--tw-shadow-color)] shadow-slate-100 rounded-full select-none ${className}`}
+      className={`${className} flex py-2 md:py-4 px-6 md:px-14 justify-center items-center gap-2.5 shadow-[0_0_60px_-20px_var(--tw-shadow-color)] shadow-slate-100 rounded-full select-none`}
       style={{
         border: "4px solid var(--white-radial)",
         background: "var(--white-linear)",
@@ -33,7 +35,8 @@ export default function InputButton({
         value={value}
         onChange={(e) => onChange(e.target.value)}
         placeholder={placeholder}
-        className="text-lg md:text-2xl text-center text-black bg-transparent border-none outline-none p-0"
+        maxLength={maxLength}
+        className="text-center text-black bg-transparent border-none outline-none p-0"
         style={{
           width: `${inputSize}ch`,
           minWidth: `${placeholderLength}ch`,

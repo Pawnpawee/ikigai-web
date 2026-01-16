@@ -1,7 +1,6 @@
 "use client";
 
 import {
-  AnimatePresence,
   type MotionValue,
   m,
   useMotionValueEvent,
@@ -197,7 +196,7 @@ export default function IntoDarkNameInput({
               playTrigger={set4Opacity}
             />
           </m.div>
-          <div className="flex items-center justify-end portrait:justify-center h-full w-full">
+          <div className="flex items-center justify-end portrait:justify-center h-full w-full overflow-hidden">
             {/* Text and Input */}
             <div
               className={`flex flex-col items-center ${
@@ -230,31 +229,22 @@ export default function IntoDarkNameInput({
               </m.div>
 
               <m.div
-                className={`flex gap-5 ${
-                  isMobile ? "items-center" : "items-start"
-                }`}
+                className="flex flex-col items-center"
                 style={{ opacity: inputOpacity, zIndex }}
               >
-                <div className="flex flex-col items-center">
-                  <m.div onKeyDown={handleKeyDown}>
-                    <InputButton
-                      value={playerName}
-                      onChange={setPlayerName}
-                      placeholder="พิมพ์ข้อความ..."
-                    />
-                  </m.div>
-                  {/* Error message */}
-                  {nameError && (
-                    <m.p
-                      className="typo-p-md text-red-500 mt-4"
-                      initial={{ opacity: 0, y: -10 }}
-                      animate={{ opacity: 1, y: 0 }}
-                    >
-                      {nameError}
-                    </m.p>
-                  )}
-                </div>
-                <AnimatePresence>
+                <div className="flex gap-5">
+                  <div className="flex flex-col items-center">
+                    <m.div onKeyDown={handleKeyDown}>
+                      <InputButton
+                        value={playerName}
+                        onChange={setPlayerName}
+                        placeholder="พิมพ์ข้อความ..."
+                        className="text-lg md:text-2xl"
+                      />
+                    </m.div>
+                    {/* Error message */}
+                  </div>
+
                   {!isConfirmed && (
                     <m.button
                       initial={{ opacity: 0, y: 10, scale: 0 }}
@@ -267,12 +257,21 @@ export default function IntoDarkNameInput({
                       whileHover={{ scale: 1.05 }}
                       whileTap={{ scale: 0.95 }}
                       onClick={onConfirm}
-                      className="h-full p-4 border border-white/30 bg-white/10 rounded-full text-white hover:bg-white/20 backdrop-blur-sm transition-all flex items-center cursor-pointer text-3xl portrait:text-xl origin-center"
+                      className="h-full p-4 border border-white/30 bg-white/10 rounded-full text-white hover:bg-white/20 backdrop-blur-sm transition-all flex items-center text-3xl portrait:text-xl origin-center"
                     >
                       <HiCheck />
                     </m.button>
                   )}
-                </AnimatePresence>
+                </div>
+                {nameError && (
+                  <m.p
+                    className="text-sm md:text-xl text-red-500 mt-4 text-center"
+                    initial={{ opacity: 0, y: -10 }}
+                    animate={{ opacity: 1, y: 0 }}
+                  >
+                    {nameError}
+                  </m.p>
+                )}
               </m.div>
             </div>
           </div>

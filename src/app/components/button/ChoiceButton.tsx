@@ -1,4 +1,5 @@
 import { m } from "framer-motion";
+import { useAudio } from "@/app/contexts/AudioContext";
 
 interface Props {
   text: string;
@@ -13,19 +14,20 @@ export default function ChoiceButton({
   onClick,
   className = "",
 }: Props) {
+  const { playSfx } = useAudio();
+
+  const handleClick = () => {
+    playSfx("/assets/Sound/Pop Select Button.mp3");
+    onClick();
+  };
+
   return (
     <m.button
-      onClick={onClick}
+      onClick={handleClick}
       className={`flex justify-center items-center
         text-base md:text-2xl
-        relative rounded-full px-10 text-center transition-all
-        border md:border-[3px] border-solid whitespace-pre-line
-        
-        max-w-2xs
-        min-h-10
-
-        lg:max-w-md lg:min-w-md
-        lg:min-h-28
+        relative rounded-full text-center transition-all
+        border md:border-[3px] border-solid whitespace-pre-line caret-transparent
         ${
           isSelected
             ? "bg-white text-black border-white"

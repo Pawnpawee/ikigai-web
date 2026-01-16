@@ -42,7 +42,7 @@ export default function GifCursor() {
         x: mouseX,
         y: mouseY,
         translateX: "-50%",
-        translateY: "-50%",
+        translateY: "-35%",
       }}
       animate={{
         opacity: 1,
@@ -53,7 +53,7 @@ export default function GifCursor() {
         src={
           isHover
             ? "/assets/cursors/cursor-hover-w.svg"
-            : "/assets/cursors/cursor-s.svg"
+            : "/assets/cursors/cursor.webp"
         }
         alt="Spirit Cursor"
         width={60}

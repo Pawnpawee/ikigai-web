@@ -2,7 +2,7 @@
 
 import { useMotionValueEvent, useScroll } from "framer-motion";
 import { useLenis } from "lenis/react";
-import { useRouter } from "next/navigation";
+
 import { useEffect, useRef, useState } from "react";
 import { useUI } from "@/app/contexts/UIStarContext";
 import IntoDarkChoices from "./IntoDark_Choices";
@@ -12,7 +12,6 @@ import IntoDarkSubmit from "./IntoDark_Submit";
 
 export default function IntoDark() {
   const ref = useRef<HTMLDivElement>(null);
-  const router = useRouter();
   const lenis = useLenis();
   const { setShowStars } = useUI();
 
@@ -29,32 +28,47 @@ export default function IntoDark() {
     offset: ["start start", "end end"],
   });
 
+  const isResettingScroll = useRef(false);
+
+  //? Scroll lock effect สำหรับ s6_1
   useEffect(() => {
     if (!lenis || !ref.current) return;
 
-    const handleScroll = (e: { scroll: number; animatedScroll: number }) => {
-      if (isNameConfirmed || !ref.current) return;
+    const handleScroll = (e: {
+      scroll: number;
+      animatedScroll: number;
+      velocity: number;
+    }) => {
+      if (isNameConfirmed || !ref.current || isResettingScroll.current) return;
 
       const scrollStart = ref.current.offsetTop;
       const sectionHeight = ref.current.scrollHeight;
       const viewportHeight = window.innerHeight;
       const scrollableDistance = sectionHeight - viewportHeight;
 
-      // 0.150 คือตำแหน่งประมาณ 90% ของ NameInput section (270vh/1800vh)
       const lockThreshold = scrollStart + scrollableDistance * 0.15;
 
-      // ตรวจสอบตำแหน่งปัจจุบัน (e.scroll หรือ e.animatedScroll)
-      // ถ้าเกินจุด Lock ให้ดีดกลับไปที่จุด Lock ทันที
-      if (e.animatedScroll > lockThreshold) {
-        // immediate: true คือการวาร์ปไปเลย ไม่ต้อง smooth เพื่อความรู้สึกว่า "ติด" จริงๆ
-        lenis.scrollTo(lockThreshold, { immediate: true });
+      const tolerance = 2;
+
+      if (e.animatedScroll > lockThreshold + tolerance && e.velocity > 0) {
+        isResettingScroll.current = true;
+
+        lenis.scrollTo(lockThreshold, {
+          immediate: true,
+          force: true,
+          lock: true,
+
+          onComplete: () => {
+            requestAnimationFrame(() => {
+              isResettingScroll.current = false;
+            });
+          },
+        });
       }
     };
 
-    // ผูก Event Listener กับ Lenis
     lenis.on("scroll", handleScroll);
 
-    // Cleanup เมื่อ Component หายไป หรือ State เปลี่ยน
     return () => {
       lenis.off("scroll", handleScroll);
     };
@@ -133,13 +147,13 @@ export default function IntoDark() {
 
     if (selectedReasons.length === 0) {
       setReasonsError("กรุณาเลือกเหตุผลอย่างน้อย 1 ข้อ");
-      scrollToProgress(0.334); // Middle of Choices section (0.167-0.500)
+      scrollToProgress(0.35); // Middle of Choices section (0.167-0.500)
       setIsLoading(false);
       return;
     }
 
     try {
-      const response = await fetch("/api/save-progress", {
+      await fetch("/api/save-progress", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
@@ -148,7 +162,7 @@ export default function IntoDark() {
         }),
       });
 
-      router.push("/love-session");
+      window.location.href = "/love-session";
     } catch (error) {
       console.error("Error submitting data:", error);
       setIsLoading(false);
@@ -156,7 +170,7 @@ export default function IntoDark() {
   };
 
   useMotionValueEvent(scrollYProgress, "change", (latest) => {
-    const isIntoDark = latest > 0.1;
+    const isIntoDark = latest > 0;
 
     if (isIntoDark) {
       setShowStars(false);
@@ -164,7 +178,7 @@ export default function IntoDark() {
   });
 
   return (
-    <div ref={ref} className="w-full relative bg-black touch-pan-y">
+    <div ref={ref} className="w-full relative bg-black">
       {/* 300vh */}
       <div className="h-[300vh] w-full ">
         <IntoDarkNameInput
@@ -198,7 +212,7 @@ export default function IntoDark() {
       </div>
 
       {/* 600vh - Ikigai Submit */}
-      <div className="h-[600vh] w-full">
+      <div className="relative h-[600vh] w-full">
         <IntoDarkSubmit
           scrollYProgress={scrollYProgress}
           isLoading={isLoading}

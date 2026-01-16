@@ -3,6 +3,7 @@
 
 import { m } from "framer-motion";
 import { useDevice } from "@/app/contexts/DeviceContext";
+import LazyLottie from "./reusable/LazyLottie";
 
 export default function OrientationGuard() {
   const { isInvalidOrientation } = useDevice();
@@ -10,18 +11,25 @@ export default function OrientationGuard() {
   return (
     <>
       {isInvalidOrientation && (
-        <m.div className="fixed inset-0 z-99 bg-black text-white flex flex-col items-center justify-center p-6 text-center">
-          {/* Icon หมุนจอ */}
-          <div className="text-6xl mb-6 animate-pulse">📱🔄</div>
+        <m.div className="fixed inset-0 z-101 bg-black text-white flex flex-col items-center justify-center gap-12 xl:gap-25 p-6 w-screen h-screen">
+          {/* ข้อความบน */}
+          <p className="text-lg md:text-2xl xl:text-4xl text-center text-white leading-normal tracking-wide font-normal">
+            กรุณาหมุนหน้าจอเป็นแนวตั้ง
+          </p>
 
-          <h2 className="text-3xl font-bold mb-4">Please Rotate Device</h2>
-          <p className="text-gray-400 text-lg max-w-md">
-            This website is optimized for Portrait mode on mobile & tablet
-            devices.
-            <br />
-            <span className="text-sm mt-2 block opacity-70">
-              (Desktop users can browse in Landscape as usual)
-            </span>
+          {/* Rotate Phone Animation */}
+          <div className="w-30 md:w-50 xl:w-75">
+            <LazyLottie
+              src="/assets/rotate phone.json"
+              className="w-full h-full"
+              loop
+              play={true}
+            />
+          </div>
+
+          {/* ข้อความล่าง */}
+          <p className="text-lg md:text-2xl xl:text-4xl text-center text-white leading-normal tracking-wide font-normal">
+            เพื่อประสบการณ์ที่ดียิ่งขึ้น
           </p>
         </m.div>
       )}

@@ -35,6 +35,7 @@ interface IkigaiCircleProps {
     delay?: number;
   };
   yOffset?: number;
+  alwaysShowTooltip?: boolean;
 }
 
 const IkigaiCircle = memo(
@@ -51,6 +52,7 @@ const IkigaiCircle = memo(
     transition,
     yOffset = -180,
     opacity,
+    alwaysShowTooltip = false,
   }: IkigaiCircleProps) => {
     const [isHovered, setIsHovered] = useState(false);
     const [animationComplete, setAnimationComplete] = useState(false);
@@ -104,7 +106,7 @@ const IkigaiCircle = memo(
         }}
       >
         <m.div
-          className="relative w-[320px] md:w-[380px] h-auto cursor-pointer"
+          className="relative w-[320px] md:w-[380px] h-auto"
           style={{
             y: yOffset,
             pointerEvents: "auto",
@@ -134,6 +136,7 @@ const IkigaiCircle = memo(
             style={{ rotate: tooltipRotate }}
             initial={{ opacity: 0 }}
             animate={
+              (shouldAnimate && alwaysShowTooltip) ||
               (shouldAnimate && isHovered && !isMobile) ||
               (shouldAnimate && isMobile)
                 ? { opacity: 1 }

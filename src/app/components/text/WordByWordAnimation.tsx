@@ -33,7 +33,6 @@ const AnimatedWord: FC<AnimatedWordProps> = ({
         opacity,
       }}
       className="
-        cursor-pointer
         transition-all duration-500 ease-out
         hover:drop-shadow-[0_0_10px_#ffffff]
         hover:text-shadow-amber-100
