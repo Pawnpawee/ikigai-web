@@ -22,8 +22,6 @@ export default function IntoDark() {
   const [nameError, setNameError] = useState("");
   const [reasonsError, setReasonsError] = useState("");
   const [isNameConfirmed, setIsNameConfirmed] = useState(false);
-  //! Flag เพื่อป้องกัน infinite loop ใน scroll lock
-  const isScrollingRef = useRef(false);
 
   const { scrollYProgress } = useScroll({
     target: ref,
@@ -34,7 +32,7 @@ export default function IntoDark() {
     if (!lenis || !ref.current) return;
 
     const handleScroll = (e: { scroll: number; animatedScroll: number }) => {
-      if (isNameConfirmed || !ref.current || isScrollingRef.current) return;
+      if (isNameConfirmed || !ref.current) return;
 
       const scrollStart = ref.current.offsetTop;
       const sectionHeight = ref.current.scrollHeight;
@@ -43,19 +41,10 @@ export default function IntoDark() {
 
       //? Lock ที่ 0.15 (ประมาณ 90% ของ NameInput section)
       const lockThreshold = scrollStart + scrollableDistance * 0.15;
-      //! Tolerance เพื่อป้องกันการวนลูป (5px)
-      const tolerance = 5;
 
-      if (e.animatedScroll > lockThreshold + tolerance) {
-        isScrollingRef.current = true;
+      if (e.animatedScroll > lockThreshold) {
         lenis.scrollTo(lockThreshold, {
           immediate: true,
-          onComplete: () => {
-            //? Reset flag หลังจาก scroll เสร็จ
-            setTimeout(() => {
-              isScrollingRef.current = false;
-            }, 100);
-          },
         });
       }
     };

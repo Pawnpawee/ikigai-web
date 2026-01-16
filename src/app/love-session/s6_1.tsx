@@ -265,7 +265,7 @@ export default function S6_1({
   );
 
   return (
-    <m.div className="sticky w-full" style={{ top }}>
+    <m.div className="sticky w-full overflow-hidden" style={{ top }}>
       <m.div
         className="flex items-center justify-center bg-s6 min-h-screen "
         style={{ opacity, zIndex }}
