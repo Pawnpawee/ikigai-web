@@ -5,7 +5,7 @@ export const SCENE_INTODARK_4_ITEMS: SceneItemData[] = [
   {
     id: "bg-gradient",
     src: getImgPath("Scene/Scene5/04/bg_gradient.webp"),
-    mobileSrc: getImgPath("Scene/Scene5/04/bg gradient mobile.webp"),
+    mobileSrc: getImgPath("Scene/Scene5/04/bg_gradient_mobile.webp"),
     alt: "Background gradient",
     style: {
       width: "95.79%",
