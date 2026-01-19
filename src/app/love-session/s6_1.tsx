@@ -16,6 +16,7 @@ import SceneLayer, {
 } from "@/app/components/reusable/SceneLayer";
 import { ACTIVITIES, SCENE_S6_1_ITEMS } from "@/app/data/scene_s6_1.data";
 import { useDeviceCheck } from "@/app/hooks/useDeviceCheck";
+import { getJsonUrl } from "@/utils/cloudinaryUtils";
 import GradientButton from "../components/button/GradientButton";
 import LazyLottie from "../components/reusable/LazyLottie";
 
@@ -288,7 +289,7 @@ export default function S6_1({
               }}
             >
               <LazyLottie
-                src="/assets/Scene/Scene6/02/s6-2 mobile.json"
+                src={getJsonUrl("Scene/Scene6/02/s6-2 mobile.json")}
                 className="w-full h-full"
                 loop
                 playTrigger={bgOpacity}
@@ -308,7 +309,7 @@ export default function S6_1({
               }}
             >
               <LazyLottie
-                src="/assets/Scene/Scene6/02/s6-2.json"
+                src={getJsonUrl("Scene/Scene6/02/s6-2.json")}
                 className="w-full h-full"
                 loop
                 playTrigger={bgOpacity}

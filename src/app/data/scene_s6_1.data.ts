@@ -1,10 +1,11 @@
+import { getImgPath } from "@/utils/cloudinaryUtils";
 import type { SceneItemData } from "../components/reusable/SceneLayer";
 
 export const SCENE_S6_1_ITEMS: SceneItemData[] = [
   {
     id: "bggradient",
-    src: "/assets/Scene/Scene6/02/bg gradient.webp",
-    mobileSrc: "/assets/Scene/Scene6/02/bg gradient mobile.webp",
+    src: getImgPath("Scene/Scene6/02/bg_gradient.webp"),
+    mobileSrc: getImgPath("Scene/Scene6/02/bg_gradient_mobile.webp"),
     alt: "Background gradient",
     style: {
       width: "100%",
@@ -23,8 +24,8 @@ export const SCENE_S6_1_ITEMS: SceneItemData[] = [
   },
   {
     id: "tree4",
-    src: "/assets/Scene/Scene6/02/tree4.webp",
-    mobileSrc: "/assets/Scene/Scene6/02/tree4 mb.webp",
+    src: getImgPath("Scene/Scene6/02/tree4.webp"),
+    mobileSrc: getImgPath("Scene/Scene6/02/tree4_mb.webp"),
     alt: "Tree 4",
     style: {
       width: "111.60%", // 2142.66 / 1920
@@ -42,8 +43,8 @@ export const SCENE_S6_1_ITEMS: SceneItemData[] = [
   },
   {
     id: "tree3",
-    src: "/assets/Scene/Scene6/02/tree3.webp",
-    mobileSrc: "/assets/Scene/Scene6/02/tree3 mb.webp",
+    src: getImgPath("Scene/Scene6/02/tree3.webp"),
+    mobileSrc: getImgPath("Scene/Scene6/02/tree3_mb.webp"),
     alt: "Tree 3",
     style: {
       width: "79.38%", // 1524.07 / 1920
@@ -61,8 +62,8 @@ export const SCENE_S6_1_ITEMS: SceneItemData[] = [
   },
   {
     id: "tree2",
-    src: "/assets/Scene/Scene6/02/tree2.webp",
-    mobileSrc: "/assets/Scene/Scene6/02/tree2 mb.webp",
+    src: getImgPath("Scene/Scene6/02/tree2.webp"),
+    mobileSrc: getImgPath("Scene/Scene6/02/tree2_mb.webp"),
     alt: "Tree 2",
     style: {
       width: "120.59%", // 2315.33 / 1920
@@ -80,8 +81,8 @@ export const SCENE_S6_1_ITEMS: SceneItemData[] = [
   },
   {
     id: "tree1",
-    src: "/assets/Scene/Scene6/02/tree1.webp",
-    mobileSrc: "/assets/Scene/Scene6/02/tree1 mb.webp",
+    src: getImgPath("Scene/Scene6/02/tree1.webp"),
+    mobileSrc: getImgPath("Scene/Scene6/02/tree1_mb.webp"),
     alt: "Tree 1",
     style: {
       width: "50.19%", // 963.64 / 1920
@@ -99,8 +100,8 @@ export const SCENE_S6_1_ITEMS: SceneItemData[] = [
   },
   {
     id: "leave",
-    src: "/assets/Scene/Scene6/02/leave.webp",
-    mobileSrc: "/assets/Scene/Scene6/02/leave mb.webp",
+    src: getImgPath("Scene/Scene6/02/leave.webp"),
+    mobileSrc: getImgPath("Scene/Scene6/02/leave_mb.webp"),
     alt: "Leaves",
     style: {
       width: "108.84%", // 2089.82 / 1920
@@ -118,8 +119,8 @@ export const SCENE_S6_1_ITEMS: SceneItemData[] = [
   },
   {
     id: "paper",
-    src: "/assets/Scene/Scene6/02/paper.webp",
-    mobileSrc: "/assets/Scene/Scene6/02/paper mb.webp",
+    src: getImgPath("Scene/Scene6/02/paper.webp"),
+    mobileSrc: getImgPath("Scene/Scene6/02/paper_mb.webp"),
     alt: "Paper",
     style: {
       width: "83.35%", // 1600.27 / 1920

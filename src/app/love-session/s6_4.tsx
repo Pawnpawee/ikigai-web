@@ -18,6 +18,7 @@ import SceneLayer, {
 import { useAudio } from "@/app/contexts/AudioContext";
 import { SCENE_S6_4_ITEMS } from "@/app/data/scene_s6_4.data";
 import { useDeviceCheck } from "@/app/hooks/useDeviceCheck";
+import { getAudioUrl, getJsonUrl } from "@/utils/cloudinaryUtils";
 
 interface S6_4Props {
   scrollYProgress: MotionValue<number>;
@@ -138,7 +139,7 @@ export default function S6_4({ scrollYProgress }: S6_4Props) {
   //? Play walking sound when cat-human appears
   useMotionValueEvent(catHumanOpacity, "change", (latest) => {
     if (latest >= 0.5 && !hasPlayedSound.current) {
-      playSfx("/assets/Sound/6/walking-on-leaves.mp3");
+      playSfx(getAudioUrl("Sound/6/walking-on-leaves.mp3"));
       hasPlayedSound.current = true;
     }
   });
@@ -188,7 +189,7 @@ export default function S6_4({ scrollYProgress }: S6_4Props) {
             }}
           >
             <LazyLottie
-              src="/assets/Scene/Scene6/04/s6-human-cat.json"
+              src={getJsonUrl("Scene/Scene6/04/s6-human-cat.json")}
               className="w-full h-full"
               loop
               playTrigger={catHumanOpacity}
@@ -209,7 +210,7 @@ export default function S6_4({ scrollYProgress }: S6_4Props) {
             }}
           >
             <LazyLottie
-              src="/assets/Scene/Scene6/04/s6-leave.json"
+              src={getJsonUrl("Scene/Scene6/04/s6-leave.json")}
               className="w-full h-full"
               loop
               playTrigger={treeOpacity}

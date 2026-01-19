@@ -1,10 +1,10 @@
 "use client";
 
-import { useMotionValueEvent, useScroll } from "framer-motion";
+import { useScroll } from "framer-motion";
 import { useLenis } from "lenis/react";
 
 import { useEffect, useRef, useState } from "react";
-import { useUI } from "@/app/contexts/UIStarContext";
+import { useStarsVisibility } from "@/app/hooks/useStarsVisibility";
 import IntoDarkChoices from "./IntoDark_Choices";
 import IntoDarkHeard from "./IntoDark_Heard";
 import IntoDarkNameInput from "./IntoDark_NameInput";
@@ -13,7 +13,6 @@ import IntoDarkSubmit from "./IntoDark_Submit";
 export default function IntoDark() {
   const ref = useRef<HTMLDivElement>(null);
   const lenis = useLenis();
-  const { setShowStars } = useUI();
 
   const [playerName, setPlayerName] = useState("");
   const [selectedReasons, setSelectedReasons] = useState<number[]>([]);
@@ -26,6 +25,11 @@ export default function IntoDark() {
   const { scrollYProgress } = useScroll({
     target: ref,
     offset: ["start start", "end end"],
+  });
+
+  //? ใช้ Hook สำหรับจัดการ Stars visibility - Hide stars ตลอดเวลา
+  useStarsVisibility(scrollYProgress, {
+    shouldShow: () => false,
   });
 
   const isResettingScroll = useRef(false);
@@ -168,14 +172,6 @@ export default function IntoDark() {
       setIsLoading(false);
     }
   };
-
-  useMotionValueEvent(scrollYProgress, "change", (latest) => {
-    const isIntoDark = latest > 0;
-
-    if (isIntoDark) {
-      setShowStars(false);
-    }
-  });
 
   return (
     <div ref={ref} className="w-full relative bg-black">

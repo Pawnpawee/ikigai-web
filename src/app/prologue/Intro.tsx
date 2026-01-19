@@ -1,9 +1,10 @@
 "use client";
-import { m, useMotionValueEvent, useScroll, useTransform } from "framer-motion";
+import { m, useScroll, useTransform } from "framer-motion";
 import Image from "next/image";
 import { useRef } from "react";
+import { getImgPath } from "@/utils/cloudinaryUtils";
 import WordByWordAnimation from "../components/text/WordByWordAnimation";
-import { useUI } from "../contexts/UIStarContext";
+import { useStarsVisibility } from "../hooks/useStarsVisibility";
 
 const INTRO_TEXT = `คำถามอิคิไกทั้งสี่ข้อ — "สิ่งที่รัก, สิ่งที่ถนัด, สิ่งที่โลกต้องการ และ สิ่งที่สร้างรายได้” 
 เป็นเพียงเครื่องมือการสำรวจเพื่อช่วยให้คุณสะท้อนตัวเอง ซึ่งเป็นภาพ ณ ตอนนี้เท่านั้น 
@@ -13,7 +14,6 @@ const INTRO_TEXT = `คำถามอิคิไกทั้งสี่ข้
 
 export default function Intro() {
   const ref = useRef<HTMLDivElement>(null);
-  const { setShowStars } = useUI();
 
   const { scrollYProgress } = useScroll({
     target: ref,
@@ -56,12 +56,9 @@ export default function Intro() {
     ["0px 0px 0px rgba(255,255,255,0)", "0px 0px 10px rgba(255,255,255,0.6)"],
   );
 
-  useMotionValueEvent(scrollYProgress, "change", (latest) => {
-    const isIntroVisible = latest < 1;
-
-    if (isIntroVisible) {
-      setShowStars(true);
-    }
+  //? ใช้ Hook สำหรับจัดการ Stars visibility
+  useStarsVisibility(scrollYProgress, {
+    shouldShow: (p) => p < 1,
   });
 
   return (
@@ -87,7 +84,7 @@ export default function Intro() {
             >
               <div className="relative w-10 h-10">
                 <Image
-                  src="/assets/Icon/star.svg"
+                  src={getImgPath("Icon/star.svg")}
                   alt="star"
                   fill
                   className="object-contain"

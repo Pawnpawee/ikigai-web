@@ -1,9 +1,9 @@
 "use client";
 
-import { m, useMotionValueEvent, useScroll, useTransform } from "framer-motion";
+import { m, useScroll, useTransform } from "framer-motion";
 import { useRef } from "react";
 
-import { useUI } from "@/app/contexts/UIStarContext";
+import { useStarsVisibility } from "@/app/hooks/useStarsVisibility";
 import GradientButton from "../button/GradientButton";
 import WordByWordAnimation from "../text/WordByWordAnimation";
 
@@ -30,16 +30,9 @@ export default function DecisionSection({
 
   const opacity = useTransform(scrollYProgress, [0, 0.8], [0, 1]);
 
-  const { setShowStars } = useUI();
-
-  useMotionValueEvent(scrollYProgress, "change", (latest) => {
-    const isDecisionSectionVisible = latest > 0;
-
-    if (isDecisionSectionVisible) {
-      setShowStars(true);
-    } else {
-      setShowStars(false);
-    }
+  //? ใช้ Hook สำหรับจัดการ Stars visibility
+  useStarsVisibility(scrollYProgress, {
+    shouldShow: (p) => p > 0,
   });
 
   return (

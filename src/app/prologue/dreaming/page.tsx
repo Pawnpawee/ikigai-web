@@ -2,10 +2,10 @@
 
 import { m } from "framer-motion";
 import { useEffect, useLayoutEffect, useState } from "react";
-
 import DecisionSection from "@/app/components/reusable/DecisionSection";
 import EyelidOverlay from "@/app/components/reusable/EyeLidOverlay";
 import { useAudio } from "@/app/contexts/AudioContext";
+import { getAudioUrl } from "@/utils/cloudinaryUtils";
 import Dreaming from "./Dreaming";
 import Weighing from "./Weighing";
 
@@ -36,7 +36,7 @@ export default function DreamingPage() {
 
   useEffect(() => {
     if (!isMuted) {
-      setBgMusic("/assets/Sound/3-4/egypt-jelly-dance.mp3");
+      setBgMusic(getAudioUrl("Sound/3-4/egypt-jelly-dance.mp3"));
     }
   }, [isMuted, setBgMusic]);
 
@@ -54,7 +54,7 @@ export default function DreamingPage() {
 
         //? เล่นเสียงแมวเมี่ยวตอนข้อความที่ 3
         if (nextIndex === 2 && !isMuted) {
-          playSfx("/assets/Sound/3-4/cat-meow.mp3");
+          playSfx(getAudioUrl("Sound/3-4/cat-meow.mp3"));
         }
       } else {
         //? ข้อความหมดแล้ว บังคับตื่น

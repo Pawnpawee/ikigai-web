@@ -1,3 +1,4 @@
+import { getImgPath } from "@/utils/cloudinaryUtils";
 import type { SceneItemData } from "../components/reusable/SceneLayer";
 
 //? Converted from Figma inset values [top right bottom left] to position/size
@@ -6,7 +7,7 @@ export const SCENE_SLEEPING_ITEMS: SceneItemData[] = [
   // Layer 1: Background (inset: [0 -0.06% 0 0])
   {
     id: "bg",
-    src: "/assets/Scene/Scene2/bg.webp",
+    src: getImgPath("Scene/Scene2/bg.webp"),
     alt: "background room",
     style: { left: "0%", top: "0%", width: "100.1%", height: "100%" },
     sizes: "100vw",
@@ -18,7 +19,7 @@ export const SCENE_SLEEPING_ITEMS: SceneItemData[] = [
   // height = 100 - 7.79 - 0 = 92.21%
   {
     id: "bed",
-    src: "/assets/Scene/Scene2/bed.webp",
+    src: getImgPath("Scene/Scene2/bed.webp"),
     alt: "bed with person sleeping",
     style: { left: "8.7%", top: "7.8%", width: "82.7%", height: "92.2%" },
     sizes: "(max-width: 768px) 90vw, 85vw",
@@ -31,7 +32,7 @@ export const SCENE_SLEEPING_ITEMS: SceneItemData[] = [
   // height = 100 - 16.34 - 30.53 = 53.13%
   {
     id: "set1",
-    src: "/assets/Scene/Scene2/set1.webp",
+    src: getImgPath("Scene/Scene2/set1.webp"),
     alt: "books and notes on table",
     style: { left: "11.4%", top: "16.3%", width: "78.6%", height: "53.1%" },
     sizes: "(max-width: 768px) 85vw, 80vw",
@@ -44,7 +45,7 @@ export const SCENE_SLEEPING_ITEMS: SceneItemData[] = [
   // height = 100 - 17.13 - 73.09 = 9.78%
   {
     id: "set2",
-    src: "/assets/Scene/Scene2/set2.webp",
+    src: getImgPath("Scene/Scene2/set2.webp"),
     alt: "lamp and clock",
     style: { left: "17.9%", top: "17.1%", width: "63.2%", height: "9.8%" },
     sizes: "(max-width: 768px) 70vw, 65vw",
@@ -56,7 +57,7 @@ export const SCENE_SLEEPING_ITEMS: SceneItemData[] = [
   // height = 100 - 19.11 - 21.57 = 59.32%
   {
     id: "human",
-    src: "/assets/Scene/Scene2/human.webp",
+    src: getImgPath("Scene/Scene2/human.webp"),
     alt: "person sleeping on bed",
     style: { left: "42.0%", top: "19.1%", width: "16.6%", height: "59.3%" },
     sizes: "(max-width: 768px) 30vw, 20vw",
@@ -69,7 +70,7 @@ export const SCENE_SLEEPING_ITEMS: SceneItemData[] = [
   // height = 100 - 41.65 - 2.8 = 55.55%
   {
     id: "blanket",
-    src: "/assets/Scene/Scene2/blanket.webp",
+    src: getImgPath("Scene/Scene2/blanket.webp"),
     alt: "blanket covering person",
     style: { left: "32.0%", top: "41.7%", width: "36.2%", height: "55.6%" },
     sizes: "(max-width: 768px) 50vw, 40vw",

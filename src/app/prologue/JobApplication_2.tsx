@@ -1,6 +1,7 @@
 "use client";
 import { type MotionValue, m, useTransform } from "framer-motion";
 import { useMemo } from "react";
+import { getJsonUrl } from "@/utils/cloudinaryUtils";
 import LazyLottie from "../components/reusable/LazyLottie";
 import SceneLayer, {
   type AnimationMap,
@@ -109,7 +110,7 @@ export default function JobApplication2({
             }}
           >
             <LazyLottie
-              src="/assets/Scene/Scene1/human.json"
+              src={getJsonUrl("Scene/Scene1/human.json")}
               className="w-full h-full"
               loop
               playTrigger={opacity}
@@ -129,7 +130,7 @@ export default function JobApplication2({
             }}
           >
             <LazyLottie
-              src="/assets/Scene/Scene1/moon.json"
+              src={getJsonUrl("Scene/Scene1/moon.json")}
               className="w-full h-full"
               loop
               playTrigger={moonOpacity}

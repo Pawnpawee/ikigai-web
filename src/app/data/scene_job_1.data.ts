@@ -1,3 +1,4 @@
+import { getImgPath } from "@/utils/cloudinaryUtils";
 import type { SceneItemData } from "../components/reusable/SceneLayer";
 
 //? Scene 1 dimensions from Figma: 1920x2160, converted to percentage for 1920x1080 aspect ratio
@@ -5,7 +6,7 @@ import type { SceneItemData } from "../components/reusable/SceneLayer";
 export const SCENE_1_ITEMS: SceneItemData[] = [
   {
     id: "table",
-    src: "/assets/Scene/Scene1/table.webp",
+    src: getImgPath("Scene/Scene1/table.webp"),
     alt: "Desk table",
     style: { left: "2.3%", top: "86.5%", width: "96.3%", height: "39.3%" },
     animGroup: 10,
@@ -13,7 +14,7 @@ export const SCENE_1_ITEMS: SceneItemData[] = [
   },
   {
     id: "poster1",
-    src: "/assets/Scene/Scene1/poster1.webp",
+    src: getImgPath("Scene/Scene1/poster1.webp"),
     alt: "Wall poster group 1",
     style: { left: "7.0%", top: "-4.2%", width: "87.5%", height: "37.3%" },
     animGroup: 1,
@@ -21,7 +22,7 @@ export const SCENE_1_ITEMS: SceneItemData[] = [
   },
   {
     id: "poster2",
-    src: "/assets/Scene/Scene1/poster2.webp",
+    src: getImgPath("Scene/Scene1/poster2.webp"),
     alt: "Wall poster group 2",
     style: { left: "11.3%", top: "10.2%", width: "53.8%", height: "34.3%" },
     animGroup: 2,
@@ -29,7 +30,7 @@ export const SCENE_1_ITEMS: SceneItemData[] = [
   },
   {
     id: "poster3",
-    src: "/assets/Scene/Scene1/poster3.webp",
+    src: getImgPath("Scene/Scene1/poster3.webp"),
     alt: "Wall poster group 3",
     style: { left: "48.0%", top: "38.4%", width: "50.1%", height: "30.7%" },
     animGroup: 3,
@@ -37,7 +38,7 @@ export const SCENE_1_ITEMS: SceneItemData[] = [
   },
   {
     id: "poster4",
-    src: "/assets/Scene/Scene1/poster4.webp",
+    src: getImgPath("Scene/Scene1/poster4.webp"),
     alt: "Wall poster group 4",
     style: { left: "-1.5%", top: "53.8%", width: "26.6%", height: "22.8%" },
     animGroup: 4,
@@ -45,7 +46,7 @@ export const SCENE_1_ITEMS: SceneItemData[] = [
   },
   {
     id: "poster5",
-    src: "/assets/Scene/Scene1/poster5.webp",
+    src: getImgPath("Scene/Scene1/poster5.webp"),
     alt: "Wall poster group 5",
     style: { left: "79.3%", top: "72.2%", width: "24.0%", height: "10.1%" },
     animGroup: 5,
@@ -53,7 +54,7 @@ export const SCENE_1_ITEMS: SceneItemData[] = [
   },
   {
     id: "poster8",
-    src: "/assets/Scene/Scene1/poster8.webp",
+    src: getImgPath("Scene/Scene1/poster8.webp"),
     alt: "Wall poster",
     style: { left: "105.4%", top: "59.0%", width: "12.8%", height: "8.8%" },
     animGroup: 5,
@@ -61,7 +62,7 @@ export const SCENE_1_ITEMS: SceneItemData[] = [
   },
   {
     id: "computer",
-    src: "/assets/Scene/Scene1/Computer.webp",
+    src: getImgPath("Scene/Scene1/Computer.webp"),
     alt: "Computer workstation",
     style: { left: "25.1%", top: "57.1%", width: "49.9%", height: "35.1%" },
     animGroup: 11,
@@ -69,7 +70,7 @@ export const SCENE_1_ITEMS: SceneItemData[] = [
   },
   {
     id: "light",
-    src: "/assets/Scene/Scene1/light.webp",
+    src: getImgPath("Scene/Scene1/light.webp"),
     alt: "Lamp light",
     style: { left: "23.8%", top: "61.6%", width: "51.0%", height: "29.9%" },
     animGroup: 99,
@@ -78,7 +79,7 @@ export const SCENE_1_ITEMS: SceneItemData[] = [
   },
   {
     id: "set1",
-    src: "/assets/Scene/Scene1/set1.webp",
+    src: getImgPath("Scene/Scene1/set1.webp"),
     alt: "Desk items set 1: book, pen, pencil box, post-it",
     style: { left: "74.6%", top: "83.8%", width: "18.3%", height: "10.8%" },
     animGroup: 14,
@@ -86,7 +87,7 @@ export const SCENE_1_ITEMS: SceneItemData[] = [
   },
   {
     id: "set2",
-    src: "/assets/Scene/Scene1/set2.webp",
+    src: getImgPath("Scene/Scene1/set2.webp"),
     alt: "Desk items set 2: lamp, book, paper",
     style: { left: "5.9%", top: "56.0%", width: "24.9%", height: "38.7%" },
     animGroup: 13,

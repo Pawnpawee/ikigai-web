@@ -1,26 +1,22 @@
 "use client";
 
-import {
-  type MotionValue,
-  m,
-  useMotionValueEvent,
-  useTransform,
-} from "framer-motion";
+import { type MotionValue, m, useTransform } from "framer-motion";
 import Image from "next/image";
 import { useMemo } from "react";
 import type { SceneItemData } from "@/app/components/reusable/SceneLayer";
 import SceneLayer, {
   type AnimationMap,
 } from "@/app/components/reusable/SceneLayer";
-import { useUI } from "@/app/contexts/UIStarContext";
 import { useDeviceCheck } from "@/app/hooks/useDeviceCheck";
+import { useStarsVisibility } from "@/app/hooks/useStarsVisibility";
+import { getImgPath } from "@/utils/cloudinaryUtils";
 
 const MotionImage = m.create(Image);
 
 //? Light blur layer - ค่าคงที่สำหรับทุก session
 const LIGHT_BLUR_ITEM: SceneItemData = {
   id: "light-blur",
-  src: "/assets/Scene/Scene6/01/light_blur.webp",
+  src: getImgPath("Scene/Scene6/01/light_blur.webp"),
   alt: "Light blur effect",
   style: {
     width: "97.81%",
@@ -59,7 +55,6 @@ export default function Cover({
   iconImage,
   sessionText = "session 1",
 }: CoverProps) {
-  const { setShowStars } = useUI();
   const { isMobile } = useDeviceCheck();
 
   //? รวม light-blur layer กับ items ที่ส่งเข้ามา
@@ -88,15 +83,11 @@ export default function Cover({
     [lightBlurOpacity, titleOpacity, iconOpacity],
   );
 
-  useMotionValueEvent(scrollYProgress, "change", (latest) => {
-    const isCoverVisible = latest > 0;
-
-    if (isCoverVisible) {
-      setShowStars(true);
-    } else {
-      setShowStars(false);
-    }
+  //? Show stars when Cover is visible (scrollYProgress > 0)
+  useStarsVisibility(scrollYProgress, {
+    shouldShow: (p) => p > 0,
   });
+
   const opacity = useTransform(scrollYProgress, [0, 0.1, 0.8, 1], [0, 1, 1, 0]);
 
   return (

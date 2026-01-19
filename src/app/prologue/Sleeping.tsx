@@ -6,6 +6,7 @@ import { useEffect, useMemo, useRef } from "react";
 
 import { useAudio } from "@/app/contexts/AudioContext";
 import { useDevice } from "@/app/contexts/DeviceContext";
+import { getAudioUrl } from "@/utils/cloudinaryUtils";
 import Bubble from "../components/button/Bubble";
 import EyelidOverlay from "../components/reusable/EyeLidOverlay";
 import SceneLayer, {
@@ -29,13 +30,13 @@ export default function Sleeping() {
   //? Initialize looping sounds
   useEffect(() => {
     clockSoundRef.current = new Howl({
-      src: ["/assets/Sound/1-2/clock-ticking.mp3"],
+      src: [getAudioUrl("Sound/1-2/clock-ticking.mp3")],
       loop: true,
       volume: sfxVolume / 100,
     });
 
     heartBeatSoundRef.current = new Howl({
-      src: ["/assets/Sound/1-2/heart-beat.mp3"],
+      src: [getAudioUrl("Sound/1-2/heart-beat.mp3")],
       loop: true,
       volume: sfxVolume / 100,
     });

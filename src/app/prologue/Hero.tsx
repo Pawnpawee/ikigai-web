@@ -2,8 +2,8 @@ import { m, useScroll, useTransform, type Variants } from "framer-motion";
 import { useEffect, useMemo, useRef, useState } from "react";
 import LazyLottie from "@/app/components/reusable/LazyLottie";
 import { useAudio } from "@/app/contexts/AudioContext";
-
 import { SCENE_HERO_ITEMS } from "@/app/data/scene_hero.data";
+import { getAudioUrl, getImgPath, getJsonUrl } from "@/utils/cloudinaryUtils";
 import IkigaiCircle from "../components/reusable/IkigaiCircle";
 import SceneLayer from "../components/reusable/SceneLayer";
 import { useMouseParallax } from "../hooks/useMouseParallax";
@@ -29,7 +29,7 @@ export default function Hero({ shouldAnimate }: HeroProps) {
     if (shouldAnimate) {
       const timer = setTimeout(() => {
         setShouldPlayLottie(true);
-        playSfx("/assets/Sound/12/magical-sparkling.mp3");
+        playSfx(getAudioUrl("Sound/12/magical-sparkling.mp3"));
       }, 2000);
 
       return () => clearTimeout(timer);
@@ -182,8 +182,8 @@ export default function Hero({ shouldAnimate }: HeroProps) {
       {/* Circle-World */}
       <IkigaiCircle
         className="scale-50 md:scale-100"
-        imageSrc="/assets/Scene/Hero/world-circle.webp"
-        iconSrc="/assets/Icon/world.webp"
+        imageSrc={getImgPath("Scene/Hero/world-circle.webp")}
+        iconSrc={getImgPath("Icon/world.webp")}
         text="สิ่งที่โลกต้องการ"
         rotateValue={circle4_rotate}
         initialAnimation={circleAnimations.circle4}
@@ -197,8 +197,8 @@ export default function Hero({ shouldAnimate }: HeroProps) {
       {/* Circle-Paid */}
       <IkigaiCircle
         className="scale-50 md:scale-100"
-        imageSrc="/assets/Scene/Hero/paid-circle.webp"
-        iconSrc="/assets/Icon/paid.webp"
+        imageSrc={getImgPath("Scene/Hero/paid-circle.webp")}
+        iconSrc={getImgPath("Icon/paid.webp")}
         text="สิ่งที่สร้างรายได้"
         rotateValue={circle3_rotate}
         initialAnimation={circleAnimations.circle3}
@@ -212,8 +212,8 @@ export default function Hero({ shouldAnimate }: HeroProps) {
       {/* Circle-Skill */}
       <IkigaiCircle
         className="scale-50 md:scale-100"
-        imageSrc="/assets/Scene/Hero/skill-circle.webp"
-        iconSrc="/assets/Icon/skill.webp"
+        imageSrc={getImgPath("Scene/Hero/skill-circle.webp")}
+        iconSrc={getImgPath("Icon/skill.webp")}
         text="สิ่งที่ถนัด"
         rotateValue={circle2_rotate}
         initialAnimation={circleAnimations.circle2}
@@ -227,8 +227,8 @@ export default function Hero({ shouldAnimate }: HeroProps) {
       {/* Circle-Love */}
       <IkigaiCircle
         className="scale-50 md:scale-100"
-        imageSrc="/assets/Scene/Hero/love-circle.webp"
-        iconSrc="/assets/Icon/love.webp"
+        imageSrc={getImgPath("Scene/Hero/love-circle.webp")}
+        iconSrc={getImgPath("Icon/love.webp")}
         text="สิ่งที่รัก"
         rotateValue={circle1_rotate}
         initialAnimation={circleAnimations.circle1}
@@ -254,7 +254,7 @@ export default function Hero({ shouldAnimate }: HeroProps) {
           transition={{ duration: 2, delay: 1.5 }}
         >
           <LazyLottie
-            src="/assets/Scene/Hero/logo.json"
+            src={getJsonUrl("Scene/Hero/logo.json")}
             className="h-[100px]"
             loop={false}
             play={shouldPlayLottie}

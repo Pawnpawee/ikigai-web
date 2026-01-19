@@ -8,7 +8,6 @@ import {
 } from "framer-motion";
 import { useMemo, useRef } from "react";
 import { HiCheck } from "react-icons/hi";
-
 import InputButton from "@/app/components/button/InputButton";
 import LazyLottie from "@/app/components/reusable/LazyLottie";
 import MysteriousText from "@/app/components/reusable/MysteriousText";
@@ -18,6 +17,7 @@ import SceneLayer, {
 import { useAudio } from "@/app/contexts/AudioContext";
 import { SCENE_INTODARK_1_ITEMS } from "@/app/data/scene_intoDark_1";
 import { useDeviceCheck } from "@/app/hooks/useDeviceCheck";
+import { getAudioUrl, getJsonUrl } from "@/utils/cloudinaryUtils";
 
 interface NameInputProps {
   scrollYProgress: MotionValue<number>;
@@ -127,7 +127,7 @@ export default function IntoDarkNameInput({
   //? เล่นเสียงแมวเมื่อแมวโผล่มา (set4Opacity > 0.5)
   useMotionValueEvent(set4Opacity, "change", (latest) => {
     if (latest >= 0.5 && !hasPlayedCatSound.current) {
-      playSfx("/assets/Sound/3-4/cat-meow.mp3");
+      playSfx(getAudioUrl("Sound/3-4/cat-meow.mp3"));
       hasPlayedCatSound.current = true;
     }
   });
@@ -170,7 +170,7 @@ export default function IntoDarkNameInput({
             }}
           >
             <LazyLottie
-              src="/assets/Scene/Scene5/01/s5-1-water.json"
+              src={getJsonUrl("Scene/Scene5/01/s5-1-water.json")}
               className="w-full h-full"
               loop
               playTrigger={textOpacity}
@@ -190,7 +190,7 @@ export default function IntoDarkNameInput({
             }}
           >
             <LazyLottie
-              src="/assets/Scene/Scene5/01/s5-1-cat-starline.json"
+              src={getJsonUrl("Scene/Scene5/01/s5-1-cat-starline.json")}
               className="w-full h-full"
               loop
               playTrigger={set4Opacity}

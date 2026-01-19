@@ -1,22 +1,16 @@
 "use client";
-import {
-  m,
-  useInView,
-  useMotionValueEvent,
-  useScroll,
-  useTransform,
-} from "framer-motion";
+import { m, useInView, useScroll, useTransform } from "framer-motion";
 import { Howl } from "howler";
 import { useEffect, useRef } from "react";
 import { useAudio } from "@/app/contexts/AudioContext";
-import { useUI } from "@/app/contexts/UIStarContext";
+import { useStarsVisibility } from "@/app/hooks/useStarsVisibility";
+import { getAudioUrl } from "@/utils/cloudinaryUtils";
 import JobApplication1 from "./JobApplication_1";
 import JobApplication2 from "./JobApplication_2";
 
 export default function JobApplication() {
   const ref = useRef<HTMLDivElement>(null);
   const isInView = useInView(ref, { once: false, amount: 0.1 });
-  const { setShowStars } = useUI();
   const { playSfx, stopAllSfx, sfxVolume, isMuted } = useAudio();
 
   //? Ref for looping clock sound
@@ -27,10 +21,15 @@ export default function JobApplication() {
     offset: ["start end", "end end"],
   });
 
+  //? ใช้ Hook สำหรับจัดการ Stars visibility - Hide stars ตลอดเวลา
+  useStarsVisibility(scrollYProgress, {
+    shouldShow: () => false,
+  });
+
   //? Initialize clock sound (looping)
   useEffect(() => {
     clockSoundRef.current = new Howl({
-      src: ["/assets/Sound/1-2/clock-ticking.mp3"],
+      src: [getAudioUrl("Sound/1-2/clock-ticking.mp3")],
       loop: true,
       volume: sfxVolume / 100,
     });
@@ -74,9 +73,9 @@ export default function JobApplication() {
 
     const playAlternatingSound = () => {
       if (isPageFlip) {
-        playSfx("/assets/Sound/1-2/page-flip.mp3");
+        playSfx(getAudioUrl("Sound/1-2/page-flip.mp3"));
       } else {
-        playSfx("/assets/Sound/1-2/typing-on-laptop.mp3");
+        playSfx(getAudioUrl("Sound/1-2/typing-on-laptop.mp3"));
       }
       isPageFlip = !isPageFlip;
 
@@ -104,12 +103,8 @@ export default function JobApplication() {
     [0, 0, 1, 1, 0],
   );
 
-  useMotionValueEvent(scrollYProgress, "change", (latest) => {
-    const isJobApplicationVisible = latest > 0;
-
-    if (isJobApplicationVisible) {
-      setShowStars(false);
-    }
+  useStarsVisibility(scrollYProgress, {
+    shouldShow: () => false,
   });
 
   return (

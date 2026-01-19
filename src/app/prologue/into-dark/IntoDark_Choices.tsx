@@ -2,7 +2,6 @@
 
 import { type MotionValue, m, useTransform } from "framer-motion";
 import { useMemo } from "react";
-
 import ChoiceButton from "@/app/components/button/ChoiceButton";
 import LazyLottie from "@/app/components/reusable/LazyLottie";
 import MysteriousText from "@/app/components/reusable/MysteriousText";
@@ -11,6 +10,7 @@ import SceneLayer, {
 } from "@/app/components/reusable/SceneLayer";
 import { REASONS, SCENE_INTODARK_2_ITEMS } from "@/app/data/scene_intoDark_2";
 import { useDeviceCheck } from "@/app/hooks/useDeviceCheck";
+import { getJsonUrl } from "@/utils/cloudinaryUtils";
 
 interface ChoicesProps {
   scrollYProgress: MotionValue<number>;
@@ -119,7 +119,7 @@ export default function IntoDarkChoices({
             }}
           >
             <LazyLottie
-              src="/assets/Scene/Scene5/02/s5-2-cat-starline.json"
+              src={getJsonUrl("Scene/Scene5/02/s5-2-cat-starline.json")}
               className="w-full h-full"
               loop
               playTrigger={catOpacity}

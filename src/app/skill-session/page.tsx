@@ -7,6 +7,7 @@ import {
   COVER_SESSION2_CONFIG,
   COVER_SESSION2_ITEMS,
 } from "@/app/data/cover_session2.data";
+import { getAudioUrl } from "@/utils/cloudinaryUtils";
 import { useAudio } from "../contexts/AudioContext";
 
 export default function SessionLovePage() {
@@ -29,7 +30,7 @@ export default function SessionLovePage() {
 
   useEffect(() => {
     if (!isMuted) {
-      setBgMusic("/assets/Sound/7/living-art.mp3");
+      setBgMusic(getAudioUrl("Sound/7/living-art.mp3"));
     }
   }, [setBgMusic, isMuted]);
 

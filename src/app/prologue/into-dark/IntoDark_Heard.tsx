@@ -10,6 +10,7 @@ import SceneLayer, {
 } from "@/app/components/reusable/SceneLayer";
 import { SCENE_INTODARK_3_ITEMS } from "@/app/data/scene_intoDark_3";
 import { useDeviceCheck } from "@/app/hooks/useDeviceCheck";
+import { getJsonUrl } from "@/utils/cloudinaryUtils";
 
 interface HeardProps {
   scrollYProgress: MotionValue<number>;
@@ -81,7 +82,7 @@ export default function IntoDarkHeard({
             }}
           >
             <LazyLottie
-              src="/assets/Scene/Scene5/03/s5-3-cat-starline.json"
+              src={getJsonUrl("Scene/Scene5/03/s5-3-cat-starline.json")}
               className="w-full h-full"
               loop
               playTrigger={set3Opacity}

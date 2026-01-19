@@ -1,3 +1,4 @@
+import { getImgPath } from "@/utils/cloudinaryUtils";
 import type { SceneItemData } from "../components/reusable/SceneLayer";
 
 //? Scene 6-4 Data: Love Session - Final Question
@@ -9,7 +10,7 @@ import type { SceneItemData } from "../components/reusable/SceneLayer";
 export const SCENE_S6_4_ITEMS: SceneItemData[] = [
   {
     id: "ground",
-    src: "/assets/Scene/Scene6/04/ground.webp",
+    src: getImgPath("Scene/Scene6/04/ground.webp"),
     alt: "Floor ground",
     style: {
       width: "100.31%", // (1926 / 1920) * 100
@@ -28,7 +29,7 @@ export const SCENE_S6_4_ITEMS: SceneItemData[] = [
   },
   {
     id: "tree-back",
-    src: "/assets/Scene/Scene6/04/tree_back.webp",
+    src: getImgPath("Scene/Scene6/04/tree_back.webp"),
     alt: "Trees background",
     style: {
       width: "30.95%", // (594.18 / 1920) * 100
@@ -46,7 +47,7 @@ export const SCENE_S6_4_ITEMS: SceneItemData[] = [
   },
   {
     id: "tree-front",
-    src: "/assets/Scene/Scene6/04/tree_front.webp",
+    src: getImgPath("Scene/Scene6/04/tree_front.webp"),
     alt: "Trees front",
     style: {
       width: "24.62%", // (472.714 / 1920) * 100
@@ -65,7 +66,7 @@ export const SCENE_S6_4_ITEMS: SceneItemData[] = [
   },
   {
     id: "tree-main",
-    src: "/assets/Scene/Scene6/04/tree.webp",
+    src: getImgPath("Scene/Scene6/04/tree.webp"),
     alt: "Main trees and stones",
     style: {
       width: "96.03%", // (1843.82 / 1920) * 100
@@ -85,7 +86,7 @@ export const SCENE_S6_4_ITEMS: SceneItemData[] = [
 
   {
     id: "tree-main2",
-    src: "/assets/Scene/Scene6/04/tree.webp",
+    src: getImgPath("Scene/Scene6/04/tree.webp"),
     alt: "Main trees and stones",
     style: {
       width: "96.03%", // (1843.82 / 1920) * 100
@@ -104,7 +105,7 @@ export const SCENE_S6_4_ITEMS: SceneItemData[] = [
   },
   {
     id: "tree-front2",
-    src: "/assets/Scene/Scene6/04/tree_front.webp",
+    src: getImgPath("Scene/Scene6/04/tree_front.webp"),
     alt: "Trees front",
     style: {
       width: "24.62%", // (472.714 / 1920) * 100

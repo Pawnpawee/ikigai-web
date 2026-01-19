@@ -1,10 +1,11 @@
+import { getImgPath } from "@/utils/cloudinaryUtils";
 import type { SceneItemData } from "../components/reusable/SceneLayer";
 
 export const SCENE_INTODARK_3_ITEMS: SceneItemData[] = [
   {
     id: "little-star",
-    src: "/assets/Scene/Scene5/03/little star.webp",
-    mobileSrc: "/assets/Scene/Scene5/03/little star mobile.webp",
+    src: getImgPath("Scene/Scene5/03/little_star.webp"),
+    mobileSrc: getImgPath("Scene/Scene5/03/little_star_mobile.webp"),
     alt: "Little Star",
     style: {
       width: "97.11%",
@@ -24,7 +25,7 @@ export const SCENE_INTODARK_3_ITEMS: SceneItemData[] = [
 
   {
     id: "cloud",
-    src: "/assets/Scene/Scene5/03/cloud.webp",
+    src: getImgPath("Scene/Scene5/03/cloud.webp"),
     alt: "Cloud",
     style: {
       width: "43.30%",

@@ -3,6 +3,7 @@
 
 import { m } from "framer-motion";
 import { useDevice } from "@/app/contexts/DeviceContext";
+import { getJsonUrl } from "@/utils/cloudinaryUtils";
 import LazyLottie from "./reusable/LazyLottie";
 
 export default function OrientationGuard() {
@@ -20,7 +21,7 @@ export default function OrientationGuard() {
           {/* Rotate Phone Animation */}
           <div className="w-30 md:w-50 xl:w-75">
             <LazyLottie
-              src="/assets/rotate phone.json"
+              src={getJsonUrl("rotate phone.json")}
               className="w-full h-full"
               loop
               play={true}

@@ -1,5 +1,6 @@
 import { m } from "framer-motion";
 import { useAudio } from "@/app/contexts/AudioContext";
+import { getAudioUrl } from "@/utils/cloudinaryUtils";
 
 interface Props {
   text: string;
@@ -17,7 +18,7 @@ export default function ChoiceButton({
   const { playSfx } = useAudio();
 
   const handleClick = () => {
-    playSfx("/assets/Sound/Pop Select Button.mp3");
+    playSfx(getAudioUrl("Sound/Pop Select Button.mp3"));
     onClick();
   };
 

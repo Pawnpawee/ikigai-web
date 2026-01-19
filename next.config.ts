@@ -8,7 +8,13 @@ const withBundleAnalyzer = bundleAnalyzer({
 const nextConfig: NextConfig = {
   //? information: การกำหนด formats ช่วยลดขนาดรูปภาพอัตโนมัติ
   images: {
-    remotePatterns: [{ protocol: "https", hostname: "**" }],
+    remotePatterns: [
+      {
+        protocol: "https",
+        hostname: "res.cloudinary.com",
+        pathname: "/**",
+      },
+    ],
     qualities: [85, 90, 100],
     formats: ["image/avif", "image/webp"],
   },

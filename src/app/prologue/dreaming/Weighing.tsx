@@ -1,11 +1,5 @@
 "use client";
-import {
-  m,
-  useInView,
-  useMotionValueEvent,
-  useScroll,
-  useTransform,
-} from "framer-motion";
+import { m, useInView, useScroll, useTransform } from "framer-motion";
 import { Howl } from "howler";
 import { useEffect, useMemo, useRef } from "react";
 import EyelidOverlay from "@/app/components/reusable/EyeLidOverlay";
@@ -16,13 +10,13 @@ import SceneLayer, {
 import SubtitleScroll from "@/app/components/text/SubtitleScroll";
 import { useAudio } from "@/app/contexts/AudioContext";
 import { useDevice } from "@/app/contexts/DeviceContext";
-import { useUI } from "@/app/contexts/UIStarContext";
 import { SCENE_WEIGHING_ITEMS } from "@/app/data/scene_weighing.data";
+import { useStarsVisibility } from "@/app/hooks/useStarsVisibility";
+import { getAudioUrl, getJsonUrl } from "@/utils/cloudinaryUtils";
 
 export default function Weighing() {
   const ref = useRef<HTMLDivElement>(null);
   const isInView = useInView(ref, { once: false, amount: 0.1 });
-  const { setShowStars } = useUI();
 
   // ตรวจสอบ orientation โดยใช้ custom hook
   const { isMobile } = useDevice();
@@ -42,25 +36,25 @@ export default function Weighing() {
   //? Initialize sound effects
   useEffect(() => {
     scalesSoundRef.current = new Howl({
-      src: ["/assets/Sound/3-4/weighing.mp3"],
+      src: [getAudioUrl("Sound/3-4/weighing.mp3")],
       loop: false,
       volume: sfxVolume / 100,
     });
 
     metalSoundRef.current = new Howl({
-      src: ["/assets/Sound/3-4/metal-slide.mp3"],
+      src: [getAudioUrl("Sound/3-4/metal-slide.mp3")],
       loop: false,
       volume: sfxVolume / 100,
     });
 
     blackHoleSoundRef.current = new Howl({
-      src: ["/assets/Sound/3-4/black-hole.mp3"],
+      src: [getAudioUrl("Sound/3-4/black-hole.mp3")],
       loop: true,
       volume: (sfxVolume / 100) * 2,
     });
 
     fallingSoundRef.current = new Howl({
-      src: ["/assets/Sound/3-4/falling.mp3"],
+      src: [getAudioUrl("Sound/3-4/falling.mp3")],
       loop: false,
       volume: sfxVolume / 100,
     });
@@ -304,14 +298,9 @@ export default function Weighing() {
     ],
   );
 
-  useMotionValueEvent(scrollYProgress, "change", (latest) => {
-    const isFalling = latest > 0.75;
-
-    if (isFalling) {
-      setShowStars(true);
-    } else {
-      setShowStars(false);
-    }
+  //? ใช้ Hook สำหรับจัดการ Stars visibility
+  useStarsVisibility(scrollYProgress, {
+    shouldShow: (p) => p > 0.75, // Show เมื่อเริ่มตกลงไปใน black hole
   });
 
   return (
@@ -359,7 +348,7 @@ export default function Weighing() {
                   initial={{ opacity: 0, y: 100 }}
                 >
                   <LazyLottie
-                    src="/assets/Scene/Scene4/s4-clothing.json"
+                    src={getJsonUrl("Scene/Scene4/s4-clothing.json")}
                     loop
                     playTrigger={set4Opacity}
                     className="w-full h-full"
@@ -378,7 +367,7 @@ export default function Weighing() {
           }}
         >
           <LazyLottie
-            src="/assets/Scene/Scene4/human.json"
+            src={getJsonUrl("Scene/Scene4/human.json")}
             playTrigger={videoOpacity}
             loop
             className="w-full h-full"

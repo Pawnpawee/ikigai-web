@@ -1,3 +1,5 @@
+import { getImgPath } from "@/utils/cloudinaryUtils";
+
 interface BubbleProps {
   text: string;
   className?: string;
@@ -9,7 +11,7 @@ export default function Bubble({ text, className = "" }: BubbleProps) {
       <div
         className="absolute inset-0"
         style={{
-          backgroundImage: `url('/assets/Scene/Scene2/bubble.webp')`,
+          backgroundImage: `url('${getImgPath("Scene/Scene2/bubble.webp")}')`,
           backgroundSize: "100% 100%",
         }}
       />

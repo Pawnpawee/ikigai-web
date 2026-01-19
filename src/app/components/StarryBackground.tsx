@@ -4,6 +4,7 @@
 import { m } from "framer-motion";
 import { useEffect, useState } from "react";
 import { useUI } from "@/app/contexts/UIStarContext";
+import { getJsonUrl } from "@/utils/cloudinaryUtils";
 import LazyLottie from "./reusable/LazyLottie";
 
 const StarryBackground = () => {
@@ -25,7 +26,7 @@ const StarryBackground = () => {
           className="fixed inset-0 w-full h-full pointer-events-none flex justify-center items-center z-1"
         >
           <LazyLottie
-            src="/assets/Scene/Hero/starry-bg.json"
+            src={getJsonUrl("Scene/Hero/starry-bg.json")}
             loop
             play={true}
             ignoreAspectRatio={true}

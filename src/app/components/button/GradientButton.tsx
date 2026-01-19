@@ -1,6 +1,7 @@
 "use client";
 import { m } from "framer-motion";
 import { useAudio } from "@/app/contexts/AudioContext";
+import { getAudioUrl } from "@/utils/cloudinaryUtils";
 
 interface GradientButtonProps {
   text: string;
@@ -29,7 +30,7 @@ export default function GradientButton({
     // หาก disabled เป็น true ให้ return ออกทันที ไม่เล่นเสียงและไม่เรียก onClick
     if (disabled) return;
 
-    playSfx("/assets/Sound/Pop Select Button.mp3");
+    playSfx(getAudioUrl("Sound/Pop Select Button.mp3"));
     onClick();
   };
 

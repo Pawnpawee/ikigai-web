@@ -1,22 +1,21 @@
 "use client";
-import { m, useMotionValueEvent, useScroll, useTransform } from "framer-motion";
+import { m, useScroll, useTransform } from "framer-motion";
 import { useMemo, useRef } from "react";
-
 import LazyLottie from "@/app/components/reusable/LazyLottie";
 import SceneLayer, {
   type AnimationMap,
 } from "@/app/components/reusable/SceneLayer";
 import WordByWordAnimation from "@/app/components/text/WordByWordAnimation";
 import { useDevice } from "@/app/contexts/DeviceContext";
-import { useUI } from "@/app/contexts/UIStarContext";
 import { SCENE_DREAMING_ITEMS } from "@/app/data/scene_dreaming.data";
+import { useStarsVisibility } from "@/app/hooks/useStarsVisibility";
+import { getJsonUrl } from "@/utils/cloudinaryUtils";
 
 export default function Dreaming() {
   const ref = useRef<HTMLDivElement>(null);
 
   // ตรวจสอบ orientation โดยใช้ custom hook
   const { isMobile } = useDevice();
-  const { setShowStars } = useUI();
 
   const { scrollYProgress } = useScroll({
     target: ref,
@@ -77,12 +76,9 @@ export default function Dreaming() {
     [set1Y, set2Y, set3Y, set1Opacity, set2Opacity, set3Opacity],
   );
 
-  useMotionValueEvent(scrollYProgress, "change", (latest) => {
-    const isDreaming = latest < 1;
-
-    if (isDreaming) {
-      setShowStars(false);
-    }
+  //? ใช้ Hook สำหรับจัดการ Stars visibility
+  useStarsVisibility(scrollYProgress, {
+    shouldShow: (p) => p >= 1, // Hide จนกว่าจะถึงท้าย section
   });
 
   return (
@@ -102,7 +98,7 @@ export default function Dreaming() {
           style={{ opacity: set1Opacity }}
         >
           <LazyLottie
-            src={"/assets/Scene/Scene3/sky.json"}
+            src={getJsonUrl("Scene/Scene3/sky.json")}
             loop={true}
             playTrigger={set1Opacity}
             className="w-full object-cover"
@@ -121,7 +117,7 @@ export default function Dreaming() {
           }}
         >
           <LazyLottie
-            src={"/assets/Scene/Scene3/sun.json"}
+            src={getJsonUrl("Scene/Scene3/sun.json")}
             loop={true}
             playTrigger={scrollYProgress}
             className="w-full h-full"
@@ -142,7 +138,7 @@ export default function Dreaming() {
             style={{ right: animal_right }}
           >
             <LazyLottie
-              src={"/assets/Scene/Scene3/camel.json"}
+              src={getJsonUrl("Scene/Scene3/camel.json")}
               loop={true}
               playTrigger={set3Opacity}
               className="w-full h-full"

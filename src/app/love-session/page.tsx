@@ -1,6 +1,6 @@
 "use client";
 
-import { useMotionValueEvent, useScroll, useTransform } from "framer-motion";
+import { useScroll, useTransform } from "framer-motion";
 import { useLenis } from "lenis/react";
 import { useEffect, useLayoutEffect, useRef, useState } from "react";
 import Cover from "@/app/components/reusable/Cover";
@@ -8,15 +8,15 @@ import {
   COVER_SESSION1_CONFIG,
   COVER_SESSION1_ITEMS,
 } from "@/app/data/cover_session1.data";
+import { useStarsVisibility } from "@/app/hooks/useStarsVisibility";
+import { getAudioUrl } from "@/utils/cloudinaryUtils";
 import { useAudio } from "../contexts/AudioContext";
-import { useUI } from "../contexts/UIStarContext";
 import S6_1 from "./s6_1";
 import S6_4 from "./s6_4";
 
 export default function SessionLovePage() {
   //? Single ref for entire page
   const ref = useRef<HTMLDivElement>(null);
-  const { setShowStars } = useUI();
   const { setBgMusic, isMuted } = useAudio();
   const lenis = useLenis();
 
@@ -45,7 +45,7 @@ export default function SessionLovePage() {
 
   useEffect(() => {
     if (!isMuted) {
-      setBgMusic("/assets/Sound/6/majestic-sky.mp3");
+      setBgMusic(getAudioUrl("Sound/6/majestic-sky.mp3"));
     }
   }, [setBgMusic, isMuted]);
 
@@ -111,14 +111,9 @@ export default function SessionLovePage() {
     }
   };
 
-  useMotionValueEvent(scrollYProgress, "change", (latest) => {
-    //? Cover section ends at 0.133 (200vh / 1500vh)
-    //? S6_1 starts at 0.133 and ends at 0.533 (800vh / 1500vh)
-    const isScene6 = latest > 0.133;
-
-    if (isScene6) {
-      setShowStars(false);
-    }
+  //? Hide stars when entering S6_1 section (after 0.133)
+  useStarsVisibility(scrollYProgress, {
+    shouldShow: (p) => p <= 0.133,
   });
 
   return (
