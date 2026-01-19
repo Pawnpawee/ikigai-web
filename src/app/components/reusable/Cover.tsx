@@ -1,10 +1,6 @@
 "use client";
 
-import {
-  type MotionValue,
-  m,
-  useTransform,
-} from "framer-motion";
+import { type MotionValue, m, useTransform } from "framer-motion";
 import Image from "next/image";
 import { useMemo } from "react";
 import type { SceneItemData } from "@/app/components/reusable/SceneLayer";

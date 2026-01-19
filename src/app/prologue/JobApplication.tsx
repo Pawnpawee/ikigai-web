@@ -1,10 +1,5 @@
 "use client";
-import {
-  m,
-  useInView,
-  useScroll,
-  useTransform,
-} from "framer-motion";
+import { m, useInView, useScroll, useTransform } from "framer-motion";
 import { Howl } from "howler";
 import { useEffect, useRef } from "react";
 import { useAudio } from "@/app/contexts/AudioContext";
@@ -99,19 +94,19 @@ export default function JobApplication() {
   const opacity = useTransform(
     scrollYProgress,
     [0, 0.2, 0.947, 1],
-    [0, 1, 1, 0]
+    [0, 1, 1, 0],
   );
 
   const opacity_bg = useTransform(
     scrollYProgress,
     [0, 0.2, 0.5, 0.97, 1],
-    [0, 0, 1, 1, 0]
+    [0, 0, 1, 1, 0],
   );
 
   useStarsVisibility(scrollYProgress, {
     shouldShow: () => false,
   });
-  
+
   return (
     <m.div
       ref={ref}

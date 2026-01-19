@@ -50,12 +50,12 @@ export default function Hero({ shouldAnimate }: HeroProps) {
       document.documentElement.style.setProperty(
         "overflow",
         "hidden",
-        "important"
+        "important",
       );
       document.documentElement.style.setProperty(
         "height",
         "100vh",
-        "important"
+        "important",
       );
       document.body.style.setProperty("overflow", "hidden", "important");
       document.body.style.setProperty("height", "100vh", "important");
@@ -97,7 +97,7 @@ export default function Hero({ shouldAnimate }: HeroProps) {
         },
       },
     }),
-    []
+    [],
   );
   const charVariants: Variants = useMemo(
     () => ({
@@ -107,7 +107,7 @@ export default function Hero({ shouldAnimate }: HeroProps) {
         x: 0,
       },
     }),
-    []
+    [],
   );
 
   const circle1_rotate = useTransform(scrollYProgress, [0, 1], [-180, 0]);
@@ -156,7 +156,7 @@ export default function Hero({ shouldAnimate }: HeroProps) {
         ease: "easeInOut" as const,
       },
     }),
-    [shouldAnimate]
+    [shouldAnimate],
   );
 
   return (
