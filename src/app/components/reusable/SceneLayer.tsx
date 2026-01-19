@@ -192,7 +192,6 @@ const SceneItem = ({
         src={responsiveSrc}
         alt={item.alt}
         fill
-        loading={item.priority ? "eager" : "lazy"}
         priority={item.priority}
         fetchPriority={item.priority ? "high" : "auto"}
         sizes={item.sizes || "(max-width: 768px) 100vw, 50vw"}
