@@ -18,6 +18,7 @@ import SceneLayer, {
 import { useAudio } from "@/app/contexts/AudioContext";
 import { SCENE_S6_4_ITEMS } from "@/app/data/scene_s6_4.data";
 import { useDeviceCheck } from "@/app/hooks/useDeviceCheck";
+import { getAudioUrl, getJsonUrl } from "@/utils/cloudinaryUtils";
 
 interface S6_4Props {
   scrollYProgress: MotionValue<number>;
@@ -46,14 +47,14 @@ export default function S6_4({ scrollYProgress }: S6_4Props) {
   const groundOpacity = useTransform(
     scrollYProgress,
     [0, 0.036, 0.071],
-    [0, 1, 1],
+    [0, 1, 1]
   );
 
   //? Group 2: Tree back + Tree + Leaves (50-100vh = 0.071-0.143)
   const treeOpacity = useTransform(
     scrollYProgress,
     [0.071, 0.107, 0.143],
-    [0, 1, 1],
+    [0, 1, 1]
   );
 
   //? Tree slide left animation - single loop: slide out left, reset from right, back to center
@@ -61,21 +62,21 @@ export default function S6_4({ scrollYProgress }: S6_4Props) {
   const treeX = useTransform(
     scrollYProgress,
     [0.286, 0.52, 0.52, 0.75, 0.9],
-    isMobile ? [500, -2000, 2000, 500, -2000] : [0, -1950, 1950, 0, -1950],
+    isMobile ? [500, -2000, 2000, 500, -2000] : [0, -1950, 1950, 0, -1950]
   );
 
   //? Tree subtle vertical movement (bounce effect while walking)
   const treeY = useTransform(
     scrollYProgress,
     [0.286, 0.52, 0.52, 0.75, 0.9],
-    [0, 100, 100, 0, 100],
+    [0, 100, 100, 0, 100]
   );
 
   //? Group 2: Tree back + Tree + Leaves (50-100vh = 0.071-0.143)
   const tree2Opacity = useTransform(
     scrollYProgress,
     [0.071, 0.107, 0.143],
-    [0, 1, 1],
+    [0, 1, 1]
   );
 
   //? Tree slide left animation - single loop: slide out left, reset from right, back to center
@@ -83,28 +84,28 @@ export default function S6_4({ scrollYProgress }: S6_4Props) {
   const tree2X = useTransform(
     scrollYProgress,
     [0.286, 0.52, 0.75, 0.75, 0.9],
-    isMobile ? [2000, 500, -2000, 2000, 0] : [1920, 0, -1920, 1920, 0],
+    isMobile ? [2000, 500, -2000, 2000, 0] : [1920, 0, -1920, 1920, 0]
   );
 
   //? Tree subtle vertical movement (bounce effect while walking)
   const tree2Y = useTransform(
     scrollYProgress,
     [0.286, 0.52, 0.75, 0.75, 0.9],
-    [100, 0, 100, 100, 0],
+    [100, 0, 100, 100, 0]
   );
 
   //? Group 3: Cat-Human (100-200vh = 0.143-0.286)
   const catHumanOpacity = useTransform(
     scrollYProgress,
     [0.143, 0.214, 0.286],
-    [0, 1, 1],
+    [0, 1, 1]
   );
 
   //? Group 4: Text + Choice buttons (350-550vh = 0.5-0.785)
   const textOpacity = useTransform(
     scrollYProgress,
     [0.5, 0.643, 0.785],
-    [0, 1, 1],
+    [0, 1, 1]
   );
 
   //? Continue button opacity (appears after choice selected)
@@ -132,13 +133,13 @@ export default function S6_4({ scrollYProgress }: S6_4Props) {
       tree2X,
       tree2Y,
       catHumanOpacity,
-    ],
+    ]
   );
 
   //? Play walking sound when cat-human appears
   useMotionValueEvent(catHumanOpacity, "change", (latest) => {
     if (latest >= 0.5 && !hasPlayedSound.current) {
-      playSfx("/assets/Sound/6/walking-on-leaves.mp3");
+      playSfx(getAudioUrl("Sound/6/walking-on-leaves.mp3"));
       hasPlayedSound.current = true;
     }
   });
@@ -188,7 +189,7 @@ export default function S6_4({ scrollYProgress }: S6_4Props) {
             }}
           >
             <LazyLottie
-              src="/assets/Scene/Scene6/04/s6-human-cat.json"
+              src={getJsonUrl("Scene/Scene6/04/s6-human-cat.json")}
               className="w-full h-full"
               loop
               playTrigger={catHumanOpacity}
@@ -209,7 +210,7 @@ export default function S6_4({ scrollYProgress }: S6_4Props) {
             }}
           >
             <LazyLottie
-              src="/assets/Scene/Scene6/04/s6-leave.json"
+              src={getJsonUrl("Scene/Scene6/04/s6-leave.json")}
               className="w-full h-full"
               loop
               playTrigger={treeOpacity}

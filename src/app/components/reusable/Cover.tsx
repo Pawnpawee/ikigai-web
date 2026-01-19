@@ -14,13 +14,14 @@ import SceneLayer, {
 } from "@/app/components/reusable/SceneLayer";
 import { useUI } from "@/app/contexts/UIStarContext";
 import { useDeviceCheck } from "@/app/hooks/useDeviceCheck";
+import { getImgPath } from "@/utils/cloudinaryUtils";
 
 const MotionImage = m.create(Image);
 
 //? Light blur layer - ค่าคงที่สำหรับทุก session
 const LIGHT_BLUR_ITEM: SceneItemData = {
   id: "light-blur",
-  src: "/assets/Scene/Scene6/01/light_blur.webp",
+  src: getImgPath("Scene/Scene6/01/light_blur.webp"),
   alt: "Light blur effect",
   style: {
     width: "97.81%",
@@ -85,7 +86,7 @@ export default function Cover({
       3: { opacity: titleOpacity },
       4: { opacity: iconOpacity },
     }),
-    [lightBlurOpacity, titleOpacity, iconOpacity],
+    [lightBlurOpacity, titleOpacity, iconOpacity]
   );
 
   useMotionValueEvent(scrollYProgress, "change", (latest) => {

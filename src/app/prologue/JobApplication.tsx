@@ -10,6 +10,7 @@ import { Howl } from "howler";
 import { useEffect, useRef } from "react";
 import { useAudio } from "@/app/contexts/AudioContext";
 import { useUI } from "@/app/contexts/UIStarContext";
+import { getAudioUrl } from "@/utils/cloudinaryUtils";
 import JobApplication1 from "./JobApplication_1";
 import JobApplication2 from "./JobApplication_2";
 
@@ -30,7 +31,7 @@ export default function JobApplication() {
   //? Initialize clock sound (looping)
   useEffect(() => {
     clockSoundRef.current = new Howl({
-      src: ["/assets/Sound/1-2/clock-ticking.mp3"],
+      src: [getAudioUrl("Sound/1-2/clock-ticking.mp3")],
       loop: true,
       volume: sfxVolume / 100,
     });
@@ -74,9 +75,9 @@ export default function JobApplication() {
 
     const playAlternatingSound = () => {
       if (isPageFlip) {
-        playSfx("/assets/Sound/1-2/page-flip.mp3");
+        playSfx(getAudioUrl("Sound/1-2/page-flip.mp3"));
       } else {
-        playSfx("/assets/Sound/1-2/typing-on-laptop.mp3");
+        playSfx(getAudioUrl("Sound/1-2/typing-on-laptop.mp3"));
       }
       isPageFlip = !isPageFlip;
 
@@ -95,13 +96,13 @@ export default function JobApplication() {
   const opacity = useTransform(
     scrollYProgress,
     [0, 0.2, 0.947, 1],
-    [0, 1, 1, 0],
+    [0, 1, 1, 0]
   );
 
   const opacity_bg = useTransform(
     scrollYProgress,
     [0, 0.2, 0.5, 0.97, 1],
-    [0, 0, 1, 1, 0],
+    [0, 0, 1, 1, 0]
   );
 
   useMotionValueEvent(scrollYProgress, "change", (latest) => {

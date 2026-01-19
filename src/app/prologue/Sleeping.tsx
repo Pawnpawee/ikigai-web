@@ -6,6 +6,7 @@ import { useEffect, useMemo, useRef } from "react";
 
 import { useAudio } from "@/app/contexts/AudioContext";
 import { useDevice } from "@/app/contexts/DeviceContext";
+import { getAudioUrl } from "@/utils/cloudinaryUtils";
 import Bubble from "../components/button/Bubble";
 import EyelidOverlay from "../components/reusable/EyeLidOverlay";
 import SceneLayer, {
@@ -29,13 +30,13 @@ export default function Sleeping() {
   //? Initialize looping sounds
   useEffect(() => {
     clockSoundRef.current = new Howl({
-      src: ["/assets/Sound/1-2/clock-ticking.mp3"],
+      src: [getAudioUrl("Sound/1-2/clock-ticking.mp3")],
       loop: true,
       volume: sfxVolume / 100,
     });
 
     heartBeatSoundRef.current = new Howl({
-      src: ["/assets/Sound/1-2/heart-beat.mp3"],
+      src: [getAudioUrl("Sound/1-2/heart-beat.mp3")],
       loop: true,
       volume: sfxVolume / 100,
     });
@@ -84,7 +85,7 @@ export default function Sleeping() {
   const opacity = useTransform(
     scrollYProgress,
     [0, 0.05, 0.95, 1],
-    [0, 1, 1, 0],
+    [0, 1, 1, 0]
   );
 
   const set1Y = useTransform(scrollYProgress, [0, 0.0625], [100, 0]);
@@ -104,28 +105,28 @@ export default function Sleeping() {
   const bubble1Opacity = useTransform(
     scrollYProgress,
     [0.3125, 0.375, 0.5625, 0.6125],
-    [0, 1, 1, 0],
+    [0, 1, 1, 0]
   ); // ค้างจนถึง 50%, fade out 50-55%
 
   const bubble2Y = useTransform(scrollYProgress, [0.375, 0.4375], [100, 0]);
   const bubble2Opacity = useTransform(
     scrollYProgress,
     [0.375, 0.4375, 0.5625, 0.6125],
-    [0, 1, 1, 0],
+    [0, 1, 1, 0]
   );
 
   const bubble3Y = useTransform(scrollYProgress, [0.4375, 0.5], [100, 0]);
   const bubble3Opacity = useTransform(
     scrollYProgress,
     [0.4375, 0.5, 0.5625, 0.6125],
-    [0, 1, 1, 0],
+    [0, 1, 1, 0]
   );
 
   const bubble4Y = useTransform(scrollYProgress, [0.5, 0.5625], [100, 0]);
   const bubble4Opacity = useTransform(
     scrollYProgress,
     [0.5, 0.5625, 0.5625, 0.6125],
-    [0, 1, 1, 0],
+    [0, 1, 1, 0]
   );
 
   const scale = useTransform(scrollYProgress, [0.5625, 0.75], [1, 1.7]);
@@ -138,19 +139,19 @@ export default function Sleeping() {
   const textOpacity = useTransform(
     scrollYProgress,
     [0.5625, 0.65, 0.7, 0.8],
-    [0, 1, 1, 0],
+    [0, 1, 1, 0]
   );
 
   const textSectionProgress = useTransform(
     scrollYProgress,
     [0.5625, 0.8],
-    [0, 1], // ส่งค่า 0-1 แบบ Linear
+    [0, 1] // ส่งค่า 0-1 แบบ Linear
   );
 
   const ry = useTransform(
     scrollYProgress,
     [0, 0.75, 0.8, 0.85, 0.9, 0.95, 1],
-    [200, 200, 0, 60, 0, 40, 0],
+    [200, 200, 0, 60, 0, 40, 0]
   );
 
   const animations: AnimationMap = useMemo(
@@ -169,7 +170,7 @@ export default function Sleeping() {
       set3Opacity,
       set4Y,
       set4Opacity,
-    ],
+    ]
   );
 
   return (

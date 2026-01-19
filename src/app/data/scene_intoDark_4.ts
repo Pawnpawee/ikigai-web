@@ -1,10 +1,11 @@
+import { getImgPath } from "@/utils/cloudinaryUtils";
 import type { SceneItemData } from "../components/reusable/SceneLayer";
 
 export const SCENE_INTODARK_4_ITEMS: SceneItemData[] = [
   {
     id: "bg-gradient",
-    src: "/assets/Scene/Scene5/04/bg gradient.webp",
-    mobileSrc: "/assets/Scene/Scene5/04/bg gradient mobile.webp",
+    src: getImgPath("Scene/Scene5/04/bg gradient.webp"),
+    mobileSrc: getImgPath("Scene/Scene5/04/bg gradient mobile.webp"),
     alt: "Background gradient",
     style: {
       width: "95.79%",
@@ -23,8 +24,8 @@ export const SCENE_INTODARK_4_ITEMS: SceneItemData[] = [
   },
   {
     id: "little-star",
-    src: "/assets/Scene/Scene5/04/little star.webp",
-    mobileSrc: "/assets/Scene/Scene5/04/little star mobile.webp",
+    src: getImgPath("Scene/Scene5/04/little star.webp"),
+    mobileSrc: getImgPath("Scene/Scene5/04/little star mobile.webp"),
     alt: "Little Star",
     style: {
       width: "93.27%",
@@ -43,7 +44,7 @@ export const SCENE_INTODARK_4_ITEMS: SceneItemData[] = [
   },
   {
     id: "cloud",
-    src: "/assets/Scene/Scene5/04/cloud.webp",
+    src: getImgPath("Scene/Scene5/04/cloud.webp"),
     alt: "Cloud",
     style: {
       width: "39.14%",

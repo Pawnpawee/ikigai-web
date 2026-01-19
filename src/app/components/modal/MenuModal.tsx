@@ -1,9 +1,9 @@
-"use client";
 import { m } from "framer-motion";
 import Image from "next/image";
 import Link from "next/link";
 import type { ChangeEvent } from "react";
 import { useAudio } from "@/app/contexts/AudioContext";
+import { getImgPath } from "@/utils/cloudinaryUtils";
 
 interface MenuModalProps {
   isOpen: boolean;
@@ -58,7 +58,7 @@ export default function MenuModal({ isOpen, onClose }: MenuModalProps) {
                   aria-label="ปิดเมนู"
                 >
                   <Image
-                    src="/assets/Icon/close.webp"
+                    src={getImgPath("Icon/close.webp")}
                     alt="Close"
                     width={27}
                     height={27}
@@ -76,7 +76,7 @@ export default function MenuModal({ isOpen, onClose }: MenuModalProps) {
                   </p>
                   <div className="flex items-center gap-7.5">
                     <Image
-                      src="/assets/Icon/mute_icon.webp"
+                      src={getImgPath("Icon/mute_icon.webp")}
                       alt="Mute"
                       width={27}
                       height={37}
@@ -113,7 +113,7 @@ export default function MenuModal({ isOpen, onClose }: MenuModalProps) {
                       }}
                     />
                     <Image
-                      src="/assets/Icon/unmute_icon.webp"
+                      src={getImgPath("Icon/unmute_icon.webp")}
                       alt="Unmute"
                       width={43}
                       height={37}
@@ -129,7 +129,7 @@ export default function MenuModal({ isOpen, onClose }: MenuModalProps) {
                   </p>
                   <div className="flex items-center gap-7.5">
                     <Image
-                      src="/assets/Icon/mute_icon.webp"
+                      src={getImgPath("Icon/mute_icon.webp")}
                       alt="Mute"
                       width={27}
                       height={37}
@@ -166,7 +166,7 @@ export default function MenuModal({ isOpen, onClose }: MenuModalProps) {
                       }}
                     />
                     <Image
-                      src="/assets/Icon/unmute_icon.webp"
+                      src={getImgPath("Icon/unmute_icon.webp")}
                       alt="Unmute"
                       width={43}
                       height={37}
@@ -187,7 +187,7 @@ export default function MenuModal({ isOpen, onClose }: MenuModalProps) {
                   >
                     <div className="flex items-center gap-5 md:gap-[45px]">
                       <Image
-                        src="/assets/Icon/privacy_icon.webp"
+                        src={getImgPath("Icon/privacy_icon.webp")}
                         alt="Privacy"
                         width={46}
                         height={56}
@@ -203,7 +203,7 @@ export default function MenuModal({ isOpen, onClose }: MenuModalProps) {
                       </div>
                     </div>
                     <Image
-                      src="/assets/Icon/next_btn.webp"
+                      src={getImgPath("Icon/next_btn.webp")}
                       alt="Next"
                       width={19}
                       height={25}
@@ -221,7 +221,7 @@ export default function MenuModal({ isOpen, onClose }: MenuModalProps) {
                   >
                     <div className="flex items-center gap-5 md:gap-[45px]">
                       <Image
-                        src="/assets/Icon/person_icon.webp"
+                        src={getImgPath("Icon/person_icon.webp")}
                         alt="About"
                         width={47}
                         height={47}
@@ -237,7 +237,7 @@ export default function MenuModal({ isOpen, onClose }: MenuModalProps) {
                       </div>
                     </div>
                     <Image
-                      src="/assets/Icon/next_btn.webp"
+                      src={getImgPath("Icon/next_btn.webp")}
                       alt="Next"
                       width={19}
                       height={25}

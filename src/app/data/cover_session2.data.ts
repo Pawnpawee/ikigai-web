@@ -1,3 +1,4 @@
+import { getImgPath } from "@/utils/cloudinaryUtils";
 import type { SceneItemData } from "../components/reusable/SceneLayer";
 
 interface CoverDataConfig {
@@ -7,15 +8,15 @@ interface CoverDataConfig {
 }
 
 export const COVER_SESSION2_CONFIG: CoverDataConfig = {
-  titleImage: "/assets/Scene/Scene7/01/what_you_good_at.webp",
-  iconImage: "/assets/Icon/skill.webp",
+  titleImage: getImgPath("Scene/Scene7/01/what_you_good_at.webp"),
+  iconImage: getImgPath("Icon/skill.webp"),
   sessionText: "session 2",
 };
 
 export const COVER_SESSION2_ITEMS: SceneItemData[] = [
   {
     id: "light",
-    src: "/assets/Scene/Scene7/01/light_skill.webp",
+    src: getImgPath("Scene/Scene7/01/light_skill.webp"),
     alt: "Light blur effect",
     style: {
       width: "29.70%",

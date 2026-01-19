@@ -1,9 +1,10 @@
+import { getImgPath } from "@/utils/cloudinaryUtils";
 import type { SceneItemData } from "../components/reusable/SceneLayer";
 
 export const SCENE_WEIGHING_ITEMS: SceneItemData[] = [
   {
     id: "ground",
-    src: "/assets/Scene/Scene4/ground.webp",
+    src: getImgPath("Scene/Scene4/ground.webp"),
     alt: "ground",
     style: {
       width: "100.7%",
@@ -17,7 +18,7 @@ export const SCENE_WEIGHING_ITEMS: SceneItemData[] = [
   },
   {
     id: "building",
-    src: "/assets/Scene/Scene4/building.webp",
+    src: getImgPath("Scene/Scene4/building.webp"),
     alt: "Building",
     style: {
       width: "127.1%",
@@ -31,7 +32,7 @@ export const SCENE_WEIGHING_ITEMS: SceneItemData[] = [
   },
   {
     id: "scale-2-1",
-    src: "/assets/Scene/Scene4/scale-2.webp",
+    src: getImgPath("Scene/Scene4/scale-2.webp"),
     alt: "Scale Left",
     style: {
       bottom: "43.8%",
@@ -46,7 +47,7 @@ export const SCENE_WEIGHING_ITEMS: SceneItemData[] = [
   },
   {
     id: "scale_center",
-    src: "/assets/Scene/Scene4/scale.webp",
+    src: getImgPath("Scene/Scene4/scale.webp"),
     alt: "Scale",
     style: {
       top: "45.8%",
@@ -61,7 +62,7 @@ export const SCENE_WEIGHING_ITEMS: SceneItemData[] = [
   },
   {
     id: "heart_plate",
-    src: "/assets/Scene/Scene4/heart-plate.webp",
+    src: getImgPath("Scene/Scene4/heart-plate.webp"),
     alt: "Heart Plate",
     style: {
       top: "58.5%",
@@ -76,7 +77,7 @@ export const SCENE_WEIGHING_ITEMS: SceneItemData[] = [
   },
   {
     id: "feather_plate",
-    src: "/assets/Scene/Scene4/feather-plate.webp",
+    src: getImgPath("Scene/Scene4/feather-plate.webp"),
     alt: "Feather Plate",
     style: {
       top: "58.8%",
@@ -91,7 +92,7 @@ export const SCENE_WEIGHING_ITEMS: SceneItemData[] = [
   },
   {
     id: "light_overlay",
-    src: "/assets/Scene/Scene4/light.webp",
+    src: getImgPath("Scene/Scene4/light.webp"),
     alt: "Light",
     style: {
       top: "23.4%",

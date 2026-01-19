@@ -3,6 +3,7 @@ import { m, useMotionValue } from "framer-motion";
 import Image from "next/image";
 import { useEffect, useState } from "react";
 import { useDevice } from "@/app/contexts/DeviceContext";
+import { getImgPath } from "@/utils/cloudinaryUtils";
 
 export default function GifCursor() {
   const { isMobile } = useDevice();
@@ -24,7 +25,7 @@ export default function GifCursor() {
       // เช็คว่า Hover ปุ่มไหม
       const target = e.target as HTMLElement;
       const isInteractive = target.closest(
-        "button, a, input, textarea, [role='button'], .cursor-pointer",
+        "button, a, input, textarea, [role='button'], .cursor-pointer"
       );
       setIsHover(!!isInteractive);
     };
@@ -52,8 +53,8 @@ export default function GifCursor() {
       <Image
         src={
           isHover
-            ? "/assets/cursors/cursor-hover-w.svg"
-            : "/assets/cursors/cursor.webp"
+            ? getImgPath("cursors/cursor-hover-w.svg")
+            : getImgPath("cursors/cursor.webp")
         }
         alt="Spirit Cursor"
         width={60}

@@ -8,6 +8,7 @@ import {
   COVER_SESSION1_CONFIG,
   COVER_SESSION1_ITEMS,
 } from "@/app/data/cover_session1.data";
+import { getAudioUrl } from "@/utils/cloudinaryUtils";
 import { useAudio } from "../contexts/AudioContext";
 import { useUI } from "../contexts/UIStarContext";
 import S6_1 from "./s6_1";
@@ -45,7 +46,7 @@ export default function SessionLovePage() {
 
   useEffect(() => {
     if (!isMuted) {
-      setBgMusic("/assets/Sound/6/majestic-sky.mp3");
+      setBgMusic(getAudioUrl("Sound/6/majestic-sky.mp3"));
     }
   }, [setBgMusic, isMuted]);
 

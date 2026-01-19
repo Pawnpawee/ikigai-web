@@ -8,7 +8,6 @@ import {
 } from "framer-motion";
 import { useMemo, useRef } from "react";
 import { HiCheck } from "react-icons/hi";
-
 import InputButton from "@/app/components/button/InputButton";
 import LazyLottie from "@/app/components/reusable/LazyLottie";
 import MysteriousText from "@/app/components/reusable/MysteriousText";
@@ -18,6 +17,7 @@ import SceneLayer, {
 import { useAudio } from "@/app/contexts/AudioContext";
 import { SCENE_INTODARK_1_ITEMS } from "@/app/data/scene_intoDark_1";
 import { useDeviceCheck } from "@/app/hooks/useDeviceCheck";
+import { getAudioUrl, getJsonUrl } from "@/utils/cloudinaryUtils";
 
 interface NameInputProps {
   scrollYProgress: MotionValue<number>;
@@ -52,12 +52,12 @@ export default function IntoDarkNameInput({
   const opacity = useTransform(
     scrollYProgress,
     [0, 0.006, 0.153, 0.167],
-    [0, 1, 1, 0],
+    [0, 1, 1, 0]
   );
   const zIndex = useTransform(
     scrollYProgress,
     [0, 0.006, 0.166, 0.167],
-    [10, 10, 10, -1],
+    [10, 10, 10, -1]
   );
 
   // ชุด 1: Background Gradient + Little star 2 (0-25vh = 0-0.014)
@@ -67,49 +67,49 @@ export default function IntoDarkNameInput({
   const set2Opacity = useTransform(
     scrollYProgress,
     [0.014, 0.021, 0.028],
-    [0, 1, 1],
+    [0, 1, 1]
   );
 
   // ชุด 3: Star line 1 (50-75vh = 0.028-0.042) - รอชุด 2 opacity = 1
   const set3Opacity = useTransform(
     scrollYProgress,
     [0.028, 0.035, 0.042],
-    [0, 1, 1],
+    [0, 1, 1]
   );
 
   // ชุด 4: Star line 3 + Little star 1 + Cat (75-175vh = 0.042-0.097) - รอชุด 3 opacity = 1
   const set4Opacity = useTransform(
     scrollYProgress,
     [0.042, 0.049, 0.097],
-    [0, 1, 1],
+    [0, 1, 1]
   );
 
   // Cat floating down animation
   const catY = useTransform(
     scrollYProgress,
     [0.042, 0.103, 0.125],
-    [-100, 10, 0],
+    [-100, 10, 0]
   );
 
   // ชุด 5: ข้อความ + Water (175-225vh = 0.097-0.125) - 50vh - รอชุด 4 opacity = 1
   const textOpacity = useTransform(
     scrollYProgress,
     [0.097, 0.111, 0.125],
-    [0, 1, 1],
+    [0, 1, 1]
   );
 
   // Water bounce animation (scale) - ย้ายมาชุด 5
   const waterScale = useTransform(
     scrollYProgress,
     [0.097, 0.103, 0.111, 0.118, 0.125],
-    [0, 1.3, 0.9, 1.1, 1],
+    [0, 1.3, 0.9, 1.1, 1]
   );
 
   // ชุด 6: Input box (225-275vh = 0.125-0.153) - 50vh - รอชุด 5 opacity = 1
   const inputOpacity = useTransform(
     scrollYProgress,
     [0.125, 0.139, 0.153],
-    [0, 1, 1],
+    [0, 1, 1]
   );
 
   //? Animation Map - matches animGroup in scene_intoDark_1.data.ts
@@ -121,13 +121,13 @@ export default function IntoDarkNameInput({
       4: { opacity: set4Opacity, y: catY },
       5: { opacity: textOpacity },
     }),
-    [bgOpacity, set2Opacity, set3Opacity, set4Opacity, catY, textOpacity],
+    [bgOpacity, set2Opacity, set3Opacity, set4Opacity, catY, textOpacity]
   );
 
   //? เล่นเสียงแมวเมื่อแมวโผล่มา (set4Opacity > 0.5)
   useMotionValueEvent(set4Opacity, "change", (latest) => {
     if (latest >= 0.5 && !hasPlayedCatSound.current) {
-      playSfx("/assets/Sound/3-4/cat-meow.mp3");
+      playSfx(getAudioUrl("Sound/3-4/cat-meow.mp3"));
       hasPlayedCatSound.current = true;
     }
   });
@@ -170,7 +170,7 @@ export default function IntoDarkNameInput({
             }}
           >
             <LazyLottie
-              src="/assets/Scene/Scene5/01/s5-1-water.json"
+              src={getJsonUrl("Scene/Scene5/01/s5-1-water.json")}
               className="w-full h-full"
               loop
               playTrigger={textOpacity}
@@ -190,7 +190,7 @@ export default function IntoDarkNameInput({
             }}
           >
             <LazyLottie
-              src="/assets/Scene/Scene5/01/s5-1-cat-starline.json"
+              src={getJsonUrl("Scene/Scene5/01/s5-1-cat-starline.json")}
               className="w-full h-full"
               loop
               playTrigger={set4Opacity}

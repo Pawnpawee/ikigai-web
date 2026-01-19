@@ -1,3 +1,4 @@
+import { getImgPath } from "@/utils/cloudinaryUtils";
 import type { SceneItemData } from "../components/reusable/SceneLayer";
 
 export const REASONS = [
@@ -12,8 +13,8 @@ export const REASONS = [
 export const SCENE_INTODARK_2_ITEMS: SceneItemData[] = [
   {
     id: "bg-gradient-top",
-    src: "/assets/Scene/Scene5/02/bg gradient top.webp",
-    mobileSrc: "/assets/Scene/Scene5/02/bg gradient top mobile.webp",
+    src: getImgPath("Scene/Scene5/02/bg gradient top.webp"),
+    mobileSrc: getImgPath("Scene/Scene5/02/bg gradient top mobile.webp"),
     alt: "Background gradient",
     style: {
       left: "-11.30%",
@@ -33,8 +34,8 @@ export const SCENE_INTODARK_2_ITEMS: SceneItemData[] = [
 
   {
     id: "bg-gradient-bottom",
-    src: "/assets/Scene/Scene5/02/bg gradient bottom.webp",
-    mobileSrc: "/assets/Scene/Scene5/02/bg gradient bottom mobile.webp",
+    src: getImgPath("Scene/Scene5/02/bg gradient bottom.webp"),
+    mobileSrc: getImgPath("Scene/Scene5/02/bg gradient bottom mobile.webp"),
     alt: "Background gradient",
     style: {
       left: "0",
@@ -52,8 +53,8 @@ export const SCENE_INTODARK_2_ITEMS: SceneItemData[] = [
   },
   {
     id: "little-star",
-    src: "/assets/Scene/Scene5/02/little star.webp",
-    mobileSrc: "/assets/Scene/Scene5/02/little star mobile.webp",
+    src: getImgPath("Scene/Scene5/02/little star.webp"),
+    mobileSrc: getImgPath("Scene/Scene5/02/little star mobile.webp"),
     alt: "Little Star",
     style: {
       right: "5.49%",

@@ -1,9 +1,10 @@
+import { getImgPath } from "@/utils/cloudinaryUtils";
 import type { SceneItemData } from "../components/reusable/SceneLayer";
 
 export const SCENE_DREAMING_ITEMS: SceneItemData[] = [
   {
     id: "desert1",
-    src: "/assets/Scene/Scene3/desert1.webp",
+    src: getImgPath("Scene/Scene3/desert1.webp"),
     alt: "desert1",
     style: { bottom: "0%", left: "0%", width: "100%", height: "46.8%" },
     sizes: "100vw",
@@ -11,7 +12,7 @@ export const SCENE_DREAMING_ITEMS: SceneItemData[] = [
   },
   {
     id: "desert2",
-    src: "/assets/Scene/Scene3/desert2.webp",
+    src: getImgPath("Scene/Scene3/desert2.webp"),
     alt: "desert2",
     style: {
       bottom: "23.2%",
@@ -24,7 +25,7 @@ export const SCENE_DREAMING_ITEMS: SceneItemData[] = [
   },
   {
     id: "desert3",
-    src: "/assets/Scene/Scene3/desert3.webp",
+    src: getImgPath("Scene/Scene3/desert3.webp"),
     alt: "desert3",
     style: { bottom: "0%", left: "0%", width: "100%", height: "32.4%" },
     sizes: "100vw",

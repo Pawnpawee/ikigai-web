@@ -9,6 +9,7 @@ import {
   useRef,
   useState,
 } from "react";
+import { getAudioUrl } from "@/utils/cloudinaryUtils";
 
 interface AudioContextType {
   // State
@@ -52,7 +53,7 @@ export function AudioProvider({ children }: { children: React.ReactNode }) {
         console.error("Save settings failed", e);
       }
     },
-    [],
+    []
   );
 
   // --- Initialization ---
@@ -90,7 +91,7 @@ export function AudioProvider({ children }: { children: React.ReactNode }) {
     }
 
     const timer = setTimeout(() => {
-      const defaultBgMusic = "/assets/Sound/bg-music.mp3";
+      const defaultBgMusic = getAudioUrl("Sound/bg-music.mp3");
 
       const bgSound = new Howl({
         src: [defaultBgMusic],
@@ -207,7 +208,7 @@ export function AudioProvider({ children }: { children: React.ReactNode }) {
         console.error("Failed to play SFX:", error);
       }
     },
-    [sfxVolume],
+    [sfxVolume]
   );
 
   //? หยุดเสียง SFX ทั้งหมดที่กำลังเล่นอยู่

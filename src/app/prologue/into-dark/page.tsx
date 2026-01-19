@@ -3,6 +3,7 @@
 import { useEffect, useLayoutEffect } from "react";
 
 import { useAudio } from "@/app/contexts/AudioContext";
+import { getAudioUrl } from "@/utils/cloudinaryUtils";
 
 import IntoDark from "./IntoDark";
 
@@ -18,7 +19,7 @@ export default function IntoDarkPage() {
 
   useEffect(() => {
     if (!isMuted) {
-      setBgMusic("/assets/Sound/5/mysterious-dark-background.mp3");
+      setBgMusic(getAudioUrl("Sound/5/mysterious-dark-background.mp3"));
     }
   }, [setBgMusic, isMuted]);
 

@@ -1,6 +1,7 @@
 "use client";
 import { m } from "framer-motion";
 import Image from "next/image";
+import { getImgPath } from "@/utils/cloudinaryUtils";
 
 interface WelcomeSoundModalProps {
   isOpen: boolean;
@@ -46,7 +47,7 @@ export default function WelcomeSoundModal({
                 className="bg-[#515c64] rounded-full px-2.5 md:px-5 py-3 md:py-6 flex items-center justify-center"
               >
                 <Image
-                  src="/assets/Icon/unmute_icon.webp"
+                  src={getImgPath("Icon/unmute_icon.webp")}
                   alt="Sound icon"
                   width={52}
                   height={43}

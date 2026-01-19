@@ -16,6 +16,7 @@ import SceneLayer, {
 } from "@/app/components/reusable/SceneLayer";
 import { ACTIVITIES, SCENE_S6_1_ITEMS } from "@/app/data/scene_s6_1.data";
 import { useDeviceCheck } from "@/app/hooks/useDeviceCheck";
+import { getJsonUrl } from "@/utils/cloudinaryUtils";
 import GradientButton from "../components/button/GradientButton";
 import LazyLottie from "../components/reusable/LazyLottie";
 
@@ -50,12 +51,12 @@ export default function S6_1({
   const opacity = useTransform(
     scrollYProgress,
     [0, 0.05, 0.985, 1],
-    [0, 1, 1, 0],
+    [0, 1, 1, 0]
   );
   const zIndex = useTransform(
     scrollYProgress,
     [0, 0.049, 0.05, 0.95, 0.951],
-    [-1, -1, 10, 10, -1],
+    [-1, -1, 10, 10, -1]
   );
 
   // 1. bg + animation (0-0.1)
@@ -120,7 +121,7 @@ export default function S6_1({
       leaveY,
       paperOpacity,
       paperScale,
-    ],
+    ]
   );
 
   //? Handlers
@@ -165,7 +166,7 @@ export default function S6_1({
     // ตรวจสอบว่าซ้ำกับ custom activities ที่มีอยู่แล้วหรือไม่
     if (
       customActivities.some(
-        (act) => act.toLowerCase() === inputValue.trim().toLowerCase(),
+        (act) => act.toLowerCase() === inputValue.trim().toLowerCase()
       )
     ) {
       setActivitiesError("กิจกรรมนี้มีอยู่แล้ว");
@@ -176,7 +177,7 @@ export default function S6_1({
     if (
       ACTIVITIES.some(
         (act: { label: string }) =>
-          act.label.toLowerCase() === inputValue.trim().toLowerCase(),
+          act.label.toLowerCase() === inputValue.trim().toLowerCase()
       )
     ) {
       setActivitiesError("กิจกรรมนี้มีอยู่ในตัวเลือกแล้ว");
@@ -238,7 +239,7 @@ export default function S6_1({
 
     // กรองเฉพาะอันที่ยังไม่ได้เลือก แล้วลดออกตามจำนวน custom
     const unselectedCount = ACTIVITIES.filter(
-      (act: { id: number }) => !selectedActivities.includes(act.id),
+      (act: { id: number }) => !selectedActivities.includes(act.id)
     ).length;
 
     const itemsToRemove = customActivities.length;
@@ -250,7 +251,7 @@ export default function S6_1({
 
       // นับ index ของอันที่ไม่ได้เลือกในรายการทั้งหมด
       const unselectedIndex = ACTIVITIES.slice(0, index + 1).filter(
-        (a: { id: number }) => !selectedActivities.includes(a.id),
+        (a: { id: number }) => !selectedActivities.includes(a.id)
       ).length;
 
       // แสดงถ้ายังไม่เกินจำนวนที่ต้องซ่อน
@@ -261,7 +262,7 @@ export default function S6_1({
   const top = useTransform(
     scrollYProgress,
     [0, 0.3, 0.6, 0.8, 1],
-    ["0vh", "-30vh", "-50vh", "-80vh", "-100vh"],
+    ["0vh", "-30vh", "-50vh", "-80vh", "-100vh"]
   );
 
   return (
@@ -288,7 +289,7 @@ export default function S6_1({
               }}
             >
               <LazyLottie
-                src="/assets/Scene/Scene6/02/s6-2 mobile.json"
+                src={getJsonUrl("Scene/Scene6/02/s6-2 mobile.json")}
                 className="w-full h-full"
                 loop
                 playTrigger={bgOpacity}
@@ -308,7 +309,7 @@ export default function S6_1({
               }}
             >
               <LazyLottie
-                src="/assets/Scene/Scene6/02/s6-2.json"
+                src={getJsonUrl("Scene/Scene6/02/s6-2.json")}
                 className="w-full h-full"
                 loop
                 playTrigger={bgOpacity}
@@ -409,14 +410,14 @@ export default function S6_1({
                                 key={activity.id}
                                 text={activity.label}
                                 isSelected={selectedActivities.includes(
-                                  activity.id,
+                                  activity.id
                                 )}
                                 onClick={() =>
                                   handleActivityToggle(activity.id)
                                 }
                                 className="px-5 py-3 text-2xl"
                               />
-                            ),
+                            )
                           )}
 
                           {/* Custom Activities Display */}
@@ -427,7 +428,7 @@ export default function S6_1({
                               isSelected={true}
                               onClick={() => {
                                 setCustomActivities((prev) =>
-                                  prev.filter((a) => a !== activity),
+                                  prev.filter((a) => a !== activity)
                                 );
                               }}
                               className="px-5 py-3 text-2xl"
@@ -478,7 +479,7 @@ export default function S6_1({
                           {/* Step 2: แสดงเฉพาะ 5 อันที่เลือกจาก Step 1 */}
                           {selectedActivities.map((id) => {
                             const activity = ACTIVITIES.find(
-                              (act: { id: number }) => act.id === id,
+                              (act: { id: number }) => act.id === id
                             );
                             if (!activity) return null;
                             return (
@@ -486,7 +487,7 @@ export default function S6_1({
                                 key={activity.id}
                                 text={activity.label}
                                 isSelected={secondStepSelection.includes(
-                                  activity.label,
+                                  activity.label
                                 )}
                                 onClick={() =>
                                   handleSecondStepToggle(activity.label)
@@ -501,7 +502,7 @@ export default function S6_1({
                               key={`step2-${activity}`}
                               text={activity}
                               isSelected={secondStepSelection.includes(
-                                activity,
+                                activity
                               )}
                               onClick={() => handleSecondStepToggle(activity)}
                               className="px-5 py-3"
@@ -657,14 +658,14 @@ export default function S6_1({
                                 key={activity.id}
                                 text={activity.label}
                                 isSelected={selectedActivities.includes(
-                                  activity.id,
+                                  activity.id
                                 )}
                                 onClick={() =>
                                   handleActivityToggle(activity.id)
                                 }
                                 className="px-1 md:px-5 py-0 md:py-3 w-26 md:w-auto h-12 md:h-auto text-sm md:text-2xl lg:text-3xl"
                               />
-                            ),
+                            )
                           )}
 
                           {/* Custom Activities Display */}
@@ -675,7 +676,7 @@ export default function S6_1({
                               isSelected={true}
                               onClick={() => {
                                 setCustomActivities((prev) =>
-                                  prev.filter((a) => a !== activity),
+                                  prev.filter((a) => a !== activity)
                                 );
                               }}
                               className="px-1 md:px-5 py-0 md:py-3 w-26 md:w-auto h-12 md:h-auto text-sm md:text-2xl lg:text-3xl"
@@ -727,7 +728,7 @@ export default function S6_1({
                           {/* Step 2: แสดงเฉพาะ 5 อันที่เลือกจาก Step 1 */}
                           {selectedActivities.map((id) => {
                             const activity = ACTIVITIES.find(
-                              (act: { id: number }) => act.id === id,
+                              (act: { id: number }) => act.id === id
                             );
                             if (!activity) return null;
                             return (
@@ -735,7 +736,7 @@ export default function S6_1({
                                 key={activity.id}
                                 text={activity.label}
                                 isSelected={secondStepSelection.includes(
-                                  activity.label,
+                                  activity.label
                                 )}
                                 onClick={() =>
                                   handleSecondStepToggle(activity.label)
@@ -750,7 +751,7 @@ export default function S6_1({
                               key={`step2-${activity}`}
                               text={activity}
                               isSelected={secondStepSelection.includes(
-                                activity,
+                                activity
                               )}
                               onClick={() => handleSecondStepToggle(activity)}
                               className="px-1 md:px-5 py-0 md:py-3 w-26 md:w-auto h-12 md:h-auto text-sm md:text-2xl lg:text-3xl"

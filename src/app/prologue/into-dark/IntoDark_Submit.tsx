@@ -11,6 +11,7 @@ import SceneLayer, {
 } from "@/app/components/reusable/SceneLayer";
 import { SCENE_INTODARK_4_ITEMS } from "@/app/data/scene_intoDark_4";
 import { useDeviceCheck } from "@/app/hooks/useDeviceCheck";
+import { getImgPath, getJsonUrl } from "@/utils/cloudinaryUtils";
 
 interface SubmitProps {
   scrollYProgress: MotionValue<number>;
@@ -28,7 +29,7 @@ export default function IntoDarkSubmit({
   const zIndex = useTransform(
     scrollYProgress,
     [0, 0.666, 0.668, 1.0],
-    [-1, -1, 10, 10],
+    [-1, -1, 10, 10]
   );
 
   // ชุด 1: Cat animation (0.667-0.676)
@@ -45,7 +46,7 @@ export default function IntoDarkSubmit({
   const circle1_rotate = useTransform(
     scrollYProgress,
     [0.676, 0.73],
-    [0, -180],
+    [0, -180]
   ); // Love - Top
   const circle2_rotate = useTransform(scrollYProgress, [0.676, 0.73], [0, 90]); // Skill - Left
   const circle3_rotate = useTransform(scrollYProgress, [0.676, 0.73], [90, 0]); // Paid - Bottom
@@ -83,13 +84,13 @@ export default function IntoDarkSubmit({
       2: { opacity: catOpacity, y: catY },
       3: { opacity: cloudOpacity },
     }),
-    [bgOpacity, catOpacity, catY, cloudOpacity],
+    [bgOpacity, catOpacity, catY, cloudOpacity]
   );
 
   const top = useTransform(
     scrollYProgress,
     [0.667, 0.7, 1],
-    ["0vh", "-50vh", "-100vh"],
+    ["0vh", "-50vh", "-100vh"]
   );
 
   return (
@@ -119,7 +120,7 @@ export default function IntoDarkSubmit({
             }}
           >
             <LazyLottie
-              src="/assets/Scene/Scene5/04/s5-4-cat-starline.json"
+              src={getJsonUrl("Scene/Scene5/04/s5-4-cat-starline.json")}
               className="w-full h-full"
               loop
               playTrigger={catOpacity}
@@ -150,8 +151,8 @@ export default function IntoDarkSubmit({
                 {/* World Circle - Top Right */}
                 <IkigaiCircle
                   className="scale-50 md:scale-80 lg:scale-100"
-                  imageSrc="/assets/Scene/Hero/world-circle.webp"
-                  iconSrc="/assets/Icon/world.webp"
+                  imageSrc={getImgPath("Scene/Hero/world-circle.webp")}
+                  iconSrc={getImgPath("Icon/world.webp")}
                   text={"สิ่งที่\nโลกต้องการ"}
                   rotateValue={circle4_rotate}
                   initialAnimation={{
@@ -169,8 +170,8 @@ export default function IntoDarkSubmit({
                 {/* Paid Circle - Bottom */}
                 <IkigaiCircle
                   className="scale-50 md:scale-80 lg:scale-100"
-                  imageSrc="/assets/Scene/Hero/paid-circle.webp"
-                  iconSrc="/assets/Icon/paid.webp"
+                  imageSrc={getImgPath("Scene/Hero/paid-circle.webp")}
+                  iconSrc={getImgPath("Icon/paid.webp")}
                   text="สิ่งที่ทำให้เกิดรายได้"
                   rotateValue={circle3_rotate}
                   initialAnimation={{
@@ -188,8 +189,8 @@ export default function IntoDarkSubmit({
                 {/* Skill Circle - Left */}
                 <IkigaiCircle
                   className="scale-50 md:scale-80 lg:scale-100"
-                  imageSrc="/assets/Scene/Hero/skill-circle.webp"
-                  iconSrc="/assets/Icon/skill.webp"
+                  imageSrc={getImgPath("Scene/Hero/skill-circle.webp")}
+                  iconSrc={getImgPath("Icon/skill.webp")}
                   text={"สิ่งที่\nเราถนัด"}
                   rotateValue={circle2_rotate}
                   initialAnimation={{
@@ -207,8 +208,8 @@ export default function IntoDarkSubmit({
                 {/* Love Circle - Top */}
                 <IkigaiCircle
                   className="scale-50 md:scale-80 lg:scale-100"
-                  imageSrc="/assets/Scene/Hero/love-circle.webp"
-                  iconSrc="/assets/Icon/love.webp"
+                  imageSrc={getImgPath("Scene/Hero/love-circle.webp")}
+                  iconSrc={getImgPath("Icon/love.webp")}
                   text="สิ่งที่เรารัก"
                   rotateValue={circle1_rotate}
                   initialAnimation={{
