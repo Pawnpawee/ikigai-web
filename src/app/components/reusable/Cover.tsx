@@ -3,7 +3,6 @@
 import {
   type MotionValue,
   m,
-  useMotionValueEvent,
   useTransform,
 } from "framer-motion";
 import Image from "next/image";
