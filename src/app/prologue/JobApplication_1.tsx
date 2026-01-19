@@ -19,7 +19,7 @@ export default function JobApplication1({
   const opacity = useTransform(
     scrollYProgress,
     [0, 0.611, 0.611, 1],
-    [1, 1, 0, 0]
+    [1, 1, 0, 0],
   );
 
   // Light
@@ -30,99 +30,99 @@ export default function JobApplication1({
   const poster1Opacity = useTransform(
     scrollYProgress,
     [0, 0.033, 1],
-    [0, 1, 1]
+    [0, 1, 1],
   );
 
   const poster2Y = useTransform(
     scrollYProgress,
     [0.033, 0.066, 1],
-    [100, 0, 0]
+    [100, 0, 0],
   );
   const poster2Opacity = useTransform(
     scrollYProgress,
     [0.033, 0.066, 1],
-    [0, 1, 1]
+    [0, 1, 1],
   );
 
   const poster3Y = useTransform(
     scrollYProgress,
     [0.066, 0.099, 1],
-    [100, 0, 0]
+    [100, 0, 0],
   );
   const poster3Opacity = useTransform(
     scrollYProgress,
     [0.066, 0.099, 1],
-    [0, 1, 1]
+    [0, 1, 1],
   );
 
   const poster4Y = useTransform(
     scrollYProgress,
     [0.099, 0.132, 1],
-    [100, 0, 0]
+    [100, 0, 0],
   );
   const poster4Opacity = useTransform(
     scrollYProgress,
     [0.099, 0.132, 1],
-    [0, 1, 1]
+    [0, 1, 1],
   );
 
   const poster5Y = useTransform(
     scrollYProgress,
     [0.132, 0.167, 1],
-    [100, 0, 0]
+    [100, 0, 0],
   );
   const poster5Opacity = useTransform(
     scrollYProgress,
     [0.132, 0.167, 1],
-    [0, 1, 1]
+    [0, 1, 1],
   );
 
   const tableY = useTransform(scrollYProgress, [0.278, 0.305, 1], [100, 0, 0]);
   const tableOpacity = useTransform(
     scrollYProgress,
     [0.278, 0.305, 1],
-    [0, 1, 1]
+    [0, 1, 1],
   );
 
   const computerY = useTransform(
     scrollYProgress,
     [0.305, 0.333, 1],
-    [100, 0, 0]
+    [100, 0, 0],
   );
   const computerOpacity = useTransform(
     scrollYProgress,
     [0.305, 0.333, 1],
-    [0, 1, 1]
+    [0, 1, 1],
   );
 
   const set1Y = useTransform(scrollYProgress, [0.35, 0.367, 1], [100, 0, 0]);
   const set1Opacity = useTransform(
     scrollYProgress,
     [0.35, 0.367, 1],
-    [0, 1, 1]
+    [0, 1, 1],
   );
 
   const set2Y = useTransform(scrollYProgress, [0.367, 0.389, 1], [100, 0, 0]);
   const set2Opacity = useTransform(
     scrollYProgress,
     [0.367, 0.389, 1],
-    [0, 1, 1]
+    [0, 1, 1],
   );
 
   const humanY = useTransform(
     scrollYProgress,
     [0.389, 0.417, 0.43, 0.444],
-    [100, 0, -5, 0]
+    [100, 0, -5, 0],
   );
   const humanOp = useTransform(
     scrollYProgress,
     [0.389, 0.444, 0.99, 1],
-    [0, 1, 1, 0]
+    [0, 1, 1, 0],
   );
   const humanScale = useTransform(
     scrollYProgress,
     [0.389, 0.417, 0.43, 0.444],
-    [0.95, 1, 1.02, 1]
+    [0.95, 1, 1.02, 1],
   );
 
   //? Animation Map - matches animGroup in scene_job_1.data.ts
@@ -159,7 +159,7 @@ export default function JobApplication1({
       set2Y,
       set2Opacity,
       lightOp,
-    ]
+    ],
   );
 
   return (

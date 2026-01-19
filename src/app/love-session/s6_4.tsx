@@ -47,14 +47,14 @@ export default function S6_4({ scrollYProgress }: S6_4Props) {
   const groundOpacity = useTransform(
     scrollYProgress,
     [0, 0.036, 0.071],
-    [0, 1, 1]
+    [0, 1, 1],
   );
 
   //? Group 2: Tree back + Tree + Leaves (50-100vh = 0.071-0.143)
   const treeOpacity = useTransform(
     scrollYProgress,
     [0.071, 0.107, 0.143],
-    [0, 1, 1]
+    [0, 1, 1],
   );
 
   //? Tree slide left animation - single loop: slide out left, reset from right, back to center
@@ -62,21 +62,21 @@ export default function S6_4({ scrollYProgress }: S6_4Props) {
   const treeX = useTransform(
     scrollYProgress,
     [0.286, 0.52, 0.52, 0.75, 0.9],
-    isMobile ? [500, -2000, 2000, 500, -2000] : [0, -1950, 1950, 0, -1950]
+    isMobile ? [500, -2000, 2000, 500, -2000] : [0, -1950, 1950, 0, -1950],
   );
 
   //? Tree subtle vertical movement (bounce effect while walking)
   const treeY = useTransform(
     scrollYProgress,
     [0.286, 0.52, 0.52, 0.75, 0.9],
-    [0, 100, 100, 0, 100]
+    [0, 100, 100, 0, 100],
   );
 
   //? Group 2: Tree back + Tree + Leaves (50-100vh = 0.071-0.143)
   const tree2Opacity = useTransform(
     scrollYProgress,
     [0.071, 0.107, 0.143],
-    [0, 1, 1]
+    [0, 1, 1],
   );
 
   //? Tree slide left animation - single loop: slide out left, reset from right, back to center
@@ -84,28 +84,28 @@ export default function S6_4({ scrollYProgress }: S6_4Props) {
   const tree2X = useTransform(
     scrollYProgress,
     [0.286, 0.52, 0.75, 0.75, 0.9],
-    isMobile ? [2000, 500, -2000, 2000, 0] : [1920, 0, -1920, 1920, 0]
+    isMobile ? [2000, 500, -2000, 2000, 0] : [1920, 0, -1920, 1920, 0],
   );
 
   //? Tree subtle vertical movement (bounce effect while walking)
   const tree2Y = useTransform(
     scrollYProgress,
     [0.286, 0.52, 0.75, 0.75, 0.9],
-    [100, 0, 100, 100, 0]
+    [100, 0, 100, 100, 0],
   );
 
   //? Group 3: Cat-Human (100-200vh = 0.143-0.286)
   const catHumanOpacity = useTransform(
     scrollYProgress,
     [0.143, 0.214, 0.286],
-    [0, 1, 1]
+    [0, 1, 1],
   );
 
   //? Group 4: Text + Choice buttons (350-550vh = 0.5-0.785)
   const textOpacity = useTransform(
     scrollYProgress,
     [0.5, 0.643, 0.785],
-    [0, 1, 1]
+    [0, 1, 1],
   );
 
   //? Continue button opacity (appears after choice selected)
@@ -133,7 +133,7 @@ export default function S6_4({ scrollYProgress }: S6_4Props) {
       tree2X,
       tree2Y,
       catHumanOpacity,
-    ]
+    ],
   );
 
   //? Play walking sound when cat-human appears

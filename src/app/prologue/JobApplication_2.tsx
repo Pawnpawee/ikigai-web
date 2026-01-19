@@ -21,55 +21,55 @@ export default function JobApplication2({
   const x = useTransform(
     scrollYProgress,
     [0, 0.611, 0.75],
-    ["0%", "0%", `${isMobile ? "-65%" : "-49.5%"}`]
+    ["0%", "0%", `${isMobile ? "-65%" : "-49.5%"}`],
   );
 
   const opacity = useTransform(
     scrollYProgress,
     [0, 0.611, 0.611, 0.97, 1],
-    [0, 0, 1, 1, 0]
+    [0, 0, 1, 1, 0],
   );
 
   const windowY = useTransform(scrollYProgress, [0.722, 0.755, 1], [100, 0, 0]);
   const windowOpacity = useTransform(
     scrollYProgress,
     [0.722, 0.755, 1],
-    [0, 1, 1]
+    [0, 1, 1],
   );
 
   const lightWindowOpacity = useTransform(
     scrollYProgress,
     [0.755, 0.789, 1],
-    [0, 1, 1]
+    [0, 1, 1],
   );
 
   const building2Y = useTransform(
     scrollYProgress,
     [0.833, 0.867, 1],
-    [100, 0, 0]
+    [100, 0, 0],
   );
   const building2Opacity = useTransform(
     scrollYProgress,
     [0.833, 0.867, 1],
-    [0, 1, 1]
+    [0, 1, 1],
   );
 
   const building1Y = useTransform(
     scrollYProgress,
     [0.867, 0.9, 1],
-    [100, 0, 0]
+    [100, 0, 0],
   );
   const building1Opacity = useTransform(
     scrollYProgress,
     [0.867, 0.9, 1],
-    [0, 1, 1]
+    [0, 1, 1],
   );
 
   const moonY = useTransform(scrollYProgress, [0.9, 0.944, 1], [100, 0, 0]);
   const moonOpacity = useTransform(
     scrollYProgress,
     [0.9, 0.944, 0.99, 1],
-    [0, 1, 1, 0]
+    [0, 1, 1, 0],
   );
 
   //? AnimationMap must match animGroup values in scene_job_2.data.ts (16 items)
@@ -88,7 +88,7 @@ export default function JobApplication2({
       building2Opacity,
       building1Y,
       building1Opacity,
-    ]
+    ],
   );
 
   return (
