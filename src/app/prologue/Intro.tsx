@@ -1,10 +1,10 @@
 "use client";
-import { m, useMotionValueEvent, useScroll, useTransform } from "framer-motion";
+import { m, useScroll, useTransform } from "framer-motion";
 import Image from "next/image";
 import { useRef } from "react";
 import { getImgPath } from "@/utils/cloudinaryUtils";
 import WordByWordAnimation from "../components/text/WordByWordAnimation";
-import { useUI } from "../contexts/UIStarContext";
+import { useStarsVisibility } from "../hooks/useStarsVisibility";
 
 const INTRO_TEXT = `คำถามอิคิไกทั้งสี่ข้อ — "สิ่งที่รัก, สิ่งที่ถนัด, สิ่งที่โลกต้องการ และ สิ่งที่สร้างรายได้” 
 เป็นเพียงเครื่องมือการสำรวจเพื่อช่วยให้คุณสะท้อนตัวเอง ซึ่งเป็นภาพ ณ ตอนนี้เท่านั้น 
@@ -14,7 +14,6 @@ const INTRO_TEXT = `คำถามอิคิไกทั้งสี่ข้
 
 export default function Intro() {
   const ref = useRef<HTMLDivElement>(null);
-  const { setShowStars } = useUI();
 
   const { scrollYProgress } = useScroll({
     target: ref,
@@ -26,20 +25,20 @@ export default function Intro() {
   const scrollToOpacity = useTransform(
     scrollYProgress,
     [0, 0.05, 0.9, 1],
-    [0, 1, 1, 0]
+    [0, 1, 1, 0],
   );
 
   const zIndex = useTransform(
     scrollYProgress,
     [0, 0.1, 0.9, 1],
-    [-1, 10, 10, -1]
+    [-1, 10, 10, -1],
   );
 
   const starOpacity = useTransform(scrollYProgress, [0.04, 0.08], [1, 0]);
   const starScale = useTransform(
     scrollYProgress,
     [0.04, 0.1, 0.11],
-    [1.5, 8, 1.5]
+    [1.5, 8, 1.5],
   );
   const starRotate = useTransform(scrollYProgress, [0.04, 0.1], [0, 180]);
 
@@ -48,21 +47,18 @@ export default function Intro() {
   const introBlur = useTransform(
     scrollYProgress,
     [0.07, 0.1],
-    ["blur(12px)", "blur(0px)"]
+    ["blur(12px)", "blur(0px)"],
   );
 
   const introGlow = useTransform(
     scrollYProgress,
     [0.07, 0.12],
-    ["0px 0px 0px rgba(255,255,255,0)", "0px 0px 10px rgba(255,255,255,0.6)"]
+    ["0px 0px 0px rgba(255,255,255,0)", "0px 0px 10px rgba(255,255,255,0.6)"],
   );
 
-  useMotionValueEvent(scrollYProgress, "change", (latest) => {
-    const isIntroVisible = latest < 1;
-
-    if (isIntroVisible) {
-      setShowStars(true);
-    }
+  //? ใช้ Hook สำหรับจัดการ Stars visibility
+  useStarsVisibility(scrollYProgress, {
+    shouldShow: (p) => p < 1,
   });
 
   return (

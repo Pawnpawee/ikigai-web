@@ -13,8 +13,8 @@ export const REASONS = [
 export const SCENE_INTODARK_2_ITEMS: SceneItemData[] = [
   {
     id: "bg-gradient-top",
-    src: getImgPath("Scene/Scene5/02/bg gradient top.webp"),
-    mobileSrc: getImgPath("Scene/Scene5/02/bg gradient top mobile.webp"),
+    src: getImgPath("Scene/Scene5/02/bg_gradient_top.webp"),
+    mobileSrc: getImgPath("Scene/Scene5/02/bg_gradient_top_mobile.webp"),
     alt: "Background gradient",
     style: {
       left: "-11.30%",
@@ -34,8 +34,8 @@ export const SCENE_INTODARK_2_ITEMS: SceneItemData[] = [
 
   {
     id: "bg-gradient-bottom",
-    src: getImgPath("Scene/Scene5/02/bg gradient bottom.webp"),
-    mobileSrc: getImgPath("Scene/Scene5/02/bg gradient bottom mobile.webp"),
+    src: getImgPath("Scene/Scene5/02/bg_gradient_bottom.webp"),
+    mobileSrc: getImgPath("Scene/Scene5/02/bg_gradient_bottom_mobile.webp"),
     alt: "Background gradient",
     style: {
       left: "0",
@@ -53,8 +53,8 @@ export const SCENE_INTODARK_2_ITEMS: SceneItemData[] = [
   },
   {
     id: "little-star",
-    src: getImgPath("Scene/Scene5/02/little star.webp"),
-    mobileSrc: getImgPath("Scene/Scene5/02/little star mobile.webp"),
+    src: getImgPath("Scene/Scene5/02/little_star.webp"),
+    mobileSrc: getImgPath("Scene/Scene5/02/little_star_mobile.webp"),
     alt: "Little Star",
     style: {
       right: "5.49%",

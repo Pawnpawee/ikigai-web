@@ -1,7 +1,7 @@
 "use client";
 
 import type React from "react";
-import { createContext, useContext, useState } from "react";
+import { createContext, useContext, useMemo, useState } from "react";
 
 interface UIContextType {
   showStars: boolean;
@@ -13,11 +13,10 @@ const UIContext = createContext<UIContextType | undefined>(undefined);
 export const UIStarProvider = ({ children }: { children: React.ReactNode }) => {
   const [showStars, setShowStars] = useState(true);
 
-  return (
-    <UIContext.Provider value={{ showStars, setShowStars }}>
-      {children}
-    </UIContext.Provider>
-  );
+  //? Memoize Context Value เพื่อป้องกัน re-render ที่ไม่จำเป็น
+  const value = useMemo(() => ({ showStars, setShowStars }), [showStars]);
+
+  return <UIContext.Provider value={value}>{children}</UIContext.Provider>;
 };
 
 export const useUI = () => {

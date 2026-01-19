@@ -4,7 +4,7 @@ import type { SceneItemData } from "../components/reusable/SceneLayer";
 export const SCENE_INTODARK_4_ITEMS: SceneItemData[] = [
   {
     id: "bg-gradient",
-    src: getImgPath("Scene/Scene5/04/bg gradient.webp"),
+    src: getImgPath("Scene/Scene5/04/bg_gradient.webp"),
     mobileSrc: getImgPath("Scene/Scene5/04/bg gradient mobile.webp"),
     alt: "Background gradient",
     style: {
@@ -24,8 +24,8 @@ export const SCENE_INTODARK_4_ITEMS: SceneItemData[] = [
   },
   {
     id: "little-star",
-    src: getImgPath("Scene/Scene5/04/little star.webp"),
-    mobileSrc: getImgPath("Scene/Scene5/04/little star mobile.webp"),
+    src: getImgPath("Scene/Scene5/04/little_star.webp"),
+    mobileSrc: getImgPath("Scene/Scene5/04/little_star_mobile.webp"),
     alt: "Little Star",
     style: {
       width: "93.27%",

@@ -6,12 +6,7 @@
 // จะได้: /assets/Scene/Scene6/04/tree.webp (local) หรือ Cloudinary URL (ถ้ามี)
 export const getImgPath = (path: string) => {
   const cloudName = process.env.NEXT_PUBLIC_CLOUDINARY_CLOUD_NAME;
-  
-  //? Fallback: ใช้ local path ถ้ายังไม่ได้ตั้งค่า Cloudinary
-  if (!cloudName) {
-    return `/assets/${path}`;
-  }
-  
+
   //? Return Cloudinary URL สำหรับ production
   // Note: ต้อง upload รูปไปที่ folder assets ใน Cloudinary ก่อน
   return `https://res.cloudinary.com/${cloudName}/image/upload/assets/${path}`;
@@ -22,12 +17,6 @@ export const getImgPath = (path: string) => {
 // ตัวอย่าง: getJsonUrl("Scene/Hero/starry-bg.json")
 export const getJsonUrl = (path: string) => {
   const cloudName = process.env.NEXT_PUBLIC_CLOUDINARY_CLOUD_NAME;
-  
-  //? Fallback: ใช้ local path ถ้ายังไม่ได้ตั้งค่า Cloudinary
-  if (!cloudName) {
-    return `/assets/${path}`;
-  }
-  
   return `https://res.cloudinary.com/${cloudName}/raw/upload/v1/assets/${path}`;
 };
 
@@ -36,12 +25,7 @@ export const getJsonUrl = (path: string) => {
 // ตัวอย่าง: getAudioUrl("Sound/bg-music.mp3")
 export const getAudioUrl = (path: string) => {
   const cloudName = process.env.NEXT_PUBLIC_CLOUDINARY_CLOUD_NAME;
-  
-  //? Fallback: ใช้ local path ถ้ายังไม่ได้ตั้งค่า Cloudinary
-  if (!cloudName) {
-    return `/assets/${path}`;
-  }
-  
+
   // ไฟล์เสียงใน Cloudinary จะถูกมองเป็น video resource type
   return `https://res.cloudinary.com/${cloudName}/video/upload/v1/assets/${path}`;
 };

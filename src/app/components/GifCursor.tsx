@@ -3,7 +3,6 @@ import { m, useMotionValue } from "framer-motion";
 import Image from "next/image";
 import { useEffect, useState } from "react";
 import { useDevice } from "@/app/contexts/DeviceContext";
-import { getImgPath } from "@/utils/cloudinaryUtils";
 
 export default function GifCursor() {
   const { isMobile } = useDevice();
@@ -53,8 +52,8 @@ export default function GifCursor() {
       <Image
         src={
           isHover
-            ? getImgPath("cursors/cursor-hover-w.svg")
-            : getImgPath("cursors/cursor.webp")
+            ? "/assets/cursors/cursor-hover-w.svg"
+            : "/assets/cursors/cursor.webp"
         }
         alt="Spirit Cursor"
         width={60}

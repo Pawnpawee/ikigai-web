@@ -4,7 +4,7 @@ import type { SceneItemData } from "../components/reusable/SceneLayer";
 export const SCENE_INTODARK_1_ITEMS: SceneItemData[] = [
   {
     id: "bg-gradient",
-    src: getImgPath("Scene/Scene5/01/bg gradient.webp"),
+    src: getImgPath("Scene/Scene5/01/bg_gradient.webp"),
     alt: "Background gradient",
     style: {
       left: "-11.34%",

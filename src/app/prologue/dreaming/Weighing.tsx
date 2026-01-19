@@ -1,11 +1,5 @@
 "use client";
-import {
-  m,
-  useInView,
-  useMotionValueEvent,
-  useScroll,
-  useTransform,
-} from "framer-motion";
+import { m, useInView, useScroll, useTransform } from "framer-motion";
 import { Howl } from "howler";
 import { useEffect, useMemo, useRef } from "react";
 import EyelidOverlay from "@/app/components/reusable/EyeLidOverlay";
@@ -16,14 +10,13 @@ import SceneLayer, {
 import SubtitleScroll from "@/app/components/text/SubtitleScroll";
 import { useAudio } from "@/app/contexts/AudioContext";
 import { useDevice } from "@/app/contexts/DeviceContext";
-import { useUI } from "@/app/contexts/UIStarContext";
 import { SCENE_WEIGHING_ITEMS } from "@/app/data/scene_weighing.data";
+import { useStarsVisibility } from "@/app/hooks/useStarsVisibility";
 import { getAudioUrl, getJsonUrl } from "@/utils/cloudinaryUtils";
 
 export default function Weighing() {
   const ref = useRef<HTMLDivElement>(null);
   const isInView = useInView(ref, { once: false, amount: 0.1 });
-  const { setShowStars } = useUI();
 
   // ตรวจสอบ orientation โดยใช้ custom hook
   const { isMobile } = useDevice();
@@ -185,19 +178,19 @@ export default function Weighing() {
   const opacity = useTransform(
     scrollYProgress,
     [0, 0.05, 0.98, 1],
-    [0, 1, 1, 0]
+    [0, 1, 1, 0],
   );
 
   const insideOpacity = useTransform(
     scrollYProgress,
     [0, 0.05, 0.75, 0.8],
-    [0, 1, 1, 0]
+    [0, 1, 1, 0],
   );
 
   const ry = useTransform(
     scrollYProgress,
     [0, 0.05, 0.1, 0.15, 0.2, 0.25, 0.28],
-    [0, 0, 40, 0, 50, 0, 200]
+    [0, 0, 40, 0, 50, 0, 200],
   );
 
   // POV falling effect - extended to use additional 50vh (600-750vh = 0.6-0.75)
@@ -207,7 +200,7 @@ export default function Weighing() {
   const set4Opacity = useTransform(
     scrollYProgress,
     [0.2, 0.2667, 0.749, 0.78],
-    [0, 1, 1, 0]
+    [0, 1, 1, 0],
   );
   const set4Y = useTransform(scrollYProgress, [0.2, 0.2667], [100, 0]);
 
@@ -215,7 +208,7 @@ export default function Weighing() {
   const set6Opacity = useTransform(
     scrollYProgress,
     [0.3333, 0.4, 0.749, 0.78],
-    [0, 1, 1, 0]
+    [0, 1, 1, 0],
   );
   const set6Y = useTransform(scrollYProgress, [0.3333, 0.4], [100, 0]);
 
@@ -223,12 +216,12 @@ export default function Weighing() {
   const containerScale = useTransform(
     scrollYProgress,
     [0.5, 0.7],
-    isMobile ? [2.3, 4] : [1, 2]
+    isMobile ? [2.3, 4] : [1, 2],
   );
   const containerTop = useTransform(
     scrollYProgress,
     [0.5, 0.7],
-    isMobile ? ["-1%", "-3%"] : ["0%", "-7%"]
+    isMobile ? ["-1%", "-3%"] : ["0%", "-7%"],
   );
 
   // Derive z_move from the existing containerScale so the visual zoom
@@ -247,32 +240,32 @@ export default function Weighing() {
   const heartPlateY = useTransform(
     scrollYProgress,
     [0.62, 0.72],
-    isMobile ? [0, 8] : [0, 30]
+    isMobile ? [0, 8] : [0, 30],
   );
   // Feather plate: slight rise (Y movement)
   const featherPlateY = useTransform(
     scrollYProgress,
     [0.62, 0.72],
-    isMobile ? [0, -3] : [0, -10]
+    isMobile ? [0, -3] : [0, -10],
   );
 
   const textOpacity = useTransform(
     scrollYProgress,
     [0, 0.2, 0.75, 0.85],
-    [0, 1, 1, 0]
+    [0, 1, 1, 0],
   );
 
   const textAnimationProgress = useTransform(
     scrollYProgress,
     [0, 0.25, 0.85],
-    [0, 0, 1]
+    [0, 0, 1],
   );
 
   // ============ VIDEO SECTION (750-1000vh = 0.75-1.0) ============
   const videoOpacity = useTransform(
     scrollYProgress,
     [0.75, 0.8, 0.98, 1],
-    [0, 1, 1, 0]
+    [0, 1, 1, 0],
   );
 
   const animations: AnimationMap = useMemo(
@@ -302,17 +295,12 @@ export default function Weighing() {
       heartRotate,
       heartPlateY,
       featherPlateY,
-    ]
+    ],
   );
 
-  useMotionValueEvent(scrollYProgress, "change", (latest) => {
-    const isFalling = latest > 0.75;
-
-    if (isFalling) {
-      setShowStars(true);
-    } else {
-      setShowStars(false);
-    }
+  //? ใช้ Hook สำหรับจัดการ Stars visibility
+  useStarsVisibility(scrollYProgress, {
+    shouldShow: (p) => p > 0.75, // Show เมื่อเริ่มตกลงไปใน black hole
   });
 
   return (

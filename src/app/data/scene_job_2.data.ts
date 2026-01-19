@@ -95,7 +95,7 @@ export const SCENE_2_ITEMS: SceneItemData[] = [
   },
   {
     id: "lightWindow",
-    src: getImgPath("Scene/Scene1/light window.webp"),
+    src: getImgPath("Scene/Scene1/light_window.webp"),
     alt: "Window light glow",
     style: { left: "67.3%", top: "19.3%", width: "14.9%", height: "62.7%" },
     animGroup: 2,

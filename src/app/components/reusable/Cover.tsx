@@ -12,8 +12,8 @@ import type { SceneItemData } from "@/app/components/reusable/SceneLayer";
 import SceneLayer, {
   type AnimationMap,
 } from "@/app/components/reusable/SceneLayer";
-import { useUI } from "@/app/contexts/UIStarContext";
 import { useDeviceCheck } from "@/app/hooks/useDeviceCheck";
+import { useStarsVisibility } from "@/app/hooks/useStarsVisibility";
 import { getImgPath } from "@/utils/cloudinaryUtils";
 
 const MotionImage = m.create(Image);
@@ -60,7 +60,6 @@ export default function Cover({
   iconImage,
   sessionText = "session 1",
 }: CoverProps) {
-  const { setShowStars } = useUI();
   const { isMobile } = useDeviceCheck();
 
   //? รวม light-blur layer กับ items ที่ส่งเข้ามา
@@ -86,18 +85,14 @@ export default function Cover({
       3: { opacity: titleOpacity },
       4: { opacity: iconOpacity },
     }),
-    [lightBlurOpacity, titleOpacity, iconOpacity]
+    [lightBlurOpacity, titleOpacity, iconOpacity],
   );
 
-  useMotionValueEvent(scrollYProgress, "change", (latest) => {
-    const isCoverVisible = latest > 0;
-
-    if (isCoverVisible) {
-      setShowStars(true);
-    } else {
-      setShowStars(false);
-    }
+  //? Show stars when Cover is visible (scrollYProgress > 0)
+  useStarsVisibility(scrollYProgress, {
+    shouldShow: (p) => p > 0,
   });
+
   const opacity = useTransform(scrollYProgress, [0, 0.1, 0.8, 1], [0, 1, 1, 0]);
 
   return (

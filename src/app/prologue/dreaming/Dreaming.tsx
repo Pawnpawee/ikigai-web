@@ -1,5 +1,5 @@
 "use client";
-import { m, useMotionValueEvent, useScroll, useTransform } from "framer-motion";
+import { m, useScroll, useTransform } from "framer-motion";
 import { useMemo, useRef } from "react";
 import LazyLottie from "@/app/components/reusable/LazyLottie";
 import SceneLayer, {
@@ -7,8 +7,8 @@ import SceneLayer, {
 } from "@/app/components/reusable/SceneLayer";
 import WordByWordAnimation from "@/app/components/text/WordByWordAnimation";
 import { useDevice } from "@/app/contexts/DeviceContext";
-import { useUI } from "@/app/contexts/UIStarContext";
 import { SCENE_DREAMING_ITEMS } from "@/app/data/scene_dreaming.data";
+import { useStarsVisibility } from "@/app/hooks/useStarsVisibility";
 import { getJsonUrl } from "@/utils/cloudinaryUtils";
 
 export default function Dreaming() {
@@ -16,7 +16,6 @@ export default function Dreaming() {
 
   // ตรวจสอบ orientation โดยใช้ custom hook
   const { isMobile } = useDevice();
-  const { setShowStars } = useUI();
 
   const { scrollYProgress } = useScroll({
     target: ref,
@@ -27,7 +26,7 @@ export default function Dreaming() {
   const opacity = useTransform(
     scrollYProgress,
     [0, 0.3, 0.95, 1],
-    [0, 1, 1, 0]
+    [0, 1, 1, 0],
   );
 
   // 1/4: desert3 + sky โผล่ขึ้นมา
@@ -46,14 +45,14 @@ export default function Dreaming() {
   const animal_right = useTransform(
     scrollYProgress,
     [0.3, 1],
-    ["-50%", isMobile ? "30%" : "8%"]
+    ["-50%", isMobile ? "30%" : "8%"],
   );
 
   // Sun: เคลื่อนที่ตลอดการ scroll
   const sun_bottom = useTransform(
     scrollYProgress,
     [0, 1],
-    ["70%", isMobile ? "25%" : "30%"]
+    ["70%", isMobile ? "25%" : "30%"],
   );
   const sun_left = useTransform(scrollYProgress, [0, 1], ["0%", "85%"]);
   const sun_scale = useTransform(scrollYProgress, [0, 1], [0.5, 1]);
@@ -65,7 +64,7 @@ export default function Dreaming() {
                 ภายในห้องโถงแห่งสัจจะ หัวใจจะถูกนำไปชั่งเทียบกับขนนก
 หากหัวใจเบากว่าขนนกก็จะเข้าถึงชีวิตหลังความตายเดินทางสู่ทุ่งแห่งความสุข
 แต่ถ้าหากจิตใจหนักแน่นมักถูกกลืนกินด้วยบางสิ่ง…`,
-    []
+    [],
   );
 
   const animations: AnimationMap = useMemo(
@@ -74,15 +73,12 @@ export default function Dreaming() {
       2: { y: set2Y, opacity: set2Opacity },
       3: { y: set3Y, opacity: set3Opacity },
     }),
-    [set1Y, set2Y, set3Y, set1Opacity, set2Opacity, set3Opacity]
+    [set1Y, set2Y, set3Y, set1Opacity, set2Opacity, set3Opacity],
   );
 
-  useMotionValueEvent(scrollYProgress, "change", (latest) => {
-    const isDreaming = latest < 1;
-
-    if (isDreaming) {
-      setShowStars(false);
-    }
+  //? ใช้ Hook สำหรับจัดการ Stars visibility
+  useStarsVisibility(scrollYProgress, {
+    shouldShow: (p) => p >= 1, // Hide จนกว่าจะถึงท้าย section
   });
 
   return (
