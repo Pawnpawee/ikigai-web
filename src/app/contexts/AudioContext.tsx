@@ -145,44 +145,62 @@ export function AudioProvider({ children }: { children: React.ReactNode }) {
     saveSettings({ sfxVolume: vol });
   };
 
-  // 4. Set Background Music
+  // 4. Set Background Music (with Fade In/Out)
   const setBgMusic = (src: string | null) => {
     if (currentBgMusic === src) return;
 
     const prevSound = soundRef.current;
 
-    // Step A: หยุดตัวเก่า
-    if (prevSound) {
-      prevSound.stop();
+    // Step A: Fade out เพลงเก่าก่อน
+    if (prevSound && prevSound.playing()) {
+      prevSound.fade(prevSound.volume(), 0, 500);
+
+      //? รอให้ fade out เสร็จก่อน stop และ unload
+      setTimeout(() => {
+        prevSound.stop();
+        prevSound.unload();
+      }, 500);
+    } else if (prevSound) {
+      //? ถ้าไม่ได้เล่นอยู่ก็ unload ทันที
       prevSound.unload();
     }
 
-    // Step B: เล่นตัวใหม่
-    if (src) {
-      setCurrentBgMusic(src);
+    // Step B: เล่นตัวใหม่ (หลัง fade out ของเก่าจบ)
+    const playNewSound = () => {
+      if (src) {
+        setCurrentBgMusic(src);
 
-      const newSound = new Howl({
-        src: [src],
-        loop: true,
-        volume: 0,
-        autoplay: false,
-        onplayerror: (_id, err) => {
-          console.warn("Play Error:", err);
-          soundRef.current?.once("unlock", () => {
-            soundRef.current?.play();
-          });
-        },
-      });
+        const newSound = new Howl({
+          src: [src],
+          loop: true,
+          volume: 0,
+          autoplay: false,
+          onplayerror: (_id, err) => {
+            console.warn("Play Error:", err);
+            soundRef.current?.once("unlock", () => {
+              soundRef.current?.play();
+            });
+          },
+        });
 
-      soundRef.current = newSound;
-      newSound.play();
+        soundRef.current = newSound;
+        newSound.play();
 
-      if (!isMuted) {
-        newSound.fade(0, volume / 100, 1500);
+        //? Fade in เพลงใหม่
+        if (!isMuted) {
+          newSound.fade(0, volume / 100, 1000);
+        }
+      } else {
+        setCurrentBgMusic(null);
+        soundRef.current = null;
       }
+    };
+
+    //? เริ่มเล่นเพลงใหม่หลังจากเพลงเก่า fade out เสร็จ (หรือทันทีถ้าไม่มีเพลงเก่า)
+    if (prevSound && prevSound.playing()) {
+      setTimeout(playNewSound, 500);
     } else {
-      setCurrentBgMusic(null);
-      soundRef.current = null;
+      playNewSound();
     }
   };
 

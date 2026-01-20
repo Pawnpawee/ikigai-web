@@ -28,7 +28,7 @@ interface S6_4Props {
 export default function S6_4({ scrollYProgress }: S6_4Props) {
   const router = useRouter();
   const { isMobile } = useDevice();
-  const { playSfx } = useAudio();
+  const { playSfx, stopAllSfx } = useAudio();
   const hasPlayedSound = useRef(false);
 
   const [selectedChoice, setSelectedChoice] = useState<string | null>(null);
@@ -138,11 +138,14 @@ export default function S6_4({ scrollYProgress }: S6_4Props) {
     ],
   );
 
-  //? Play walking sound when cat-human appears
+  //? Play/Stop walking sound based on cat-human visibility
   useMotionValueEvent(catHumanOpacity, "change", (latest) => {
     if (latest >= 0.5 && !hasPlayedSound.current) {
       playSfx(getAudioUrl("Sound/6/walking-on-leaves.mp3"));
       hasPlayedSound.current = true;
+    } else if (latest < 0.5 && hasPlayedSound.current) {
+      stopAllSfx();
+      hasPlayedSound.current = false;
     }
   });
 
