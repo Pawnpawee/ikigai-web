@@ -158,6 +158,7 @@ export default function S6_4({ scrollYProgress }: S6_4Props) {
 
   //? Handle continue button click
   const handleContinue = () => {
+    stopAllSfx();
     router.push("/skill-session");
   };
 

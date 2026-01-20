@@ -289,7 +289,7 @@ export default function S6_1({
               }}
             >
               <LazyLottie
-                src={getJsonUrl("Scene/Scene6/02/s6-2 mobile.json")}
+                src={getJsonUrl("Scene/Scene6/02/s6-2_mobile.json")}
                 className="w-full h-full"
                 loop
                 playTrigger={bgOpacity}

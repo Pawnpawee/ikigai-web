@@ -152,7 +152,7 @@ export function AudioProvider({ children }: { children: React.ReactNode }) {
     const prevSound = soundRef.current;
 
     // Step A: Fade out เพลงเก่าก่อน
-    if (prevSound && prevSound.playing()) {
+    if (prevSound?.playing()) {
       prevSound.fade(prevSound.volume(), 0, 500);
 
       //? รอให้ fade out เสร็จก่อน stop และ unload
@@ -197,7 +197,7 @@ export function AudioProvider({ children }: { children: React.ReactNode }) {
     };
 
     //? เริ่มเล่นเพลงใหม่หลังจากเพลงเก่า fade out เสร็จ (หรือทันทีถ้าไม่มีเพลงเก่า)
-    if (prevSound && prevSound.playing()) {
+    if (prevSound?.playing()) {
       setTimeout(playNewSound, 500);
     } else {
       playNewSound();
