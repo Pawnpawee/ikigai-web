@@ -6,6 +6,7 @@ import {
   useMotionValueEvent,
   useTransform,
 } from "framer-motion";
+import { useRouter } from "next/navigation";
 import { useMemo, useRef, useState } from "react";
 import { HiOutlineChevronDown } from "react-icons/hi";
 import ChoiceButton from "@/app/components/button/ChoiceButton";
@@ -17,16 +18,17 @@ import SceneLayer, {
 } from "@/app/components/reusable/SceneLayer";
 import { useAudio } from "@/app/contexts/AudioContext";
 import { SCENE_S6_4_ITEMS } from "@/app/data/scene_s6_4.data";
-import { useDeviceCheck } from "@/app/hooks/useDeviceCheck";
 import { getAudioUrl, getJsonUrl } from "@/utils/cloudinaryUtils";
+import { useDevice } from "../contexts/DeviceContext";
 
 interface S6_4Props {
   scrollYProgress: MotionValue<number>;
 }
 
 export default function S6_4({ scrollYProgress }: S6_4Props) {
-  const { isMobile } = useDeviceCheck();
-  const { playSfx } = useAudio();
+  const router = useRouter();
+  const { isMobile } = useDevice();
+  const { playSfx, stopAllSfx } = useAudio();
   const hasPlayedSound = useRef(false);
 
   const [selectedChoice, setSelectedChoice] = useState<string | null>(null);
@@ -136,11 +138,14 @@ export default function S6_4({ scrollYProgress }: S6_4Props) {
     ],
   );
 
-  //? Play walking sound when cat-human appears
+  //? Play/Stop walking sound based on cat-human visibility
   useMotionValueEvent(catHumanOpacity, "change", (latest) => {
     if (latest >= 0.5 && !hasPlayedSound.current) {
       playSfx(getAudioUrl("Sound/6/walking-on-leaves.mp3"));
       hasPlayedSound.current = true;
+    } else if (latest < 0.5 && hasPlayedSound.current) {
+      stopAllSfx();
+      hasPlayedSound.current = false;
     }
   });
 
@@ -153,7 +158,8 @@ export default function S6_4({ scrollYProgress }: S6_4Props) {
 
   //? Handle continue button click
   const handleContinue = () => {
-    window.location.href = "/skill-session";
+    stopAllSfx();
+    router.push("/skill-session");
   };
 
   const choices = [

@@ -377,7 +377,7 @@ export default function Weighing() {
 
       {/* ชุด 10: Subtitles */}
       <m.div
-        className="fixed bottom-[15%] left-0 right-0"
+        className="absolute bottom-[15%] left-0 right-0 pointer-events-none"
         style={{ opacity: textOpacity }}
       >
         <SubtitleScroll

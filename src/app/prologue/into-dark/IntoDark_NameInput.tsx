@@ -15,8 +15,8 @@ import SceneLayer, {
   type AnimationMap,
 } from "@/app/components/reusable/SceneLayer";
 import { useAudio } from "@/app/contexts/AudioContext";
+import { useDevice } from "@/app/contexts/DeviceContext";
 import { SCENE_INTODARK_1_ITEMS } from "@/app/data/scene_intoDark_1";
-import { useDeviceCheck } from "@/app/hooks/useDeviceCheck";
 import { getAudioUrl, getJsonUrl } from "@/utils/cloudinaryUtils";
 
 interface NameInputProps {
@@ -36,7 +36,7 @@ export default function IntoDarkNameInput({
   onConfirm,
   isConfirmed,
 }: NameInputProps) {
-  const { isMobile } = useDeviceCheck();
+  const { isMobile } = useDevice();
   const { playSfx } = useAudio();
   const hasPlayedCatSound = useRef(false);
 

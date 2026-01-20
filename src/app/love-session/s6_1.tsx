@@ -15,10 +15,10 @@ import SceneLayer, {
   type AnimationMap,
 } from "@/app/components/reusable/SceneLayer";
 import { ACTIVITIES, SCENE_S6_1_ITEMS } from "@/app/data/scene_s6_1.data";
-import { useDeviceCheck } from "@/app/hooks/useDeviceCheck";
 import { getJsonUrl } from "@/utils/cloudinaryUtils";
 import GradientButton from "../components/button/GradientButton";
 import LazyLottie from "../components/reusable/LazyLottie";
+import { useDevice } from "../contexts/DeviceContext";
 
 interface S6_1Props {
   scrollYProgress: MotionValue<number>;
@@ -35,7 +35,7 @@ export default function S6_1({
   playerName = "เจ้า",
   onCompleted,
 }: S6_1Props) {
-  const { isMobile } = useDeviceCheck();
+  const { isMobile } = useDevice();
 
   //? State Management
   const [step, setStep] = useState(1); // 1 = เลือก 5, 2 = เลือก 3
@@ -289,7 +289,7 @@ export default function S6_1({
               }}
             >
               <LazyLottie
-                src={getJsonUrl("Scene/Scene6/02/s6-2 mobile.json")}
+                src={getJsonUrl("Scene/Scene6/02/s6-2_mobile.json")}
                 className="w-full h-full"
                 loop
                 playTrigger={bgOpacity}

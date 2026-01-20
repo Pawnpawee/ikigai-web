@@ -8,8 +8,8 @@ import MysteriousText from "@/app/components/reusable/MysteriousText";
 import SceneLayer, {
   type AnimationMap,
 } from "@/app/components/reusable/SceneLayer";
+import { useDevice } from "@/app/contexts/DeviceContext";
 import { SCENE_INTODARK_3_ITEMS } from "@/app/data/scene_intoDark_3";
-import { useDeviceCheck } from "@/app/hooks/useDeviceCheck";
 import { getJsonUrl } from "@/utils/cloudinaryUtils";
 
 interface HeardProps {
@@ -23,7 +23,7 @@ export default function IntoDarkHeard({
   hasHeard,
   setHasHeard,
 }: HeardProps) {
-  const { isMobile } = useDeviceCheck();
+  const { isMobile } = useDevice();
 
   const zIndex = useTransform(
     scrollYProgress,

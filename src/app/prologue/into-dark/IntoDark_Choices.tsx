@@ -8,8 +8,8 @@ import MysteriousText from "@/app/components/reusable/MysteriousText";
 import SceneLayer, {
   type AnimationMap,
 } from "@/app/components/reusable/SceneLayer";
+import { useDevice } from "@/app/contexts/DeviceContext";
 import { REASONS, SCENE_INTODARK_2_ITEMS } from "@/app/data/scene_intoDark_2";
-import { useDeviceCheck } from "@/app/hooks/useDeviceCheck";
 import { getJsonUrl } from "@/utils/cloudinaryUtils";
 
 interface ChoicesProps {
@@ -27,7 +27,7 @@ export default function IntoDarkChoices({
   handleReasonToggle,
   reasonsError,
 }: ChoicesProps) {
-  const { isMobile } = useDeviceCheck();
+  const { isMobile } = useDevice();
 
   // Main container opacity and z-index - ปรับให้ตรงกับ 600vh (0.167-0.500)
   const opacity = useTransform(

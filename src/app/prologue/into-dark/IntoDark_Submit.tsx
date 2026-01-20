@@ -9,8 +9,8 @@ import MysteriousText from "@/app/components/reusable/MysteriousText";
 import SceneLayer, {
   type AnimationMap,
 } from "@/app/components/reusable/SceneLayer";
+import { useDevice } from "@/app/contexts/DeviceContext";
 import { SCENE_INTODARK_4_ITEMS } from "@/app/data/scene_intoDark_4";
-import { useDeviceCheck } from "@/app/hooks/useDeviceCheck";
 import { getImgPath, getJsonUrl } from "@/utils/cloudinaryUtils";
 
 interface SubmitProps {
@@ -24,7 +24,7 @@ export default function IntoDarkSubmit({
   isLoading,
   handleSubmit,
 }: SubmitProps) {
-  const { isMobile } = useDeviceCheck();
+  const { isMobile } = useDevice();
 
   const zIndex = useTransform(
     scrollYProgress,
@@ -34,7 +34,7 @@ export default function IntoDarkSubmit({
 
   // ชุด 1: Cat animation (0.667-0.676)
 
-  const bgOpacity = useTransform(scrollYProgress, [0.69, 0.72], [0, 1]);
+  const bgOpacity = useTransform(scrollYProgress, [0.67, 0.7], [0, 1]);
 
   const catOpacity = useTransform(scrollYProgress, [0.667, 0.83], [0, 1]);
   const catY = useTransform(scrollYProgress, [0.667, 0.83], [50, 0]);
@@ -43,21 +43,17 @@ export default function IntoDarkSubmit({
   const cloudOpacity = useTransform(scrollYProgress, [0.676, 0.69], [0, 1]);
 
   // ชุด 3: Ikigai Circle (0.676-0.73)
-  const circle1_rotate = useTransform(
-    scrollYProgress,
-    [0.676, 0.73],
-    [0, -180],
-  ); // Love - Top
-  const circle2_rotate = useTransform(scrollYProgress, [0.676, 0.73], [0, 90]); // Skill - Left
-  const circle3_rotate = useTransform(scrollYProgress, [0.676, 0.73], [90, 0]); // Paid - Bottom
-  const circle4_rotate = useTransform(scrollYProgress, [0.676, 0.73], [0, -90]); // World - Right
+  const circle1_rotate = useTransform(scrollYProgress, [0.67, 0.7], [0, -180]); // Love - Top
+  const circle2_rotate = useTransform(scrollYProgress, [0.67, 0.7], [0, 90]); // Skill - Left
+  const circle3_rotate = useTransform(scrollYProgress, [0.67, 0.7], [90, 0]); // Paid - Bottom
+  const circle4_rotate = useTransform(scrollYProgress, [0.67, 0.7], [0, -90]); // World - Right
 
-  const subText_opacity = useTransform(scrollYProgress, [0.7, 0.73], [0, 1]);
-  const subText_y = useTransform(scrollYProgress, [0.7, 0.73], [30, 0]);
+  const subText_opacity = useTransform(scrollYProgress, [0.67, 0.7], [0, 1]);
+  const subText_y = useTransform(scrollYProgress, [0.67, 0.7], [30, 0]);
 
   // Text opacity animations - appear sequentially
-  const text1_opacity = useTransform(scrollYProgress, [0.67, 0.69], [0, 1]); // "ถ้าเจ้าหาจุด..."
-  const text2_opacity = useTransform(scrollYProgress, [0.7, 0.77], [0, 1]); // Description
+  const text1_opacity = useTransform(scrollYProgress, [0.67, 0.68], [0, 1]); // "ถ้าเจ้าหาจุด..."
+  const text2_opacity = useTransform(scrollYProgress, [0.7, 0.8], [0, 1]); // Description
 
   const text3_opacity = useTransform(scrollYProgress, [0.87, 0.92], [0, 1]); // "แต่เจ้าไม่ต้องกังวล..."
 
@@ -234,16 +230,16 @@ export default function IntoDarkSubmit({
                       <MysteriousText
                         text={`แรงผลักดัน\n(Passion)`}
                         scrollYProgress={scrollYProgress}
-                        startProgress={0.7}
-                        endProgress={0.73}
+                        startProgress={0.67}
+                        endProgress={0.7}
                       />
                     </div>
                     <div className="text-white relative">
                       <MysteriousText
                         text={`หน้าที่\n(Mission)`}
                         scrollYProgress={scrollYProgress}
-                        startProgress={0.7}
-                        endProgress={0.73}
+                        startProgress={0.67}
+                        endProgress={0.7}
                       />
                     </div>
                   </div>
@@ -252,16 +248,16 @@ export default function IntoDarkSubmit({
                       <MysteriousText
                         text={`ทักษะวิชาชีพ\n(Vocation)`}
                         scrollYProgress={scrollYProgress}
-                        startProgress={0.7}
-                        endProgress={0.73}
+                        startProgress={0.67}
+                        endProgress={0.7}
                       />
                     </div>
                     <div className="text-white relative">
                       <MysteriousText
                         text={`อาชีพ\n(Profession)`}
                         scrollYProgress={scrollYProgress}
-                        startProgress={0.7}
-                        endProgress={0.73}
+                        startProgress={0.67}
+                        endProgress={0.7}
                       />
                     </div>
                   </div>
@@ -279,7 +275,7 @@ export default function IntoDarkSubmit({
                     }
                     scrollYProgress={scrollYProgress}
                     startProgress={0.7}
-                    endProgress={0.8}
+                    endProgress={0.85}
                   />
                 </m.div>
               </div>
