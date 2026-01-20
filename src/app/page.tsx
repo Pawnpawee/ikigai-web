@@ -1,5 +1,6 @@
 "use client";
 
+import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import WelcomeSoundModal from "./components/modal/WelcomeSoundModal";
 import DecisionSection from "./components/reusable/DecisionSection";
@@ -11,6 +12,7 @@ import JobApplication from "./prologue/JobApplication";
 import Sleeping from "./prologue/Sleeping";
 
 export default function Home() {
+  const router = useRouter();
   const [showWelcomeModal, setShowWelcomeModal] = useState(false);
   const { start, stop } = useAudio();
 
@@ -77,7 +79,7 @@ export default function Home() {
   };
 
   const handleWakeUp = () => {
-    window.location.href = "/prologue/dreaming";
+    router.push("/prologue/dreaming");
   };
 
   return (

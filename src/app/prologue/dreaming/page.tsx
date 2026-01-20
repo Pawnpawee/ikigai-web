@@ -1,5 +1,6 @@
 "use client";
 
+import { useRouter } from "next/navigation";
 import { useEffect, useLayoutEffect, useState } from "react";
 import DecisionSection from "@/app/components/reusable/DecisionSection";
 import EyelidOverlay from "@/app/components/reusable/EyeLidOverlay";
@@ -9,6 +10,7 @@ import Dreaming from "./Dreaming";
 import Weighing from "./Weighing";
 
 export default function DreamingPage() {
+  const router = useRouter();
   const { playSfx, isMuted, setBgMusic } = useAudio();
 
   useLayoutEffect(() => {
@@ -67,12 +69,11 @@ export default function DreamingPage() {
   };
 
   const handleLook = async () => {
-    window.location.href = "/prologue/into-dark";
+    router.push("/prologue/into-dark");
   };
 
   return (
     <div>
-
       {/* Scenes */}
       <Dreaming />
       <Weighing />

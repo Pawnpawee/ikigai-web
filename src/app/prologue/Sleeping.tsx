@@ -264,7 +264,7 @@ export default function Sleeping() {
 
         {/* ชุด 10: Text "เห้อนอนดีกว่า" */}
         <m.div
-          className="fixed bottom-[15%] left-0 right-0"
+          className="absolute bottom-[15%] left-0 right-0 pointer-events-none"
           style={{ opacity: textOpacity }}
         >
           <SubtitleScroll
