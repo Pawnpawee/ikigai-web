@@ -9,8 +9,8 @@ import MysteriousText from "@/app/components/reusable/MysteriousText";
 import SceneLayer, {
   type AnimationMap,
 } from "@/app/components/reusable/SceneLayer";
+import { useDevice } from "@/app/contexts/DeviceContext";
 import { SCENE_INTODARK_4_ITEMS } from "@/app/data/scene_intoDark_4";
-import { useDeviceCheck } from "@/app/hooks/useDeviceCheck";
 import { getImgPath, getJsonUrl } from "@/utils/cloudinaryUtils";
 
 interface SubmitProps {
@@ -24,7 +24,7 @@ export default function IntoDarkSubmit({
   isLoading,
   handleSubmit,
 }: SubmitProps) {
-  const { isMobile } = useDeviceCheck();
+  const { isMobile } = useDevice();
 
   const zIndex = useTransform(
     scrollYProgress,

@@ -1,6 +1,5 @@
 "use client";
 
-import { m } from "framer-motion";
 import { useEffect, useLayoutEffect, useState } from "react";
 import DecisionSection from "@/app/components/reusable/DecisionSection";
 import EyelidOverlay from "@/app/components/reusable/EyeLidOverlay";
@@ -73,13 +72,6 @@ export default function DreamingPage() {
 
   return (
     <div>
-      {/* Fade In */}
-      <m.div
-        initial={{ opacity: 1 }}
-        animate={{ opacity: 0 }}
-        transition={{ duration: 1.5, ease: "easeOut" }}
-        className="fixed inset-0 z-99 bg-black pointer-events-none"
-      />
 
       {/* Scenes */}
       <Dreaming />

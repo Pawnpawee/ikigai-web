@@ -7,7 +7,7 @@ import type { SceneItemData } from "@/app/components/reusable/SceneLayer";
 import SceneLayer, {
   type AnimationMap,
 } from "@/app/components/reusable/SceneLayer";
-import { useDeviceCheck } from "@/app/hooks/useDeviceCheck";
+import { useDevice } from "@/app/contexts/DeviceContext";
 import { useStarsVisibility } from "@/app/hooks/useStarsVisibility";
 import { getImgPath } from "@/utils/cloudinaryUtils";
 
@@ -55,7 +55,7 @@ export default function Cover({
   iconImage,
   sessionText = "session 1",
 }: CoverProps) {
-  const { isMobile } = useDeviceCheck();
+  const { isMobile } = useDevice();
 
   //? รวม light-blur layer กับ items ที่ส่งเข้ามา
   const allItems = useMemo(() => [LIGHT_BLUR_ITEM, ...items], [items]);

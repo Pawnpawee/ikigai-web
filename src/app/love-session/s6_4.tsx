@@ -17,15 +17,15 @@ import SceneLayer, {
 } from "@/app/components/reusable/SceneLayer";
 import { useAudio } from "@/app/contexts/AudioContext";
 import { SCENE_S6_4_ITEMS } from "@/app/data/scene_s6_4.data";
-import { useDeviceCheck } from "@/app/hooks/useDeviceCheck";
 import { getAudioUrl, getJsonUrl } from "@/utils/cloudinaryUtils";
+import { useDevice } from "../contexts/DeviceContext";
 
 interface S6_4Props {
   scrollYProgress: MotionValue<number>;
 }
 
 export default function S6_4({ scrollYProgress }: S6_4Props) {
-  const { isMobile } = useDeviceCheck();
+  const { isMobile } = useDevice();
   const { playSfx } = useAudio();
   const hasPlayedSound = useRef(false);
 
