@@ -43,11 +43,7 @@ export default function IntoDarkSubmit({
   const cloudOpacity = useTransform(scrollYProgress, [0.676, 0.69], [0, 1]);
 
   // ชุด 3: Ikigai Circle (0.676-0.73)
-  const circle1_rotate = useTransform(
-    scrollYProgress,
-    [0.67, 0.7],
-    [0, -180],
-  ); // Love - Top
+  const circle1_rotate = useTransform(scrollYProgress, [0.67, 0.7], [0, -180]); // Love - Top
   const circle2_rotate = useTransform(scrollYProgress, [0.67, 0.7], [0, 90]); // Skill - Left
   const circle3_rotate = useTransform(scrollYProgress, [0.67, 0.7], [90, 0]); // Paid - Bottom
   const circle4_rotate = useTransform(scrollYProgress, [0.67, 0.7], [0, -90]); // World - Right

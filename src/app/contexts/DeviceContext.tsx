@@ -25,7 +25,7 @@ export function DeviceProvider({ children }: { children: ReactNode }) {
   const [isInitialized, setIsInitialized] = useState(false);
 
   useEffect(() => {
-    // Logic การเช็ค Device 
+    // Logic การเช็ค Device
     const touchQuery = window.matchMedia("(pointer: coarse)");
     const landscapeQuery = window.matchMedia("(orientation: landscape)");
 
