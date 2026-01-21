@@ -144,7 +144,7 @@ export default function SessionLovePage() {
           selectedHobbies: s6_1Data?.selectedHobbies,
           customHobbies: s6_1Data?.customHobbies,
           topThreeHobbies: s6_1Data?.topThreeHobbies,
-          s6_4Choice: selectedChoice,
+          dreamAnswer: selectedChoice,
         }),
       });
 
