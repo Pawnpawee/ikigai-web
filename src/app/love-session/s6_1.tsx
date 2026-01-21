@@ -20,10 +20,16 @@ import GradientButton from "../components/button/GradientButton";
 import LazyLottie from "../components/reusable/LazyLottie";
 import { useDevice } from "../contexts/DeviceContext";
 
+export interface S6_1Data {
+  selectedHobbies: string[];
+  customHobbies: string[];
+  topThreeHobbies: string[];
+}
+
 interface S6_1Props {
   scrollYProgress: MotionValue<number>;
   playerName?: string;
-  onCompleted?: () => void;
+  onCompleted?: (data: S6_1Data) => void;
 }
 
 const MIN_SELECTIONS = 1;
@@ -39,9 +45,9 @@ export default function S6_1({
 
   //? State Management
   const [step, setStep] = useState(1); // 1 = เลือก 5, 2 = เลือก 3
-  const [selectedActivities, setSelectedActivities] = useState<number[]>([]);
-  const [customActivities, setCustomActivities] = useState<string[]>([]);
-  const [secondStepSelection, setSecondStepSelection] = useState<string[]>([]);
+  const [selectedHobbies, setSelectedHobbies] = useState<string[]>([]);
+  const [customHobbies, setCustomHobbies] = useState<string[]>([]);
+  const [topThreeHobbies, setTopThreeHobbies] = useState<string[]>([]);
   const [showInput, setShowInput] = useState(false);
   const [inputValue, setInputValue] = useState("");
   const [activitiesError, setActivitiesError] = useState("");
@@ -125,26 +131,26 @@ export default function S6_1({
   );
 
   //? Handlers
-  const handleActivityToggle = (id: number) => {
+  const handleActivityToggle = (label: string) => {
     setActivitiesError("");
 
-    setSelectedActivities((prev) => {
-      if (prev.includes(id)) {
-        return prev.filter((actId) => actId !== id);
+    setSelectedHobbies((prev) => {
+      if (prev.includes(label)) {
+        return prev.filter((actLabel) => actLabel !== label);
       }
 
       // ตรวจสอบรวมกับ custom activities
-      if (prev.length + customActivities.length >= MAX_SELECTIONS) {
+      if (prev.length + customHobbies.length >= MAX_SELECTIONS) {
         setActivitiesError(`เลือกได้สูงสุด ${MAX_SELECTIONS} กิจกรรม`);
         return prev;
       }
 
-      return [...prev, id];
+      return [...prev, label];
     });
   };
 
   const handleAddCustomActivity = () => {
-    if (selectedActivities.length + customActivities.length >= MAX_SELECTIONS) {
+    if (selectedHobbies.length + customHobbies.length >= MAX_SELECTIONS) {
       setActivitiesError(`เลือกได้สูงสุด ${MAX_SELECTIONS} กิจกรรม`);
       return;
     }
@@ -165,7 +171,7 @@ export default function S6_1({
 
     // ตรวจสอบว่าซ้ำกับ custom activities ที่มีอยู่แล้วหรือไม่
     if (
-      customActivities.some(
+      customHobbies.some(
         (act) => act.toLowerCase() === inputValue.trim().toLowerCase(),
       )
     ) {
@@ -184,12 +190,12 @@ export default function S6_1({
       return;
     }
 
-    if (selectedActivities.length + customActivities.length >= MAX_SELECTIONS) {
+    if (selectedHobbies.length + customHobbies.length >= MAX_SELECTIONS) {
       setActivitiesError(`เลือกได้สูงสุด ${MAX_SELECTIONS} กิจกรรม`);
       return;
     }
 
-    setCustomActivities((prev) => [...prev, inputValue.trim()]);
+    setCustomHobbies((prev) => [...prev, inputValue.trim()]);
     setInputValue("");
     setShowInput(false);
     setActivitiesError("");
@@ -208,7 +214,7 @@ export default function S6_1({
   const handleSecondStepToggle = (activity: string) => {
     setActivitiesError("");
 
-    setSecondStepSelection((prev) => {
+    setTopThreeHobbies((prev) => {
       if (prev.includes(activity)) {
         return prev.filter((a) => a !== activity);
       }
@@ -224,34 +230,34 @@ export default function S6_1({
 
   const handleBacktoStep1 = () => {
     setStep(1);
-    setSecondStepSelection([]);
+    setTopThreeHobbies([]);
     setActivitiesError("");
   };
 
-  const totalSelected = selectedActivities.length + customActivities.length;
+  const totalSelected = selectedHobbies.length + customHobbies.length;
 
   //? Filter activities: แสดงทั้งหมด แต่เมื่อเพิ่ม custom activities ให้ลดอันที่ไม่ได้เลือกออกทีละ 1
   const visibleActivities = (() => {
     // ถ้ายังไม่มี custom activities ให้แสดงทั้งหมด
-    if (customActivities.length === 0) {
+    if (customHobbies.length === 0) {
       return ACTIVITIES;
     }
 
     // กรองเฉพาะอันที่ยังไม่ได้เลือก แล้วลดออกตามจำนวน custom
     const unselectedCount = ACTIVITIES.filter(
-      (act: { id: number }) => !selectedActivities.includes(act.id),
+      (act: { label: string }) => !selectedHobbies.includes(act.label),
     ).length;
 
-    const itemsToRemove = customActivities.length;
+    const itemsToRemove = customHobbies.length;
 
     // คงเรียงลำดับเดิม แต่ซ่อนอันที่ไม่ได้เลือกจากท้ายสุด
-    return ACTIVITIES.filter((act: { id: number }, index: number) => {
-      const isSelected = selectedActivities.includes(act.id);
+    return ACTIVITIES.filter((act: { label: string }, index: number) => {
+      const isSelected = selectedHobbies.includes(act.label);
       if (isSelected) return true; // แสดงอันที่เลือกเสมอ
 
       // นับ index ของอันที่ไม่ได้เลือกในรายการทั้งหมด
       const unselectedIndex = ACTIVITIES.slice(0, index + 1).filter(
-        (a: { id: number }) => !selectedActivities.includes(a.id),
+        (a: { label: string }) => !selectedHobbies.includes(a.label),
       ).length;
 
       // แสดงถ้ายังไม่เกินจำนวนที่ต้องซ่อน
@@ -386,7 +392,7 @@ export default function S6_1({
                           }`}
                         >
                           {activitiesError ||
-                            `เลือกแล้ว ${secondStepSelection.length}/${STEP2_MAX_SELECTIONS} กิจกรรม`}
+                            `เลือกแล้ว ${topThreeHobbies.length}/${STEP2_MAX_SELECTIONS} กิจกรรม`}
                         </p>
                       </>
                     )}
@@ -409,11 +415,11 @@ export default function S6_1({
                               <ChoiceButton
                                 key={activity.id}
                                 text={activity.label}
-                                isSelected={selectedActivities.includes(
-                                  activity.id,
+                                isSelected={selectedHobbies.includes(
+                                  activity.label,
                                 )}
                                 onClick={() =>
-                                  handleActivityToggle(activity.id)
+                                  handleActivityToggle(activity.label)
                                 }
                                 className="px-5 py-3 text-2xl"
                               />
@@ -421,13 +427,13 @@ export default function S6_1({
                           )}
 
                           {/* Custom Activities Display */}
-                          {customActivities.map((activity) => (
+                          {customHobbies.map((activity) => (
                             <ChoiceButton
                               key={`custom-${activity}`}
                               text={activity}
                               isSelected={true}
                               onClick={() => {
-                                setCustomActivities((prev) =>
+                                setCustomHobbies((prev) =>
                                   prev.filter((a) => a !== activity),
                                 );
                               }}
@@ -477,33 +483,21 @@ export default function S6_1({
                       ) : (
                         <>
                           {/* Step 2: แสดงเฉพาะ 5 อันที่เลือกจาก Step 1 */}
-                          {selectedActivities.map((id) => {
-                            const activity = ACTIVITIES.find(
-                              (act: { id: number }) => act.id === id,
-                            );
-                            if (!activity) return null;
-                            return (
-                              <ChoiceButton
-                                key={activity.id}
-                                text={activity.label}
-                                isSelected={secondStepSelection.includes(
-                                  activity.label,
-                                )}
-                                onClick={() =>
-                                  handleSecondStepToggle(activity.label)
-                                }
-                                className="px-5 py-3"
-                              />
-                            );
-                          })}
+                          {selectedHobbies.map((label) => (
+                            <ChoiceButton
+                              key={label}
+                              text={label}
+                              isSelected={topThreeHobbies.includes(label)}
+                              onClick={() => handleSecondStepToggle(label)}
+                              className="px-5 py-3"
+                            />
+                          ))}
 
-                          {customActivities.map((activity) => (
+                          {customHobbies.map((activity) => (
                             <ChoiceButton
                               key={`step2-${activity}`}
                               text={activity}
-                              isSelected={secondStepSelection.includes(
-                                activity,
-                              )}
+                              isSelected={topThreeHobbies.includes(activity)}
                               onClick={() => handleSecondStepToggle(activity)}
                               className="px-5 py-3"
                             />
@@ -569,24 +563,27 @@ export default function S6_1({
                         initial={{ opacity: 0, y: 20 }}
                         animate={{
                           opacity:
-                            secondStepSelection.length === STEP2_MAX_SELECTIONS
+                            topThreeHobbies.length === STEP2_MAX_SELECTIONS
                               ? 1
                               : 0,
                           y:
-                            secondStepSelection.length === STEP2_MAX_SELECTIONS
+                            topThreeHobbies.length === STEP2_MAX_SELECTIONS
                               ? 0
                               : 20,
                         }}
                         transition={{ duration: 0.5, ease: "easeOut" }}
                       >
-                        {secondStepSelection.length ===
-                          STEP2_MAX_SELECTIONS && (
+                        {topThreeHobbies.length === STEP2_MAX_SELECTIONS && (
                           <GradientButton
                             text="ไปต่อ"
                             isSelected={true}
                             onClick={() => {
                               if (onCompleted) {
-                                onCompleted();
+                                onCompleted({
+                                  selectedHobbies,
+                                  customHobbies,
+                                  topThreeHobbies,
+                                });
                               }
                             }}
                             variant="white"
@@ -634,7 +631,7 @@ export default function S6_1({
                           }`}
                         >
                           {activitiesError ||
-                            `เลือกแล้ว ${secondStepSelection.length}/${STEP2_MAX_SELECTIONS} กิจกรรม`}
+                            `เลือกแล้ว ${topThreeHobbies.length}/${STEP2_MAX_SELECTIONS} กิจกรรม`}
                         </p>
                       </>
                     )}
@@ -657,11 +654,11 @@ export default function S6_1({
                               <ChoiceButton
                                 key={activity.id}
                                 text={activity.label}
-                                isSelected={selectedActivities.includes(
-                                  activity.id,
+                                isSelected={selectedHobbies.includes(
+                                  activity.label,
                                 )}
                                 onClick={() =>
-                                  handleActivityToggle(activity.id)
+                                  handleActivityToggle(activity.label)
                                 }
                                 className="px-1 md:px-5 py-0 md:py-3 w-26 md:w-auto h-12 md:h-auto text-sm md:text-2xl lg:text-3xl"
                               />
@@ -669,13 +666,13 @@ export default function S6_1({
                           )}
 
                           {/* Custom Activities Display */}
-                          {customActivities.map((activity) => (
+                          {customHobbies.map((activity) => (
                             <ChoiceButton
                               key={`custom-${activity}`}
                               text={activity}
                               isSelected={true}
                               onClick={() => {
-                                setCustomActivities((prev) =>
+                                setCustomHobbies((prev) =>
                                   prev.filter((a) => a !== activity),
                                 );
                               }}
@@ -726,33 +723,21 @@ export default function S6_1({
                       ) : (
                         <>
                           {/* Step 2: แสดงเฉพาะ 5 อันที่เลือกจาก Step 1 */}
-                          {selectedActivities.map((id) => {
-                            const activity = ACTIVITIES.find(
-                              (act: { id: number }) => act.id === id,
-                            );
-                            if (!activity) return null;
-                            return (
-                              <ChoiceButton
-                                key={activity.id}
-                                text={activity.label}
-                                isSelected={secondStepSelection.includes(
-                                  activity.label,
-                                )}
-                                onClick={() =>
-                                  handleSecondStepToggle(activity.label)
-                                }
-                                className="px-1 md:px-5 py-0 md:py-3 w-26 md:w-auto h-12 md:h-auto text-sm md:text-2xl lg:text-3xl"
-                              />
-                            );
-                          })}
+                          {selectedHobbies.map((label) => (
+                            <ChoiceButton
+                              key={label}
+                              text={label}
+                              isSelected={topThreeHobbies.includes(label)}
+                              onClick={() => handleSecondStepToggle(label)}
+                              className="px-1 md:px-5 py-0 md:py-3 w-26 md:w-auto h-12 md:h-auto text-sm md:text-2xl lg:text-3xl"
+                            />
+                          ))}
 
-                          {customActivities.map((activity) => (
+                          {customHobbies.map((activity) => (
                             <ChoiceButton
                               key={`step2-${activity}`}
                               text={activity}
-                              isSelected={secondStepSelection.includes(
-                                activity,
-                              )}
+                              isSelected={topThreeHobbies.includes(activity)}
                               onClick={() => handleSecondStepToggle(activity)}
                               className="px-1 md:px-5 py-0 md:py-3 w-26 md:w-auto h-12 md:h-auto text-sm md:text-2xl lg:text-3xl"
                             />
@@ -819,26 +804,30 @@ export default function S6_1({
                           initial={{ opacity: 0, y: 20 }}
                           animate={{
                             opacity:
-                              secondStepSelection.length ===
-                              STEP2_MAX_SELECTIONS
+                              topThreeHobbies.length === STEP2_MAX_SELECTIONS
                                 ? 1
                                 : 0,
                             y:
-                              secondStepSelection.length ===
-                              STEP2_MAX_SELECTIONS
+                              topThreeHobbies.length === STEP2_MAX_SELECTIONS
                                 ? 0
                                 : 20,
                           }}
                           transition={{ duration: 0.5, ease: "easeOut" }}
                         >
-                          {secondStepSelection.length ===
-                            STEP2_MAX_SELECTIONS && (
+                          {topThreeHobbies.length === STEP2_MAX_SELECTIONS && (
                             <GradientButton
                               text="ไปต่อ"
                               isSelected={true}
                               onClick={() => {
                                 if (onCompleted) {
-                                  onCompleted();
+                                  onCompleted({
+                                    selectedHobbies: [
+                                      ...selectedHobbies,
+                                      ...customHobbies,
+                                    ],
+                                    customHobbies,
+                                    topThreeHobbies,
+                                  });
                                 }
                               }}
                               variant="white"

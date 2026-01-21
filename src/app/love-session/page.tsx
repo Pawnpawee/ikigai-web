@@ -2,6 +2,7 @@
 
 import { useScroll, useTransform } from "framer-motion";
 import { useLenis } from "lenis/react";
+import { useRouter } from "next/navigation";
 import { useEffect, useLayoutEffect, useRef, useState } from "react";
 import Cover from "@/app/components/reusable/Cover";
 import {
@@ -9,9 +10,11 @@ import {
   COVER_SESSION1_ITEMS,
 } from "@/app/data/cover_session1.data";
 import { useStarsVisibility } from "@/app/hooks/useStarsVisibility";
+import { API_BASE_URL } from "@/utils/appConfig";
 import { getAudioUrl } from "@/utils/cloudinaryUtils";
+import { getSessionUser } from "@/utils/storage";
 import { useAudio } from "../contexts/AudioContext";
-import S6_1 from "./s6_1";
+import S6_1, { type S6_1Data } from "./s6_1";
 import S6_4 from "./s6_4";
 
 export default function SessionLovePage() {
@@ -19,8 +22,11 @@ export default function SessionLovePage() {
   const ref = useRef<HTMLDivElement>(null);
   const { setBgMusic, isMuted } = useAudio();
   const lenis = useLenis();
+  const router = useRouter();
+  const [userId, setUserId] = useState<string | null>(null);
 
   const [isS6_1Completed, setIsS6_1Completed] = useState(false);
+  const [s6_1Data, setS6_1Data] = useState<S6_1Data | null>(null);
 
   //? Single scrollYProgress for entire page (0-1 for 1500vh)
   const { scrollYProgress } = useScroll({
@@ -98,8 +104,24 @@ export default function SessionLovePage() {
     };
   }, [lenis, isS6_1Completed]);
 
+  useEffect(() => {
+    //? 1. ดึงข้อมูลจาก Session Storage
+    const user = getSessionUser();
+
+    //? 2. เช็คว่ามีข้อมูลไหม?
+    if (user?.id) {
+      console.log("Found User ID:", user.id);
+      setUserId(user.id);
+    } else {
+      router.push("/prologue/into-dark");
+    }
+  }, [router]);
+
   //? Handler: Auto-scroll to s6_4 เมื่อ s6_1 completed
-  const handleS6_1Completed = () => {
+  const handleS6_1Completed = (data: S6_1Data) => {
+    //? เก็บข้อมูล hobbies ที่ user เลือก
+    setS6_1Data(data);
+
     setIsS6_1Completed(true);
 
     if (ref.current && lenis) {
@@ -108,6 +130,27 @@ export default function SessionLovePage() {
       //? Scroll to start of S6_4 section (at 0.55 = 800vh / 1500vh)
       const scrollTarget = scrollStart + scrollableDistance * 0.56;
       lenis.scrollTo(scrollTarget, { duration: 1.5 });
+    }
+  };
+
+  //? Handler: Navigate to next session after s6_4 completed
+  const handleS6_4Continue = async (selectedChoice: string) => {
+    try {
+      await fetch(`${API_BASE_URL}/api/user/progress/love`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          userId: userId,
+          selectedHobbies: s6_1Data?.selectedHobbies,
+          customHobbies: s6_1Data?.customHobbies,
+          topThreeHobbies: s6_1Data?.topThreeHobbies,
+          s6_4Choice: selectedChoice,
+        }),
+      });
+
+      router.push("/skill-session");
+    } catch (error) {
+      console.error("Error submitting data:", error);
     }
   };
 
@@ -139,7 +182,7 @@ export default function SessionLovePage() {
 
       {/* S6_4 Section - 700vh (800-1500vh, progress: 0.533-1.0) */}
       <div className="h-[700vh] w-full">
-        <S6_4 scrollYProgress={s6_4Progress} />
+        <S6_4 scrollYProgress={s6_4Progress} onContinue={handleS6_4Continue} />
       </div>
     </div>
   );
