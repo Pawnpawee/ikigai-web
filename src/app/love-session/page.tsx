@@ -13,6 +13,7 @@ import { useStarsVisibility } from "@/app/hooks/useStarsVisibility";
 import { API_BASE_URL } from "@/utils/appConfig";
 import { getAudioUrl } from "@/utils/cloudinaryUtils";
 import { getSessionUser } from "@/utils/storage";
+import ErrorModal from "../components/modal/ErrorModal";
 import { useAudio } from "../contexts/AudioContext";
 import S6_1, { type S6_1Data } from "./s6_1";
 import S6_4 from "./s6_4";
@@ -27,6 +28,7 @@ export default function SessionLovePage() {
 
   const [isS6_1Completed, setIsS6_1Completed] = useState(false);
   const [s6_1Data, setS6_1Data] = useState<S6_1Data | null>(null);
+  const [showErrorModal, setShowErrorModal] = useState(false);
 
   //? Single scrollYProgress for entire page (0-1 for 1500vh)
   const { scrollYProgress } = useScroll({
@@ -110,7 +112,6 @@ export default function SessionLovePage() {
 
     //? 2. เช็คว่ามีข้อมูลไหม?
     if (user?.id) {
-      console.log("Found User ID:", user.id);
       setUserId(user.id);
     } else {
       router.push("/prologue/into-dark");
@@ -136,7 +137,7 @@ export default function SessionLovePage() {
   //? Handler: Navigate to next session after s6_4 completed
   const handleS6_4Continue = async (selectedChoice: string) => {
     try {
-      await fetch(`${API_BASE_URL}/api/user/progress/love`, {
+      const response = await fetch(`${API_BASE_URL}/api/user/progress/love`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
@@ -148,9 +149,15 @@ export default function SessionLovePage() {
         }),
       });
 
+      if (!response.ok) {
+        setShowErrorModal(true);
+        return;
+      }
+
       router.push("/skill-session");
     } catch (error) {
       console.error("Error submitting data:", error);
+      setShowErrorModal(true);
     }
   };
 
@@ -161,6 +168,14 @@ export default function SessionLovePage() {
 
   return (
     <div ref={ref} className="h-[1500vh] w-full relative bg-black">
+      {/* Error Modal */}
+      <ErrorModal
+        isOpen={showErrorModal}
+        onClose={() => setShowErrorModal(false)}
+        title="ขออภัย"
+        message="ส่งข้อมูลไม่สำเร็จ กรุณาลองอีกครั้ง"
+      />
+
       {/* Cover Section - 200vh (0-200vh, progress: 0-0.133) */}
       <div className="h-[200vh] w-full">
         <Cover

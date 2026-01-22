@@ -411,9 +411,9 @@ export default function S6_1({
                         <>
                           {/* Activity Buttons */}
                           {visibleActivities.map(
-                            (activity: { id: number; label: string }) => (
+                            (activity: { label: string }) => (
                               <ChoiceButton
-                                key={activity.id}
+                                key={activity.label}
                                 text={activity.label}
                                 isSelected={selectedHobbies.includes(
                                   activity.label,
@@ -650,9 +650,9 @@ export default function S6_1({
                         <>
                           {/* Activity Buttons */}
                           {visibleActivities.map(
-                            (activity: { id: number; label: string }) => (
+                            (activity: { label: string }) => (
                               <ChoiceButton
-                                key={activity.id}
+                                key={activity.label}
                                 text={activity.label}
                                 isSelected={selectedHobbies.includes(
                                   activity.label,
@@ -821,10 +821,7 @@ export default function S6_1({
                               onClick={() => {
                                 if (onCompleted) {
                                   onCompleted({
-                                    selectedHobbies: [
-                                      ...selectedHobbies,
-                                      ...customHobbies,
-                                    ],
+                                    selectedHobbies,
                                     customHobbies,
                                     topThreeHobbies,
                                   });

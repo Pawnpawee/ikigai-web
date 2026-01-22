@@ -4,6 +4,7 @@ import { useScroll } from "framer-motion";
 import { useLenis } from "lenis/react";
 import { useRouter } from "next/navigation";
 import { useEffect, useRef, useState } from "react";
+import ErrorModal from "@/app/components/modal/ErrorModal";
 import { useUser } from "@/app/contexts/UserContext";
 import { useStarsVisibility } from "@/app/hooks/useStarsVisibility";
 import { API_BASE_URL } from "@/utils/appConfig";
@@ -24,6 +25,7 @@ export default function IntoDark() {
   const [nameError, setNameError] = useState("");
   const [reasonsError, setReasonsError] = useState("");
   const [isNameConfirmed, setIsNameConfirmed] = useState(false);
+  const [showErrorModal, setShowErrorModal] = useState(false);
 
   const { scrollYProgress } = useScroll({
     target: ref,
@@ -174,6 +176,12 @@ export default function IntoDark() {
         },
       );
 
+      if (!response.ok) {
+        setShowErrorModal(true);
+        setIsLoading(false);
+        return;
+      }
+
       const data = await response.json();
 
       saveUser(data.userId, playerName);
@@ -181,12 +189,21 @@ export default function IntoDark() {
       router.push("/love-session");
     } catch (error) {
       console.error("Error submitting data:", error);
+      setShowErrorModal(true);
       setIsLoading(false);
     }
   };
 
   return (
     <div ref={ref} className="w-full relative bg-black">
+      {/* Error Modal */}
+      <ErrorModal
+        isOpen={showErrorModal}
+        onClose={() => setShowErrorModal(false)}
+        title="ขออภัย"
+        message="ส่งข้อมูลไม่สำเร็จ กรุณาลองอีกครั้ง"
+      />
+
       {/* 300vh */}
       <div className="h-[300vh] w-full ">
         <IntoDarkNameInput

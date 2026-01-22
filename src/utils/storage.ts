@@ -7,8 +7,13 @@ const StorageKeys = {
 
 export const getSessionUser = () => {
   if (typeof window === "undefined") return null; // ป้องกัน Error ตอน SSR
+  const id = sessionStorage.getItem(StorageKeys.USER_ID);
+  const name = sessionStorage.getItem(StorageKeys.PLAYER_NAME);
+  if (!id || !name) {
+    return null;
+  }
   return {
-    id: sessionStorage.getItem(StorageKeys.USER_ID),
-    name: sessionStorage.getItem(StorageKeys.PLAYER_NAME),
+    id,
+    name,
   };
 };
