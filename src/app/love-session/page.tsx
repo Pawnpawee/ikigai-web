@@ -12,9 +12,9 @@ import {
 import { useStarsVisibility } from "@/app/hooks/useStarsVisibility";
 import { API_BASE_URL } from "@/utils/appConfig";
 import { getAudioUrl } from "@/utils/cloudinaryUtils";
-import { getSessionUser } from "@/utils/storage";
 import ErrorModal from "../components/modal/ErrorModal";
 import { useAudio } from "../contexts/AudioContext";
+import { useUser } from "../contexts/UserContext";
 import S6_1, { type S6_1Data } from "./s6_1";
 import S6_4 from "./s6_4";
 
@@ -22,9 +22,9 @@ export default function SessionLovePage() {
   //? Single ref for entire page
   const ref = useRef<HTMLDivElement>(null);
   const { setBgMusic, isMuted } = useAudio();
+  const { userId, isLoading } = useUser();
   const lenis = useLenis();
   const router = useRouter();
-  const [userId, setUserId] = useState<string | null>(null);
 
   const [isS6_1Completed, setIsS6_1Completed] = useState(false);
   const [s6_1Data, setS6_1Data] = useState<S6_1Data | null>(null);
@@ -107,16 +107,11 @@ export default function SessionLovePage() {
   }, [lenis, isS6_1Completed]);
 
   useEffect(() => {
-    //? 1. ดึงข้อมูลจาก Session Storage
-    const user = getSessionUser();
-
-    //? 2. เช็คว่ามีข้อมูลไหม?
-    if (user?.id) {
-      setUserId(user.id);
-    } else {
+    //? เช็คว่ามี userId จาก Context หรือไม่
+    if (!isLoading && !userId) {
       router.push("/prologue/into-dark");
     }
-  }, [router]);
+  }, [userId, isLoading, router]);
 
   //? Handler: Auto-scroll to s6_4 เมื่อ s6_1 completed
   const handleS6_1Completed = (data: S6_1Data) => {

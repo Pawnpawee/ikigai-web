@@ -17,3 +17,15 @@ export const getSessionUser = () => {
     name,
   };
 };
+
+export const saveSessionUser = (id: string, name: string) => {
+  if (typeof window === "undefined") return;
+  sessionStorage.setItem(StorageKeys.USER_ID, id);
+  sessionStorage.setItem(StorageKeys.PLAYER_NAME, name);
+};
+
+export const clearSessionUser = () => {
+  if (typeof window === "undefined") return;
+  sessionStorage.removeItem(StorageKeys.USER_ID);
+  sessionStorage.removeItem(StorageKeys.PLAYER_NAME);
+};

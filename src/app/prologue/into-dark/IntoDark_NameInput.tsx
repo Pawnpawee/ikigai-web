@@ -16,9 +16,9 @@ import SceneLayer, {
 } from "@/app/components/reusable/SceneLayer";
 import { useAudio } from "@/app/contexts/AudioContext";
 import { useDevice } from "@/app/contexts/DeviceContext";
+import { useUser } from "@/app/contexts/UserContext";
 import { SCENE_INTODARK_1_ITEMS } from "@/app/data/scene_intoDark_1";
 import { getAudioUrl, getJsonUrl } from "@/utils/cloudinaryUtils";
-import { getSessionUser } from "@/utils/storage";
 
 interface NameInputProps {
   scrollYProgress: MotionValue<number>;
@@ -39,16 +39,15 @@ export default function IntoDarkNameInput({
 }: NameInputProps) {
   const { isMobile } = useDevice();
   const { playSfx } = useAudio();
+  const { playerName: savedPlayerName } = useUser();
   const hasPlayedCatSound = useRef(false);
 
-  //? โหลดชื่อจาก sessionStorage เมื่อ component mount
+  //? โหลดชื่อจาก UserContext เมื่อ component mount
   useEffect(() => {
-    //? 1. ดึงข้อมูลจาก Session Storage
-    const user = getSessionUser();
-    if (user?.name?.trim()) {
-      setPlayerName(user.name);
+    if (savedPlayerName?.trim()) {
+      setPlayerName(savedPlayerName);
     }
-  }, [setPlayerName]);
+  }, [savedPlayerName, setPlayerName]);
 
   // Total height: 300vh (0-0.167 ของ 1800vh รวม)
   // ชุด 1: 0-25vh (0-0.014) - bg gradient + little star 2

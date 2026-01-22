@@ -184,6 +184,13 @@ export default function IntoDark() {
 
       const data = await response.json();
 
+      if (!data?.userId) {
+        console.error("Invalid response: userId is missing");
+        setShowErrorModal(true);
+        setIsLoading(false);
+        return;
+      }
+
       saveUser(data.userId, playerName);
 
       router.push("/love-session");
@@ -199,7 +206,10 @@ export default function IntoDark() {
       {/* Error Modal */}
       <ErrorModal
         isOpen={showErrorModal}
-        onClose={() => setShowErrorModal(false)}
+        onClose={() => {
+          setShowErrorModal(false);
+          setIsLoading(false);
+        }}
         title="ขออภัย"
         message="ส่งข้อมูลไม่สำเร็จ กรุณาลองอีกครั้ง"
       />

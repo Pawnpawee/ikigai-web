@@ -6,10 +6,16 @@ import {
   useEffect,
   useState,
 } from "react";
+import {
+  clearSessionUser,
+  getSessionUser,
+  saveSessionUser,
+} from "@/utils/storage";
 
 interface UserContextType {
   userId: string | null;
   playerName: string | null;
+  isLoading: boolean;
   saveUser: (id: string, name: string) => void;
   clearUser: () => void;
 }
@@ -19,32 +25,34 @@ const UserContext = createContext<UserContextType | undefined>(undefined);
 export function UserProvider({ children }: { children: ReactNode }) {
   const [userId, setUserId] = useState<string | null>(null);
   const [playerName, setPlayerName] = useState<string | null>(null);
+  const [isLoading, setIsLoading] = useState(true);
 
   //? เมื่อโหลดหน้าเว็บครั้งแรก ให้เช็คใน sessionStorage ก่อน
   useEffect(() => {
-    const storedId = sessionStorage.getItem("ikigai_userId");
-    const storedName = sessionStorage.getItem("ikigai_playerName");
-    if (storedId) setUserId(storedId);
-    if (storedName) setPlayerName(storedName);
+    const user = getSessionUser();
+    if (user) {
+      setUserId(user.id);
+      setPlayerName(user.name);
+    }
+    setIsLoading(false);
   }, []);
 
   const saveUser = (id: string, name: string) => {
     setUserId(id);
     setPlayerName(name);
-    // บันทึกลง Storage ให้อัตโนมัติ
-    sessionStorage.setItem("ikigai_userId", id);
-    sessionStorage.setItem("ikigai_playerName", name);
+    saveSessionUser(id, name);
   };
 
   const clearUser = () => {
     setUserId(null);
     setPlayerName(null);
-    sessionStorage.removeItem("ikigai_userId");
-    sessionStorage.removeItem("ikigai_playerName");
+    clearSessionUser();
   };
 
   return (
-    <UserContext.Provider value={{ userId, playerName, saveUser, clearUser }}>
+    <UserContext.Provider
+      value={{ userId, playerName, isLoading, saveUser, clearUser }}
+    >
       {children}
     </UserContext.Provider>
   );
