@@ -30,7 +30,7 @@ export default function GradientButton({
     // หาก disabled เป็น true ให้ return ออกทันที ไม่เล่นเสียงและไม่เรียก onClick
     if (disabled) return;
 
-    playSfx(getAudioUrl("Sound/Pop Select Button.mp3"));
+    playSfx(getAudioUrl("Sound/Pop_Select_Button.mp3"));
     onClick();
   };
 

@@ -15,8 +15,8 @@ import { getJsonUrl } from "@/utils/cloudinaryUtils";
 interface ChoicesProps {
   scrollYProgress: MotionValue<number>;
   playerName: string;
-  selectedReasons: number[];
-  handleReasonToggle: (id: number) => void;
+  selectedReasons: string[];
+  handleReasonToggle: (id: string) => void;
   reasonsError: string;
 }
 
@@ -126,7 +126,7 @@ export default function IntoDarkChoices({
             />
           </m.div>
 
-          {/* Top Content - Welcome Section (node-id: 497:3458) */}
+          {/* Top Content - Welcome Section */}
           <m.div
             className="absolute flex flex-col items-start w-screen pointer-events-auto"
             style={{
@@ -134,7 +134,7 @@ export default function IntoDarkChoices({
               opacity: textOpacity,
             }}
           >
-            {/* Welcome box with padding (node-id: 497:3459) */}
+            {/* Welcome box with padding */}
             <div
               className={`flex flex-col items-center justify-center text-center text-white w-full px-0 ${
                 isMobile
@@ -142,7 +142,7 @@ export default function IntoDarkChoices({
                   : "py-[100px] 2xl:py-[150px] gap-4"
               }`}
             >
-              {/* Main welcome text (node-id: 497:3460) */}
+              {/* Main welcome text */}
               <div className="leading-normal text-lg md:text-3xl w-full">
                 <div className="mb-0">
                   <MysteriousText
@@ -169,7 +169,7 @@ export default function IntoDarkChoices({
                   />
                 </div>
               </div>
-              {/* Subtitle text (node-id: 497:3461) */}
+              {/* Subtitle text */}
               <div className="text-sm md:text-xl w-full">
                 <p className={reasonsError ? "text-red-500 font-bold" : ""}>
                   {reasonsError || "(ตอบอย่างน้อย 1 ข้อ)"}
@@ -177,7 +177,7 @@ export default function IntoDarkChoices({
               </div>
             </div>
 
-            {/* Choice Buttons Section (node-id: 497:3462) */}
+            {/* Choice Buttons Section */}
             <m.div
               className={`flex px-[5%] w-screen ${
                 isMobile
@@ -190,31 +190,31 @@ export default function IntoDarkChoices({
               }}
             >
               <div className="flex flex-col gap-[15px] md:gap-[50px] xl:gap-[100px]">
-                {/* Choice button 1 (node-id: 478:910) */}
+                {/* Choice button 1 */}
                 <ChoiceButton
                   text={REASONS[0].text}
-                  isSelected={selectedReasons.includes(REASONS[0].id)}
-                  onClick={() => handleReasonToggle(REASONS[0].id)}
+                  isSelected={selectedReasons.includes(REASONS[0].text)}
+                  onClick={() => handleReasonToggle(REASONS[0].text)}
                   className="max-w-2xs
         min-h-10
         lg:max-w-md lg:min-w-md
         lg:min-h-28 px-10"
                 />
-                {/* Choice button 3 (node-id: 478:911) */}
+                {/* Choice button 3 */}
                 <ChoiceButton
                   text={REASONS[2].text}
-                  isSelected={selectedReasons.includes(REASONS[2].id)}
-                  onClick={() => handleReasonToggle(REASONS[2].id)}
+                  isSelected={selectedReasons.includes(REASONS[2].text)}
+                  onClick={() => handleReasonToggle(REASONS[2].text)}
                   className="max-w-2xs
         min-h-10
         lg:max-w-md lg:min-w-md
         lg:min-h-28 px-10"
                 />
-                {/* Choice button 6 (node-id: 478:912) */}
+                {/* Choice button 6 */}
                 <ChoiceButton
                   text={REASONS[5].text}
-                  isSelected={selectedReasons.includes(REASONS[5].id)}
-                  onClick={() => handleReasonToggle(REASONS[5].id)}
+                  isSelected={selectedReasons.includes(REASONS[5].text)}
+                  onClick={() => handleReasonToggle(REASONS[5].text)}
                   className="max-w-2xs
         min-h-10
         lg:max-w-md lg:min-w-md
@@ -222,31 +222,31 @@ export default function IntoDarkChoices({
                 />
               </div>
               <div className="flex flex-col gap-[15px] md:gap-[50px] xl:gap-[100px]">
-                {/* Choice button 2 (node-id: 478:907) */}
+                {/* Choice button 2 */}
                 <ChoiceButton
                   text={REASONS[1].text}
-                  isSelected={selectedReasons.includes(REASONS[1].id)}
-                  onClick={() => handleReasonToggle(REASONS[1].id)}
+                  isSelected={selectedReasons.includes(REASONS[1].text)}
+                  onClick={() => handleReasonToggle(REASONS[1].text)}
                   className="max-w-2xs
         min-h-10
         lg:max-w-md lg:min-w-md
         lg:min-h-28 px-10"
                 />
-                {/* Choice button 5 (node-id: 478:908) */}
+                {/* Choice button 5 */}
                 <ChoiceButton
                   text={REASONS[4].text}
-                  isSelected={selectedReasons.includes(REASONS[4].id)}
-                  onClick={() => handleReasonToggle(REASONS[4].id)}
+                  isSelected={selectedReasons.includes(REASONS[4].text)}
+                  onClick={() => handleReasonToggle(REASONS[4].text)}
                   className="max-w-2xs
         min-h-10
         lg:max-w-md lg:min-w-md
         lg:min-h-28 px-10"
                 />
-                {/* Choice button 4 (node-id: 478:909) */}
+                {/* Choice button 4 */}
                 <ChoiceButton
                   text={REASONS[3].text}
-                  isSelected={selectedReasons.includes(REASONS[3].id)}
-                  onClick={() => handleReasonToggle(REASONS[3].id)}
+                  isSelected={selectedReasons.includes(REASONS[3].text)}
+                  onClick={() => handleReasonToggle(REASONS[3].text)}
                   className="max-w-2xs
         min-h-10
         lg:max-w-md lg:min-w-md
@@ -256,7 +256,7 @@ export default function IntoDarkChoices({
             </m.div>
           </m.div>
 
-          {/* End Content Container (node-id: 497:3447) */}
+          {/* End Content Container */}
           <m.div
             className={`absolute bottom-0 flex w-screen flex-col items-center justify-center pointer-events-auto ${
               isMobile

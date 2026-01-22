@@ -6,7 +6,7 @@ import {
   useMotionValueEvent,
   useTransform,
 } from "framer-motion";
-import { useMemo, useRef } from "react";
+import { useEffect, useMemo, useRef } from "react";
 import { HiCheck } from "react-icons/hi";
 import InputButton from "@/app/components/button/InputButton";
 import LazyLottie from "@/app/components/reusable/LazyLottie";
@@ -16,6 +16,7 @@ import SceneLayer, {
 } from "@/app/components/reusable/SceneLayer";
 import { useAudio } from "@/app/contexts/AudioContext";
 import { useDevice } from "@/app/contexts/DeviceContext";
+import { useUser } from "@/app/contexts/UserContext";
 import { SCENE_INTODARK_1_ITEMS } from "@/app/data/scene_intoDark_1";
 import { getAudioUrl, getJsonUrl } from "@/utils/cloudinaryUtils";
 
@@ -38,7 +39,15 @@ export default function IntoDarkNameInput({
 }: NameInputProps) {
   const { isMobile } = useDevice();
   const { playSfx } = useAudio();
+  const { playerName: savedPlayerName } = useUser();
   const hasPlayedCatSound = useRef(false);
+
+  //? โหลดชื่อจาก UserContext เมื่อ component mount
+  useEffect(() => {
+    if (savedPlayerName?.trim()) {
+      setPlayerName(savedPlayerName);
+    }
+  }, [savedPlayerName, setPlayerName]);
 
   // Total height: 300vh (0-0.167 ของ 1800vh รวม)
   // ชุด 1: 0-25vh (0-0.014) - bg gradient + little star 2
@@ -240,6 +249,7 @@ export default function IntoDarkNameInput({
                         onChange={setPlayerName}
                         placeholder="พิมพ์ข้อความ..."
                         className="text-lg md:text-2xl"
+                        maxLength={20}
                       />
                     </m.div>
                     {/* Error message */}

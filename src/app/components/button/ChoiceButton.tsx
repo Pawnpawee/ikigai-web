@@ -18,7 +18,7 @@ export default function ChoiceButton({
   const { playSfx } = useAudio();
 
   const handleClick = () => {
-    playSfx(getAudioUrl("Sound/Pop Select Button.mp3"));
+    playSfx(getAudioUrl("Sound/Pop_Select_Button.mp3"));
     onClick();
   };
 
