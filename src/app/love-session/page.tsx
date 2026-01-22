@@ -2,6 +2,7 @@
 
 import { useScroll, useTransform } from "framer-motion";
 import { useLenis } from "lenis/react";
+import { useRouter } from "next/navigation";
 import { useEffect, useLayoutEffect, useRef, useState } from "react";
 import Cover from "@/app/components/reusable/Cover";
 import {
@@ -9,18 +10,25 @@ import {
   COVER_SESSION1_ITEMS,
 } from "@/app/data/cover_session1.data";
 import { useStarsVisibility } from "@/app/hooks/useStarsVisibility";
+import { API_BASE_URL } from "@/utils/appConfig";
 import { getAudioUrl } from "@/utils/cloudinaryUtils";
+import ErrorModal from "../components/modal/ErrorModal";
 import { useAudio } from "../contexts/AudioContext";
-import S6_1 from "./s6_1";
+import { useUser } from "../contexts/UserContext";
+import S6_1, { type S6_1Data } from "./s6_1";
 import S6_4 from "./s6_4";
 
 export default function SessionLovePage() {
   //? Single ref for entire page
   const ref = useRef<HTMLDivElement>(null);
   const { setBgMusic, isMuted } = useAudio();
+  const { userId, isLoading } = useUser();
   const lenis = useLenis();
+  const router = useRouter();
 
   const [isS6_1Completed, setIsS6_1Completed] = useState(false);
+  const [s6_1Data, setS6_1Data] = useState<S6_1Data | null>(null);
+  const [showErrorModal, setShowErrorModal] = useState(false);
 
   //? Single scrollYProgress for entire page (0-1 for 1500vh)
   const { scrollYProgress } = useScroll({
@@ -98,8 +106,18 @@ export default function SessionLovePage() {
     };
   }, [lenis, isS6_1Completed]);
 
+  useEffect(() => {
+    //? เช็คว่ามี userId จาก Context หรือไม่
+    if (!isLoading && !userId) {
+      router.push("/prologue/into-dark");
+    }
+  }, [userId, isLoading, router]);
+
   //? Handler: Auto-scroll to s6_4 เมื่อ s6_1 completed
-  const handleS6_1Completed = () => {
+  const handleS6_1Completed = (data: S6_1Data) => {
+    //? เก็บข้อมูล hobbies ที่ user เลือก
+    setS6_1Data(data);
+
     setIsS6_1Completed(true);
 
     if (ref.current && lenis) {
@@ -111,6 +129,33 @@ export default function SessionLovePage() {
     }
   };
 
+  //? Handler: Navigate to next session after s6_4 completed
+  const handleS6_4Continue = async (selectedChoice: string) => {
+    try {
+      const response = await fetch(`${API_BASE_URL}/api/user/progress/love`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          userId: userId,
+          selectedHobbies: s6_1Data?.selectedHobbies,
+          customHobbies: s6_1Data?.customHobbies,
+          topThreeHobbies: s6_1Data?.topThreeHobbies,
+          dreamAnswer: selectedChoice,
+        }),
+      });
+
+      if (!response.ok) {
+        setShowErrorModal(true);
+        return;
+      }
+
+      router.push("/skill-session");
+    } catch (error) {
+      console.error("Error submitting data:", error);
+      setShowErrorModal(true);
+    }
+  };
+
   //? Hide stars when entering S6_1 section (after 0.133)
   useStarsVisibility(scrollYProgress, {
     shouldShow: (p) => p <= 0.133,
@@ -118,6 +163,14 @@ export default function SessionLovePage() {
 
   return (
     <div ref={ref} className="h-[1500vh] w-full relative bg-black">
+      {/* Error Modal */}
+      <ErrorModal
+        isOpen={showErrorModal}
+        onClose={() => setShowErrorModal(false)}
+        title="ขออภัย"
+        message="ส่งข้อมูลไม่สำเร็จ กรุณาลองอีกครั้ง"
+      />
+
       {/* Cover Section - 200vh (0-200vh, progress: 0-0.133) */}
       <div className="h-[200vh] w-full">
         <Cover
@@ -139,7 +192,7 @@ export default function SessionLovePage() {
 
       {/* S6_4 Section - 700vh (800-1500vh, progress: 0.533-1.0) */}
       <div className="h-[700vh] w-full">
-        <S6_4 scrollYProgress={s6_4Progress} />
+        <S6_4 scrollYProgress={s6_4Progress} onContinue={handleS6_4Continue} />
       </div>
     </div>
   );

@@ -6,7 +6,6 @@ import {
   useMotionValueEvent,
   useTransform,
 } from "framer-motion";
-import { useRouter } from "next/navigation";
 import { useMemo, useRef, useState } from "react";
 import { HiOutlineChevronDown } from "react-icons/hi";
 import ChoiceButton from "@/app/components/button/ChoiceButton";
@@ -23,10 +22,10 @@ import { useDevice } from "../contexts/DeviceContext";
 
 interface S6_4Props {
   scrollYProgress: MotionValue<number>;
+  onContinue: (selectedChoice: string) => void;
 }
 
-export default function S6_4({ scrollYProgress }: S6_4Props) {
-  const router = useRouter();
+export default function S6_4({ scrollYProgress, onContinue }: S6_4Props) {
   const { isMobile } = useDevice();
   const { playSfx, stopAllSfx } = useAudio();
   const hasPlayedSound = useRef(false);
@@ -159,7 +158,7 @@ export default function S6_4({ scrollYProgress }: S6_4Props) {
   //? Handle continue button click
   const handleContinue = () => {
     stopAllSfx();
-    router.push("/skill-session");
+    onContinue(selectedChoice || "ไม่แน่ใจ");
   };
 
   const choices = [
@@ -260,8 +259,8 @@ export default function S6_4({ scrollYProgress }: S6_4Props) {
                   <ChoiceButton
                     key={choice.id}
                     text={choice.text}
-                    isSelected={selectedChoice === choice.id}
-                    onClick={() => handleChoiceSelect(choice.id)}
+                    isSelected={selectedChoice === choice.text}
+                    onClick={() => handleChoiceSelect(choice.text)}
                     className="px-8 py-2 md:px-16 md:py-4 text-sm md:text-2xl lg:text-3xl"
                   />
                 ))}

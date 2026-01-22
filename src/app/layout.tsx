@@ -7,6 +7,7 @@ import StarryBackground from "./components/StarryBackground";
 import { AudioProvider } from "./contexts/AudioContext";
 import { DeviceProvider } from "./contexts/DeviceContext";
 import { UIStarProvider } from "./contexts/UIStarContext";
+import { UserProvider } from "./contexts/UserContext";
 
 const anuphan = Anuphan({
   variable: "--font-anuphan",
@@ -46,10 +47,12 @@ export default function RootLayout({
           <OrientationGuard />
           {/* //todo: wait for design */}
           <AudioProvider>
-            <UIStarProvider>
-              <StarryBackground />
-              <AppWrapper>{children}</AppWrapper>
-            </UIStarProvider>
+            <UserProvider>
+              <UIStarProvider>
+                <StarryBackground />
+                <AppWrapper>{children}</AppWrapper>
+              </UIStarProvider>
+            </UserProvider>
           </AudioProvider>
         </DeviceProvider>
       </body>

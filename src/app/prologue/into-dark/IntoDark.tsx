@@ -4,7 +4,10 @@ import { useScroll } from "framer-motion";
 import { useLenis } from "lenis/react";
 import { useRouter } from "next/navigation";
 import { useEffect, useRef, useState } from "react";
+import ErrorModal from "@/app/components/modal/ErrorModal";
+import { useUser } from "@/app/contexts/UserContext";
 import { useStarsVisibility } from "@/app/hooks/useStarsVisibility";
+import { API_BASE_URL } from "@/utils/appConfig";
 import IntoDarkChoices from "./IntoDark_Choices";
 import IntoDarkHeard from "./IntoDark_Heard";
 import IntoDarkNameInput from "./IntoDark_NameInput";
@@ -16,12 +19,13 @@ export default function IntoDark() {
   const lenis = useLenis();
 
   const [playerName, setPlayerName] = useState("");
-  const [selectedReasons, setSelectedReasons] = useState<number[]>([]);
+  const [selectedReasons, setSelectedReasons] = useState<string[]>([]);
   const [hasHeard, setHasHeard] = useState<boolean | null>(null);
   const [isLoading, setIsLoading] = useState(false);
   const [nameError, setNameError] = useState("");
   const [reasonsError, setReasonsError] = useState("");
   const [isNameConfirmed, setIsNameConfirmed] = useState(false);
+  const [showErrorModal, setShowErrorModal] = useState(false);
 
   const { scrollYProgress } = useScroll({
     target: ref,
@@ -98,13 +102,13 @@ export default function IntoDark() {
     }
   };
 
-  // ... (ส่วน handleReasonToggle, handleSubmit คงเดิม) ...
-  const handleReasonToggle = (reasonId: number) => {
+  const handleReasonToggle = (reasonText: string) => {
     if (reasonsError) setReasonsError("");
-    setSelectedReasons((prev) =>
-      prev.includes(reasonId)
-        ? prev.filter((id) => id !== reasonId)
-        : [...prev, reasonId],
+    setSelectedReasons(
+      (prev) =>
+        prev.includes(reasonText)
+          ? prev.filter((text) => text !== reasonText) // เอาออก
+          : [...prev, reasonText], // เพิ่มเข้า
     );
   };
 
@@ -127,6 +131,8 @@ export default function IntoDark() {
       }
     }
   };
+
+  const { saveUser } = useUser();
 
   const handleSubmit = async () => {
     if (isLoading) return;
@@ -158,24 +164,56 @@ export default function IntoDark() {
     }
 
     try {
-      await fetch("/api/save-progress", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          playerName: playerName || "ผู้มาเยือน",
-          selectedReasons,
-        }),
-      });
+      const response = await fetch(
+        `${API_BASE_URL}/api/user/progress/prologue`,
+        {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            playerName: playerName || "ผู้มาเยือน",
+            selectedReasons: selectedReasons,
+          }),
+        },
+      );
+
+      if (!response.ok) {
+        setShowErrorModal(true);
+        setIsLoading(false);
+        return;
+      }
+
+      const data = await response.json();
+
+      if (!data?.userId) {
+        console.error("Invalid response: userId is missing");
+        setShowErrorModal(true);
+        setIsLoading(false);
+        return;
+      }
+
+      saveUser(data.userId, playerName);
 
       router.push("/love-session");
     } catch (error) {
       console.error("Error submitting data:", error);
+      setShowErrorModal(true);
       setIsLoading(false);
     }
   };
 
   return (
     <div ref={ref} className="w-full relative bg-black">
+      {/* Error Modal */}
+      <ErrorModal
+        isOpen={showErrorModal}
+        onClose={() => {
+          setShowErrorModal(false);
+          setIsLoading(false);
+        }}
+        title="ขออภัย"
+        message="ส่งข้อมูลไม่สำเร็จ กรุณาลองอีกครั้ง"
+      />
+
       {/* 300vh */}
       <div className="h-[300vh] w-full ">
         <IntoDarkNameInput
