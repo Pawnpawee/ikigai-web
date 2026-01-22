@@ -15,5 +15,4 @@ const getApiBaseUrl = (): string => {
   return "http://localhost:5112";
 };
 
-
 export const API_BASE_URL = getApiBaseUrl();
