@@ -14,7 +14,7 @@ export default function ErrorModal({
   isOpen,
   onClose,
   title = "ขออภัย",
-  message = "เกิดข้อผิดพลาด กรุณาลองอีกครั้ง",
+  message = "ส่งข้อมูลไม่สำเร็จ กรุณาลองอีกครั้ง",
 }: ErrorModalProps) {
   if (!isOpen) return null;
 
@@ -38,58 +38,58 @@ export default function ErrorModal({
         transition={{ type: "spring", stiffness: 300, damping: 25 }}
         className="flex w-screen h-screen items-center justify-center z-100 fixed"
       >
-        <div
-          className="bg-[#262b2e] rounded-2xl md:rounded-4xl p-4 md:px-8 py-7 md:py-14 flex flex-col
-            gap-5 md:gap-10 items-center max-w-[90%] md:max-w-[600px]"
-        >
-          {/* Error Icon */}
+        <div className="bg-[#262b2e] flex flex-col items-center rounded-2xl md:rounded-4xl px-10 md:px-20 py-8 md:py-16 gap-5 md:gap-10">
+          {/* Header Section: Icon + Title */}
           <m.div
-            initial={{ scale: 0 }}
-            animate={{ scale: 1 }}
-            transition={{ delay: 0.2, type: "spring", stiffness: 200 }}
-            className="bg-[#515c64] rounded-full px-2.5 md:px-5 py-3 md:py-6 flex items-center justify-center"
+            initial={{ opacity: 0, y: 10 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.2 }}
+            className="flex flex-col gap-8 items-center shrink-0"
           >
-            <Image
-              src={getImgPath("Icon/close.webp")}
-              alt="Error icon"
-              width={40}
-              height={40}
-              className="h-6 md:h-10 w-auto"
-            />
+            {/* Error Icon */}
+            <m.div
+              initial={{ scale: 0 }}
+              animate={{ scale: 1 }}
+              transition={{ delay: 0.3, type: "spring", stiffness: 200 }}
+              className="bg-[#515c64] rounded-full p-3 md:p-6 flex items-center justify-center"
+            >
+              <Image
+                src={getImgPath("Icon/cross_icon.webp")}
+                alt="Error icon"
+                width={48}
+                height={48}
+                className="w-full h-full block max-w-none"
+              />
+            </m.div>
+
+            {/* Title */}
+            <m.p
+              initial={{ opacity: 0, y: 10 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: 0.35 }}
+              className="text-2xl md:text-4xl text-white text-center"
+            >
+              {title}
+            </m.p>
           </m.div>
 
-          {/* Title */}
-          <m.h2
-            initial={{ opacity: 0, y: 10 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.3 }}
-            className="text-2xl md:text-4xl text-white text-center whitespace-pre-line"
-          >
-            {title}
-          </m.h2>
-
-          {/* Message */}
-          <m.p
-            initial={{ opacity: 0, y: 10 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.35 }}
-            className="text-base md:text-xl text-white text-center whitespace-pre-line"
-          >
-            {message}
-          </m.p>
-
-          {/* Close Button */}
+          {/* Content Section: Message + Button */}
           <m.div
             initial={{ opacity: 0, y: 10 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.4 }}
-            className="w-[200px] md:w-[300px]"
+            className="flex flex-col gap-5 md:gap-10 items-start shrink-0 w-full"
           >
+            {/* Message */}
+            <p className="text-base md:text-xl text-white text-center">
+              {message}
+            </p>
+
+            {/* Close Button */}
             <button
               type="button"
               onClick={onClose}
-              className="w-full bg-linear-to-r from-[#4a5568] to-[#2d3748] hover:from-[#5a6678] hover:to-[#3d4758] 
-                rounded-2xl py-4 md:py-5 px-4 transition-all caret-transparent"
+              className="w-full bg-[#3473c3] hover:bg-[#2961ad] rounded-2xl py-5 px-4 flex items-center justify-center shrink-0 transition-all caret-transparent"
             >
               <p className="text-xl md:text-3xl text-white text-center">
                 ลองอีกครั้ง
