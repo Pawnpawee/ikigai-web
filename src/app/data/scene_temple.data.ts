@@ -1,9 +1,7 @@
 import type { SceneItemData } from "../components/reusable/SceneLayer";
 
 //? Scene 10: Temple Arrival - Journey to the Temple
-export const TEMPLE_ARRIVAL_ITEMS: SceneItemData[] = [
-  
-];
+export const TEMPLE_ARRIVAL_ITEMS: SceneItemData[] = [];
 
 //? Analysis steps configuration with Thai text
 export const ANALYSIS_STEPS_CONFIG = [

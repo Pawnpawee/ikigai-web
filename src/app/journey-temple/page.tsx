@@ -25,7 +25,8 @@ export default function JourneyTemplePage() {
   }, [userId, isLoading, router]);
 
   //? Helper function: สร้าง Promise เพื่อหน่วงเวลา (ใช้แทน setTimeout ใน loop)
-  const wait = (ms: number) => new Promise((resolve) => setTimeout(resolve, ms));
+  const wait = (ms: number) =>
+    new Promise((resolve) => setTimeout(resolve, ms));
 
   const handleStartCeremony = async () => {
     if (!userId) {

@@ -1,4 +1,3 @@
-
 const StorageKeys = {
   USER_ID: "ikigai_userId",
   PLAYER_NAME: "ikigai_playerName",
@@ -45,7 +44,7 @@ export const saveSessionResult = (data: Record<string, unknown>) => {
 export const getSessionResult = () => {
   if (typeof window === "undefined") return null;
   const jsonString = sessionStorage.getItem(StorageKeys.IKIGAI_RESULT);
-  
+
   if (!jsonString) return null;
 
   try {

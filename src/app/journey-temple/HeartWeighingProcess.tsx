@@ -105,16 +105,13 @@ export default function HeartWeighingProcess({
         animate={{ scale: 1 }}
         transition={{ delay: 1, duration: 1, type: "spring" }}
       >
-
         {/* Heart with glow */}
         <m.div
           className="heart-glow absolute top-[10%] w-[30%] h-[30%] md:w-[25%] md:h-[25%]"
           initial={{ y: -50, opacity: 0 }}
           animate={{ y: 0, opacity: 1 }}
           transition={{ delay: 1.5, duration: 1 }}
-        >
-          
-        </m.div>
+        ></m.div>
 
         {/* Feather */}
         <m.div
@@ -131,9 +128,7 @@ export default function HeartWeighingProcess({
             repeat: Number.POSITIVE_INFINITY,
             ease: "easeInOut",
           }}
-        >
-          
-        </m.div>
+        ></m.div>
 
         {/* Floating symbols around heart */}
         {[0, 1, 2, 3].map((index) => (
