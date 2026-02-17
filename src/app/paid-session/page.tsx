@@ -39,7 +39,7 @@ export default function PaidSessionPage() {
       }
 
       //? Navigate to home or next session
-      router.push("/");
+      router.push("/journey-temple");
     } catch (error) {
       console.error("Error submitting paid data:", error);
       setShowErrorModal(true);
