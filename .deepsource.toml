@@ -1,14 +1,35 @@
 version = 1
 
+test_patterns = [
+  "**/*.test.ts",
+  "**/*.test.tsx",
+  "**/__tests__/**"
+]
+
+exclude_patterns = [
+  "**/node_modules/**",
+  "**/.next/**",        # //! warning: ต้อง Exclude เสมอ เพราะเป็น Build Artifact ของ Next.js
+  "**/out/**",          # //? information: สำหรับกรณีทำ Static Export (SSG)
+  "**/public/**",       # //? information: ไฟล์ Static assets ไม่ต้องตรวจ Logic
+  "**/coverage/**"
+]
+
 [[analyzers]]
 name = "javascript"
+enabled = true
 
   [analyzers.meta]
-  plugins = ["react"]
-  environment = [
-    "browser",
-    "nodejs"
-  ]
+  environment = ["browser", "nodejs"] 
+  
+  plugins = ["react", "types"]
 
-[[code_formatters]]
+  [analyzers.meta.thresholds]
+  max_issues = 0
+
+[[transformers]]
 name = "prettier"
+enabled = true
+
+[[analyzers]]
+name = "secrets"
+enabled = true
