@@ -8,9 +8,9 @@ test_patterns = [
 
 exclude_patterns = [
   "**/node_modules/**",
-  "**/.next/**",        # //! warning: ต้อง Exclude เสมอ เพราะเป็น Build Artifact ของ Next.js
-  "**/out/**",          # //? information: สำหรับกรณีทำ Static Export (SSG)
-  "**/public/**",       # //? information: ไฟล์ Static assets ไม่ต้องตรวจ Logic
+  "**/.next/**",
+  "**/out/**",
+  "**/public/**",
   "**/coverage/**"
 ]
 
@@ -19,9 +19,9 @@ name = "javascript"
 enabled = true
 
   [analyzers.meta]
-  environment = ["browser", "nodejs"] 
+  environment = ["browser", "nodejs"]
   
-  plugins = ["react", "types"]
+  plugins = ["react"]
 
   [analyzers.meta.thresholds]
   max_issues = 0
