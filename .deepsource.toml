@@ -20,10 +20,9 @@ enabled = true
 
   [analyzers.meta]
   environment = ["browser", "nodejs"]
-  
   plugins = ["react"]
 
-  [analyzers.meta.thresholds]
+  [analyzers.thresholds]
   max_issues = 0
 
 [[transformers]]
