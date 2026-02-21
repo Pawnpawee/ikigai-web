@@ -3,18 +3,21 @@ import { m } from "framer-motion";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
-import type { IkigaiAnalysis } from "@/app/types/ikigai.types";
+import type { IkigaiAnalysis, IkigaiScores } from "@/app/types/ikigai.types";
 import { getImgPath } from "@/utils/cloudinaryUtils";
+import IkigaiCards from "./IkigaiCards";
 import IkigaiVennDiagram from "./IkigaiVennDiagram";
 import SectionDetailModal from "./SectionDetailModal";
 
 interface IkigaiResultDisplayProps {
   analysis: IkigaiAnalysis;
+  scores?: IkigaiScores;
   playerName?: string;
 }
 
 export default function IkigaiResultDisplay({
   analysis,
+  scores,
   playerName,
 }: IkigaiResultDisplayProps) {
   const router = useRouter();
@@ -104,9 +107,9 @@ export default function IkigaiResultDisplay({
     : null;
 
   return (
-    <div className="relative min-h-screen w-full bg-linear-to-b from-purple-950 via-indigo-900 to-black overflow-hidden">
+    <div className="relative min-h-screen w-full bg-linear-to-b from-purple-950 via-indigo-900 to-black overflow-x-hidden">
       {/* Stars background */}
-      <div className="absolute inset-0 pointer-events-none">
+      <div className="fixed inset-0 pointer-events-none">
         {Array.from({ length: 50 }).map(() => {
           const randomLeft = Math.random() * 100;
           const randomTop = Math.random() * 100;
@@ -134,7 +137,7 @@ export default function IkigaiResultDisplay({
 
       {/* Deity message */}
       <m.div
-        className="absolute top-[5%] w-full text-center px-4 z-20"
+        className="w-full text-center px-4 z-20 pt-[5%]"
         initial={{ opacity: 0, y: -30 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ delay: 0.5, duration: 1 }}
@@ -151,7 +154,7 @@ export default function IkigaiResultDisplay({
 
       {/* Symbols merging animation */}
       {!showCircle && (
-        <div className="absolute inset-0 flex items-center justify-center">
+        <div className="relative h-[60vh] flex items-center justify-center">
           {[0, 1, 2, 3].map((index) => (
             <m.div
               key={`symbol-${index}`}
@@ -210,19 +213,38 @@ export default function IkigaiResultDisplay({
         </div>
       )}
 
-      {/* Ikigai Circle Diagram */}
+      {/* Ikigai Circle Diagram + Cards Side by Side */}
       {showCircle && (
         <m.div
-          className="absolute top-[20%] md:top-[15%] w-full px-4 flex justify-center"
+          className="w-full px-4 flex justify-center mt-8"
           initial={{ opacity: 0, scale: 0.8 }}
           animate={{ opacity: 1, scale: 1 }}
           transition={{ duration: 1, type: "spring" }}
         >
-          <div className="w-full max-w-4xl">
-            <IkigaiVennDiagram
-              analysis={analysis}
-              onSectionClick={handleSectionClick}
-            />
+          {/* Cards Sidebar */}
+          {scores && Object.keys(scores).length > 0 && (
+            <m.div
+              className="w-full lg:w-[320px] shrink-0"
+              initial={{ opacity: 0, x: 40 }}
+              animate={{ opacity: 1, x: 0 }}
+              transition={{ delay: 2.5, duration: 0.8 }}
+            >
+              <IkigaiCards
+                scores={scores}
+                analysis={analysis}
+                onCardClick={handleSectionClick}
+              />
+            </m.div>
+          )}
+          <div className="w-full max-w-7xl flex flex-col lg:flex-row items-center lg:items-start gap-6 lg:gap-10">
+            {/* Venn Diagram */}
+            <div className="w-full lg:flex-1">
+              <IkigaiVennDiagram
+                analysis={analysis}
+                scores={scores}
+                onSectionClick={handleSectionClick}
+              />
+            </div>
           </div>
         </m.div>
       )}
@@ -230,7 +252,7 @@ export default function IkigaiResultDisplay({
       {/* Action buttons */}
       {showCircle && (
         <m.div
-          className="absolute bottom-[5%] w-full flex flex-wrap justify-center gap-3 md:gap-4 px-4 z-20"
+          className="w-full flex flex-wrap justify-center gap-3 md:gap-4 px-4 py-8 z-20"
           initial={{ opacity: 0, y: 50 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 2.5, duration: 0.8 }}

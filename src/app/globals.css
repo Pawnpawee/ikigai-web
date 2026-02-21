@@ -153,6 +153,43 @@
   );
 }
 
+@utility bg-s7-1 {
+  background: linear-gradient(
+    0deg,
+    #28286f 0%,
+    #26276b 23%,
+    #222461 43%,
+    #1b1f4f 62%,
+    #121836 80%,
+    #060f16 97%,
+    #040e11 100%
+  );
+}
+
+@utility bg-s7-2 {
+  background: linear-gradient(
+    0deg,
+    #060129 1.32%,
+    #0b0735 9.19%,
+    #18154f 30.84%,
+    #212061 52.48%,
+    #26266c 75.11%,
+    #282870 99.7%
+  );
+}
+
+@utility bg-s7 {
+  background: linear-gradient(
+    0deg,
+    #060129 1.32%,
+    #0b0735 9.19%,
+    #18154f 30.84%,
+    #212061 52.48%,
+    #26266c 75.11%,
+    rgba(0, 0, 0, 0) 100%
+  );
+}
+
 body {
   background: var(--color-background);
   color: var(--color-foreground);

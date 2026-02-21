@@ -33,7 +33,8 @@ interface S6_1Props {
 }
 
 const MIN_SELECTIONS = 1;
-const MAX_SELECTIONS = 5;
+const MAX_SELECTIONS = 10;
+const STEP2_MIN_SELECTIONS = 1;
 const STEP2_MAX_SELECTIONS = 3;
 
 export default function S6_1({
@@ -44,7 +45,7 @@ export default function S6_1({
   const { isMobile } = useDevice();
 
   //? State Management
-  const [step, setStep] = useState(1); // 1 = เลือก 5, 2 = เลือก 3
+  const [step, setStep] = useState(1); // 1 = เลือก 10, 2 = เลือก 3
   const [selectedHobbies, setSelectedHobbies] = useState<string[]>([]);
   const [customHobbies, setCustomHobbies] = useState<string[]>([]);
   const [topThreeHobbies, setTopThreeHobbies] = useState<string[]>([]);
@@ -392,7 +393,7 @@ export default function S6_1({
                           }`}
                         >
                           {activitiesError ||
-                            `เลือกแล้ว ${topThreeHobbies.length}/${STEP2_MAX_SELECTIONS} กิจกรรม`}
+                            `เลือกแล้ว ${topThreeHobbies.length}/${STEP2_MAX_SELECTIONS} กิจกรรม (ขั้นต่ำ ${STEP2_MIN_SELECTIONS} กิจกรรม)`}
                         </p>
                       </>
                     )}
@@ -512,18 +513,16 @@ export default function S6_1({
                       initial={{ opacity: 0, y: 20 }}
                       animate={{
                         opacity:
-                          step === 1 && totalSelected === MAX_SELECTIONS
-                            ? 1
-                            : 0,
+                          step === 1 && totalSelected >= MIN_SELECTIONS ? 1 : 0,
                         y:
-                          step === 1 && totalSelected === MAX_SELECTIONS
+                          step === 1 && totalSelected >= MIN_SELECTIONS
                             ? 0
                             : 20,
                       }}
                       transition={{ duration: 0.5, ease: "easeOut" }}
                     >
                       {/* Proceed Button */}
-                      {step === 1 && totalSelected === MAX_SELECTIONS && (
+                      {step === 1 && totalSelected >= MIN_SELECTIONS && (
                         <GradientButton
                           text="ไปต่อ"
                           isSelected={true}
@@ -563,17 +562,17 @@ export default function S6_1({
                         initial={{ opacity: 0, y: 20 }}
                         animate={{
                           opacity:
-                            topThreeHobbies.length === STEP2_MAX_SELECTIONS
+                            topThreeHobbies.length >= STEP2_MIN_SELECTIONS
                               ? 1
                               : 0,
                           y:
-                            topThreeHobbies.length === STEP2_MAX_SELECTIONS
+                            topThreeHobbies.length >= STEP2_MIN_SELECTIONS
                               ? 0
                               : 20,
                         }}
                         transition={{ duration: 0.5, ease: "easeOut" }}
                       >
-                        {topThreeHobbies.length === STEP2_MAX_SELECTIONS && (
+                        {topThreeHobbies.length >= STEP2_MIN_SELECTIONS && (
                           <GradientButton
                             text="ไปต่อ"
                             isSelected={true}
@@ -631,7 +630,7 @@ export default function S6_1({
                           }`}
                         >
                           {activitiesError ||
-                            `เลือกแล้ว ${topThreeHobbies.length}/${STEP2_MAX_SELECTIONS} กิจกรรม`}
+                            `เลือกแล้ว ${topThreeHobbies.length}/${STEP2_MAX_SELECTIONS} กิจกรรม (ขั้นต่ำ ${STEP2_MIN_SELECTIONS} กิจกรรม)`}
                         </p>
                       </>
                     )}
@@ -752,18 +751,16 @@ export default function S6_1({
                       initial={{ opacity: 0, y: 20 }}
                       animate={{
                         opacity:
-                          step === 1 && totalSelected === MAX_SELECTIONS
-                            ? 1
-                            : 0,
+                          step === 1 && totalSelected >= MIN_SELECTIONS ? 1 : 0,
                         y:
-                          step === 1 && totalSelected === MAX_SELECTIONS
+                          step === 1 && totalSelected >= MIN_SELECTIONS
                             ? 0
                             : 20,
                       }}
                       transition={{ duration: 0.5, ease: "easeOut" }}
                     >
                       {/* Proceed Button */}
-                      {step === 1 && totalSelected === MAX_SELECTIONS && (
+                      {step === 1 && totalSelected >= MIN_SELECTIONS && (
                         <GradientButton
                           text="ไปต่อ"
                           isSelected={true}
@@ -804,17 +801,17 @@ export default function S6_1({
                           initial={{ opacity: 0, y: 20 }}
                           animate={{
                             opacity:
-                              topThreeHobbies.length === STEP2_MAX_SELECTIONS
+                              topThreeHobbies.length >= STEP2_MIN_SELECTIONS
                                 ? 1
                                 : 0,
                             y:
-                              topThreeHobbies.length === STEP2_MAX_SELECTIONS
+                              topThreeHobbies.length >= STEP2_MIN_SELECTIONS
                                 ? 0
                                 : 20,
                           }}
                           transition={{ duration: 0.5, ease: "easeOut" }}
                         >
-                          {topThreeHobbies.length === STEP2_MAX_SELECTIONS && (
+                          {topThreeHobbies.length >= STEP2_MIN_SELECTIONS && (
                             <GradientButton
                               text="ไปต่อ"
                               isSelected={true}

@@ -19,10 +19,58 @@ const PAID_ANSWER_CHOICES = [
   { id: "no", text: "ไม่ได้" },
 ];
 
+// ---------------------------------------------------------------------------
+//? Gibberish / Random Text Detection
+//? ตรวจจับข้อความที่พิมมั่วๆ หรือไม่มีความหมาย
+// ---------------------------------------------------------------------------
+function validateMeaningfulText(text: string): string | null {
+  const trimmed = text.trim();
+
+  //? 1. ความยาวขั้นต่ำ — ต้องมีอย่างน้อย 5 ตัวอักษร
+  if (trimmed.length < 5) {
+    return "กรุณาพิมพ์คำตอบอย่างน้อย 5 ตัวอักษร";
+  }
+
+  //? 2. ตัวอักษรซ้ำติดกัน เช่น "aaaaaaa", "กกกกก", "5555555"
+  if (/(.)\1{3,}/u.test(trimmed)) {
+    return "ดูเหมือนข้อความจะมีตัวอักษรซ้ำมากเกินไปนะ ลองพิมพ์ใหม่อีกครั้ง";
+  }
+
+  //? 3. Keyboard smash patterns (English + Thai)
+  const keyboardPatterns =
+    /asdf|qwer|zxcv|hjkl|uiop|bnm|fghj|tyui|sdfg|xcvb|wasd|ฟหกด|แโใไ|ๆไำพ|กดเ้|ทมใฝ|บปลห|อิืท|เ้าส|พะัี|ฟหกด|ดเ้า|หกดส|กดสว|ผปแอ|ฤๅษศ|ฯญฐ/i;
+  if (keyboardPatterns.test(trimmed)) {
+    return "ดูเหมือนจะพิมพ์มั่วๆ อยู่นะ ลองตอบอีกครั้งได้ไหม?";
+  }
+
+  //? 4. ตัวอักษรที่ไม่ซ้ำน้อยเกินไป (unique ratio ต่ำ = พิมพ์ซ้ำๆ)
+  const uniqueChars = new Set(trimmed.replace(/\s/g, "")).size;
+  const nonSpaceLen = trimmed.replace(/\s/g, "").length;
+  if (nonSpaceLen >= 5 && uniqueChars / nonSpaceLen < 0.25) {
+    return "ข้อความนี้ดูซ้ำๆ กันมาก ลองเล่าให้หลากหลายขึ้นอีกนิดนะ";
+  }
+
+  //? 5. มีแต่ตัวเลข / สัญลักษณ์พิเศษ ไม่มีตัวอักษรจริงเลย
+  const hasThaiOrEnglish = /[ก-๙a-zA-Z]/u.test(trimmed);
+  if (!hasThaiOrEnglish) {
+    return "กรุณาพิมพ์เป็นข้อความภาษาไทยหรืออังกฤษ";
+  }
+
+  //? 6. สัญลักษณ์มากเกินครึ่ง
+  const symbolCount = (trimmed.match(/[^ก-๙a-zA-Z\s]/gu) || []).length;
+  if (symbolCount / nonSpaceLen > 0.5) {
+    return "ข้อความมีสัญลักษณ์มากเกินไป ลองพิมพ์เป็นคำตอบที่อ่านได้นะ";
+  }
+
+  return null; //* ผ่านการตรวจสอบ
+}
+
 export default function PaidWork({ onSubmit }: PaidWorkProps) {
   const [scene, setScene] = useState<
     "intro" | "paid" | "jobs" | "experience" | "transition"
   >("intro");
+
+  const [experienceError, setExperienceError] = useState("");
 
   const [paidData, setPaidData] = useState<PaidData>({
     everPaidAnswer: "",
@@ -62,7 +110,17 @@ export default function PaidWork({ onSubmit }: PaidWorkProps) {
   };
 
   const handleExperienceSubmit = () => {
-    if (paidData.monetizableExperience.trim().length === 0) return;
+    const text = paidData.monetizableExperience.trim();
+    if (text.length === 0) return;
+
+    //? ตรวจสอบข้อความมั่วๆ / พิมเล่นๆ
+    const error = validateMeaningfulText(text);
+    if (error) {
+      setExperienceError(error);
+      return;
+    }
+
+    setExperienceError("");
     setTimeout(() => {
       setScene("transition");
       onSubmit(paidData);
@@ -112,7 +170,7 @@ export default function PaidWork({ onSubmit }: PaidWorkProps) {
                 <button
                   key={choice.id}
                   type="button"
-                  onClick={() => handlePaidAnswer(choice.text)}
+                  onClick={() => handlePaidAnswer(choice.id)}
                   className={`px-8 py-3 rounded-lg text-white hover:scale-105 transition-transform ${
                     choice.id === "yes" ? "bg-green-600" : "bg-red-600"
                   }`}
@@ -219,16 +277,22 @@ export default function PaidWork({ onSubmit }: PaidWorkProps) {
 
             <textarea
               value={paidData.monetizableExperience}
-              onChange={(e) =>
+              onChange={(e) => {
+                setExperienceError("");
                 setPaidData((prev) => ({
                   ...prev,
                   monetizableExperience: e.target.value,
-                }))
-              }
+                }));
+              }}
               maxLength={100}
               placeholder="เล่าประสบการณ์ของคุณ... (ไม่เกิน 100 ตัวอักษร)"
               className="w-full h-32 px-4 py-3 bg-gray-800 text-white rounded-lg resize-none mb-2"
             />
+            {experienceError && (
+              <p className="text-red-400 text-sm mb-2 text-center">
+                {experienceError}
+              </p>
+            )}
             <p className="text-gray-400 text-sm mb-6 text-right">
               {paidData.monetizableExperience.length} / 100
             </p>

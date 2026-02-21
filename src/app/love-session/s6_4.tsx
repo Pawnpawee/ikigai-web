@@ -164,7 +164,7 @@ export default function S6_4({ scrollYProgress, onContinue }: S6_4Props) {
   const choices = [
     { id: "yes", text: "ได้" },
     { id: "no", text: "ไม่ได้" },
-    { id: "unsure", text: "ไม่แน่ใจ" },
+    { id: "not_sure", text: "ไม่แน่ใจ" },
   ];
 
   return (
@@ -259,8 +259,8 @@ export default function S6_4({ scrollYProgress, onContinue }: S6_4Props) {
                   <ChoiceButton
                     key={choice.id}
                     text={choice.text}
-                    isSelected={selectedChoice === choice.text}
-                    onClick={() => handleChoiceSelect(choice.text)}
+                    isSelected={selectedChoice === choice.id}
+                    onClick={() => handleChoiceSelect(choice.id)}
                     className="px-8 py-2 md:px-16 md:py-4 text-sm md:text-2xl lg:text-3xl"
                   />
                 ))}
