@@ -1,10 +1,11 @@
 "use client";
 import { m } from "framer-motion";
 import { useState } from "react";
-import type { IkigaiAnalysis } from "@/app/types/ikigai.types";
+import type { IkigaiAnalysis, IkigaiScores } from "@/app/types/ikigai.types";
 
 interface IkigaiVennDiagramProps {
   analysis: IkigaiAnalysis;
+  scores?: IkigaiScores;
   onSectionClick?: (section: keyof IkigaiAnalysis) => void;
 }
 
@@ -68,6 +69,7 @@ const INTERSECTION_CONFIG = [
 
 export default function IkigaiVennDiagram({
   analysis,
+  scores,
   onSectionClick,
 }: IkigaiVennDiagramProps) {
   const [hoveredSection, setHoveredSection] = useState<
@@ -115,6 +117,17 @@ export default function IkigaiVennDiagram({
               <p className="text-white font-bold text-base md:text-xl leading-tight drop-shadow-lg">
                 {circle.label}
               </p>
+              {/* Score Badge */}
+              {scores?.[circle.key] != null && (
+                <div className="inline-flex items-center justify-center bg-white/20 backdrop-blur-sm rounded-full px-3 py-1 my-1 border border-white/30">
+                  <span className="text-yellow-300 font-bold text-lg md:text-2xl drop-shadow-lg">
+                    {scores[circle.key]}
+                  </span>
+                  <span className="text-white/80 text-xs md:text-sm ml-1">
+                    คะแนน
+                  </span>
+                </div>
+              )}
               <p className="text-white text-base md:text-xl leading-tight drop-shadow-lg">
                 {analysis[circle.key]?.short_summary}
               </p>
@@ -165,9 +178,17 @@ export default function IkigaiVennDiagram({
                   : "none",
             }}
           >
-            <p className="text-white font-semibold text-xs md:text-base whitespace-nowrap drop-shadow-lg">
-              {analysis[intersection.key]?.short_summary || intersection.label}
-            </p>
+            <div className="flex items-center gap-2">
+              {scores?.[intersection.key] != null && (
+                <span className="text-yellow-300 font-bold text-sm md:text-lg drop-shadow-lg">
+                  {scores[intersection.key]}
+                </span>
+              )}
+              <p className="text-white font-semibold text-xs md:text-base whitespace-nowrap drop-shadow-lg">
+                {analysis[intersection.key]?.short_summary ||
+                  intersection.label}
+              </p>
+            </div>
           </div>
         </m.div>
       ))}

@@ -1,8 +1,6 @@
 "use client";
 import { m, useAnimate } from "framer-motion";
-import Image from "next/image";
 import { useEffect, useState } from "react";
-import { getImgPath } from "@/utils/cloudinaryUtils";
 
 interface HeartWeighingProcessProps {
   isProcessing: boolean;

@@ -7,7 +7,6 @@ import ErrorModal from "../components/modal/ErrorModal";
 import { useUser } from "../contexts/UserContext";
 import HeartWeighingProcess from "./HeartWeighingProcess";
 import TempleArrival from "./TempleArrival";
-import { saveSessionResult } from "@/utils/storage";
 
 export default function JourneyTemplePage() {
   const router = useRouter();
@@ -23,10 +22,6 @@ export default function JourneyTemplePage() {
       router.push("/prologue/into-dark");
     }
   }, [userId, isLoading, router]);
-
-  //? Helper function: สร้าง Promise เพื่อหน่วงเวลา (ใช้แทน setTimeout ใน loop)
-  const wait = (ms: number) =>
-    new Promise((resolve) => setTimeout(resolve, ms));
 
   const handleStartCeremony = async () => {
     if (!userId) {

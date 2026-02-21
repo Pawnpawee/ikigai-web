@@ -27,7 +27,7 @@ const CALLED_UPON_CHOICES = [
 ];
 
 const NO_MANUAL_CHOICES = [
-  { id: "do_it_myself", text: "ลงมือหาวิธีด้วยตัวเอง" },
+  { id: "do_myself", text: "ลงมือหาวิธีด้วยตัวเอง" },
   { id: "ask_first", text: "ขอคำสั่งหรือ feedback ก่อนแล้วจึงทำตาม" },
 ];
 
@@ -180,7 +180,7 @@ export default function WorldNeeds({ onSubmit }: WorldNeedsProps) {
                 <button
                   key={choice.id}
                   type="button"
-                  onClick={() => handleCalledAnswer(choice.text)}
+                  onClick={() => handleCalledAnswer(choice.id)}
                   className={`px-8 py-3 rounded-lg text-white hover:scale-105 transition-transform ${
                     choice.id === "yes" ? "bg-green-600" : "bg-red-600"
                   }`}
@@ -269,9 +269,9 @@ export default function WorldNeeds({ onSubmit }: WorldNeedsProps) {
                 <button
                   key={choice.id}
                   type="button"
-                  onClick={() => handleNoManualAnswer(choice.text)}
+                  onClick={() => handleNoManualAnswer(choice.id)}
                   className={`px-6 py-3 rounded-lg text-white hover:scale-105 transition-transform ${
-                    choice.id === "do_it_myself"
+                    choice.id === "do_myself"
                       ? "bg-purple-600"
                       : "bg-orange-600"
                   }`}
@@ -305,7 +305,7 @@ export default function WorldNeeds({ onSubmit }: WorldNeedsProps) {
                 <button
                   key={choice.id}
                   type="button"
-                  onClick={() => handleMismatchAnswer(choice.text)}
+                  onClick={() => handleMismatchAnswer(choice.id)}
                   className={`px-6 py-3 rounded-lg text-white hover:scale-105 transition-transform ${
                     choice.id === "adapt_self"
                       ? "bg-blue-600"
@@ -340,7 +340,7 @@ export default function WorldNeeds({ onSubmit }: WorldNeedsProps) {
                 <button
                   key={choice.id}
                   type="button"
-                  onClick={() => handleFutureAnswer(choice.text)}
+                  onClick={() => handleFutureAnswer(choice.id)}
                   className={`px-8 py-3 rounded-lg text-white hover:scale-105 transition-transform ${
                     choice.id === "yes" ? "bg-green-600" : "bg-red-600"
                   }`}

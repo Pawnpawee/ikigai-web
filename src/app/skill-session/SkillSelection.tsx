@@ -459,7 +459,7 @@ export default function SkillSelection({ onSubmit }: SkillSelectionProps) {
                 <button
                   key={choice.id}
                   type="button"
-                  onClick={() => handleMatchAnswer(choice.text)}
+                  onClick={() => handleMatchAnswer(choice.id)}
                   className={`px-8 py-3 rounded-lg text-white hover:scale-105 transition-transform ${
                     choice.id === "match" ? "bg-green-600" : "bg-red-600"
                   }`}
@@ -493,7 +493,7 @@ export default function SkillSelection({ onSubmit }: SkillSelectionProps) {
                 <button
                   key={choice.id}
                   type="button"
-                  onClick={() => handleUseAnswer(choice.text)}
+                  onClick={() => handleUseAnswer(choice.id)}
                   className={`px-8 py-3 rounded-lg text-white hover:scale-105 transition-transform ${
                     choice.id === "yes" ? "bg-green-600" : "bg-red-600"
                   }`}

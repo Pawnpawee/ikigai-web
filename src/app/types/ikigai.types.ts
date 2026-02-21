@@ -16,8 +16,12 @@ export interface IkigaiAnalysis {
   vocation: IkigaiSection;
 }
 
+//? คะแนนแต่ละด้านของ Ikigai (0-100)
+export type IkigaiScores = Partial<Record<keyof IkigaiAnalysis, number>>;
+
 export interface IkigaiResult {
   ikigai_analysis: IkigaiAnalysis;
+  scores?: IkigaiScores;
 }
 
 //? Display configuration for each section
