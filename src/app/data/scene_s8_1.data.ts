@@ -192,7 +192,7 @@ export const SCENE_S8_1_ITEMS: SceneItemData[] = [
       top: "69.64%",
     },
     animGroup: 8,
-    className:"z-1"
+    className: "z-1",
   },
 
   //? ── Phase 2: Bloom Lotuses (100vh) ──
@@ -280,7 +280,7 @@ export const SCENE_S8_1_ITEMS: SceneItemData[] = [
       top: "46.18%",
     },
     animGroup: 12,
-    className:"z-1"
+    className: "z-1",
   },
 ];
 
