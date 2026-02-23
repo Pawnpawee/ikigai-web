@@ -190,6 +190,50 @@
   );
 }
 
+@utility bg-s8-1 {
+  background: linear-gradient(
+    180deg,
+    #323a83 -9.1%,
+    #2f418b -4.67%,
+    #2757a3 3.08%,
+    #1b7ac9 11.94%,
+    #1294e6 17.47%
+  );
+}
+
+@utility bg-s8-2 {
+  background: linear-gradient(
+    0deg,
+    #b1e588 0%,
+    #a9dd85 1%,
+    #89c17b 7%,
+    #6ea872 14%,
+    #58946b 22%,
+    #478466 31%,
+    #3b7962 42%,
+    #347360 57%,
+    #337260 100%
+  );
+}
+
+@utility bg-s8-3 {
+  background: linear-gradient(180deg, #1d3873 0%, #0e283d 100%);
+}
+@utility bg-s8-4 {
+  background: linear-gradient(0deg, #1d3873 0%, #13314d 100%);
+}
+@utility bg-s8-5 {
+  background: linear-gradient(
+    180deg,
+    #010101 1.97%,
+    #050812 7.51%,
+    #0b1227 16.36%,
+    #0e1837 26.33%,
+    #111c40 37.4%,
+    #121e43 52.9%
+  );
+}
+
 body {
   background: var(--color-background);
   color: var(--color-foreground);

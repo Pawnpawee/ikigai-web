@@ -2,6 +2,7 @@
 
 import { type MotionValue, m, useTransform } from "framer-motion";
 import { useMemo, useState } from "react";
+import { HiOutlineChevronDown } from "react-icons/hi";
 import GradientButton from "@/app/components/button/GradientButton";
 import MysteriousText from "@/app/components/reusable/MysteriousText";
 import SceneLayer, {
@@ -53,6 +54,7 @@ export default function S7_3({ scrollYProgress, onCompleted }: S7_3Props) {
   const [useSkillsInNewRole, setUseSkillsInNewRole] = useState<string | null>(
     null,
   );
+  const [showContinueButton, setShowContinueButton] = useState(false);
 
   // ─── Container Animations ───
 
@@ -114,6 +116,14 @@ export default function S7_3({ scrollYProgress, onCompleted }: S7_3Props) {
   const q2TextOpacity = useTransform(scrollYProgress, [0.7, 0.85], [0, 1]);
   const q2TextY = useTransform(scrollYProgress, [0.58, 0.68], [30, 0]);
 
+  //? Continue button opacity (appears after Q2 choice selected)
+  const continueButtonOpacity = useTransform(() => {
+    if (showContinueButton) {
+      return 1;
+    }
+    return 0;
+  });
+
   // ─── Handlers ───
 
   //? Q1: Select skills match answer
@@ -121,14 +131,19 @@ export default function S7_3({ scrollYProgress, onCompleted }: S7_3Props) {
     setSkillsMatchJob(choiceId);
   };
 
-  //? Q2: Select use-skills-in-new-role answer → submit S7_3 data
+  //? Q2: Select use-skills-in-new-role answer → show continue button
   const handleQ2Select = (choiceId: string) => {
     setUseSkillsInNewRole(choiceId);
+    //? Show continue button immediately when selected
+    setShowContinueButton(true);
+  };
 
-    if (skillsMatchJob) {
+  //? Handle continue button click → submit S7_3 data
+  const handleContinue = () => {
+    if (skillsMatchJob && useSkillsInNewRole) {
       onCompleted?.({
         skillsMatchJob,
-        useSkillsInNewRole: choiceId,
+        useSkillsInNewRole,
       });
     }
   };
@@ -240,6 +255,25 @@ export default function S7_3({ scrollYProgress, onCompleted }: S7_3Props) {
                 />
               ))}
             </div>
+
+            {/* Continue Button */}
+            <m.div
+              className="flex justify-center mt-8 md:mt-12"
+              style={{ opacity: continueButtonOpacity }}
+              initial={{ y: 20 }}
+              animate={{ y: showContinueButton ? 0 : 20 }}
+              transition={{ duration: 0.5, ease: "easeOut" }}
+            >
+              <GradientButton
+                text="ไปต่อ"
+                isSelected={true}
+                onClick={handleContinue}
+                variant="default"
+                className="text-lg md:text-2xl lg:text-3xl"
+              >
+                <HiOutlineChevronDown className="ml-2" />
+              </GradientButton>
+            </m.div>
           </m.div>
         </SceneLayer>
       </m.div>
