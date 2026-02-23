@@ -9,7 +9,7 @@ export const getImgPath = (path: string) => {
 
   //? Return Cloudinary URL สำหรับ production
   // Note: ต้อง upload รูปไปที่ folder assets ใน Cloudinary ก่อน
-  return `https://res.cloudinary.com/${cloudName}/image/upload/assets/${path}`;
+  return `https://res.cloudinary.com/${cloudName}/image/upload/v1/assets/${path}`;
 };
 
 //? information: สร้าง URL เต็มสำหรับไฟล์ JSON (Lottie)
