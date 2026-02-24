@@ -237,7 +237,7 @@ export default function S8_1({ scrollYProgress, onCompleted }: S8_1Props) {
               scrollYProgress={scrollYProgress}
               startProgress={0.78}
               endProgress={0.85}
-              className="text-center leading-relaxed tracking-wide text-white text-md md:text-2xl lg:text-3xl"
+              className="text-center leading-relaxed tracking-wide text-white text-base md:text-2xl lg:text-3xl"
             />
           </div>
 
@@ -264,7 +264,7 @@ export default function S8_1({ scrollYProgress, onCompleted }: S8_1Props) {
                 scrollYProgress={scrollYProgress}
                 startProgress={0.78}
                 endProgress={0.88}
-                className="text-white text-md md:text-2xl lg:text-3xl leading-normal tracking-[0.6px]"
+                className="text-white text-base md:text-2xl lg:text-3xl leading-normal tracking-[0.6px]"
               />
             </div>
 
