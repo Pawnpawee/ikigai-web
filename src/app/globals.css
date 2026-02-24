@@ -233,6 +233,18 @@
     #121e43 52.9%
   );
 }
+@utility bg-s9-2 {
+  background: linear-gradient(
+    180deg,
+    #ffd064 2.82%,
+    #efbd5a 10.35%,
+    #cd9345 29.15%,
+    #b17234 47.95%,
+    #9d5a27 65.82%,
+    #924b20 82.74%,
+    #8e471e 96.84%
+  );
+}
 
 body {
   background: var(--color-background);

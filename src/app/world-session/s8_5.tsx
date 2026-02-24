@@ -202,7 +202,7 @@ export default function S8_5({ scrollYProgress, onCompleted }: S8_5Props) {
                 scrollYProgress={scrollYProgress}
                 startProgress={0.6}
                 endProgress={0.7}
-                className="text-white text-md md:text-2xl lg:text-3xl leading-normal tracking-[0.6px]"
+                className="text-white text-base md:text-2xl lg:text-3xl leading-normal tracking-[0.6px]"
               />
             </div>
 

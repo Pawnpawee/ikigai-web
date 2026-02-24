@@ -220,7 +220,7 @@ export default function S7_2({ scrollYProgress, onCompleted }: S7_2Props) {
                     />
                     {/*? Counter */}
                     <m.p
-                      className={`text-center mt-1 sm:mt-2 select-none text-xs md:text-md xl:text-lg  ${
+                      className={`text-center mt-1 sm:mt-2 select-none text-xs md:text-base xl:text-lg  ${
                         error ? "text-red-400 font-bold" : "text-gray-300"
                       }`}
                       style={{ opacity: choicesOpacity }}
@@ -332,7 +332,7 @@ export default function S7_2({ scrollYProgress, onCompleted }: S7_2Props) {
 
                     {/*? Counter (functional, not in Figma — sits inside question block) */}
                     <m.p
-                      className={`text-center mt-1 sm:mt-2 select-none text-xs md:text-md xl:text-lg ${
+                      className={`text-center mt-1 sm:mt-2 select-none text-xs md:text-base xl:text-lg ${
                         error ? "text-red-400 font-bold" : "text-gray-300"
                       }`}
                       style={{ opacity: choicesOpacity }}

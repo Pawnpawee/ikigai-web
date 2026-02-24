@@ -129,7 +129,7 @@ function GiftCard({
         {/*? Card label below the frame */}
         <p
           className={`
-					text-white text-center text-xs md:text-md lg:text-xl
+					text-white text-center text-xs md:text-base lg:text-xl
 					leading-tight select-none px-1 whitespace-pre-line min-w-max
 					transition-colors duration-300
 					${isSelected ? "text-yellow-300 font-semibold" : "text-white/90"}
@@ -320,7 +320,7 @@ export default function S8_2({ scrollYProgress, onCompleted }: S8_2Props) {
               />
               {/*? Selection Counter */}
               <m.p
-                className="text-center mt-1 sm:mt-2 select-none text-xs md:text-md xl:text-lg text-gray-300"
+                className="text-center mt-1 sm:mt-2 select-none text-xs md:text-base xl:text-lg text-gray-300"
                 style={{ opacity: carouselOpacity }}
               >
                 เลือกแล้ว {selectedGifts.length} (ตอบได้หลายข้อ ขั้นต่ำ{" "}

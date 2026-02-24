@@ -16,24 +16,27 @@ import {
   ARROW_L_SRC,
   ARROW_R_SRC,
   CARD_FRAME_SRC,
-  HARD_SKILL_CARDS,
   ITEMS_PER_PAGE,
-  SCENE_S7_1_ITEMS,
+  JOB_CARDS,
+  MIN_SELECTIONS,
+  S9_2_QUESTION_TEXT,
+  SCENE_S9_2_ITEMS,
   SELECTED_FRAME_SRC,
-} from "@/app/data/scene_s7_1.data";
+} from "@/app/data/scene_s9_2.data";
 import { useDevice } from "../contexts/DeviceContext";
 
-export interface S7_1Data {
-  selectedHardSkills: string[];
-  customHardSkills: string[];
+// ────────────────────────────────────────────────────
+//  Types
+// ────────────────────────────────────────────────────
+
+export interface S9_2Data {
+  selectedJobCards: string[];
 }
 
-interface S7_1Props {
+interface S9_2Props {
   scrollYProgress: MotionValue<number>;
-  onCompleted?: (data: S7_1Data) => void;
+  onCompleted?: (data: S9_2Data) => void;
 }
-
-const MIN_SELECTIONS = 2;
 
 // ────────────────────────────────────────────────────
 //  Carousel Navigation Arrow
@@ -54,7 +57,7 @@ function CarouselArrow({
       onClick={onClick}
       disabled={disabled}
       className={`
-        z-10 flex items-center justify-center
+        z-10 flex items-center justify-center shrink-0
         aspect-39/79 w-[2.5%] portrait:w-[6.2%]
         transition-opacity duration-300
         ${disabled ? "opacity-20 cursor-default" : "opacity-80 hover:opacity-100 cursor-pointer"}
@@ -62,7 +65,6 @@ function CarouselArrow({
       whileTap={disabled ? {} : { scale: 0.9 }}
       aria-label={direction === "left" ? "Previous page" : "Next page"}
     >
-      {/*? Arrow image matching Figma */}
       <Image
         src={direction === "left" ? ARROW_L_SRC : ARROW_R_SRC}
         alt={direction === "left" ? "Previous" : "Next"}
@@ -75,65 +77,77 @@ function CarouselArrow({
 }
 
 // ────────────────────────────────────────────────────
-//  Skill Card Component
+//  Job Avatar Card Component
 // ────────────────────────────────────────────────────
 
-function SkillCard({
-  imageSrc,
-  label,
+function JobAvatarCard({
+  avatarSrc,
+  category,
+  jobs,
   isSelected,
   onClick,
 }: {
-  imageSrc: string;
-  label: string;
+  avatarSrc: string;
+  category: string;
+  jobs: string[];
   isSelected: boolean;
   onClick: () => void;
-  isMobile: boolean;
 }) {
   return (
     <m.button
       type="button"
       onClick={onClick}
-      className="flex flex-col items-center justify-center cursor-pointer w-[23.56%] portrait:w-[55%] gap-3 md:gap-5"
+      //? Desktop: 450.40/1680 = 26.81%, Mobile: 389.35/1080 = 36.05%
+      className="flex flex-col items-center justify-center cursor-pointer
+        w-[26.81%] portrait:w-[69%] gap-0"
       whileHover={{ scale: 1.03 }}
       whileTap={{ scale: 0.97 }}
       transition={{ type: "spring", stiffness: 300, damping: 20 }}
     >
-      {/*? Card Frame  */}
-      <div className="relative w-full aspect-396/428 transition-all duration-300">
+      {/*? Card Frame — aspect 450.40/520.11 ≈ aspect-450/520 */}
+      <div className="relative w-full aspect-450/520 transition-all duration-300">
         {/*? Frame border image — switches to selected_frame when selected */}
         <Image
           src={isSelected ? SELECTED_FRAME_SRC : CARD_FRAME_SRC}
           alt=""
           fill
           sizes="25vw"
-          className="w-full z-10 pointer-events-none"
+          className="w-full pointer-events-none"
         />
 
-        {/*? Skill illustration inside the frame */}
-        <div className="absolute inset-[15%] flex items-center justify-center overflow-hidden">
-          <Image
-            src={imageSrc}
-            alt={label}
-            fill
-            sizes="30vw"
-            className="object-contain"
-          />
-        </div>
-      </div>
-
-      <div className="w-full flex items-start justify-center overflow-visible">
-        {/*? Card label below the frame */}
-        <p
-          className={`
-          text-white text-center text-xs md:text-base lg:text-xl
-          leading-tight select-none px-1
-          transition-colors duration-300
-          ${isSelected ? "text-yellow-300 font-semibold" : "text-white/90"}
-        `}
+        {/*? Inner content: Avatar + labels */}
+        <div
+          className="absolute flex flex-col items-center
+          inset-x-[15.12%] top-[7.30%] bottom-[3%] gap-[3.90%]"
         >
-          {label}
-        </p>
+          {/*? Avatar illustration — 314.16/450.40 = 69.75% width, aspect 314/280 */}
+          <div className="relative w-full aspect-314/280 overflow-hidden shrink-0 portrait:w-[80%]">
+            <Image
+              src={avatarSrc}
+              alt={category}
+              fill
+              sizes="20vw"
+              className="object-contain"
+            />
+          </div>
+
+          {/*? Text labels — category + top 3 jobs */}
+          <div className="flex flex-col items-center w-full gap-[4%] h-full">
+            <p
+              className={`
+                flex items-center justify-center text-center text-[10px] min-[375px]:text-xs md:text-base lg:text-xl select-none w-[140%] min-h-[50%] align-middle whitespace-pre-line
+                 transition-colors duration-300
+                ${isSelected ? "text-yellow-300 font-semibold" : "text-white/90"}
+              `}
+            >
+              {category}
+            </p>
+            <p className="text-center text-[9px] min-[375px]:text-xs md:text-sm lg:text-base text-black line-clamp-2 select-none">
+              {jobs.slice(0, 3).join(" · ")}
+              {jobs.length > 3 && ` +${jobs.length - 3}`}
+            </p>
+          </div>
+        </div>
       </div>
     </m.button>
   );
@@ -162,13 +176,13 @@ function DotNavigation({
             key={`dot-page-${pageNum}`}
             onClick={() => onPageChange(i)}
             className={`
-            rounded-full transition-all duration-300 cursor-pointer
-            ${
-              currentPage === i
-                ? "w-2 h-2 md:w-3.5 md:h-3.5 bg-white shadow-[0_0_8px_rgba(255,255,255,0.6)]"
-                : "w-1.5 h-1.5 md:w-3 md:h-3 bg-white/30 hover:bg-white/50"
-            }
-          `}
+              rounded-full transition-all duration-300 cursor-pointer
+              ${
+                currentPage === i
+                  ? "w-2 h-2 md:w-3.5 md:h-3.5 bg-white shadow-[0_0_8px_rgba(255,255,255,0.6)]"
+                  : "w-1.5 h-1.5 md:w-3 md:h-3 bg-white/30 hover:bg-white/50"
+              }
+            `}
             aria-label={`Go to page ${pageNum}`}
           />
         );
@@ -178,23 +192,23 @@ function DotNavigation({
 }
 
 // ────────────────────────────────────────────────────
-//  Main Component: S7_1 (Hard Skills Carousel)
+//  Main Component: S9_2 (Job Cards Carousel)
 // ────────────────────────────────────────────────────
 
-export default function S7_1({ scrollYProgress, onCompleted }: S7_1Props) {
+export default function S9_2({ scrollYProgress, onCompleted }: S9_2Props) {
   const { isMobile } = useDevice();
 
   //? Carousel State
   const [currentPage, setCurrentPage] = useState(0);
-  const [selectedSkills, setSelectedSkills] = useState<string[]>([]);
+  const [selectedCards, setSelectedCards] = useState<string[]>([]);
   const [slideDirection, setSlideDirection] = useState<1 | -1>(1);
 
-  const totalPages = Math.ceil(HARD_SKILL_CARDS.length / ITEMS_PER_PAGE);
+  const totalPages = Math.ceil(JOB_CARDS.length / ITEMS_PER_PAGE);
 
   //? Get cards for the current page
   const currentCards = useMemo(
     () =>
-      HARD_SKILL_CARDS.slice(
+      JOB_CARDS.slice(
         currentPage * ITEMS_PER_PAGE,
         (currentPage + 1) * ITEMS_PER_PAGE,
       ),
@@ -205,24 +219,23 @@ export default function S7_1({ scrollYProgress, onCompleted }: S7_1Props) {
 
   //? Main container opacity / zIndex
   const opacity = useTransform(scrollYProgress, [0, 0.1, 0.8, 1], [0, 1, 1, 0]);
-
   const zIndex = useTransform(
     scrollYProgress,
     [0, 0.1, 0.9, 1],
     [-1, 10, 10, -1],
   );
 
-  //? 1. bgcircle (animGroup 1)
+  //? animGroup 1: element_bg
   const bgOpacity = useTransform(scrollYProgress, [0, 0.1], [0, 1]);
 
-  //? 2. starlight (animGroup 2)
-  const starlightOpacity = useTransform(scrollYProgress, [0.05, 0.15], [0, 1]);
+  //? animGroup 2: bgelement
+  const bgElementOpacity = useTransform(scrollYProgress, [0.05, 0.15], [0, 1]);
 
-  //? 3. Question text
+  //? Question text
   const questionOpacity = useTransform(scrollYProgress, [0.15, 0.25], [0, 1]);
   const questionY = useTransform(scrollYProgress, [0.15, 0.25], [30, 0]);
 
-  //? 4. Carousel area
+  //? Carousel area
   const carouselOpacity = useTransform(scrollYProgress, [0.25, 0.4], [0, 1]);
   const carouselY = useTransform(scrollYProgress, [0.25, 0.4], [40, 0]);
 
@@ -230,31 +243,26 @@ export default function S7_1({ scrollYProgress, onCompleted }: S7_1Props) {
   const animations: AnimationMap = useMemo(
     () => ({
       1: { opacity: bgOpacity },
-      2: { opacity: starlightOpacity },
+      2: { opacity: bgElementOpacity },
     }),
-    [bgOpacity, starlightOpacity],
+    [bgOpacity, bgElementOpacity],
   );
 
   // ─── Handlers ───
 
-  //? ใช้ ref เก็บ onCompleted เพื่อหลีกเลี่ยง stale closure
   const onCompletedRef = useRef(onCompleted);
   onCompletedRef.current = onCompleted;
 
-  const handleCardToggle = useCallback((label: string) => {
-    setSelectedSkills((prev) => {
-      const next = prev.includes(label)
-        ? prev.filter((s) => s !== label)
-        : [...prev, label];
+  const handleCardToggle = useCallback((category: string) => {
+    setSelectedCards((prev) => {
+      const next = prev.includes(category)
+        ? prev.filter((c) => c !== category)
+        : [...prev, category];
 
       //? เมื่อเลือกครบตาม MIN_SELECTIONS → เรียก onCompleted ทันที
       if (next.length >= MIN_SELECTIONS) {
-        //? ใช้ queueMicrotask เพื่อเรียกหลัง setState เสร็จ (ไม่ setState ซ้อน)
         queueMicrotask(() => {
-          onCompletedRef.current?.({
-            selectedHardSkills: next,
-            customHardSkills: [],
-          });
+          onCompletedRef.current?.({ selectedJobCards: next });
         });
       }
 
@@ -289,40 +297,39 @@ export default function S7_1({ scrollYProgress, onCompleted }: S7_1Props) {
 
   return (
     <m.div
-      className="fixed flex justify-center top-0 h-screen w-screen bg-s7-1 overflow-hidden"
+      className="fixed flex justify-center top-0 h-screen w-screen overflow-hidden bg-s9-2"
       style={{ opacity, zIndex }}
     >
       <m.div className="flex items-center h-screen w-screen portrait:w-auto">
         <SceneLayer
-          items={SCENE_S7_1_ITEMS}
+          items={SCENE_S9_2_ITEMS}
           animations={animations}
           containerAspectRatio={isMobile ? "1080 / 1920" : "1920 / 1080"}
         >
           {/* Content Layer */}
-          <div className="absolute inset-0 flex flex-col items-center justify-start p-[6.7%] portrait:p-0 portrait:pt-[15.74%] portrait:gap-[2%]">
-            {/*? Question Text */}
+          <div
+            className="absolute inset-0 flex flex-col items-center justify-start
+            p-[6.25%] portrait:p-0 portrait:pt-[6.97%] portrait:gap-[2%]"
+          >
+            {/*? Question Text — Desktop: (120,130) = 6.25%, 12.04% */}
             <m.div
-              className="flex flex-col items-center justify-center w-full select-none py-[4.6%] portrait:py-0"
-              style={{
-                opacity: questionOpacity,
-                y: questionY,
-              }}
+              className="flex flex-col items-center justify-center w-full select-none
+                py-[3%] portrait:py-0"
+              style={{ opacity: questionOpacity, y: questionY }}
             >
               <MysteriousText
-                text={
-                  "จงเลือกสิ่งที่เจ้าถนัดมากที่สุด อย่างน้อย 2 อย่าง \n ถ้าไม่แน่ใจ ให้เลือกสิ่งที่คิดว่าทำได้ดี ณ ตอนนี้ ? (Hard Skills)"
-                }
+                text={S9_2_QUESTION_TEXT}
                 scrollYProgress={scrollYProgress}
                 startProgress={0.15}
                 endProgress={0.25}
-                className="text-white text-sm md:text-lg lg:text-2xl leading-normal text-center"
+                className="text-white text-base md:text-2xl lg:text-3xl leading-normal text-center"
               />
               {/*? Selection Counter */}
               <m.p
-                className="text-center mt-1 sm:mt-2 select-none text-xs md:text-base xl:text-lg text-gray-300"
+                className="text-center mt-1 sm:mt-2 select-none text-xs md:text-base xl:text-lg text-white"
                 style={{ opacity: carouselOpacity }}
               >
-                เลือกแล้ว {selectedSkills.length} (ขั้นต่ำ {MIN_SELECTIONS}{" "}
+                เลือกแล้ว {selectedCards.length} สาขา (ขั้นต่ำ {MIN_SELECTIONS}{" "}
                 อย่าง)
               </m.p>
             </m.div>
@@ -332,8 +339,13 @@ export default function S7_1({ scrollYProgress, onCompleted }: S7_1Props) {
               className="flex flex-col items-center justify-center w-full h-full"
               style={{ opacity: carouselOpacity, y: carouselY }}
             >
-              {/* Carousel Row: Arrow + Cards + Arrow */}
-              <div className="flex items-center justify-center w-[87.5%] aspect-1680/506 portrait:w-[65%] portrait:aspect-713/1398">
+              {/*? Carousel Row: Arrow + Cards + Arrow */}
+              {/*? Desktop: 1680/1920 = 87.5%, aspect 1680/520 */}
+              {/*? Mobile: 706.73/1080 = 65.44%, aspect 706/1428 */}
+              <div
+                className="flex items-center justify-center
+                w-[87.5%] aspect-1680/520 portrait:w-[65.44%] portrait:aspect-706/1428"
+              >
                 {/* Left Arrow */}
                 <CarouselArrow
                   direction="left"
@@ -355,16 +367,18 @@ export default function S7_1({ scrollYProgress, onCompleted }: S7_1Props) {
                         x: { type: "spring", stiffness: 300, damping: 30 },
                         opacity: { duration: 0.2 },
                       }}
-                      className="flex justify-center items-center gap-[5%] portrait:flex-col portrait:gap-[1.56%] w-full h-full"
+                      className="flex justify-center items-center
+                        gap-[2.38%] portrait:flex-col portrait:gap-[2.80%]
+                        w-full h-full"
                     >
                       {currentCards.map((card) => (
-                        <SkillCard
+                        <JobAvatarCard
                           key={card.id}
-                          imageSrc={card.imageSrc}
-                          label={card.label}
-                          isSelected={selectedSkills.includes(card.label)}
-                          onClick={() => handleCardToggle(card.label)}
-                          isMobile={isMobile}
+                          avatarSrc={card.avatarSrc}
+                          category={card.category}
+                          jobs={card.jobs}
+                          isSelected={selectedCards.includes(card.category)}
+                          onClick={() => handleCardToggle(card.category)}
                         />
                       ))}
                     </m.div>
