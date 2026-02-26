@@ -1,75 +1,246 @@
 "use client";
+
 import { m, useScroll, useTransform } from "framer-motion";
-import { useRef } from "react";
+import { useMemo, useRef } from "react";
+import { getJsonUrl } from "@/utils/cloudinaryUtils";
 import GradientButton from "../components/button/GradientButton";
+import LazyLottie from "../components/reusable/LazyLottie";
+import SceneLayer, {
+  type AnimationMap,
+} from "../components/reusable/SceneLayer";
 import WordByWordAnimation from "../components/text/WordByWordAnimation";
+import { useDevice } from "../contexts/DeviceContext";
+import {
+  TEMPLE_ARRIVAL_ITEMS,
+  TEMPLE_DIALOGUE,
+} from "../data/scene_temple.data";
 import { useStarsVisibility } from "../hooks/useStarsVisibility";
+
+//? Scene 10.2: Temple Weighing - ฉากวิหารชั่งหัวใจ
+//? Scroll: 400vh (300vh temple + 100vh button area)
+//? เหมือน Weighing.tsx แต่ไม่มี human falling, เพิ่ม cat + ปุ่มชั่งหัวใจ
 
 interface TempleArrivalProps {
   onStartCeremony: () => void;
 }
 
-const TEMPLE_DIALOGUE = `เจ้ามาถึงวิหารแล้ว… โลกและความสามารถของเจ้ากำลังจะถูกชั่งอย่างยุติธรรม
-นี่คือโอกาสครั้งที่สองของเจ้า… เพื่อค้นพบ Ikigai ของตนเอง`;
-
 export default function TempleArrival({ onStartCeremony }: TempleArrivalProps) {
   const ref = useRef<HTMLDivElement>(null);
+  const { isMobile } = useDevice();
 
   const { scrollYProgress } = useScroll({
     target: ref,
     offset: ["start start", "end end"],
   });
 
-  //? Transform values for scene
-  const sceneOpacity = useTransform(
+  // ============ OPACITY ============
+  //? Main opacity - fade in ตอนเริ่ม
+  const opacity = useTransform(
     scrollYProgress,
-    [0, 0.1, 0.9, 1],
+    [0, 0.05, 0.95, 1],
     [0, 1, 1, 1],
   );
-  const textProgress = useTransform(scrollYProgress, [0.2, 0.8], [0, 1]);
 
-  //? Button appearance
-  const buttonOpacity = useTransform(scrollYProgress, [0.85, 0.95], [0, 1]);
-  const buttonY = useTransform(scrollYProgress, [0.85, 0.95], [50, 0]);
+  //? Inside scene opacity
+  const insideOpacity = useTransform(scrollYProgress, [0, 0.05], [0, 1]);
 
-  //? Stars visibility
+  // ============ SET 4: BUILDING + GROUND (0.05-0.15) ============
+  const set4Opacity = useTransform(scrollYProgress, [0.05, 0.15], [0, 1]);
+  const set4Y = useTransform(scrollYProgress, [0.05, 0.15], [100, 0]);
+
+  // ============ SET 6: SCALE + PLATES (0.2-0.3) ============
+  const set6Opacity = useTransform(scrollYProgress, [0.2, 0.3], [0, 1]);
+  const set6Y = useTransform(scrollYProgress, [0.2, 0.3], [100, 0]);
+
+  // ============ ZOOM (0.3-0.5) ============
+  const containerScale = useTransform(
+    scrollYProgress,
+    [0.3, 0.5],
+    isMobile ? [2.3, 4] : [1, 2],
+  );
+  const containerTop = useTransform(
+    scrollYProgress,
+    [0.3, 0.5],
+    isMobile ? ["-1%", "-3%"] : ["0%", "-7%"],
+  );
+
+  //? Derive z_move จาก containerScale เพื่อใช้กับ perspective 3D
+  const z_move = useTransform(containerScale, (s) => {
+    const scale = Number(s) || 1;
+    if (scale === 0) return 0;
+    return 1000 * (1 - 1 / scale);
+  });
+
+  // ============ HEART DROP (0.35-0.5) ============
+  //? Heart: หมุนเอียงลงเมื่อหนักกว่า
+  const heartRotate = useTransform(scrollYProgress, [0.35, 0.5], [0, -15]);
+  //? Heart plate: ตกลงตาม
+  const heartPlateY = useTransform(
+    scrollYProgress,
+    [0.35, 0.5],
+    isMobile ? [0, 8] : [0, 30],
+  );
+  //? Feather plate: ลอยขึ้นเล็กน้อย
+  const featherPlateY = useTransform(
+    scrollYProgress,
+    [0.35, 0.5],
+    isMobile ? [0, -3] : [0, -10],
+  );
+
+  // ============ CAT APPEARANCE (0.5-0.6) ============
+  const catOpacity = useTransform(scrollYProgress, [0.5, 0.6], [0, 1]);
+  const catY = useTransform(scrollYProgress, [0.5, 0.6], [50, 0]);
+
+  // ============ TEXT + BUTTON (0.55-0.75) ============
+  const textOpacity = useTransform(scrollYProgress, [0.55, 0.65], [0, 1]);
+  const textProgress = useTransform(scrollYProgress, [0.55, 0.75], [0, 1]);
+
+  //? Button: ปรากฏตอนสุดท้าย
+  const buttonOpacity = useTransform(scrollYProgress, [0.65, 0.75], [0, 1]);
+  const buttonY = useTransform(scrollYProgress, [0.65, 0.75], [50, 0]);
+
+  // ============ ANIMATION MAP ============
+  const animations: AnimationMap = useMemo(
+    () => ({
+      //? Building + Ground
+      4: { y: set4Y, opacity: set4Opacity },
+      //? Scale bar (หมุนตาม heartRotate)
+      69: { y: set6Y, opacity: set6Opacity, rotate: heartRotate },
+      //? Scale center
+      6: { y: set6Y, opacity: set6Opacity },
+      //? Heart plate (ตกลง)
+      66: { y: heartPlateY, opacity: set6Opacity },
+      //? Feather plate (ลอยขึ้น)
+      67: { y: featherPlateY, opacity: set6Opacity },
+      //? Light overlay
+      68: { y: set6Y, opacity: set6Opacity },
+      //? Cat light halo
+      10: { opacity: catOpacity, y: catY },
+    }),
+    [
+      set4Y,
+      set4Opacity,
+      set6Y,
+      set6Opacity,
+      heartRotate,
+      heartPlateY,
+      featherPlateY,
+      catOpacity,
+      catY,
+    ],
+  );
+
+  //? Stars: แสดงตลอดทั้ง section
   useStarsVisibility(scrollYProgress, {
     shouldShow: (p) => p >= 0 && p < 1,
   });
 
   return (
-    <m.div ref={ref} className="h-[300vh] w-full relative">
-      <m.div
-        className="fixed flex flex-col justify-center items-center bg-black gap-10 h-full w-full"
-        style={{ opacity: sceneOpacity }}
-      >
-        {/* Dialogue text */}
-        <m.div className="text-center px-4" style={{ opacity: sceneOpacity }}>
-          <WordByWordAnimation
-            text={TEMPLE_DIALOGUE}
-            scrollYProgress={textProgress}
-            as="p"
-            className="text-white text-lg md:text-2xl leading-relaxed drop-shadow-[0_0_10px_rgba(0,0,0,0.8)]"
-          />
-        </m.div>
+    <m.div ref={ref} className="relative h-[400vh]" style={{ opacity }}>
+      {/* Background */}
+      <div className="absolute w-screen inset-0" />
 
-        {/* Ceremony button */}
+      {/* Perspective Container (fixed) */}
+      <div
+        className="fixed inset-0 w-screen h-screen pointer-events-none"
+        style={{
+          perspective: "1000px",
+          perspectiveOrigin: "50% 50%",
+          zIndex: 0,
+        }}
+      >
         <m.div
-          className=""
+          className="fixed w-full h-full flex items-center justify-center bg-s4"
           style={{
-            opacity: buttonOpacity,
-            y: buttonY,
+            top: containerTop,
+            z: z_move,
+            willChange: "transform",
+            backfaceVisibility: "hidden",
+            opacity: insideOpacity,
           }}
         >
-          <GradientButton
-            text="เริ่มพิธีชั่งหัวใจ"
-            isSelected={false}
-            onClick={onStartCeremony}
-            variant="white"
-            className="text-xl md:text-3xl"
-          />
+          <div className="relative aspect-video w-full">
+            <m.div className="absolute inset-0 w-full h-full">
+              <SceneLayer
+                items={TEMPLE_ARRIVAL_ITEMS}
+                animations={animations}
+                containerAspectRatio="16 / 9"
+              >
+                {/* Clothing Lottie (reuse Scene4) */}
+                <m.div
+                  className="absolute bottom-[-2.1333%] left-[23.5375%] w-[52.8875%] h-[90.8444%]"
+                  style={{
+                    opacity: set4Opacity,
+                    y: set4Y,
+                  }}
+                  initial={{ opacity: 0, y: 100 }}
+                >
+                  <LazyLottie
+                    src={getJsonUrl("Scene/Scene4/s4-clothing.json")}
+                    loop
+                    playTrigger={set4Opacity}
+                    className="w-full h-full"
+                  />
+                </m.div>
+
+                {/* Cat Lottie - ปรากฏตอนท้าย */}
+                {/* Figma: x=760.07, y=737.13, w=314.67, h=325.53 */}
+                <m.div
+                  className="absolute left-[39.6%] top-[68.3%] w-[16.4%] h-[30.1%]"
+                  style={{
+                    opacity: catOpacity,
+                    y: catY,
+                  }}
+                  initial={{ opacity: 0 }}
+                >
+                  <LazyLottie
+                    src={getJsonUrl("Scene/Scene10/cat.json")}
+                    loop
+                    playTrigger={catOpacity}
+                    className="w-full h-full"
+                  />
+                </m.div>
+              </SceneLayer>
+            </m.div>
+          </div>
         </m.div>
+      </div>
+
+      {/* Text overlay - คำสนทนาของเทพ */}
+      <m.div
+        className="fixed bottom-[15%] left-0 right-0 text-center px-4 pointer-events-none z-10"
+        style={{ opacity: textOpacity }}
+      >
+        <WordByWordAnimation
+          text={TEMPLE_DIALOGUE.deity}
+          scrollYProgress={textProgress}
+          as="p"
+          className="text-lg md:text-2xl text-white leading-relaxed drop-shadow-[0_0_10px_rgba(0,0,0,0.8)]"
+        />
       </m.div>
+
+      {/* Ceremony button - ปุ่มเริ่มพิธีชั่งหัวใจ */}
+      <m.div
+        className="fixed bottom-[5%] left-0 right-0 flex justify-center z-20"
+        style={{
+          opacity: buttonOpacity,
+          y: buttonY,
+        }}
+      >
+        <GradientButton
+          text="เริ่มพิธีชั่งหัวใจ"
+          isSelected={false}
+          onClick={onStartCeremony}
+          variant="white"
+          className="text-xl md:text-3xl"
+        />
+      </m.div>
+
+      {/* Night mode overlay */}
+      <div
+        className="fixed inset-0 w-screen h-screen mix-blend-soft-light pointer-events-none"
+        style={{ backgroundColor: "var(--color-overlay)", opacity: 0.5 }}
+      />
     </m.div>
   );
 }

@@ -1,24 +1,18 @@
 "use client";
 import { m, useAnimate } from "framer-motion";
 import { useEffect, useState } from "react";
+import {
+  ANALYSIS_STEPS_CONFIG,
+  TEMPLE_DIALOGUE,
+} from "../data/scene_temple.data";
+
+//? Scene 10.2 (ต่อ): Heart Weighing Process
+//? แสดงเมื่อกดปุ่ม "เริ่มพิธีชั่งหัวใจ"
+//? ส่วน heart Lottie จะเพิ่มภายหลัง
 
 interface HeartWeighingProcessProps {
   isProcessing: boolean;
 }
-
-const ANALYSIS_STEPS = [
-  { id: 1, text: "กำลังวิเคราะห์ What you love", duration: 5000 },
-  { id: 2, text: "กำลังวิเคราะห์ What you good at", duration: 5000 },
-  { id: 3, text: "กำลังวิเคราะห์ What the world need", duration: 5000 },
-  { id: 4, text: "กำลังวิเคราะห์ What you can be paid for", duration: 5000 },
-  { id: 5, text: "กำลังวิเคราะห์ อาชีพที่ใช่สำหรับคุณ", duration: 10000 },
-  { id: 6, text: "กำลังวิเคราะห์ ikigai ของคุณ", duration: 10000 },
-  { id: 7, text: "ใกล้เสร็จแล้ว...", duration: 5000 },
-];
-
-const DEITY_DIALOGUE = `ตอนนี้… หัวใจเจ้ากำลังถูกชั่ง… 
-ขนนกจะบอกความจริงเกี่ยวกับอิคิไกของเจ้า 
-โดยผลลัพธ์นี้เป็นเพียงภาพหนึ่งของความเป็นเจ้า ณ ตอนนี้เท่านั้น`;
 
 export default function HeartWeighingProcess({
   isProcessing,
@@ -26,7 +20,7 @@ export default function HeartWeighingProcess({
   const [currentStep, setCurrentStep] = useState(0);
   const [scope, animate] = useAnimate();
 
-  //? Progress through analysis steps
+  //? Progress through analysis steps - ไล่ step ตามลำดับ
   useEffect(() => {
     if (!isProcessing) return;
 
@@ -34,9 +28,9 @@ export default function HeartWeighingProcess({
     let currentStepIndex = 0;
 
     const progressThroughSteps = () => {
-      if (currentStepIndex < ANALYSIS_STEPS.length) {
+      if (currentStepIndex < ANALYSIS_STEPS_CONFIG.length) {
         setCurrentStep(currentStepIndex);
-        const step = ANALYSIS_STEPS[currentStepIndex];
+        const step = ANALYSIS_STEPS_CONFIG[currentStepIndex];
 
         timeoutId = setTimeout(() => {
           currentStepIndex++;
@@ -52,7 +46,7 @@ export default function HeartWeighingProcess({
     };
   }, [isProcessing]);
 
-  //? Animate heart glow
+  //? Animate heart glow - เรืองแสงรอบหัวใจ
   useEffect(() => {
     if (!isProcessing) return;
 
@@ -84,7 +78,7 @@ export default function HeartWeighingProcess({
       animate={{ opacity: 1 }}
       transition={{ duration: 1 }}
     >
-      {/* Deity dialogue */}
+      {/* Deity dialogue - คำพูดของเทพ */}
       <m.div
         className="absolute top-[10%] w-[90%] md:w-[70%] text-center px-4"
         initial={{ opacity: 0, y: -20 }}
@@ -92,26 +86,27 @@ export default function HeartWeighingProcess({
         transition={{ delay: 0.5, duration: 1 }}
       >
         <p className="text-white text-base md:text-xl leading-relaxed whitespace-pre-line drop-shadow-[0_0_10px_rgba(0,0,0,0.8)]">
-          {DEITY_DIALOGUE}
+          {TEMPLE_DIALOGUE.weighing}
         </p>
       </m.div>
 
-      {/* Heart and Scale */}
+      {/* Heart and Scale - ตาชั่งหัวใจ */}
       <m.div
         className="relative w-[80%] md:w-[50%] h-[40vh] flex items-center justify-center"
         initial={{ scale: 0 }}
         animate={{ scale: 1 }}
         transition={{ delay: 1, duration: 1, type: "spring" }}
       >
-        {/* Heart with glow */}
+        {/* Heart with glow - placeholder สำหรับ Lottie */}
+        {/*todo: เพิ่ม heart Lottie animation ตรงนี้ */}
         <m.div
           className="heart-glow absolute top-[10%] w-[30%] h-[30%] md:w-[25%] md:h-[25%]"
           initial={{ y: -50, opacity: 0 }}
           animate={{ y: 0, opacity: 1 }}
           transition={{ delay: 1.5, duration: 1 }}
-        ></m.div>
+        />
 
-        {/* Feather */}
+        {/* Feather - ขนนก */}
         <m.div
           className="absolute top-[10%] right-[15%] w-[20%] h-[20%] md:w-[15%] md:h-[15%]"
           initial={{ y: -100, opacity: 0, rotate: -45 }}
@@ -126,9 +121,9 @@ export default function HeartWeighingProcess({
             repeat: Number.POSITIVE_INFINITY,
             ease: "easeInOut",
           }}
-        ></m.div>
+        />
 
-        {/* Floating symbols around heart */}
+        {/* Floating symbols around heart - อนุภาคลอยรอบหัวใจ */}
         {[0, 1, 2, 3].map((index) => (
           <m.div
             key={`symbol-${index}`}
@@ -155,7 +150,7 @@ export default function HeartWeighingProcess({
         ))}
       </m.div>
 
-      {/* Analysis progress text */}
+      {/* Analysis progress text - ข้อความสถานะการวิเคราะห์ */}
       <m.div
         className="absolute bottom-[15%] w-[90%] md:w-[60%] text-center"
         key={currentStep}
@@ -164,13 +159,18 @@ export default function HeartWeighingProcess({
         exit={{ opacity: 0, y: -20 }}
         transition={{ duration: 0.8 }}
       >
+        <div className="flex items-center justify-center gap-3 mb-2">
+          <span className="text-2xl md:text-4xl">
+            {ANALYSIS_STEPS_CONFIG[currentStep]?.icon}
+          </span>
+        </div>
         <p className="text-white text-xl md:text-3xl font-light tracking-wide">
-          {ANALYSIS_STEPS[currentStep]?.text}
+          {ANALYSIS_STEPS_CONFIG[currentStep]?.text}
         </p>
 
         {/* Progress dots */}
         <div className="flex justify-center gap-2 mt-6">
-          {ANALYSIS_STEPS.map((step) => (
+          {ANALYSIS_STEPS_CONFIG.map((step) => (
             <m.div
               key={`dot-${step.id}`}
               className="w-2 h-2 md:w-3 md:h-3 rounded-full"
