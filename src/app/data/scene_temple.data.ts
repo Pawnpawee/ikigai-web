@@ -123,7 +123,6 @@ export const TEMPLE_ARRIVAL_ITEMS: SceneItemData[] = [
     priority: true,
     sizes: "(max-width: 768px) 40vw, 30vw",
   },
-
 ];
 
 //? Analysis steps configuration with Thai text
