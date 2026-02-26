@@ -7,6 +7,11 @@ import ErrorModal from "../components/modal/ErrorModal";
 import { useUser } from "../contexts/UserContext";
 import HeartWeighingProcess from "./HeartWeighingProcess";
 import TempleArrival from "./TempleArrival";
+import WalkingDesert from "./WalkingDesert";
+
+//? Journey Temple Page - รวม Scene 10.1 + 10.2
+//? Scene 10.1: Walking through the desert (200vh)
+//? Scene 10.2: Temple Arrival + Heart Weighing (400vh)
 
 export default function JourneyTemplePage() {
   const router = useRouter();
@@ -162,12 +167,15 @@ export default function JourneyTemplePage() {
         message={errorMessage}
       />
 
-      {/* Scene 10: Temple Arrival */}
+      {/* Scene 10.1: Walking through the desert */}
+      <WalkingDesert />
+
+      {/* Scene 10.2: Temple Arrival */}
       {showTempleScene && (
         <TempleArrival onStartCeremony={handleStartCeremony} />
       )}
 
-      {/* Scene 11: Heart Weighing Process */}
+      {/* Scene 10.2 (ต่อ): Heart Weighing Process */}
       <HeartWeighingProcess isProcessing={isProcessing} />
     </>
   );

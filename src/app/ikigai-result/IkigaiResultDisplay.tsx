@@ -98,8 +98,8 @@ export default function IkigaiResultDisplay({
 
   //? Continue to next page (e.g., recommendations, next steps, etc.)
   const handleContinue = () => {
-    //todo Navigate to next page (career recommendations, goal setting, etc.)
-    router.push("/");
+    //* Navigate to Closing scene (ฉากปิดท้าย)
+    router.push("/closing");
   };
 
   const selectedSectionData = selectedSection

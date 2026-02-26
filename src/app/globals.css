@@ -246,6 +246,31 @@
   );
 }
 
+@utility bg-s10 {
+  background: linear-gradient(
+    0deg,
+    #fad08a 7.25%,
+    #f9cd88 35.97%,
+    #f5c482 54.81%,
+    #f0b478 71.85%,
+    #e99f6a 87.11%,
+    #e38d5f 96.97%
+  );
+}
+
+@utility bg-closing {
+  background: linear-gradient(
+    0deg,
+    #fff0a2 31.48%,
+    #fcefa3 48.82%,
+    #f2eba9 61.31%,
+    #e2e6b2 72.41%,
+    #cbdebf 82.82%,
+    #aed5cf 92.53%,
+    #91cbe1 100.86%
+  );
+}
+
 body {
   background: var(--color-background);
   color: var(--color-foreground);
