@@ -21,7 +21,7 @@ export default function OrientationGuard() {
           {/* Rotate Phone Animation */}
           <div className="w-30 md:w-50 xl:w-75">
             <LazyLottie
-              src={getJsonUrl("rotate phone.json")}
+              src={getJsonUrl("rotate_phone.json")}
               className="w-full h-full"
               loop
               play={true}

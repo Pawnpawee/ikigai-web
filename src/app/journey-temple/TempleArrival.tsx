@@ -14,7 +14,6 @@ import {
   TEMPLE_ARRIVAL_ITEMS,
   TEMPLE_DIALOGUE,
 } from "../data/scene_temple.data";
-import { useStarsVisibility } from "../hooks/useStarsVisibility";
 
 //? Scene 10.2: Temple Weighing - ฉากวิหารชั่งหัวใจ
 //? Scroll: 400vh (300vh temple + 100vh button area)
@@ -129,11 +128,6 @@ export default function TempleArrival({ onStartCeremony }: TempleArrivalProps) {
       catY,
     ],
   );
-
-  //? Stars: แสดงตลอดทั้ง section
-  useStarsVisibility(scrollYProgress, {
-    shouldShow: (p) => p >= 0 && p < 1,
-  });
 
   return (
     <m.div ref={ref} className="relative h-[400vh]" style={{ opacity }}>

@@ -24,7 +24,10 @@ interface AudioContextType {
   setBgMusic: (src: string | null) => void;
   setVolume: (vol: number) => void;
   setSfxVolume: (vol: number) => void;
-  playSfx: (src: string, options?: { volumeMultiplier?: number }) => void;
+  playSfx: (
+    src: string,
+    options?: { volumeMultiplier?: number; loop?: boolean },
+  ) => Howl | undefined;
   stopAllSfx: () => void; //? หยุดเสียง SFX ทั้งหมด
 }
 
@@ -69,7 +72,6 @@ export function AudioProvider({ children }: { children: React.ReactNode }) {
       // ตั้งค่า Volume เริ่มต้น
       if (savedVol !== undefined) {
         setVolume(savedVol);
-        Howler.volume(savedVol / 100);
       }
 
       // ตั้งค่า SFX Volume
@@ -96,6 +98,7 @@ export function AudioProvider({ children }: { children: React.ReactNode }) {
       const bgSound = new Howl({
         src: [defaultBgMusic],
         loop: true,
+        volume: 0, //? จะ fade in ตอน start()
       });
 
       soundRef.current = bgSound;
@@ -120,7 +123,7 @@ export function AudioProvider({ children }: { children: React.ReactNode }) {
     // Resume ถ้ามีเพลงค้างอยู่
     if (soundRef.current && !soundRef.current.playing()) {
       soundRef.current.play();
-      soundRef.current.fade(0, volume / 100, 100);
+      soundRef.current.fade(0, volume / 100, 500);
     }
   };
 
@@ -132,10 +135,13 @@ export function AudioProvider({ children }: { children: React.ReactNode }) {
     saveSettings({ isMuted: true });
   };
 
-  // 3. Set Volume
+  // 3. Set Volume (เฉพาะ Background Music เท่านั้น ไม่กระทบ SFX)
   const updateVolume = (vol: number) => {
     setVolume(vol);
-    Howler.volume(vol / 100);
+    //? ตั้งค่า volume เฉพาะ bg music instance แทน Howler.volume() ที่เป็น global
+    if (soundRef.current) {
+      soundRef.current.volume(vol / 100);
+    }
     saveSettings({ volume: vol });
   };
 
@@ -205,25 +211,33 @@ export function AudioProvider({ children }: { children: React.ReactNode }) {
   };
 
   const playSfx = useCallback(
-    (src: string, options?: { volumeMultiplier?: number }) => {
-      if (isMutedRef.current) return;
+    (
+      src: string,
+      options?: { volumeMultiplier?: number; loop?: boolean },
+    ): Howl | undefined => {
+      if (isMutedRef.current) return undefined;
 
       try {
+        const isLoop = options?.loop ?? false;
         const sound = new Howl({
           src: [src],
-          loop: false,
+          loop: isLoop,
           volume: (sfxVolume / 100) * (options?.volumeMultiplier ?? 1.0),
           autoplay: true,
-          onend: () => {
-            //? เมื่อเล่นจบให้ลบออกจาก Set และ unload
-            sfxSoundsRef.current.delete(sound);
-            sound.unload();
-          },
+          onend: isLoop
+            ? undefined
+            : () => {
+                //? เมื่อเล่นจบให้ลบออกจาก Set และ unload (เฉพาะ non-loop)
+                sfxSoundsRef.current.delete(sound);
+                sound.unload();
+              },
         });
         //? เก็บ reference ไว้เพื่อให้สามารถ stop ได้ภายหลัง
         sfxSoundsRef.current.add(sound);
+        return sound;
       } catch (error) {
         console.error("Failed to play SFX:", error);
+        return undefined;
       }
     },
     [sfxVolume],

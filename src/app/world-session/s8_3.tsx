@@ -1,12 +1,20 @@
 "use client";
 
-import { type MotionValue, m, useTransform } from "framer-motion";
+import {
+  type MotionValue,
+  m,
+  useMotionValueEvent,
+  useTransform,
+} from "framer-motion";
+import type { Howl } from "howler";
 import Image from "next/image";
-import { useMemo } from "react";
+import { useMemo, useRef } from "react";
 import SceneLayer, {
   type AnimationMap,
 } from "@/app/components/reusable/SceneLayer";
 import { SCENE_S8_3_ITEMS } from "@/app/data/scene_s8_3.data";
+import { getAudioUrl } from "@/utils/cloudinaryUtils";
+import { useAudio } from "../contexts/AudioContext";
 import { useDevice } from "../contexts/DeviceContext";
 
 // ────────────────────────────────────────────────────
@@ -31,6 +39,12 @@ interface S8_3Props {
 
 export default function S8_3({ scrollYProgress }: S8_3Props) {
   const { isMobile } = useDevice();
+  const { playSfx } = useAudio();
+
+  //? SFX tracking refs
+  const hasPlayedChime = useRef(false);
+  const hasPlayedBloom = useRef(false);
+  const chimeSoundRef = useRef<Howl | null>(null);
 
   // ─── Container Fade ───
 
@@ -119,6 +133,38 @@ export default function S8_3({ scrollYProgress }: S8_3Props) {
 
   //? animGroup 5: lotus bloom
   const lotusBloomOpacity = useTransform(scrollYProgress, [0.667, 0.8], [0, 1]);
+
+  // ─── SFX Events ───
+
+  //? เล่นเสียง chime เมื่อผีเสื้อเริ่มบิน (flightProgress เริ่มที่ scrollYProgress 0.3)
+  //? เล่นเสียง flower_bloom เมื่อดอกบัวบาน (lotusBloom เริ่มที่ scrollYProgress 0.667)
+  useMotionValueEvent(scrollYProgress, "change", (latest) => {
+    if (latest >= 0.3 && !hasPlayedChime.current) {
+      const sound = playSfx(getAudioUrl("Sound/8/chime.mp3"));
+      if (sound) chimeSoundRef.current = sound;
+      hasPlayedChime.current = true;
+    } else if (latest < 0.25 && hasPlayedChime.current) {
+      //? หยุดเสียง chime เมื่อเลื่อนกลับ
+      if (chimeSoundRef.current) {
+        chimeSoundRef.current.stop();
+        chimeSoundRef.current.unload();
+        chimeSoundRef.current = null;
+      }
+      hasPlayedChime.current = false;
+    }
+    //? หยุดเสียง chime เมื่อ scene กำลังจะหายไป
+    if (latest > 0.9 && chimeSoundRef.current) {
+      chimeSoundRef.current.stop();
+      chimeSoundRef.current.unload();
+      chimeSoundRef.current = null;
+    }
+    if (latest >= 0.667 && !hasPlayedBloom.current) {
+      playSfx(getAudioUrl("Sound/8/flower_bloom.mp3"));
+      hasPlayedBloom.current = true;
+    } else if (latest < 0.6 && hasPlayedBloom.current) {
+      hasPlayedBloom.current = false;
+    }
+  });
 
   // ─── Filter butterfly from SceneLayer (handled separately above) ───
 

@@ -104,7 +104,7 @@ export default function WalkingDesert() {
           }}
         >
           <LazyLottie
-            src={getJsonUrl("Scene/Scene10/sun.json")}
+            src={getJsonUrl("Scene/Scene3/sun.json")}
             loop={true}
             playTrigger={scrollYProgress}
             className="w-full h-full"

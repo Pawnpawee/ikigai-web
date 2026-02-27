@@ -24,6 +24,8 @@ import {
   SCENE_S8_2_ITEMS,
   SELECTED_FRAME_SRC,
 } from "@/app/data/scene_s8_2.data";
+import { getAudioUrl } from "@/utils/cloudinaryUtils";
+import { useAudio } from "../contexts/AudioContext";
 import { useDevice } from "../contexts/DeviceContext";
 
 // ────────────────────────────────────────────────────
@@ -189,6 +191,7 @@ function DotNavigation({
 
 export default function S8_2({ scrollYProgress, onCompleted }: S8_2Props) {
   const { isMobile } = useDevice();
+  const { playSfx } = useAudio();
 
   //? Carousel State
   const [currentPage, setCurrentPage] = useState(0);
@@ -244,34 +247,39 @@ export default function S8_2({ scrollYProgress, onCompleted }: S8_2Props) {
 
   // ─── Handlers ───
 
-  const handleCardToggle = useCallback((label: string) => {
-    setSelectedGifts((prev) => {
-      const next = prev.includes(label)
-        ? prev.filter((g) => g !== label)
-        : [...prev, label];
+  const handleCardToggle = useCallback(
+    (label: string) => {
+      playSfx(getAudioUrl("Sound/Pop_Select_Button.mp3"));
+      setSelectedGifts((prev) => {
+        const next = prev.includes(label)
+          ? prev.filter((g) => g !== label)
+          : [...prev, label];
 
-      //? เมื่อเลือกครบตาม MIN_GIFT_SELECTIONS → เรียก onCompleted ทันที
-      if (next.length >= MIN_GIFT_SELECTIONS) {
-        //? ใช้ queueMicrotask เพื่อเรียกหลัง setState เสร็จ (ไม่ setState ซ้อน)
-        queueMicrotask(() => {
-          onCompletedRef.current?.({
-            selectedGifts: next,
-            customGifts: [],
+        //? เมื่อเลือกครบตาม MIN_GIFT_SELECTIONS → เรียก onCompleted ทันที
+        if (next.length >= MIN_GIFT_SELECTIONS) {
+          //? ใช้ queueMicrotask เพื่อเรียกหลัง setState เสร็จ (ไม่ setState ซ้อน)
+          queueMicrotask(() => {
+            onCompletedRef.current?.({
+              selectedGifts: next,
+              customGifts: [],
+            });
           });
-        });
-      }
+        }
 
-      return next;
-    });
-  }, []);
+        return next;
+      });
+    },
+    [playSfx],
+  );
 
   const goToPage = useCallback(
     (page: number) => {
       if (page < 0 || page >= totalPages || page === currentPage) return;
+      playSfx(getAudioUrl("Sound/Pop_Select_Button.mp3"));
       setSlideDirection(page > currentPage ? 1 : -1);
       setCurrentPage(page);
     },
-    [totalPages, currentPage],
+    [totalPages, currentPage, playSfx],
   );
 
   // ─── Carousel slide variants ───

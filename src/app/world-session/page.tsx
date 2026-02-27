@@ -1,6 +1,6 @@
 "use client";
 
-import { useScroll, useTransform } from "framer-motion";
+import { useMotionValueEvent, useScroll, useTransform } from "framer-motion";
 import { useLenis } from "lenis/react";
 import { useRouter } from "next/navigation";
 import { useEffect, useLayoutEffect, useRef, useState } from "react";
@@ -11,7 +11,9 @@ import {
 } from "@/app/data/cover_session3.data";
 import { useStarsVisibility } from "@/app/hooks/useStarsVisibility";
 import { API_BASE_URL } from "@/utils/appConfig";
+import { getAudioUrl } from "@/utils/cloudinaryUtils";
 import ErrorModal from "../components/modal/ErrorModal";
+import { useAudio } from "../contexts/AudioContext";
 import { useUser } from "../contexts/UserContext";
 import S8_1, { type S8_1Data } from "./s8_1";
 import S8_2, { type S8_2Data } from "./s8_2";
@@ -36,8 +38,12 @@ export default function WorldSessionPage() {
   //? Single ref for entire page
   const ref = useRef<HTMLDivElement>(null);
   const { userId, isLoading } = useUser();
+  const { setBgMusic, isMuted, playSfx, stopAllSfx } = useAudio();
   const lenis = useLenis();
   const router = useRouter();
+
+  //? SFX tracking ref สำหรับเสียง ambient (river_flow + bird_sound)
+  const hasPlayedAmbient = useRef(false);
 
   const [isS8_1Completed, setIsS8_1Completed] = useState(false);
   const [isS8_2Completed, setIsS8_2Completed] = useState(false);
@@ -199,6 +205,12 @@ export default function WorldSessionPage() {
     }
   }, [userId, isLoading, router]);
 
+  useEffect(() => {
+    if (!isMuted) {
+      setBgMusic(getAudioUrl("Sound/8/ancient-egypt.mp3"));
+    }
+  }, [setBgMusic, isMuted]);
+
   //? Handler: S8_1 completed (Called Upon answered)
   const handleS8_1Completed = (data: S8_1Data) => {
     setIsS8_1Completed(true);
@@ -270,6 +282,19 @@ export default function WorldSessionPage() {
   //? Hide stars after Cover section (200/2100 ≈ 0.0952)
   useStarsVisibility(scrollYProgress, {
     shouldShow: (p) => p <= 0.0952,
+  });
+
+  //? เล่นเสียง ambient (river_flow + bird_sound) ตลอด S8_1-S8_5
+  //? เริ่มเมื่อเข้า S8_1 (progress > 0.0952), หยุดเมื่อออกจาก page
+  useMotionValueEvent(scrollYProgress, "change", (latest) => {
+    if (latest > 0.0952 && !hasPlayedAmbient.current) {
+      playSfx(getAudioUrl("Sound/8/river_flow.mp3"), { loop: true });
+      playSfx(getAudioUrl("Sound/8/bird_sound.mp3"), { loop: true });
+      hasPlayedAmbient.current = true;
+    } else if (latest <= 0.05 && hasPlayedAmbient.current) {
+      stopAllSfx();
+      hasPlayedAmbient.current = false;
+    }
   });
 
   return (

@@ -1,7 +1,12 @@
 "use client";
 
-import { type MotionValue, m, useTransform } from "framer-motion";
-import { useMemo, useState } from "react";
+import {
+  type MotionValue,
+  m,
+  useMotionValueEvent,
+  useTransform,
+} from "framer-motion";
+import { useMemo, useRef, useState } from "react";
 import GradientButton from "@/app/components/button/GradientButton";
 import MysteriousText from "@/app/components/reusable/MysteriousText";
 import SceneLayer, {
@@ -19,6 +24,8 @@ import {
   S8_4_QUESTION_2,
   SCENE_S8_4_ITEMS,
 } from "@/app/data/scene_s8_4.data";
+import { getAudioUrl } from "@/utils/cloudinaryUtils";
+import { useAudio } from "../contexts/AudioContext";
 import { useDevice } from "../contexts/DeviceContext";
 
 // ────────────────────────────────────────────────────
@@ -49,8 +56,13 @@ export default function S8_4({
   onCompleted,
 }: S8_4Props) {
   const { isMobile } = useDevice();
+  const { playSfx } = useAudio();
   const [noManualAnswer, setNoManualAnswer] = useState<string | null>(null);
   const [mismatchAnswer, setMismatchAnswer] = useState<string | null>(null);
+
+  //? SFX tracking refs
+  const hasPlayedIcon1 = useRef(false);
+  const hasPlayedIcon2 = useRef(false);
 
   // ─── Container Fade ───
 
@@ -122,6 +134,24 @@ export default function S8_4({
     }),
     [lotusOpacity, icon1Opacity, icon1ZIndex, icon2Opacity, icon2ZIndex],
   );
+
+  // ─── SFX Events ───
+
+  //? เล่นเสียง icon_popup เมื่อ icon_1 โผล่มา (scrollYProgress 0.15) และ icon_2 (0.77)
+  useMotionValueEvent(scrollYProgress, "change", (latest) => {
+    if (latest >= 0.15 && !hasPlayedIcon1.current) {
+      playSfx(getAudioUrl("Sound/8/icon_popup.mp3"));
+      hasPlayedIcon1.current = true;
+    } else if (latest < 0.1 && hasPlayedIcon1.current) {
+      hasPlayedIcon1.current = false;
+    }
+    if (latest >= 0.77 && !hasPlayedIcon2.current) {
+      playSfx(getAudioUrl("Sound/8/icon_popup.mp3"));
+      hasPlayedIcon2.current = true;
+    } else if (latest < 0.667 && hasPlayedIcon2.current) {
+      hasPlayedIcon2.current = false;
+    }
+  });
 
   // ─── Handlers ───
 

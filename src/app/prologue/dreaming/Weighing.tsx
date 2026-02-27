@@ -373,25 +373,25 @@ export default function Weighing() {
             className="w-full h-full"
           />
         </m.div>
-      </div>
 
-      {/* ชุด 10: Subtitles */}
-      <m.div
-        className="absolute bottom-[15%] left-0 right-0 pointer-events-none"
-        style={{ opacity: textOpacity }}
-      >
-        <SubtitleScroll
-          subtitles={[
-            "เจ้าหนักหนาด้วยความกังวล หัวใจเจ้ายังต้องการการปลดปล่อยก่อนจะไปยังทุ่งแห่งความสุข",
-            "ข้าไม่ได้มาพิพากษาด้วยความโหดร้าย หากแต่ขอเชิญให้เจ้าล่องลอยไปยังห้วงเงานั้น",
-            "เพื่อค้นหาเหตุแห่งทุกข์",
-            "เมื่อเจ้าพบทาง ประตูแห่งแสงจะเปิดให้เจ้าเอง",
-            "ดะ เดี๋ยวก่อน! ไม่นะ..",
-          ]}
-          progress={textAnimationProgress}
-          className="w-full h-full"
-        />
-      </m.div>
+        {/* ชุด 10: Subtitles */}
+        <m.div
+          className="absolute bottom-[15%] left-0 right-0 pointer-events-none"
+          style={{ opacity: textOpacity }}
+        >
+          <SubtitleScroll
+            subtitles={[
+              "เจ้าหนักหนาด้วยความกังวล หัวใจเจ้ายังต้องการการปลดปล่อยก่อนจะไปยังทุ่งแห่งความสุข",
+              "ข้าไม่ได้มาพิพากษาด้วยความโหดร้าย หากแต่ขอเชิญให้เจ้าล่องลอยไปยังห้วงเงานั้น",
+              "เพื่อค้นหาเหตุแห่งทุกข์",
+              "เมื่อเจ้าพบทาง ประตูแห่งแสงจะเปิดให้เจ้าเอง",
+              "ดะ เดี๋ยวก่อน! ไม่นะ..",
+            ]}
+            progress={textAnimationProgress}
+            className="w-full h-full"
+          />
+        </m.div>
+      </div>
 
       <EyelidOverlay externalRy={ry} />
 

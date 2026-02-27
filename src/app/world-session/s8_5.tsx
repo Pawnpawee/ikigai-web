@@ -1,7 +1,13 @@
 "use client";
 
-import { type MotionValue, m, useTransform } from "framer-motion";
-import { useMemo, useState } from "react";
+import {
+  type MotionValue,
+  m,
+  useMotionValueEvent,
+  useTransform,
+} from "framer-motion";
+import type { Howl } from "howler";
+import { useMemo, useRef, useState } from "react";
 import { HiOutlineChevronDown } from "react-icons/hi";
 import GradientButton from "@/app/components/button/GradientButton";
 import MysteriousText from "@/app/components/reusable/MysteriousText";
@@ -14,6 +20,8 @@ import {
   S8_5_QUESTION_POSITION,
   SCENE_S8_5_ITEMS,
 } from "@/app/data/scene_s8_5.data";
+import { getAudioUrl } from "@/utils/cloudinaryUtils";
+import { useAudio } from "../contexts/AudioContext";
 import { useDevice } from "../contexts/DeviceContext";
 
 // ────────────────────────────────────────────────────
@@ -45,8 +53,13 @@ interface S8_5Props {
 
 export default function S8_5({ scrollYProgress, onCompleted }: S8_5Props) {
   const { isMobile } = useDevice();
+  const { playSfx } = useAudio();
   const [futureAnswer, setFutureAnswer] = useState<string | null>(null);
   const [showContinueButton, setShowContinueButton] = useState(false);
+
+  //? SFX tracking ref
+  const hasPlayedHeartbeat = useRef(false);
+  const heartbeatSoundRef = useRef<Howl | null>(null);
 
   // ─── Container Fade ───
 
@@ -149,6 +162,27 @@ export default function S8_5({ scrollYProgress, onCompleted }: S8_5Props) {
       catY,
     ],
   );
+
+  // ─── SFX Events ───
+
+  //? เล่นเสียง heart-beat เมื่อเริ่มเห็น scene
+  useMotionValueEvent(scrollYProgress, "change", (latest) => {
+    if (latest >= 0.05 && !hasPlayedHeartbeat.current) {
+      const sound = playSfx(getAudioUrl("Sound/1-2/heart-beat.mp3"), {
+        loop: true,
+      });
+      if (sound) heartbeatSoundRef.current = sound;
+      hasPlayedHeartbeat.current = true;
+    } else if (latest < 0.03 && hasPlayedHeartbeat.current) {
+      //? หยุดเสียง heart-beat เมื่อเลื่อนกลับ
+      if (heartbeatSoundRef.current) {
+        heartbeatSoundRef.current.stop();
+        heartbeatSoundRef.current.unload();
+        heartbeatSoundRef.current = null;
+      }
+      hasPlayedHeartbeat.current = false;
+    }
+  });
 
   // ─── Handlers ───
 

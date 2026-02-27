@@ -1,7 +1,12 @@
 "use client";
 
-import { type MotionValue, m, useTransform } from "framer-motion";
-import { useMemo, useState } from "react";
+import {
+  type MotionValue,
+  m,
+  useMotionValueEvent,
+  useTransform,
+} from "framer-motion";
+import { useMemo, useRef, useState } from "react";
 import GradientButton from "@/app/components/button/GradientButton";
 import MysteriousText from "@/app/components/reusable/MysteriousText";
 import SceneLayer, {
@@ -15,6 +20,8 @@ import {
   S8_1_TEXT_BUBBLES,
   SCENE_S8_1_ITEMS,
 } from "@/app/data/scene_s8_1.data";
+import { getAudioUrl } from "@/utils/cloudinaryUtils";
+import { useAudio } from "../contexts/AudioContext";
 import { useDevice } from "../contexts/DeviceContext";
 
 // ────────────────────────────────────────────────────
@@ -39,7 +46,11 @@ interface S8_1Props {
 
 export default function S8_1({ scrollYProgress, onCompleted }: S8_1Props) {
   const { isMobile } = useDevice();
+  const { playSfx } = useAudio();
   const [calledUponAnswer, setCalledUponAnswer] = useState<string | null>(null);
+
+  //? SFX tracking refs
+  const hasPlayedBloom = useRef(false);
 
   // ─── Container Animations ───
 
@@ -171,6 +182,18 @@ export default function S8_1({ scrollYProgress, onCompleted }: S8_1Props) {
       catOpacity,
     ],
   );
+
+  // ─── SFX Events ───
+
+  //? เล่นเสียง flower_bloom เมื่อดอกบัวบาน (bloom เริ่มที่ scrollYProgress 0.5)
+  useMotionValueEvent(scrollYProgress, "change", (latest) => {
+    if (latest >= 0.5 && !hasPlayedBloom.current) {
+      playSfx(getAudioUrl("Sound/8/flower_bloom.mp3"));
+      hasPlayedBloom.current = true;
+    } else if (latest < 0.45 && hasPlayedBloom.current) {
+      hasPlayedBloom.current = false;
+    }
+  });
 
   // ─── Handlers ───
 

@@ -78,7 +78,7 @@ export default function Dreaming() {
 
   //? ใช้ Hook สำหรับจัดการ Stars visibility
   useStarsVisibility(scrollYProgress, {
-    shouldShow: (p) => p >= 1, // Hide จนกว่าจะถึงท้าย section
+    shouldShow: (p) => p >= 1.1, // Hide จนกว่าจะถึงท้าย section
   });
 
   return (

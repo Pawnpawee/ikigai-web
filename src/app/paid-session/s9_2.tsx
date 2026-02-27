@@ -23,6 +23,8 @@ import {
   SCENE_S9_2_ITEMS,
   SELECTED_FRAME_SRC,
 } from "@/app/data/scene_s9_2.data";
+import { getAudioUrl } from "@/utils/cloudinaryUtils";
+import { useAudio } from "../contexts/AudioContext";
 import { useDevice } from "../contexts/DeviceContext";
 
 // ────────────────────────────────────────────────────
@@ -197,6 +199,7 @@ function DotNavigation({
 
 export default function S9_2({ scrollYProgress, onCompleted }: S9_2Props) {
   const { isMobile } = useDevice();
+  const { playSfx } = useAudio();
 
   //? Carousel State
   const [currentPage, setCurrentPage] = useState(0);
@@ -253,30 +256,35 @@ export default function S9_2({ scrollYProgress, onCompleted }: S9_2Props) {
   const onCompletedRef = useRef(onCompleted);
   onCompletedRef.current = onCompleted;
 
-  const handleCardToggle = useCallback((category: string) => {
-    setSelectedCards((prev) => {
-      const next = prev.includes(category)
-        ? prev.filter((c) => c !== category)
-        : [...prev, category];
+  const handleCardToggle = useCallback(
+    (category: string) => {
+      playSfx(getAudioUrl("Sound/Pop_Select_Button.mp3"));
+      setSelectedCards((prev) => {
+        const next = prev.includes(category)
+          ? prev.filter((c) => c !== category)
+          : [...prev, category];
 
-      //? เมื่อเลือกครบตาม MIN_SELECTIONS → เรียก onCompleted ทันที
-      if (next.length >= MIN_SELECTIONS) {
-        queueMicrotask(() => {
-          onCompletedRef.current?.({ selectedJobCards: next });
-        });
-      }
+        //? เมื่อเลือกครบตาม MIN_SELECTIONS → เรียก onCompleted ทันที
+        if (next.length >= MIN_SELECTIONS) {
+          queueMicrotask(() => {
+            onCompletedRef.current?.({ selectedJobCards: next });
+          });
+        }
 
-      return next;
-    });
-  }, []);
+        return next;
+      });
+    },
+    [playSfx],
+  );
 
   const goToPage = useCallback(
     (page: number) => {
       if (page < 0 || page >= totalPages || page === currentPage) return;
+      playSfx(getAudioUrl("Sound/Pop_Select_Button.mp3"));
       setSlideDirection(page > currentPage ? 1 : -1);
       setCurrentPage(page);
     },
-    [totalPages, currentPage],
+    [totalPages, currentPage, playSfx],
   );
 
   // ─── Carousel slide variants ───

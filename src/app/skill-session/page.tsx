@@ -15,10 +15,19 @@ import { getAudioUrl } from "@/utils/cloudinaryUtils";
 import ErrorModal from "../components/modal/ErrorModal";
 import { useAudio } from "../contexts/AudioContext";
 import { useUser } from "../contexts/UserContext";
-import type { SkillData } from "./SkillSelection";
 import S7_1, { type S7_1Data } from "./s7_1";
 import S7_2, { type S7_2Data } from "./s7_2";
 import S7_3, { type S7_3Data } from "./s7_3";
+
+export interface SkillData {
+  selectedHardSkills: string[];
+  customHardSkills: string[];
+  selectedSoftSkills: string[];
+  customSoftSkills: string[];
+  skillsMatchJob: string;
+  useSkillsInNewRole: string;
+}
+
 
 export default function SessionSkillPage() {
   //? Single ref for entire page

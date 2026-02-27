@@ -1,7 +1,9 @@
 "use client";
 import { m } from "framer-motion";
 import Image from "next/image";
-import { getImgPath } from "@/utils/cloudinaryUtils";
+import { useEffect } from "react";
+import { useAudio } from "@/app/contexts/AudioContext";
+import { getAudioUrl, getImgPath } from "@/utils/cloudinaryUtils";
 
 interface ErrorModalProps {
   isOpen: boolean;
@@ -16,6 +18,15 @@ export default function ErrorModal({
   title = "ขออภัย",
   message = "ส่งข้อมูลไม่สำเร็จ กรุณาลองอีกครั้ง",
 }: ErrorModalProps) {
+  const { playSfx } = useAudio();
+
+  //? เล่นเสียง error เมื่อ modal เปิด
+  useEffect(() => {
+    if (isOpen) {
+      playSfx(getAudioUrl("Sound/error_modal.mp3"));
+    }
+  }, [isOpen, playSfx]);
+
   if (!isOpen) return null;
 
   return (
@@ -88,7 +99,10 @@ export default function ErrorModal({
             {/* Close Button */}
             <button
               type="button"
-              onClick={onClose}
+              onClick={() => {
+                playSfx(getAudioUrl("Sound/Pop_Select_Button.mp3"));
+                onClose();
+              }}
               className="w-full bg-[#3473c3] hover:bg-[#2961ad] rounded-2xl py-5 px-4 flex items-center justify-center shrink-0 transition-all caret-transparent"
             >
               <p className="text-xl md:text-3xl text-white text-center">

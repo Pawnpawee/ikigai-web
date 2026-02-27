@@ -12,6 +12,7 @@ import MysteriousText from "@/app/components/reusable/MysteriousText";
 import SceneLayer, {
   type AnimationMap,
 } from "@/app/components/reusable/SceneLayer";
+import { useAudio } from "@/app/contexts/AudioContext";
 import {
   ARROW_L_SRC,
   ARROW_R_SRC,
@@ -21,6 +22,7 @@ import {
   SCENE_S7_1_ITEMS,
   SELECTED_FRAME_SRC,
 } from "@/app/data/scene_s7_1.data";
+import { getAudioUrl } from "@/utils/cloudinaryUtils";
 import { useDevice } from "../contexts/DeviceContext";
 
 export interface S7_1Data {
@@ -183,6 +185,7 @@ function DotNavigation({
 
 export default function S7_1({ scrollYProgress, onCompleted }: S7_1Props) {
   const { isMobile } = useDevice();
+  const { playSfx } = useAudio();
 
   //? Carousel State
   const [currentPage, setCurrentPage] = useState(0);
@@ -241,34 +244,39 @@ export default function S7_1({ scrollYProgress, onCompleted }: S7_1Props) {
   const onCompletedRef = useRef(onCompleted);
   onCompletedRef.current = onCompleted;
 
-  const handleCardToggle = useCallback((label: string) => {
-    setSelectedSkills((prev) => {
-      const next = prev.includes(label)
-        ? prev.filter((s) => s !== label)
-        : [...prev, label];
+  const handleCardToggle = useCallback(
+    (label: string) => {
+      playSfx(getAudioUrl("Sound/Pop_Select_Button.mp3"));
+      setSelectedSkills((prev) => {
+        const next = prev.includes(label)
+          ? prev.filter((s) => s !== label)
+          : [...prev, label];
 
-      //? เมื่อเลือกครบตาม MIN_SELECTIONS → เรียก onCompleted ทันที
-      if (next.length >= MIN_SELECTIONS) {
-        //? ใช้ queueMicrotask เพื่อเรียกหลัง setState เสร็จ (ไม่ setState ซ้อน)
-        queueMicrotask(() => {
-          onCompletedRef.current?.({
-            selectedHardSkills: next,
-            customHardSkills: [],
+        //? เมื่อเลือกครบตาม MIN_SELECTIONS → เรียก onCompleted ทันที
+        if (next.length >= MIN_SELECTIONS) {
+          //? ใช้ queueMicrotask เพื่อเรียกหลัง setState เสร็จ (ไม่ setState ซ้อน)
+          queueMicrotask(() => {
+            onCompletedRef.current?.({
+              selectedHardSkills: next,
+              customHardSkills: [],
+            });
           });
-        });
-      }
+        }
 
-      return next;
-    });
-  }, []);
+        return next;
+      });
+    },
+    [playSfx],
+  );
 
   const goToPage = useCallback(
     (page: number) => {
       if (page < 0 || page >= totalPages || page === currentPage) return;
+      playSfx(getAudioUrl("Sound/Pop_Select_Button.mp3"));
       setSlideDirection(page > currentPage ? 1 : -1);
       setCurrentPage(page);
     },
-    [totalPages, currentPage],
+    [totalPages, currentPage, playSfx],
   );
 
   // ─── Carousel slide variants ───

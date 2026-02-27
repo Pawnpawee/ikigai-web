@@ -1,6 +1,9 @@
 "use client";
 import { m, useAnimate } from "framer-motion";
-import { useEffect, useState } from "react";
+import type { Howl } from "howler";
+import { useEffect, useRef, useState } from "react";
+import { getAudioUrl } from "@/utils/cloudinaryUtils";
+import { useAudio } from "../contexts/AudioContext";
 import {
   ANALYSIS_STEPS_CONFIG,
   TEMPLE_DIALOGUE,
@@ -19,6 +22,38 @@ export default function HeartWeighingProcess({
 }: HeartWeighingProcessProps) {
   const [currentStep, setCurrentStep] = useState(0);
   const [scope, animate] = useAnimate();
+  const { playSfx } = useAudio();
+
+  //? SFX refs สำหรับเสียงประมวลผล (loop)
+  const sparklingSoundRef = useRef<Howl | null>(null);
+  const shimmeringSoundRef = useRef<Howl | null>(null);
+
+  //? เล่น SFX ขณะกำลังประมวลผล และหยุดเมื่อเสร็จ
+  useEffect(() => {
+    if (isProcessing) {
+      const sparkle = playSfx(getAudioUrl("Sound/10/magical_sparkling.mp3"), {
+        loop: true,
+      });
+      const shimmer = playSfx(getAudioUrl("Sound/10/shimmering_object.mp3"), {
+        loop: true,
+      });
+      if (sparkle) sparklingSoundRef.current = sparkle;
+      if (shimmer) shimmeringSoundRef.current = shimmer;
+    }
+
+    return () => {
+      if (sparklingSoundRef.current) {
+        sparklingSoundRef.current.stop();
+        sparklingSoundRef.current.unload();
+        sparklingSoundRef.current = null;
+      }
+      if (shimmeringSoundRef.current) {
+        shimmeringSoundRef.current.stop();
+        shimmeringSoundRef.current.unload();
+        shimmeringSoundRef.current = null;
+      }
+    };
+  }, [isProcessing, playSfx]);
 
   //? Progress through analysis steps - ไล่ step ตามลำดับ
   useEffect(() => {

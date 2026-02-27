@@ -3,7 +3,10 @@
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import { API_BASE_URL } from "@/utils/appConfig";
+import { getAudioUrl } from "@/utils/cloudinaryUtils";
 import ErrorModal from "../components/modal/ErrorModal";
+import { useAudio } from "../contexts/AudioContext";
+import { useUI } from "../contexts/UIStarContext";
 import { useUser } from "../contexts/UserContext";
 import HeartWeighingProcess from "./HeartWeighingProcess";
 import TempleArrival from "./TempleArrival";
@@ -20,13 +23,27 @@ export default function JourneyTemplePage() {
   const [isProcessing, setIsProcessing] = useState(false);
   const [showErrorModal, setShowErrorModal] = useState(false);
   const [errorMessage, setErrorMessage] = useState("");
+  const { setBgMusic, isMuted } = useAudio();
+  const { setShowStars } = useUI();
+
+  //? ซ่อน Stars ตลอดทั้งหน้า
+  useEffect(() => {
+    setShowStars(false);
+    return () => setShowStars(true);
+  }, [setShowStars]);
 
   //? Check user authentication
+  // useEffect(() => {
+  //   if (!isLoading && !userId) {
+  //     router.push("/prologue/into-dark");
+  //   }
+  // }, [userId, isLoading, router]);
+
   useEffect(() => {
-    if (!isLoading && !userId) {
-      router.push("/prologue/into-dark");
+    if (!isMuted) {
+      setBgMusic(getAudioUrl("Sound/10/egypt_expedition.mp3"));
     }
-  }, [userId, isLoading, router]);
+  }, [setBgMusic, isMuted]);
 
   const handleStartCeremony = async () => {
     if (!userId) {
@@ -151,10 +168,6 @@ export default function JourneyTemplePage() {
         <p className="text-white text-xl">กำลังโหลด...</p>
       </div>
     );
-  }
-
-  if (!userId) {
-    return null;
   }
 
   return (

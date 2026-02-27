@@ -1,6 +1,6 @@
 "use client";
 
-import { useScroll, useTransform } from "framer-motion";
+import { useMotionValueEvent, useScroll, useTransform } from "framer-motion";
 import { useLenis } from "lenis/react";
 import { useRouter } from "next/navigation";
 import { useEffect, useLayoutEffect, useRef, useState } from "react";
@@ -36,7 +36,7 @@ const TOTAL_HEIGHT_VH = 1000;
 export default function PaidSessionPage() {
   //? Single ref for entire page
   const ref = useRef<HTMLDivElement>(null);
-  const { setBgMusic, isMuted } = useAudio();
+  const { setBgMusic, isMuted, playSfx, stopAllSfx } = useAudio();
   const { userId, isLoading } = useUser();
   const lenis = useLenis();
   const router = useRouter();
@@ -46,6 +46,9 @@ export default function PaidSessionPage() {
   const [s9_1Data, setS9_1Data] = useState<S9_1Data | null>(null);
   const [s9_2Data, setS9_2Data] = useState<S9_2Data | null>(null);
   const [showErrorModal, setShowErrorModal] = useState(false);
+
+  //? SFX tracking ref สำหรับเสียง ambient (market + person_walking)
+  const hasPlayedAmbient = useRef(false);
 
   //? Single scrollYProgress for entire page (0-1 for 1000vh)
   const { scrollYProgress } = useScroll({
@@ -85,13 +88,6 @@ export default function PaidSessionPage() {
       window.scrollTo(0, 0);
     }
   }, []);
-
-  //? Set background music
-  useEffect(() => {
-    if (!isMuted) {
-      setBgMusic(getAudioUrl("Sound/9/market-ambience.mp3"));
-    }
-  }, [setBgMusic, isMuted]);
 
   const isResettingScroll = useRef(false);
 
@@ -168,6 +164,25 @@ export default function PaidSessionPage() {
       router.push("/prologue/into-dark");
     }
   }, [userId, isLoading, router]);
+
+  useEffect(() => {
+    if (!isMuted) {
+      setBgMusic(getAudioUrl("Sound/9/travel_inarab.mp3"));
+    }
+  }, [setBgMusic, isMuted]);
+
+  //? เล่นเสียง ambient (market + person_walking) ตลอด S9_1-S9_3
+  //? Cover จบที่ 200/1000 = 0.2 → เริ่มเล่นหลัง Cover
+  useMotionValueEvent(scrollYProgress, "change", (latest) => {
+    if (latest > 0.2 && !hasPlayedAmbient.current) {
+      playSfx(getAudioUrl("Sound/9/market.mp3"), { loop: true });
+      playSfx(getAudioUrl("Sound/9/person_walking.mp3"), { loop: true });
+      hasPlayedAmbient.current = true;
+    } else if (latest <= 0.15 && hasPlayedAmbient.current) {
+      stopAllSfx();
+      hasPlayedAmbient.current = false;
+    }
+  });
 
   //? Handler: S9_1 completed (ever paid answer selected)
   const handleS9_1Completed = (data: S9_1Data) => {

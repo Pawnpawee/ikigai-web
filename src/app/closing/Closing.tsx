@@ -16,14 +16,16 @@ import {
   SCENE_CLOSING_ITEMS,
 } from "@/app/data/scene_closing.data";
 import { useStarsVisibility } from "@/app/hooks/useStarsVisibility";
-import { getJsonUrl } from "@/utils/cloudinaryUtils";
+import { getAudioUrl, getJsonUrl } from "@/utils/cloudinaryUtils";
 import { getSessionUser } from "@/utils/storage";
+import { useAudio } from "../contexts/AudioContext";
 
 export default function ClosingPage() {
   const ref = useRef<HTMLDivElement>(null);
   const router = useRouter();
   const { isMobile } = useDevice();
   const [playerName, setPlayerName] = useState("ผู้เดินทาง");
+  const { setBgMusic, isMuted } = useAudio();
 
   //? ดึงชื่อผู้เล่นจาก session storage
   useEffect(() => {
@@ -32,6 +34,12 @@ export default function ClosingPage() {
       setPlayerName(user.name);
     }
   }, []);
+
+  useEffect(() => {
+    if (!isMuted) {
+      setBgMusic(getAudioUrl("Sound/8/egypt_expedition.mp3"));
+    }
+  }, [setBgMusic, isMuted]);
 
   const { scrollYProgress } = useScroll({
     target: ref,
@@ -144,7 +152,7 @@ export default function ClosingPage() {
           />
         </m.div>
 
-        {/* Scene Layer: pyramid, water, tre_land, human */}
+        {/* Scene Layer: pyramid, water, tree_land, human */}
         <m.div className="absolute inset-0 w-full h-full">
           <SceneLayer
             items={SCENE_CLOSING_ITEMS}
