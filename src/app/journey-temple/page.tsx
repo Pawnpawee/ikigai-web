@@ -1,10 +1,12 @@
 "use client";
 
+import { useScroll } from "framer-motion";
 import { useRouter } from "next/navigation";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { API_BASE_URL } from "@/utils/appConfig";
 import { getAudioUrl } from "@/utils/cloudinaryUtils";
 import ErrorModal from "../components/modal/ErrorModal";
+import ProgressBar from "../components/reusable/ProgressBar";
 import { useAudio } from "../contexts/AudioContext";
 import { useUI } from "../contexts/UIStarContext";
 import { useUser } from "../contexts/UserContext";
@@ -25,6 +27,12 @@ export default function JourneyTemplePage() {
   const [errorMessage, setErrorMessage] = useState("");
   const { setBgMusic, isMuted } = useAudio();
   const { setShowStars } = useUI();
+  const ref = useRef<HTMLDivElement>(null);
+
+  const { scrollYProgress } = useScroll({
+    target: ref,
+    offset: ["start start", "end end"],
+  });
 
   //? ซ่อน Stars ตลอดทั้งหน้า
   useEffect(() => {
@@ -33,11 +41,11 @@ export default function JourneyTemplePage() {
   }, [setShowStars]);
 
   //? Check user authentication
-  // useEffect(() => {
-  //   if (!isLoading && !userId) {
-  //     router.push("/prologue/into-dark");
-  //   }
-  // }, [userId, isLoading, router]);
+  useEffect(() => {
+    if (!isLoading && !userId) {
+      router.push("/prologue/into-dark");
+    }
+  }, [userId, isLoading, router]);
 
   useEffect(() => {
     if (!isMuted) {
@@ -161,17 +169,25 @@ export default function JourneyTemplePage() {
     }
   };
 
-  //? Loading state
-  if (isLoading) {
-    return (
-      <div className="fixed inset-0 flex items-center justify-center bg-black">
-        <p className="text-white text-xl">กำลังโหลด...</p>
-      </div>
-    );
-  }
+  useEffect(() => {
+    // 4. เรา "สมัคร" (subscribe) เพื่อดักฟังเหตุการณ์ "change"
+    // .on() จะ return ฟังก์ชันสำหรับ "ยกเลิก" (unsubscribe) ออกมา
+    const unsubscribe = scrollYProgress.on("change", (latestValue) => {
+      // latestValue คือค่าตัวเลขล่าสุด
+      console.log(
+        `scrollYProgress (from useEffect): ${latestValue.toFixed(2)}`,
+      );
+    }); // 5. [สำคัญมาก] เรา return cleanup function
+    // ฟังก์ชันนี้จะทำงานเมื่อ Component ถูก unmount (ถูกทำลาย)
+    // เพื่อสั่ง "ยกเลิกการสมัคร" ป้องกัน Memory Leak
+
+    return () => {
+      unsubscribe();
+    };
+  }, [scrollYProgress]);
 
   return (
-    <>
+    <div ref={ref}>
       {/* Error Modal */}
       <ErrorModal
         isOpen={showErrorModal}
@@ -190,6 +206,11 @@ export default function JourneyTemplePage() {
 
       {/* Scene 10.2 (ต่อ): Heart Weighing Process */}
       <HeartWeighingProcess isProcessing={isProcessing} />
-    </>
+
+      {/* ProgressBar: scrollYProgress ของหน้านี้ */}
+      <div className="pointer-events-none">
+        <ProgressBar scrollYProgress={scrollYProgress} />
+      </div>
+    </div>
   );
 }

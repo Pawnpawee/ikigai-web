@@ -30,6 +30,7 @@ function AppLogic({ children }: { children: React.ReactNode }) {
       <Navbar />
       <ScrollTo opacity={scrollToOpacity} />
       <main className="relative w-full">{children}</main>
+      {/* ProgressBar ถูกย้ายไปแต่ละหน้า ไม่ต้อง render ที่นี่ */}
     </>
   );
 }

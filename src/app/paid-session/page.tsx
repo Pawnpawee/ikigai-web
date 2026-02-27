@@ -13,6 +13,7 @@ import { useStarsVisibility } from "@/app/hooks/useStarsVisibility";
 import { API_BASE_URL } from "@/utils/appConfig";
 import { getAudioUrl } from "@/utils/cloudinaryUtils";
 import ErrorModal from "../components/modal/ErrorModal";
+import ProgressBar from "../components/reusable/ProgressBar";
 import { useAudio } from "../contexts/AudioContext";
 import { useUser } from "../contexts/UserContext";
 import type { S9_1Data } from "./s9_1";
@@ -280,6 +281,11 @@ export default function PaidSessionPage() {
           scrollYProgress={s9_3Progress}
           onCompleted={handleS9_3Completed}
         />
+      </div>
+
+      {/* ProgressBar: scrollYProgress ของหน้านี้ */}
+      <div className="pointer-events-none">
+        <ProgressBar scrollYProgress={scrollYProgress} />
       </div>
     </div>
   );

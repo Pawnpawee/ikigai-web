@@ -13,6 +13,7 @@ import { useStarsVisibility } from "@/app/hooks/useStarsVisibility";
 import { API_BASE_URL } from "@/utils/appConfig";
 import { getAudioUrl } from "@/utils/cloudinaryUtils";
 import ErrorModal from "../components/modal/ErrorModal";
+import ProgressBar from "../components/reusable/ProgressBar";
 import { useAudio } from "../contexts/AudioContext";
 import { useUser } from "../contexts/UserContext";
 import S6_1, { type S6_1Data } from "./s6_1";
@@ -193,6 +194,11 @@ export default function SessionLovePage() {
       {/* S6_4 Section - 700vh (800-1500vh, progress: 0.533-1.0) */}
       <div className="h-[700vh] w-full">
         <S6_4 scrollYProgress={s6_4Progress} onContinue={handleS6_4Continue} />
+      </div>
+      
+      {/* ProgressBar: scrollYProgress ของหน้านี้ */}
+      <div className="pointer-events-none">
+        <ProgressBar scrollYProgress={scrollYProgress} />
       </div>
     </div>
   );

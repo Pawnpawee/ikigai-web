@@ -13,6 +13,7 @@ import { useStarsVisibility } from "@/app/hooks/useStarsVisibility";
 import { API_BASE_URL } from "@/utils/appConfig";
 import { getAudioUrl } from "@/utils/cloudinaryUtils";
 import ErrorModal from "../components/modal/ErrorModal";
+import ProgressBar from "../components/reusable/ProgressBar";
 import { useAudio } from "../contexts/AudioContext";
 import { useUser } from "../contexts/UserContext";
 import S7_1, { type S7_1Data } from "./s7_1";
@@ -255,6 +256,11 @@ export default function SessionSkillPage() {
           scrollYProgress={s7_3Progress}
           onCompleted={handleS7_3Completed}
         />
+      </div>
+
+      {/* ProgressBar: scrollYProgress ของหน้านี้ */}
+      <div className="pointer-events-none">
+        <ProgressBar scrollYProgress={scrollYProgress} />
       </div>
     </div>
   );

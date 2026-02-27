@@ -13,6 +13,7 @@ import { useStarsVisibility } from "@/app/hooks/useStarsVisibility";
 import { API_BASE_URL } from "@/utils/appConfig";
 import { getAudioUrl } from "@/utils/cloudinaryUtils";
 import ErrorModal from "../components/modal/ErrorModal";
+import ProgressBar from "../components/reusable/ProgressBar";
 import { useAudio } from "../contexts/AudioContext";
 import { useUser } from "../contexts/UserContext";
 import S8_1, { type S8_1Data } from "./s8_1";
@@ -354,6 +355,11 @@ export default function WorldSessionPage() {
           scrollYProgress={s8_5Progress}
           onCompleted={handleS8_5Completed}
         />
+      </div>
+      
+      {/* ProgressBar: scrollYProgress ของหน้านี้ */}
+      <div className="pointer-events-none">
+        <ProgressBar scrollYProgress={scrollYProgress} />
       </div>
     </div>
   );
