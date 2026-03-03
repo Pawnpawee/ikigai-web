@@ -14,6 +14,8 @@ import {
   SCENE_S7_2_ITEMS,
   SOFT_SKILLS_OPTIONS,
 } from "@/app/data/scene_s7_2.data";
+import { getJsonUrl } from "@/utils/cloudinaryUtils";
+import LazyLottie from "../components/reusable/LazyLottie";
 import { useDevice } from "../contexts/DeviceContext";
 
 // ────────────────────────────────────────────────────
@@ -27,7 +29,8 @@ export interface S7_2Data {
 
 interface S7_2Props {
   scrollYProgress: MotionValue<number>;
-  onCompleted?: (data: S7_2Data) => void;
+  //? ส่ง data เมื่อเลือกครบ, ส่ง null เมื่อ unselect ต่ำกว่า threshold
+  onCompleted?: (data: S7_2Data | null) => void;
 }
 
 // ────────────────────────────────────────────────────
@@ -109,13 +112,18 @@ export default function S7_2({ scrollYProgress, onCompleted }: S7_2Props) {
         ? prev.filter((s) => s !== skill)
         : [...prev, skill];
 
-      //? เมื่อเลือกครบตาม MIN_SELECTIONS → เรียก onCompleted ทันที
+      //? แจ้ง parent ทุกครั้งที่สถานะเปลี่ยน (ครบ/ไม่ครบ)
       if (next.length + customSoftSkillsRef.current.length >= MIN_SELECTIONS) {
         queueMicrotask(() => {
           onCompletedRef.current?.({
             selectedSoftSkills: next,
             customSoftSkills: customSoftSkillsRef.current,
           });
+        });
+      } else {
+        //! Unselect ต่ำกว่า threshold → แจ้ง parent ให้ล็อค scroll กลับ
+        queueMicrotask(() => {
+          onCompletedRef.current?.(null);
         });
       }
 
@@ -182,7 +190,25 @@ export default function S7_2({ scrollYProgress, onCompleted }: S7_2Props) {
   }, []);
 
   const handleRemoveCustom = useCallback((skill: string) => {
-    setCustomSoftSkills((prev) => prev.filter((s) => s !== skill));
+    setCustomSoftSkills((prev) => {
+      const next = prev.filter((s) => s !== skill);
+
+      //? เช็คว่ายังครบ threshold หรือไม่หลังลบ custom skill
+      if (selectedSoftSkillsRef.current.length + next.length < MIN_SELECTIONS) {
+        queueMicrotask(() => {
+          onCompletedRef.current?.(null);
+        });
+      } else {
+        queueMicrotask(() => {
+          onCompletedRef.current?.({
+            selectedSoftSkills: selectedSoftSkillsRef.current,
+            customSoftSkills: next,
+          });
+        });
+      }
+
+      return next;
+    });
   }, []);
 
   return (
@@ -196,6 +222,28 @@ export default function S7_2({ scrollYProgress, onCompleted }: S7_2Props) {
           animations={animations}
           containerAspectRatio={isMobile ? "1080 / 1920" : "1920 / 1080"}
         >
+          {/* Painting Lottie (overlay on static painting) */}
+          {/*? Figma: lottie frame at (71, 286) inside painting, size 298.25×259.27 */}
+          <m.div
+            className="absolute"
+            style={{
+              //? Desktop: (133.97+71)/1920, (70.83+286)/1080, 298.25/1920, 259.27/1080
+              //? Mobile: (318.97+71)/1080, (903.83+286)/1920, 298.25/1080, 259.27/1920
+              width: isMobile ? "27.62%" : "15.53%",
+              height: isMobile ? "13.50%" : "24.01%",
+              left: isMobile ? "36.11%" : "10.68%",
+              top: isMobile ? "61.97%" : "33.04%",
+              opacity: paintingOpacity,
+            }}
+          >
+            <LazyLottie
+              src={getJsonUrl("Scene/Scene7/03/s7-painting.json")}
+              className="w-full h-full"
+              loop
+              playTrigger={paintingOpacity}
+            />
+          </m.div>
+
           {/* Content Layer */}
           <div className="absolute inset-0">
             {isMobile ? (
@@ -226,7 +274,7 @@ export default function S7_2({ scrollYProgress, onCompleted }: S7_2Props) {
                       style={{ opacity: choicesOpacity }}
                     >
                       {error ||
-                        `เลือกแล้ว ${totalSelected} (ขั้นต่ำ ${MIN_SELECTIONS} อย่าง)`}
+                        `เลือกแล้ว ${totalSelected} (ขั้นต่ำ ${MIN_SELECTIONS} อย่าง เพื่อเลื่อนไปยังส่วนถัดไป)`}
                     </m.p>
                   </m.div>
 
@@ -338,7 +386,7 @@ export default function S7_2({ scrollYProgress, onCompleted }: S7_2Props) {
                       style={{ opacity: choicesOpacity }}
                     >
                       {error ||
-                        `เลือกแล้ว ${totalSelected} (ขั้นต่ำ ${MIN_SELECTIONS} อย่าง)`}
+                        `เลือกแล้ว ${totalSelected} (ขั้นต่ำ ${MIN_SELECTIONS} อย่าง เพื่อเลื่อนไปยังส่วนถัดไป)`}
                     </m.p>
                   </m.div>
 

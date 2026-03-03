@@ -25,7 +25,7 @@ export default function JourneyTemplePage() {
   const [isProcessing, setIsProcessing] = useState(false);
   const [showErrorModal, setShowErrorModal] = useState(false);
   const [errorMessage, setErrorMessage] = useState("");
-  const { setBgMusic, isMuted } = useAudio();
+  const { setBgMusic } = useAudio();
   const { setShowStars } = useUI();
   const ref = useRef<HTMLDivElement>(null);
 
@@ -47,11 +47,10 @@ export default function JourneyTemplePage() {
     }
   }, [userId, isLoading, router]);
 
+  //? ตั้งเพลง bg ทุกครั้งที่เข้าหน้า ไม่ว่าจะ mute หรือไม่ เพื่อให้ soundRef ตรงกับหน้าปัจจุบัน
   useEffect(() => {
-    if (!isMuted) {
-      setBgMusic(getAudioUrl("Sound/10/egypt_expedition.mp3"));
-    }
-  }, [setBgMusic, isMuted]);
+    setBgMusic(getAudioUrl("Sound/10/egypt_expedition.mp3"));
+  }, [setBgMusic]);
 
   const handleStartCeremony = async () => {
     if (!userId) {

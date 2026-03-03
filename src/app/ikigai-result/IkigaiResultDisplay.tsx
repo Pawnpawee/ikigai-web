@@ -1,27 +1,90 @@
 "use client";
-import { m } from "framer-motion";
+
+import { AnimatePresence, m } from "framer-motion";
+import { toPng } from "html-to-image";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
-import { useState } from "react";
+import { useCallback, useMemo, useRef, useState } from "react";
+import LazyLottie from "@/app/components/reusable/LazyLottie";
+import SceneLayer from "@/app/components/reusable/SceneLayer";
+import { useDevice } from "@/app/contexts/DeviceContext";
+import {
+  CARD_FRAME_POS,
+  CARD_GLOW_POS,
+  CARD_POS,
+  CONTINUE_BTN_POS,
+  DESCRIPTION_POS,
+  getCardAccentColor,
+  getCardAssets,
+  getCardGlowGradient,
+  IKIGAI_CENTER,
+  INTERSECTION_LABELS,
+  PERCENT_TEXT_POS,
+  SAVE_BTN_POS,
+  SHARE_BTN_POS,
+  VENN_CIRCLES,
+} from "@/app/data/ikigai.data";
 import type { IkigaiAnalysis, IkigaiScores } from "@/app/types/ikigai.types";
 import { getImgPath } from "@/utils/cloudinaryUtils";
-import IkigaiCards from "./IkigaiCards";
-import IkigaiVennDiagram from "./IkigaiVennDiagram";
 import SectionDetailModal from "./SectionDetailModal";
+
+// ─────────────────────────────────────────────────────────────
+//? Animation Sequence — ขั้นตอนการแสดงผลทีละอย่าง
+//? 0: bg + star (แสดงแต่แรก via SceneLayer shouldAnimate)
+//? 1: card + card_light (SceneLayer items)
+//? 2: percent
+//? 3: Venn circles (What you love, good at, world needs, paid for)
+//? 4: ikigai center + description
+//? 5: Intersection labels (Passion, Mission, Profession, Vocation)
+//? 6: save + share buttons
+// ─────────────────────────────────────────────────────────────
+
+const SEQUENCE_DELAYS = {
+  percent: 0,
+  circles: 0,
+  ikigaiCenter: 0,
+  description: 0,
+  labels: 0,
+  buttons: 0,
+} as const;
+
+//? Pop-up animation variant
+//? transition แยกออกเป็น top-level เพื่อไม่ให้ delay ไปทับ whileHover/whileTap
+const popUpVariant = (delay: number) => ({
+  initial: { opacity: 0, scale: 0.8, y: 20 },
+  animate: { opacity: 1, scale: 1, y: 0 },
+  transition: { delay, duration: 0.6, ease: "easeOut" as const },
+});
+
+//? Fade-in animation variant
+const fadeInVariant = (delay: number) => ({
+  initial: { opacity: 0 },
+  animate: { opacity: 1 },
+  transition: { delay, duration: 0.8, ease: "easeOut" as const },
+});
+
+// ─────────────────────────────────────────────────────────────
+//? Props
+// ─────────────────────────────────────────────────────────────
 
 interface IkigaiResultDisplayProps {
   analysis: IkigaiAnalysis;
   scores?: IkigaiScores;
+  playersInSessionPct?: number;
+  maxSessionPercentage?: string;
   playerName?: string;
 }
 
 export default function IkigaiResultDisplay({
   analysis,
   scores,
+  playersInSessionPct = 0,
+  maxSessionPercentage,
   playerName,
 }: IkigaiResultDisplayProps) {
+  const { isMobile } = useDevice();
   const router = useRouter();
-  const [showCircle, setShowCircle] = useState(false);
+  const captureRef = useRef<HTMLDivElement>(null);
   const [selectedSection, setSelectedSection] = useState<
     keyof IkigaiAnalysis | null
   >(null);
@@ -29,50 +92,113 @@ export default function IkigaiResultDisplay({
     "idle",
   );
 
-  //? After symbols merge animation completes, show the circle
-  const handleSymbolsMerged = () => {
-    setTimeout(() => setShowCircle(true), 1000);
-  };
+  // ─────────────────────────────────────────────────────────
+  //? Handlers
+  // ─────────────────────────────────────────────────────────
 
-  const handleSectionClick = (section: keyof IkigaiAnalysis) => {
+  const handleContinue = useCallback(() => {
+    router.push("/closing");
+  }, [router]);
+
+  const handleSectionClick = useCallback((section: keyof IkigaiAnalysis) => {
     setSelectedSection(section);
-  };
+  }, []);
 
-  //? Save result as JSON or PDF
-  const handleSaveResult = () => {
+  const handleCloseModal = useCallback(() => {
+    setSelectedSection(null);
+  }, []);
+
+  const handleSaveResult = useCallback(async () => {
+    if (!captureRef.current || saveStatus === "saving") return;
     setSaveStatus("saving");
 
-    try {
-      const resultData = {
-        playerName,
-        analysis,
-        savedAt: new Date().toISOString(),
+    // ⭐ 1. เตรียมตัวแปรสำหรับ DOM Interception เพื่อแก้ปัญหา Next.js Image + Cloudinary จอดำ
+    const imgElements = captureRef.current.querySelectorAll("img");
+    const originalAttributes: Array<{
+      src: string;
+      srcset: string | null;
+      crossOrigin: string | null;
+    }> = [];
+
+    // ⭐ 2. แอบสลับ URL ของ Next.js กลับไปเป็น URL ของ Cloudinary แท้ๆ ชั่วคราว
+    imgElements.forEach((img, index) => {
+      // ✅ เก็บค่าดั้งเดิมของ React/Next.js ไว้ก่อน
+      originalAttributes[index] = {
+        src: img.src,
+        srcset: img.getAttribute("srcset"),
+        crossOrigin: img.getAttribute("crossOrigin"),
       };
 
-      //? Download as JSON
-      const blob = new Blob([JSON.stringify(resultData, null, 2)], {
-        type: "application/json",
+      // ✅ ตรวจสอบว่าเป็นรูปภาพที่ผ่านการ Optimize โดย Next.js หรือไม่
+      if (img.src.includes("/_next/image")) {
+        try {
+          const urlObj = new URL(img.src, window.location.origin);
+          const actualCloudinaryUrl = urlObj.searchParams.get("url");
+
+          if (actualCloudinaryUrl) {
+            img.src = actualCloudinaryUrl; // ดึงภาพจาก Cloudinary ตรงๆ
+            img.removeAttribute("srcset"); // ลบ srcset ชั่วคราว ป้องกัน Canvas สับสน
+            img.crossOrigin = "anonymous"; // ปลดล็อค CORS Policy
+          }
+        } catch (e) {
+          console.error("ไม่สามารถแกะ URL ของภาพได้:", e);
+        }
+      }
+    });
+
+    try {
+      //? Screenshot ทั้ง container ด้วย html-to-image
+      const dataUrl = await toPng(captureRef.current, {
+        // ❌ ลบ cacheBust: true ออกเด็ดขาด เพื่อป้องกัน Next.js HTTP 400 Error
+        pixelRatio: 2,
+        backgroundColor: "rgba(0,0,0,0)",
+        //? ซ่อนปุ่ม save/share/continue ออกจากภาพ
+        filter: (node) => {
+          const el = node as HTMLElement;
+          return el.getAttribute?.("data-hide-capture") !== "true";
+        },
       });
-      const url = URL.createObjectURL(blob);
+
       const link = document.createElement("a");
-      link.href = url;
-      link.download = `ikigai-result-${playerName || "user"}-${Date.now()}.json`;
+      link.href = dataUrl;
+      link.download = `ikigai-result-${playerName || "user"}-${Date.now()}.png`;
       document.body.appendChild(link);
       link.click();
       document.body.removeChild(link);
-      URL.revokeObjectURL(url);
 
       setSaveStatus("saved");
       setTimeout(() => setSaveStatus("idle"), 3000);
     } catch (error) {
-      console.error("Error saving result:", error);
+      console.error("Error saving screenshot:", error);
       setSaveStatus("idle");
-    }
-  };
+    } finally {
+      // ⭐ 3. สำคัญมาก: ต้องคืนค่า DOM กลับสู่สภาพเดิมเสมอ! ไม่ว่าจะแคปสำเร็จหรือ Error
+      // เพื่อป้องกันไม่ให้ Virtual DOM ของ React ทำงานผิดพลาดในภายหลัง
+      imgElements.forEach((img, index) => {
+        img.src = originalAttributes[index].src;
 
-  //? Share result via Web Share API or copy link
-  const handleShareResult = async () => {
-    const shareText = `ฉันได้ค้นพบ Ikigai ของตัวเองแล้ว! 🌟\n\nมาค้นหา Ikigai ของคุณกันเถอะ`;
+        if (originalAttributes[index].srcset) {
+          img.setAttribute(
+            "srcset",
+            originalAttributes[index].srcset as string,
+          );
+        }
+
+        if (originalAttributes[index].crossOrigin) {
+          img.setAttribute(
+            "crossOrigin",
+            originalAttributes[index].crossOrigin as string,
+          );
+        } else {
+          img.removeAttribute("crossOrigin");
+        }
+      });
+    }
+  }, [playerName, saveStatus]); // Dependencies ครบถ้วนตามที่คุณตั้งไว้
+
+  const handleShareResult = useCallback(async () => {
+    const shareText =
+      "ฉันได้ค้นพบ Ikigai ของตัวเองแล้ว! 🌟\n\nมาค้นหา Ikigai ของคุณกันเถอะ";
     const shareUrl = window.location.origin;
 
     if (navigator.share) {
@@ -86,216 +212,310 @@ export default function IkigaiResultDisplay({
         console.error("Error sharing:", error);
       }
     } else {
-      //? Fallback: Copy to clipboard
       try {
         await navigator.clipboard.writeText(`${shareText}\n\n${shareUrl}`);
-        alert("คัดลอกลิงก์แล้ว! แชร์ไปเลย 🎉");
       } catch (error) {
         console.error("Error copying to clipboard:", error);
       }
     }
-  };
+  }, []);
 
-  //? Continue to next page (e.g., recommendations, next steps, etc.)
-  const handleContinue = () => {
-    //* Navigate to Closing scene (ฉากปิดท้าย)
-    router.push("/closing");
-  };
+  //? ดึง card assets ตาม MaxSessionPercentage จาก API
+  const cardAssets = useMemo(
+    () => getCardAssets(maxSessionPercentage),
+    [maxSessionPercentage],
+  );
 
+  //? สี accent ตามการ์ดที่ได้
+  const accentColor = useMemo(
+    () => getCardAccentColor(maxSessionPercentage),
+    [maxSessionPercentage],
+  );
+
+  //? CSS radial-gradient สำหรับ glow ด้านหลังการ์ด (แทน card_light image)
+  const cardGlowGradient = useMemo(
+    () => getCardGlowGradient(accentColor),
+    [accentColor],
+  );
+
+  //? ข้อมูลที่เลือกสำหรับ Modal
   const selectedSectionData = selectedSection
     ? analysis[selectedSection]
     : null;
 
+  // ─────────────────────────────────────────────────────────
+  //? Responsive position helper
+  // ─────────────────────────────────────────────────────────
+
+  const getPos = useCallback(
+    (config: {
+      desktop: Record<string, string>;
+      mobile: Record<string, string>;
+    }) => {
+      return isMobile ? config.mobile : config.desktop;
+    },
+    [isMobile],
+  );
+
   return (
-    <div className="relative min-h-screen w-full bg-linear-to-b from-purple-950 via-indigo-900 to-black overflow-x-hidden">
-      {/* Stars background */}
-      <div className="fixed inset-0 pointer-events-none">
-        {Array.from({ length: 50 }).map(() => {
-          const randomLeft = Math.random() * 100;
-          const randomTop = Math.random() * 100;
-          return (
-            <m.div
-              key={`star-${randomLeft}-${randomTop}`}
-              className="absolute w-1 h-1 bg-white rounded-full"
-              style={{
-                left: `${Math.random() * 100}%`,
-                top: `${Math.random() * 100}%`,
-              }}
-              animate={{
-                opacity: [0.2, 1, 0.2],
-                scale: [1, 1.5, 1],
-              }}
-              transition={{
-                duration: 2 + Math.random() * 3,
-                repeat: Number.POSITIVE_INFINITY,
-                delay: Math.random() * 2,
-              }}
-            />
-          );
-        })}
-      </div>
-
-      {/* Deity message */}
-      <m.div
-        className="w-full text-center px-4 z-20 pt-[5%]"
-        initial={{ opacity: 0, y: -30 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ delay: 0.5, duration: 1 }}
-      >
-        <p className="text-white text-lg md:text-2xl leading-relaxed drop-shadow-lg">
-          {playerName && (
-            <span className="text-yellow-300 font-semibold">{playerName}</span>
-          )}
-          {playerName ? " " : ""}หัวใจของเจ้าได้รับการชั่งแล้ว…
-          <br />
-          นี่คือ Ikigai ของเจ้า
-        </p>
-      </m.div>
-
-      {/* Symbols merging animation */}
-      {!showCircle && (
-        <div className="relative h-[60vh] flex items-center justify-center">
-          {[0, 1, 2, 3].map((index) => (
-            <m.div
-              key={`symbol-${index}`}
-              className="absolute w-16 h-16 md:w-24 md:h-24"
-              initial={{
-                x: [250, -250, -250, 250][index],
-                y: [-250, -250, 250, 250][index],
-                opacity: 0,
-                scale: 0,
-              }}
-              animate={{
-                x: 0,
-                y: 0,
-                opacity: 1,
-                scale: 1,
-              }}
-              transition={{
-                delay: index * 0.3,
-                duration: 1.5,
-                type: "spring",
-                damping: 20,
-              }}
-              onAnimationComplete={
-                index === 3 ? handleSymbolsMerged : undefined
-              }
-            >
-              <div
-                className="w-full h-full rounded-full"
-                style={{
-                  background: [
-                    "linear-gradient(135deg, #FF6B9D, #FFA06B)",
-                    "linear-gradient(135deg, #FFA06B, #FFD68E)",
-                    "linear-gradient(135deg, #6BCF7F, #6BA3FF)",
-                    "linear-gradient(135deg, #6BA3FF, #8EC7FF)",
-                  ][index],
-                  boxShadow: "0 0 30px rgba(255,255,255,0.5)",
-                }}
-              />
-            </m.div>
-          ))}
-
-          {/* Character silhouette forming */}
+    <div
+      ref={captureRef}
+      className="fixed flex justify-center top-0 h-screen w-screen overflow-hidden z-2"
+    >
+      <div className="flex items-center w-screen h-screen portrait:w-auto scale-[0.9] origin-center portrait:scale-100">
+        {/* ─── Main Scene Container (SceneLayer = โครงสร้างนอกสุด) ─── */}
+        <SceneLayer
+          items={[]}
+          shouldAnimate={true}
+          containerAspectRatio={isMobile ? "1080 / 1920" : "1920 / 1080"}
+        >
+          {/* ─── Card Glow (CSS radial-gradient + mix-blend-mode: screen) ─── */}
           <m.div
-            className="absolute w-32 h-32 md:w-48 md:h-48"
-            initial={{ opacity: 0, scale: 0 }}
-            animate={{ opacity: 1, scale: 1 }}
-            transition={{ delay: 1.8, duration: 1, type: "spring" }}
+            className="absolute pointer-events-none mix-blend-screen"
+            style={{
+              ...getPos(CARD_GLOW_POS),
+              background: cardGlowGradient,
+              opacity: 0.7,
+            }}
+            {...fadeInVariant(0.3)}
+          />
+
+          {/* ─── Card Frame (กรอบการ์ด ครอบ Lottie) ─── */}
+          <m.div
+            className="absolute pointer-events-none"
+            style={getPos(CARD_FRAME_POS)}
+            {...popUpVariant(0.6)}
           >
             <Image
-              src={getImgPath("journey/character-silhouette.webp")}
-              alt="Character"
+              src={cardAssets.cardFrame}
+              alt="Card frame"
               fill
-              className="object-contain drop-shadow-[0_0_50px_rgba(255,255,255,0.8)]"
+              className="object-contain"
+              sizes="(max-width: 768px) 50vw, 30vw"
+              crossOrigin="anonymous"
             />
           </m.div>
-        </div>
-      )}
 
-      {/* Ikigai Circle Diagram + Cards Side by Side */}
-      {showCircle && (
-        <m.div
-          className="w-full px-4 flex justify-center mt-8"
-          initial={{ opacity: 0, scale: 0.8 }}
-          animate={{ opacity: 1, scale: 1 }}
-          transition={{ duration: 1, type: "spring" }}
-        >
-          {/* Cards Sidebar */}
-          {scores && Object.keys(scores).length > 0 && (
-            <m.div
-              className="w-full lg:w-[320px] shrink-0"
-              initial={{ opacity: 0, x: 40 }}
-              animate={{ opacity: 1, x: 0 }}
-              transition={{ delay: 2.5, duration: 0.8 }}
-            >
-              <IkigaiCards
-                scores={scores}
-                analysis={analysis}
-                onCardClick={handleSectionClick}
-              />
-            </m.div>
-          )}
-          <div className="w-full max-w-7xl flex flex-col lg:flex-row items-center lg:items-start gap-6 lg:gap-10">
-            {/* Venn Diagram */}
-            <div className="w-full lg:flex-1">
-              <IkigaiVennDiagram
-                analysis={analysis}
-                scores={scores}
-                onSectionClick={handleSectionClick}
-              />
-            </div>
-          </div>
-        </m.div>
-      )}
+          {/* ─── Card Lottie (5 การ์ดตาม MaxSessionPercentage) ─── */}
+          <m.div
+            className="absolute z-10"
+            style={getPos(CARD_POS)}
+            {...popUpVariant(0.6)}
+          >
+            <LazyLottie
+              src={cardAssets.cardLottie}
+              className="w-full h-full"
+              loop={true}
+              play={true}
+            />
+          </m.div>
 
-      {/* Action buttons */}
-      {showCircle && (
-        <m.div
-          className="w-full flex flex-wrap justify-center gap-3 md:gap-4 px-4 py-8 z-20"
-          initial={{ opacity: 0, y: 50 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 2.5, duration: 0.8 }}
-        >
-          <button
+          {/* ─── Percent Text (PlayersInSessionPct จากผู้เล่นทั้งหมด) ─── */}
+          <m.div
+            className="absolute portrait:w-full"
+            style={getPos(PERCENT_TEXT_POS)}
+          >
+            <p className="text-white font-semibold text-base md:text-xl xl:text-3xl leading-10 text-center whitespace-nowrap">
+              <span style={{ color: accentColor }}>{playersInSessionPct}%</span>{" "}
+              จากผู้เล่นทั้งหมด
+            </p>
+          </m.div>
+
+          {/* ─── Venn Diagram: 4 วงกลมหลัก ─── */}
+          {VENN_CIRCLES.map((circle) => {
+            const pos = getPos(circle);
+            const sectionScore = scores?.[circle.key] ?? 0;
+            const shortSummary =
+              analysis[circle.key]?.short_summary || "short summary";
+
+            return (
+              <m.button
+                key={circle.key}
+                type="button"
+                className="absolute z-10 cursor-pointer"
+                style={pos}
+                whileHover={{ scale: 1.05, transition: { duration: 0.2 } }}
+                whileTap={{ scale: 0.95 }}
+                onClick={() => handleSectionClick(circle.key)}
+              >
+                {/* วงกลม Gradient Background */}
+                <Image
+                  src={circle.circleSrc}
+                  alt={circle.label}
+                  fill
+                  className="object-contain"
+                  sizes={isMobile ? "32vw" : "20vw"}
+                  crossOrigin="anonymous"
+                />
+
+                {/* Content: icon + label + percent + summary */}
+                <div className="absolute inset-0 flex flex-col items-center justify-center gap-[3.95%] px-[10%]">
+                  {/* Icon */}
+                  <div className="relative w-[12.57%] aspect-square">
+                    <Image
+                      src={circle.iconSrc}
+                      alt={`${circle.label} icon`}
+                      fill
+                      className="object-contain"
+                      sizes="48px"
+                      crossOrigin="anonymous"
+                    />
+                  </div>
+
+                  {/* Label */}
+                  <p className="text-white text-center text-xs md:text-sm xl:text-xl leading-tight whitespace-pre-line">
+                    {circle.label}
+                  </p>
+
+                  {/* Percent Badge */}
+                  <div className="bg-white/50 rounded-full px-[5.27%] py-[1.32%]">
+                    <p className="text-black font-semibold text-xs md:text-base xl:text-2xl text-center">
+                      {sectionScore} %
+                    </p>
+                  </div>
+
+                  {/* Short Summary */}
+                  <p className="text-white text-center text-[10px] md:text-sm xl:text-base whitespace-pre-line">
+                    {shortSummary}
+                  </p>
+                </div>
+              </m.button>
+            );
+          })}
+
+          {/* ─── IKIGAI Center Label ─── */}
+          <m.div
+            className="absolute z-20 flex items-center justify-center rounded-full"
+            style={{
+              ...getPos(IKIGAI_CENTER),
+              background:
+                "radial-gradient(circle, rgba(148,86,28,0.7) 0%, rgba(255,254,253,1) 100%)",
+            }}
+            {...popUpVariant(SEQUENCE_DELAYS.ikigaiCenter)}
+          >
+            <p className="text-white font-semibold text-xs md:text-base xl:text-3xl text-center">
+              IKIGAI
+            </p>
+          </m.div>
+
+          {/* ─── Intersection Labels (Passion, Mission, Profession, Vocation) ─── */}
+          {INTERSECTION_LABELS.map((label, index) => {
+            const pos = getPos(label);
+            return (
+              <m.button
+                key={label.key}
+                type="button"
+                className="absolute px-[2%] py-[0.5%] rounded-[200px] flex items-center justify-center cursor-pointer"
+                style={{
+                  ...pos,
+                  backgroundColor: label.bgColor,
+                }}
+                {...popUpVariant(SEQUENCE_DELAYS.labels + index * 0.1)}
+                whileHover={{ scale: 1.1, transition: { duration: 0.2 } }}
+                whileTap={{ scale: 0.95 }}
+                onClick={() => handleSectionClick(label.key)}
+              >
+                <p className="text-white font-semibold text-sm md:text-lg xl:text-2xl text-center py-[2.6%] px-[7.8%] whitespace-nowrap">
+                  {label.label}
+                </p>
+              </m.button>
+            );
+          })}
+
+          {/* ─── Description Text ─── */}
+          <m.div
+            className="absolute flex flex-col items-center text-center text-white"
+            style={getPos(DESCRIPTION_POS)}
+            {...fadeInVariant(SEQUENCE_DELAYS.description)}
+          >
+            <p className="font-semibold text-base md:text-xl xl:text-2xl">
+              เส้นทางแห่งการปรับตัวเพื่อเข้าสู่สังคมการทำงาน
+            </p>
+            <p className="text-xs md:text-sm xl:text-base mt-[1%]">
+              กดคลิกแต่ละวงกลมเพื่ออ่านเพิ่มเติม
+            </p>
+          </m.div>
+
+          {/* ─── Save Button ─── */}
+          <m.button
             type="button"
+            className="absolute z-20 cursor-pointer"
+            style={getPos(SAVE_BTN_POS)}
+            data-hide-capture="true"
+            {...popUpVariant(SEQUENCE_DELAYS.buttons)}
+            whileHover={{ scale: 1.1 }}
+            whileTap={{ scale: 0.9 }}
             onClick={handleSaveResult}
             disabled={saveStatus === "saving"}
-            className="px-4 py-2 md:px-8 md:py-4 bg-linear-to-r from-green-500 to-emerald-600 text-white rounded-full font-semibold text-sm md:text-lg shadow-lg hover:scale-105 transition-transform disabled:opacity-50 disabled:cursor-not-allowed flex items-center gap-2"
+            aria-label="บันทึกผลลัพธ์"
           >
-            <span className="text-xl">💾</span>
-            {saveStatus === "saving"
-              ? "กำลังบันทึก..."
-              : saveStatus === "saved"
-                ? "บันทึกแล้ว ✓"
-                : "บันทึกผลลัพธ์"}
-          </button>
-          <button
-            type="button"
-            onClick={handleShareResult}
-            className="px-4 py-2 md:px-8 md:py-4 bg-linear-to-r from-blue-500 to-indigo-600 text-white rounded-full font-semibold text-sm md:text-lg shadow-lg hover:scale-105 transition-transform flex items-center gap-2"
-          >
-            <span className="text-xl">📤</span>
-            แชร์
-          </button>
-          <button
-            type="button"
-            onClick={handleContinue}
-            className="px-4 py-2 md:px-8 md:py-4 bg-linear-to-r from-purple-500 to-pink-600 text-white rounded-full font-semibold text-sm md:text-lg shadow-lg hover:scale-105 transition-transform flex items-center gap-2"
-          >
-            ดำเนินการต่อ
-            <span className="text-xl">→</span>
-          </button>
-        </m.div>
-      )}
+            <Image
+              src={getImgPath("Scene/Result/save_btn.webp")}
+              alt="Save result"
+              fill
+              className="object-contain"
+              sizes="70px"
+              crossOrigin="anonymous"
+            />
+          </m.button>
 
-      {/* Section Detail Modal */}
-      <SectionDetailModal
-        isOpen={selectedSection !== null}
-        onClose={() => setSelectedSection(null)}
-        sectionKey={selectedSection}
-        sectionData={selectedSectionData}
-      />
+          {/* ─── Share Button ─── */}
+          <m.button
+            type="button"
+            className="absolute z-20 cursor-pointer"
+            style={getPos(SHARE_BTN_POS)}
+            data-hide-capture="true"
+            {...popUpVariant(SEQUENCE_DELAYS.buttons + 0.1)}
+            whileHover={{ scale: 1.1 }}
+            whileTap={{ scale: 0.9 }}
+            onClick={handleShareResult}
+            aria-label="แชร์ผลลัพธ์"
+          >
+            <Image
+              src={getImgPath("Scene/Result/share_btn.webp")}
+              alt="Share result"
+              fill
+              className="object-contain"
+              sizes="70px"
+              crossOrigin="anonymous"
+            />
+          </m.button>
+
+          {/* ─── Continue Button (ไป Closing Scene) ─── */}
+          <m.button
+            type="button"
+            className="absolute z-20 cursor-pointer"
+            style={getPos(CONTINUE_BTN_POS)}
+            data-hide-capture="true"
+            {...popUpVariant(SEQUENCE_DELAYS.buttons + 0.2)}
+            whileHover={{ scale: 1.1 }}
+            whileTap={{ scale: 0.9 }}
+            onClick={handleContinue}
+            aria-label="ไปต่อ"
+          >
+            <Image
+              src={getImgPath("Icon/continue_btn.webp")}
+              alt="Continue to closing"
+              fill
+              className="object-contain"
+              sizes="70px"
+              crossOrigin="anonymous"
+            />
+          </m.button>
+        </SceneLayer>
+
+        {/* ─── Section Detail Modal ─── */}
+        <AnimatePresence>
+          {selectedSection && selectedSectionData && (
+            <SectionDetailModal
+              isOpen={true}
+              onClose={handleCloseModal}
+              sectionKey={selectedSection}
+              sectionData={selectedSectionData}
+            />
+          )}
+        </AnimatePresence>
+      </div>
     </div>
   );
 }

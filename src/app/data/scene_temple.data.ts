@@ -119,7 +119,7 @@ export const TEMPLE_ARRIVAL_ITEMS: SceneItemData[] = [
       zIndex: 0,
     },
     animGroup: 68,
-    className: "mix-blend-screen",
+    className: "mix-blend-screen animate-pulse",
     priority: true,
     sizes: "(max-width: 768px) 40vw, 30vw",
   },

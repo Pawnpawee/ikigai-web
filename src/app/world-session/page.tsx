@@ -39,7 +39,7 @@ export default function WorldSessionPage() {
   //? Single ref for entire page
   const ref = useRef<HTMLDivElement>(null);
   const { userId, isLoading } = useUser();
-  const { setBgMusic, isMuted, playSfx, stopAllSfx } = useAudio();
+  const { setBgMusic, playSfx, stopAllSfx } = useAudio();
   const lenis = useLenis();
   const router = useRouter();
 
@@ -206,11 +206,17 @@ export default function WorldSessionPage() {
     }
   }, [userId, isLoading, router]);
 
+  //? ตั้งเพลง bg ทุกครั้งที่เข้าหน้า ไม่ว่าจะ mute หรือไม่ เพื่อให้ soundRef ตรงกับหน้าปัจจุบัน
   useEffect(() => {
-    if (!isMuted) {
-      setBgMusic(getAudioUrl("Sound/8/ancient-egypt.mp3"));
-    }
-  }, [setBgMusic, isMuted]);
+    setBgMusic(getAudioUrl("Sound/8/ancient-egypt.mp3"));
+  }, [setBgMusic]);
+
+  //? Cleanup: หยุด SFX ทั้งหมดเมื่อออกจากหน้า (ป้องกันเสียง ambient หลุดไปหน้าถัดไป)
+  useEffect(() => {
+    return () => {
+      stopAllSfx();
+    };
+  }, [stopAllSfx]);
 
   //? Handler: S8_1 completed (Called Upon answered)
   const handleS8_1Completed = (data: S8_1Data) => {
@@ -219,9 +225,13 @@ export default function WorldSessionPage() {
   };
 
   //? Handler: S8_2 completed (Gifts selected)
-  const handleS8_2Completed = (data: S8_2Data) => {
-    setIsS8_2Completed(true);
-    setS8_2Data(data);
+  const handleS8_2Completed = (data: S8_2Data | null) => {
+    if (data) {
+      setIsS8_2Completed(true);
+      setS8_2Data(data);
+    } else {
+      setIsS8_2Completed(false);
+    }
   };
 
   //? S8_3 is purely visual — no handler needed
@@ -356,7 +366,7 @@ export default function WorldSessionPage() {
           onCompleted={handleS8_5Completed}
         />
       </div>
-      
+
       {/* ProgressBar: scrollYProgress ของหน้านี้ */}
       <div className="pointer-events-none">
         <ProgressBar scrollYProgress={scrollYProgress} />

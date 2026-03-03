@@ -55,7 +55,6 @@ export const SCENE_S7_2_ITEMS: SceneItemData[] = [
   {
     id: "painting",
     src: getImgPath("Scene/Scene7/03/painting.webp"),
-    mobileSrc: getImgPath("Scene/Scene7/03/painting_mb.webp"),
     alt: "Easel painting illustration",
     style: {
       width: "23.02%", // 442.06 / 1920
@@ -64,10 +63,10 @@ export const SCENE_S7_2_ITEMS: SceneItemData[] = [
       top: "6.56%", // 70.83 / 1080
     },
     mobileStyle: {
-      width: "40.93%",
-      height: "48.87%",
-      left: "29.53%",
-      top: "47.07%",
+      width: "40.93%", // 442.06 / 1080
+      height: "48.87%", // 938.35 / 1920
+      left: "29.53%", // 318.97 / 1080
+      top: "47.07%", // 903.83 / 1920
     },
     animGroup: 3,
   },

@@ -1,0 +1,177 @@
+import { getImgPath } from "@/utils/cloudinaryUtils";
+import type { IkigaiAnalysis } from "../types/ikigai.types";
+
+// ─────────────────────────────────────────────────────────────
+//? Modal Config สำหรับแสดงรายละเอียดแต่ละด้าน Ikigai
+//? Reference: Figma node 930:8328 (s12-modal) 1920x1080
+//? Modal frame: x=284, y=222, w=1278.23, h=652.36
+// ─────────────────────────────────────────────────────────────
+
+export interface IkigaiModalConfig {
+  key: keyof IkigaiAnalysis;
+  title: string;
+  iconSrc: string;
+  //? สีพื้นหลังของ Modal (gradient)
+  bgGradient: string;
+  //? สีพื้นหลัง Header
+  headerBg: string;
+  //? สีพื้นหลัง Content
+  contentBg: string;
+  //? สีหลักของ Header text
+  titleColor: string;
+  //? Labels สำหรับ Section ย่อย
+  overallLabel: string;
+  strengthLabel: string;
+  developLabel: string;
+  //? Icon Sources สำหรับ Section ย่อย
+  overallIcon: string;
+  strengthIcon: string;
+  developIcon: string;
+}
+
+//? สี bg สำหรับแต่ละด้าน ikigai — เตรียมไว้หลาย modal
+export const MODAL_BG_COLORS: Record<keyof IkigaiAnalysis, string> = {
+  what_you_love: "rgba(220, 38, 68, 0.85)",
+  what_you_good_at: "rgba(255, 140, 50, 0.85)",
+  what_the_world_need: "rgba(80, 180, 80, 0.85)",
+  what_you_can_be_paid_for: "rgba(60, 120, 220, 0.85)",
+  passion: "rgba(255, 100, 180, 0.85)",
+  mission: "rgba(140, 200, 60, 0.85)",
+  profession: "rgba(150, 100, 220, 0.85)",
+  vocation: "rgba(255, 160, 40, 0.85)",
+};
+
+export const IKIGAI_MODAL_CONFIGS: IkigaiModalConfig[] = [
+  {
+    key: "what_you_love",
+    title: "What you love",
+    iconSrc: getImgPath("Icon/love.webp"),
+    bgGradient:
+      "linear-gradient(0deg, #601126 3.98%, #6A1429 16.02%, #841D31 37.33%, #B02C3E 65.12%, #EC4151 96.62%)",
+    headerBg: "",
+    contentBg: "rgba(0, 0, 0, 0.20)",
+    titleColor: "#FFFFFF",
+    overallLabel: "สรุปภาพรวม",
+    strengthLabel: "จุดแข็ง",
+    developLabel: "จุดพัฒนา",
+    overallIcon: getImgPath("Icon/icon_overall.webp"),
+    strengthIcon: getImgPath("Icon/icon_strength.webp"),
+    developIcon: getImgPath("Icon/icon_develop.webp"),
+  },
+  {
+    key: "what_you_good_at",
+    title: "What you are good at",
+    iconSrc: getImgPath("Icon/skill.webp"),
+    bgGradient:
+      "linear-gradient(0deg, #2E0A92 3.98%, #360D9B 18.8%, #4E17B6 44.74%, #7527E2 78.09%, #8D31FD 96.62%)",
+    headerBg: "",
+    contentBg: "rgba(0, 0, 0, 0.20)",
+    titleColor: "#FFFFFF",
+    overallLabel: "สรุปภาพรวม",
+    strengthLabel: "จุดแข็ง",
+    developLabel: "จุดพัฒนา",
+    overallIcon: getImgPath("Icon/icon_overall.webp"),
+    strengthIcon: getImgPath("Icon/icon_strength.webp"),
+    developIcon: getImgPath("Icon/icon_develop.webp"),
+  },
+  {
+    key: "what_the_world_need",
+    title: "What the world needs",
+    iconSrc: getImgPath("Icon/world.webp"),
+    bgGradient:
+      "linear-gradient(0deg, #095346 3.98%, #135A45 15.09%, #2D7042 34.55%, #59933E 59.56%, #95C238 88.28%, #A8D137 96.62%)",
+    headerBg: "",
+    contentBg: "rgba(0, 0, 0, 0.20)",
+    titleColor: "#FFFFFF",
+    overallLabel: "สรุปภาพรวม",
+    strengthLabel: "จุดแข็ง",
+    developLabel: "จุดพัฒนา",
+    overallIcon: getImgPath("Icon/icon_overall.webp"),
+    strengthIcon: getImgPath("Icon/icon_strength.webp"),
+    developIcon: getImgPath("Icon/icon_develop.webp"),
+  },
+  {
+    key: "what_you_can_be_paid_for",
+    title: "What you can be paid for",
+    iconSrc: getImgPath("Icon/paid.webp"),
+    bgGradient:
+      "linear-gradient(0deg, #8D380D 3.98%, #96410D 20.65%, #B1590E 48.44%, #DD8011 84.57%, #EE9012 96.62%)",
+    headerBg: "",
+    contentBg: "rgba(0, 0, 0, 0.20)",
+    titleColor: "#FFFFFF",
+    overallLabel: "สรุปภาพรวม",
+    strengthLabel: "จุดแข็ง",
+    developLabel: "จุดพัฒนา",
+    overallIcon: getImgPath("Icon/icon_overall.webp"),
+    strengthIcon: getImgPath("Icon/icon_strength.webp"),
+    developIcon: getImgPath("Icon/icon_develop.webp"),
+  },
+  {
+    key: "passion",
+    title: "Passion",
+    iconSrc: getImgPath("Icon/passion.webp"),
+    bgGradient:
+      "linear-gradient(180deg, rgba(255,100,180,0.9) 0%, rgba(180,40,120,0.95) 100%)",
+    headerBg: "",
+    contentBg: "rgba(0, 0, 0, 0.20)",
+    titleColor: "#FFFFFF",
+    overallLabel: "สรุปภาพรวม",
+    strengthLabel: "จุดแข็ง",
+    developLabel: "จุดพัฒนา",
+    overallIcon: getImgPath("Icon/icon_overall.webp"),
+    strengthIcon: getImgPath("Icon/icon_strength.webp"),
+    developIcon: getImgPath("Icon/icon_develop.webp"),
+  },
+  {
+    key: "mission",
+    title: "Mission",
+    iconSrc: getImgPath("Icon/mission.webp"),
+    bgGradient:
+      "linear-gradient(180deg, rgba(140,200,60,0.9) 0%, rgba(80,130,20,0.95) 100%)",
+    headerBg: "",
+    contentBg: "rgba(0, 0, 0, 0.20)",
+    titleColor: "#FFFFFF",
+    overallLabel: "สรุปภาพรวม",
+    strengthLabel: "จุดแข็ง",
+    developLabel: "จุดพัฒนา",
+    overallIcon: getImgPath("Icon/icon_overall.webp"),
+    strengthIcon: getImgPath("Icon/icon_strength.webp"),
+    developIcon: getImgPath("Icon/icon_develop.webp"),
+  },
+  {
+    key: "profession",
+    title: "Profession",
+    iconSrc: getImgPath("Icon/profession.webp"),
+    bgGradient:
+      "linear-gradient(180deg, rgba(150,100,220,0.9) 0%, rgba(80,40,160,0.95) 100%)",
+    headerBg: "rgba(150, 100, 220, 0.7)",
+    contentBg: "",
+    titleColor: "#FFFFFF",
+    overallLabel: "สรุปภาพรวม",
+    strengthLabel: "จุดแข็ง",
+    developLabel: "จุดพัฒนา",
+    overallIcon: getImgPath("Icon/icon_overall.webp"),
+    strengthIcon: getImgPath("Icon/icon_strength.webp"),
+    developIcon: getImgPath("Icon/icon_develop.webp"),
+  },
+  {
+    key: "vocation",
+    title: "Vocation",
+    iconSrc: getImgPath("Icon/vocation.webp"),
+    bgGradient:
+      "linear-gradient(180deg, rgba(255,160,40,0.9) 0%, rgba(180,100,10,0.95) 100%)",
+    headerBg: "",
+    contentBg: "rgba(0, 0, 0, 0.20)",
+    titleColor: "#FFFFFF",
+    overallLabel: "สรุปภาพรวม",
+    strengthLabel: "จุดแข็ง",
+    developLabel: "จุดพัฒนา",
+    overallIcon: getImgPath("Icon/icon_overall.webp"),
+    strengthIcon: getImgPath("Icon/icon_strength.webp"),
+    developIcon: getImgPath("Icon/icon_develop.webp"),
+  },
+];
+
+//? Helper: หา Modal Config จาก key
+export const getModalConfig = (key: keyof IkigaiAnalysis) =>
+  IKIGAI_MODAL_CONFIGS.find((c) => c.key === key);

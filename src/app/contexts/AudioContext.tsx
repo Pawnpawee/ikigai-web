@@ -120,9 +120,11 @@ export function AudioProvider({ children }: { children: React.ReactNode }) {
     Howler.mute(false);
     saveSettings({ isMuted: false });
 
-    // Resume ถ้ามีเพลงค้างอยู่
-    if (soundRef.current && !soundRef.current.playing()) {
-      soundRef.current.play();
+    //? Resume หรือ fade in เพลงที่เล่นอยู่ (อาจเล่นอยู่แล้วที่ volume 0)
+    if (soundRef.current) {
+      if (!soundRef.current.playing()) {
+        soundRef.current.play();
+      }
       soundRef.current.fade(0, volume / 100, 500);
     }
   };

@@ -192,27 +192,7 @@ export const SCENE_S8_5_ITEMS: SceneItemData[] = [
   //  Phase 2: Cat + Question Scene Items (200vh)
   // ────────────────────────────────────────────────────
 
-  {
-    id: "cat",
-    src: getImgPath("Scene/Scene8/05/cat.webp"),
-    alt: "Cat illustration",
-    style: {
-      //? Desktop: 867:7968 x=220.36, y=234.73, w=647.85, h=660.03
-      width: "33.74%",
-      height: "61.11%",
-      left: "11.48%",
-      top: "21.73%",
-    },
-    mobileStyle: {
-      //? Mobile: 867:14373 x=176.76, y=894.32, w=726.59, h=740.24
-      width: "67.28%",
-      height: "38.55%",
-      left: "16.37%",
-      top: "46.58%",
-    },
-    animGroup: 9,
-    className: "z-1",
-  },
+  //? cat ย้ายไปใช้ LazyLottie ใน s8_5.tsx แล้ว (cat2.json)
 ];
 
 // ────────────────────────────────────────────────────

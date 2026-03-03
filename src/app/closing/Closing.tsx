@@ -25,7 +25,7 @@ export default function ClosingPage() {
   const router = useRouter();
   const { isMobile } = useDevice();
   const [playerName, setPlayerName] = useState("ผู้เดินทาง");
-  const { setBgMusic, isMuted } = useAudio();
+  const { setBgMusic } = useAudio();
 
   //? ดึงชื่อผู้เล่นจาก session storage
   useEffect(() => {
@@ -35,11 +35,10 @@ export default function ClosingPage() {
     }
   }, []);
 
+  //? ตั้งเพลง bg ทุกครั้งที่เข้าหน้า ไม่ว่าจะ mute หรือไม่ เพื่อให้ soundRef ตรงกับหน้าปัจจุบัน
   useEffect(() => {
-    if (!isMuted) {
-      setBgMusic(getAudioUrl("Sound/8/egypt_expedition.mp3"));
-    }
-  }, [setBgMusic, isMuted]);
+    setBgMusic(getAudioUrl("Sound/10/egypt_expedition.mp3"));
+  }, [setBgMusic]);
 
   const { scrollYProgress } = useScroll({
     target: ref,
@@ -97,11 +96,6 @@ export default function ClosingPage() {
     shouldShow: () => false,
   });
 
-  const handleRetry = () => {
-    //? กลับไปเริ่มต้นใหม่ตั้งแต่หน้าแรก (prologue)
-    router.push("/");
-  };
-
   const handleGoHome = () => {
     //? กลับไปหน้าหลัก
     router.push("/");
@@ -126,7 +120,7 @@ export default function ClosingPage() {
           style={{ opacity: set1Opacity, zIndex: 0 }}
         >
           <LazyLottie
-            src={getJsonUrl("Scene/Scene13/sky.json")}
+            src={getJsonUrl("Scene/Scene3/sky.json")}
             loop={true}
             playTrigger={set1Opacity}
             className="w-full object-cover"
@@ -145,7 +139,7 @@ export default function ClosingPage() {
           }}
         >
           <LazyLottie
-            src={getJsonUrl("Scene/Scene13/sun.json")}
+            src={getJsonUrl("Scene/Closing/sun.json")}
             loop={true}
             playTrigger={set1Opacity}
             className="w-full h-full"
@@ -158,24 +152,6 @@ export default function ClosingPage() {
             items={SCENE_CLOSING_ITEMS}
             animations={animations}
             containerAspectRatio={isMobile ? "9 / 16" : "16 / 9"}
-          />
-        </m.div>
-
-        {/* Wave Lottie (on top of water) */}
-        <m.div
-          className="absolute w-full portrait:w-[178%] portrait:-left-[39%]"
-          style={{
-            bottom: 0,
-            height: isMobile ? "45%" : "30%",
-            opacity: set2Opacity,
-            zIndex: 4,
-          }}
-        >
-          <LazyLottie
-            src={getJsonUrl("Scene/Scene13/wave.json")}
-            loop={true}
-            playTrigger={set2Opacity}
-            className="w-full h-full object-cover"
           />
         </m.div>
 
@@ -209,12 +185,6 @@ export default function ClosingPage() {
             className="flex flex-row gap-4 md:gap-8 mt-8 md:mt-12"
             style={{ opacity: btnOpacity, y: btnY }}
           >
-            <GradientButton
-              text={CLOSING_DIALOGUE.buttons.retry}
-              isSelected={false}
-              onClick={handleRetry}
-              variant="white"
-            />
             <GradientButton
               text={CLOSING_DIALOGUE.buttons.home}
               isSelected={false}

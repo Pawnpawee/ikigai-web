@@ -11,7 +11,7 @@ import Weighing from "./Weighing";
 
 export default function DreamingPage() {
   const router = useRouter();
-  const { playSfx, isMuted, setBgMusic } = useAudio();
+  const { playSfx, isMuted, setBgMusic } = useAudio(); //? isMuted ยังใช้สำหรับเสียง SFX แมวเมี่ยว
 
   useLayoutEffect(() => {
     if (typeof window !== "undefined") {
@@ -35,11 +35,10 @@ export default function DreamingPage() {
     "คุณตกลงมาจุดสิ้นสุด.... คุณเจอกับบางอย่างกำลังเดินใกล้เข้ามาจะดูมันไหม",
   );
 
+  //? ตั้งเพลง bg ทุกครั้งที่เข้าหน้า ไม่ว่าจะ mute หรือไม่ เพื่อให้ soundRef ตรงกับหน้าปัจจุบัน
   useEffect(() => {
-    if (!isMuted) {
-      setBgMusic(getAudioUrl("Sound/3-4/egypt-jelly-dance.mp3"));
-    }
-  }, [isMuted, setBgMusic]);
+    setBgMusic(getAudioUrl("Sound/3-4/egypt-jelly-dance.mp3"));
+  }, [setBgMusic]);
 
   const handleNotLook = () => {
     // เริ่ม Effect ตาปรือ

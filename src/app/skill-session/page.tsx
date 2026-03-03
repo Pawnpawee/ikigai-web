@@ -29,11 +29,10 @@ export interface SkillData {
   useSkillsInNewRole: string;
 }
 
-
 export default function SessionSkillPage() {
   //? Single ref for entire page
   const ref = useRef<HTMLDivElement>(null);
-  const { setBgMusic, isMuted } = useAudio();
+  const { setBgMusic } = useAudio();
   const { userId, isLoading } = useUser();
   const lenis = useLenis();
   const router = useRouter();
@@ -68,11 +67,10 @@ export default function SessionSkillPage() {
     }
   }, []);
 
+  //? ตั้งเพลง bg ทุกครั้งที่เข้าหน้า ไม่ว่าจะ mute หรือไม่ เพื่อให้ soundRef ตรงกับหน้าปัจจุบัน
   useEffect(() => {
-    if (!isMuted) {
-      setBgMusic(getAudioUrl("Sound/7/living-art.mp3"));
-    }
-  }, [setBgMusic, isMuted]);
+    setBgMusic(getAudioUrl("Sound/7/living-art.mp3"));
+  }, [setBgMusic]);
 
   const isResettingScroll = useRef(false);
 
@@ -151,16 +149,26 @@ export default function SessionSkillPage() {
     }
   }, [userId, isLoading, router]);
 
-  //? Handler: S7_1 completed (Hard Skills selected)
-  const handleS7_1Completed = (data: S7_1Data) => {
-    setS7_1Data(data);
-    setIsS7_1Completed(true);
+  //? Handler: S7_1 status change (Hard Skills selected/unselected)
+  const handleS7_1Completed = (data: S7_1Data | null) => {
+    if (data) {
+      setS7_1Data(data);
+      setIsS7_1Completed(true);
+    } else {
+      //! Unselect ต่ำกว่า threshold → ล็อค scroll กลับ
+      setIsS7_1Completed(false);
+    }
   };
 
-  //? Handler: S7_2 completed (Soft Skills selected)
-  const handleS7_2Completed = (data: S7_2Data) => {
-    setS7_2Data(data);
-    setIsS7_2Completed(true);
+  //? Handler: S7_2 status change (Soft Skills selected/unselected)
+  const handleS7_2Completed = (data: S7_2Data | null) => {
+    if (data) {
+      setS7_2Data(data);
+      setIsS7_2Completed(true);
+    } else {
+      //! Unselect ต่ำกว่า threshold → ล็อค scroll กลับ
+      setIsS7_2Completed(false);
+    }
   };
 
   //? Handler: S7_3 completed (both questions answered)

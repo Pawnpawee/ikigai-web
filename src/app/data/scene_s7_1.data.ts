@@ -5,7 +5,7 @@ import type { SceneItemData } from "../components/reusable/SceneLayer";
 //? Layout: Desktop 1920x1080, Mobile 1080x1920
 //? Animation Groups:
 //? 1 = bgcircle (background gradient circles) - 0-0.1
-//? 2 = starlight (decorative stars) - 0.05-0.15
+//? (starlight ย้ายไปใช้ LazyLottie ใน s7_1.tsx แล้ว)
 
 // ────────────────────────────────────────────────────
 //  Background SceneLayer Items
@@ -30,25 +30,6 @@ export const SCENE_S7_1_ITEMS: SceneItemData[] = [
       top: "4.97%",
     },
     animGroup: 1,
-  },
-  {
-    id: "starlight",
-    src: getImgPath("Scene/Scene7/02/starlight.webp"),
-    mobileSrc: getImgPath("Scene/Scene7/02/starlight_mb.webp"),
-    alt: "Decorative starlight",
-    style: {
-      width: "90.12%",
-      height: "39.13%",
-      left: "4.94%",
-      top: "-0.35%",
-    },
-    mobileStyle: {
-      width: "87.63%",
-      height: "22.01%",
-      left: "6.18%",
-      top: "-9.82%",
-    },
-    animGroup: 2,
   },
 ];
 

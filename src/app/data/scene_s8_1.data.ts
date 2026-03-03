@@ -260,28 +260,7 @@ export const SCENE_S8_1_ITEMS: SceneItemData[] = [
 
   //? ── Phase 3: Cat (200vh) ──
   //? Dark overlay is rendered as CSS in the component
-
-  {
-    id: "cat",
-    src: getImgPath("Scene/Scene8/01/cat.webp"),
-    alt: "Spirit cat guide",
-    style: {
-      //? Desktop: 627.54×741.67 at (174.13, 207.5) in 1920×1080
-      width: "32.68%",
-      height: "68.67%",
-      left: "9.07%",
-      top: "19.21%",
-    },
-    mobileStyle: {
-      //? Mobile: 692.36×818.28 at (226.98, 886.75) in 1080×1920
-      width: "64.11%",
-      height: "42.62%",
-      left: "21.02%",
-      top: "46.18%",
-    },
-    animGroup: 12,
-    className: "z-1",
-  },
+  //? cat ย้ายไปใช้ LazyLottie ใน s8_1.tsx แล้ว (cat1.json)
 ];
 
 // ────────────────────────────────────────────────────

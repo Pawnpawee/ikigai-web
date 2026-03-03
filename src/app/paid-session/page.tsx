@@ -37,7 +37,7 @@ const TOTAL_HEIGHT_VH = 1000;
 export default function PaidSessionPage() {
   //? Single ref for entire page
   const ref = useRef<HTMLDivElement>(null);
-  const { setBgMusic, isMuted, playSfx, stopAllSfx } = useAudio();
+  const { setBgMusic, playSfx, stopAllSfx } = useAudio();
   const { userId, isLoading } = useUser();
   const lenis = useLenis();
   const router = useRouter();
@@ -166,11 +166,17 @@ export default function PaidSessionPage() {
     }
   }, [userId, isLoading, router]);
 
+  //? ตั้งเพลง bg ทุกครั้งที่เข้าหน้า ไม่ว่าจะ mute หรือไม่ เพื่อให้ soundRef ตรงกับหน้าปัจจุบัน
   useEffect(() => {
-    if (!isMuted) {
-      setBgMusic(getAudioUrl("Sound/9/travel_inarab.mp3"));
-    }
-  }, [setBgMusic, isMuted]);
+    setBgMusic(getAudioUrl("Sound/9/travel_inarab.mp3"));
+  }, [setBgMusic]);
+
+  //? Cleanup: หยุด SFX ทั้งหมดเมื่อออกจากหน้า (ป้องกันเสียง ambient หลุดไปหน้าถัดไป)
+  useEffect(() => {
+    return () => {
+      stopAllSfx();
+    };
+  }, [stopAllSfx]);
 
   //? เล่นเสียง ambient (market + person_walking) ตลอด S9_1-S9_3
   //? Cover จบที่ 200/1000 = 0.2 → เริ่มเล่นหลัง Cover
@@ -192,9 +198,13 @@ export default function PaidSessionPage() {
   };
 
   //? Handler: S9_2 completed (job cards selected)
-  const handleS9_2Completed = (data: S9_2Data) => {
-    setS9_2Data(data);
-    setIsS9_2Completed(true);
+  const handleS9_2Completed = (data: S9_2Data | null) => {
+    if (data) {
+      setS9_2Data(data);
+      setIsS9_2Completed(true);
+    } else {
+      setIsS9_2Completed(false);
+    }
   };
 
   //? Handler: S9_3 completed → combine all data & submit

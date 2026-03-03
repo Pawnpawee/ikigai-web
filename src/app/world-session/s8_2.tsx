@@ -39,7 +39,7 @@ export interface S8_2Data {
 
 interface S8_2Props {
   scrollYProgress: MotionValue<number>;
-  onCompleted?: (data: S8_2Data) => void;
+  onCompleted?: (data: S8_2Data | null) => void;
 }
 
 // ────────────────────────────────────────────────────
@@ -264,6 +264,11 @@ export default function S8_2({ scrollYProgress, onCompleted }: S8_2Props) {
               customGifts: [],
             });
           });
+        } else {
+          //? เมื่อเลือกไม่ครบ → แจ้ง parent ให้ล็อค scroll กลับ
+          queueMicrotask(() => {
+            onCompletedRef.current?.(null);
+          });
         }
 
         return next;
@@ -332,7 +337,7 @@ export default function S8_2({ scrollYProgress, onCompleted }: S8_2Props) {
                 style={{ opacity: carouselOpacity }}
               >
                 เลือกแล้ว {selectedGifts.length} (ตอบได้หลายข้อ ขั้นต่ำ{" "}
-                {MIN_GIFT_SELECTIONS} อย่าง)
+                {MIN_GIFT_SELECTIONS} อย่าง เพื่อเลื่อนไปยังส่วนถัดไป)
               </m.p>
             </m.div>
 

@@ -170,26 +170,7 @@ export const SCENE_S9_1_ITEMS: SceneItemData[] = [
   },
 
   //? ─── Phase 2: Cat (bgblack ใช้ CSS overlay แทนรูปภาพ) ───
-
-  {
-    id: "cat",
-    src: getImgPath("Scene/Scene9/01/cat.webp"),
-    alt: "Mysterious cat guide",
-    style: {
-      width: "33.00%",
-      height: "54.39%",
-      left: "10.13%",
-      top: "28.33%",
-    },
-    mobileStyle: {
-      width: "58.67%",
-      height: "30.59%",
-      left: "20.66%",
-      top: "51.65%",
-    },
-    animGroup: 9,
-    className: "z-1",
-  },
+  //? cat ย้ายไปใช้ LazyLottie ใน s9_1.tsx แล้ว (cat1.json)
 ];
 
 // ────────────────────────────────────────────────────

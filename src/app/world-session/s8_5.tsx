@@ -20,7 +20,8 @@ import {
   S8_5_QUESTION_POSITION,
   SCENE_S8_5_ITEMS,
 } from "@/app/data/scene_s8_5.data";
-import { getAudioUrl } from "@/utils/cloudinaryUtils";
+import { getAudioUrl, getJsonUrl } from "@/utils/cloudinaryUtils";
+import LazyLottie from "../components/reusable/LazyLottie";
 import { useAudio } from "../contexts/AudioContext";
 import { useDevice } from "../contexts/DeviceContext";
 
@@ -140,7 +141,6 @@ export default function S8_5({ scrollYProgress, onCompleted }: S8_5Props) {
       6: { opacity: lotus1Opacity, y: lotus1Y },
       7: { opacity: lotus3Opacity, y: lotus3Y },
       8: { opacity: headOpacity, y: headY },
-      9: { opacity: catOpacity, y: catY },
     }),
     [
       mountainOpacity,
@@ -158,8 +158,6 @@ export default function S8_5({ scrollYProgress, onCompleted }: S8_5Props) {
       lotus3Y,
       headOpacity,
       headY,
-      catOpacity,
-      catY,
     ],
   );
 
@@ -215,6 +213,26 @@ export default function S8_5({ scrollYProgress, onCompleted }: S8_5Props) {
             className="fixed inset-0 bg-black"
             style={{ opacity: darkOverlayOpacity }}
           />
+
+          {/* ═══ Phase 2: Cat (LazyLottie) ═══ */}
+          <m.div
+            className="absolute z-1"
+            style={{
+              width: isMobile ? "67.28%" : "33.74%",
+              height: isMobile ? "38.55%" : "61.11%",
+              left: isMobile ? "16.37%" : "11.48%",
+              top: isMobile ? "46.58%" : "21.73%",
+              opacity: catOpacity,
+              y: catY,
+            }}
+          >
+            <LazyLottie
+              src={getJsonUrl("Scene/Scene8/05/cat2.json")}
+              className="w-full h-full"
+              loop
+              playTrigger={catOpacity}
+            />
+          </m.div>
 
           {/* ═══ Phase 2 Content: Question frame (text + buttons) ═══ */}
           {/*? Desktop: 867:8161 question frame — flex-col, items-center */}

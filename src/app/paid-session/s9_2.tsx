@@ -37,7 +37,7 @@ export interface S9_2Data {
 
 interface S9_2Props {
   scrollYProgress: MotionValue<number>;
-  onCompleted?: (data: S9_2Data) => void;
+  onCompleted?: (data: S9_2Data | null) => void;
 }
 
 // ────────────────────────────────────────────────────
@@ -260,14 +260,17 @@ export default function S9_2({ scrollYProgress, onCompleted }: S9_2Props) {
     (category: string) => {
       playSfx(getAudioUrl("Sound/Pop_Select_Button.mp3"));
       setSelectedCards((prev) => {
-        const next = prev.includes(category)
-          ? prev.filter((c) => c !== category)
-          : [...prev, category];
+        //? Single-select: เลือกได้แค่ 1 ใบ — กดซ้ำ = ยกเลิก
+        const isDeselecting = prev.includes(category);
+        const next = isDeselecting ? [] : [category];
 
-        //? เมื่อเลือกครบตาม MIN_SELECTIONS → เรียก onCompleted ทันที
         if (next.length >= MIN_SELECTIONS) {
           queueMicrotask(() => {
             onCompletedRef.current?.({ selectedJobCards: next });
+          });
+        } else {
+          queueMicrotask(() => {
+            onCompletedRef.current?.(null);
           });
         }
 
@@ -337,8 +340,9 @@ export default function S9_2({ scrollYProgress, onCompleted }: S9_2Props) {
                 className="text-center mt-1 sm:mt-2 select-none text-xs md:text-base xl:text-lg text-white"
                 style={{ opacity: carouselOpacity }}
               >
-                เลือกแล้ว {selectedCards.length} สาขา (ขั้นต่ำ {MIN_SELECTIONS}{" "}
-                อย่าง)
+                {selectedCards.length > 0
+                  ? `เลือกแล้ว: ${selectedCards[0]}`
+                  : "กรุณาเลือก 1 สาขา"}
               </m.p>
             </m.div>
 

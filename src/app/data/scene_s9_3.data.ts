@@ -55,26 +55,7 @@ export const SCENE_S9_3_ITEMS: SceneItemData[] = [
     },
     animGroup: 2,
   },
-  {
-    id: "cat",
-    src: getImgPath("Scene/Scene9/03/cat.webp"),
-    alt: "Mysterious cat guide",
-    //? Desktop: 693.76/1920 = 36.13%, 631.44/1080 = 58.47%
-    style: {
-      width: "36.13%",
-      height: "58.47%",
-      left: "61.17%",
-      top: "32.19%",
-    },
-    //? Mobile: 693.76/1080 = 64.24%, 631.44/1920 = 32.89%
-    mobileStyle: {
-      width: "64.24%",
-      height: "32.89%",
-      left: "17.88%",
-      top: "55.47%",
-    },
-    animGroup: 3,
-  },
+  //? cat ย้ายไปใช้ LazyLottie ใน s9_3.tsx แล้ว (cat1.json)
 ];
 
 // ────────────────────────────────────────────────────

@@ -15,6 +15,8 @@ import {
   SCENE_S9_3_ITEMS,
   validateMeaningfulText,
 } from "@/app/data/scene_s9_3.data";
+import { getJsonUrl } from "@/utils/cloudinaryUtils";
+import LazyLottie from "../components/reusable/LazyLottie";
 import { useDevice } from "../contexts/DeviceContext";
 
 // ────────────────────────────────────────────────────
@@ -70,9 +72,8 @@ export default function S9_3({ scrollYProgress, onCompleted }: S9_3Props) {
     () => ({
       1: { opacity: moneyBgOpacity },
       2: { opacity: starlightOpacity },
-      3: { opacity: catOpacity, y: catY },
     }),
-    [moneyBgOpacity, starlightOpacity, catOpacity, catY],
+    [moneyBgOpacity, starlightOpacity],
   );
 
   // ─── Handlers ───
@@ -118,6 +119,26 @@ export default function S9_3({ scrollYProgress, onCompleted }: S9_3Props) {
           animations={animations}
           containerAspectRatio={isMobile ? "1080 / 1920" : "1920 / 1080"}
         >
+          {/* ═══ Cat (LazyLottie) ═══ */}
+          <m.div
+            className="absolute"
+            style={{
+              width: isMobile ? "64.24%" : "36.13%",
+              height: isMobile ? "32.89%" : "58.47%",
+              left: isMobile ? "17.88%" : "61.17%",
+              top: isMobile ? "55.47%" : "32.19%",
+              opacity: catOpacity,
+              y: catY,
+            }}
+          >
+            <LazyLottie
+              src={getJsonUrl("Scene/Scene9/03/cat2.json")}
+              className="w-full h-full"
+              loop
+              playTrigger={catOpacity}
+            />
+          </m.div>
+
           {/* Content Layer — question + input */}
           <div className="absolute inset-0 flex flex-col items-start pointer-events-none">
             {/*? Question Text

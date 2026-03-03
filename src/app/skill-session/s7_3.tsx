@@ -15,6 +15,8 @@ import {
   SKILLS_MATCH_CHOICES,
   USE_SKILLS_CHOICES,
 } from "@/app/data/scene_s7_3.data";
+import { getJsonUrl } from "@/utils/cloudinaryUtils";
+import LazyLottie from "../components/reusable/LazyLottie";
 import { useDevice } from "../contexts/DeviceContext";
 
 // ────────────────────────────────────────────────────
@@ -98,12 +100,9 @@ export default function S7_3({ scrollYProgress, onCompleted }: S7_3Props) {
   const animations: AnimationMap = useMemo(
     () => ({
       1: { opacity: q1BgOpacity },
-      2: { opacity: starOpacity },
-      3: { opacity: q1CatOpacity },
       4: { opacity: q1PaperOpacity },
-      5: { opacity: q2CatOpacity },
     }),
-    [q1BgOpacity, starOpacity, q1CatOpacity, q1PaperOpacity, q2CatOpacity],
+    [q1BgOpacity, q1PaperOpacity],
   );
 
   // ─── Content Animations ───
@@ -159,6 +158,83 @@ export default function S7_3({ scrollYProgress, onCompleted }: S7_3Props) {
           animations={animations}
           containerAspectRatio={isMobile ? "1080 / 3840" : "1920 / 2160"}
         >
+          {/* Star decoration (Lottie) */}
+          {isMobile ? (
+            <m.div
+              className="absolute"
+              style={{
+                width: "104.38%",
+                height: "99.99%",
+                left: "-2.66%",
+                top: "1.82%",
+                opacity: starOpacity,
+              }}
+            >
+              <LazyLottie
+                src={getJsonUrl("Scene/Scene7/04/star_mb.json")}
+                className="w-full h-full"
+                loop
+                playTrigger={starOpacity}
+              />
+            </m.div>
+          ) : (
+            <m.div
+              className="absolute"
+              style={{
+                width: "104.38%",
+                height: "99.99%",
+                left: "-2.66%",
+                top: "1.82%",
+                opacity: starOpacity,
+              }}
+            >
+              <LazyLottie
+                src={getJsonUrl("Scene/Scene7/04/star.json")}
+                className="w-full h-full"
+                loop
+                playTrigger={starOpacity}
+              />
+            </m.div>
+          )}
+
+          {/* Q1: Cat sitting on mat (Lottie) */}
+          <m.div
+            className="absolute"
+            style={{
+              width: isMobile ? "50.11%" : "28.19%",
+              height: isMobile ? "13.18%" : "23.43%",
+              left: isMobile ? "27.22%" : "37.25%",
+              top: isMobile ? "28.98%" : "25.09%",
+              opacity: q1CatOpacity,
+            }}
+          >
+            <LazyLottie
+              src={getJsonUrl("Scene/Scene7/04/cat_frame.json")}
+              className="w-full h-full"
+              loop
+              playTrigger={q1CatOpacity}
+            />
+          </m.div>
+
+          {/* Q2: Sleeping cat with crystal ball (Lottie) */}
+          <m.div
+            className="absolute"
+            style={{
+              width: isMobile ? "64.54%" : "36.30%",
+              height: isMobile ? "20.01%" : "35.57%",
+              left: isMobile ? "24.94%" : "10.45%",
+              top: isMobile ? "74.24%" : "66.09%",
+              opacity: q2CatOpacity,
+            }}
+          >
+            <LazyLottie
+              src={getJsonUrl("Scene/Scene7/04/cat_pics.json")}
+              className="w-full h-full"
+              loop
+              playTrigger={q2CatOpacity}
+            />
+          </m.div>
+
           {/* ═══ Q1 Content ═══ */}
           {/*? Desktop: centered at x=960, y=254, w=998 in 1920×2160 */}
           {/*? Mobile: centered, top ~7.5% of 1080×3840 container */}

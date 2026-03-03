@@ -22,7 +22,8 @@ import {
   SCENE_S7_1_ITEMS,
   SELECTED_FRAME_SRC,
 } from "@/app/data/scene_s7_1.data";
-import { getAudioUrl } from "@/utils/cloudinaryUtils";
+import { getAudioUrl, getJsonUrl } from "@/utils/cloudinaryUtils";
+import LazyLottie from "../components/reusable/LazyLottie";
 import { useDevice } from "../contexts/DeviceContext";
 
 export interface S7_1Data {
@@ -32,7 +33,8 @@ export interface S7_1Data {
 
 interface S7_1Props {
   scrollYProgress: MotionValue<number>;
-  onCompleted?: (data: S7_1Data) => void;
+  //? ส่ง data เมื่อเลือกครบ, ส่ง null เมื่อ unselect ต่ำกว่า threshold
+  onCompleted?: (data: S7_1Data | null) => void;
 }
 
 const MIN_SELECTIONS = 2;
@@ -233,9 +235,8 @@ export default function S7_1({ scrollYProgress, onCompleted }: S7_1Props) {
   const animations: AnimationMap = useMemo(
     () => ({
       1: { opacity: bgOpacity },
-      2: { opacity: starlightOpacity },
     }),
-    [bgOpacity, starlightOpacity],
+    [bgOpacity],
   );
 
   // ─── Handlers ───
@@ -252,14 +253,18 @@ export default function S7_1({ scrollYProgress, onCompleted }: S7_1Props) {
           ? prev.filter((s) => s !== label)
           : [...prev, label];
 
-        //? เมื่อเลือกครบตาม MIN_SELECTIONS → เรียก onCompleted ทันที
+        //? แจ้ง parent ทุกครั้งที่สถานะเปลี่ยน (ครบ/ไม่ครบ)
         if (next.length >= MIN_SELECTIONS) {
-          //? ใช้ queueMicrotask เพื่อเรียกหลัง setState เสร็จ (ไม่ setState ซ้อน)
           queueMicrotask(() => {
             onCompletedRef.current?.({
               selectedHardSkills: next,
               customHardSkills: [],
             });
+          });
+        } else {
+          //! Unselect ต่ำกว่า threshold → แจ้ง parent ให้ล็อค scroll กลับ
+          queueMicrotask(() => {
+            onCompletedRef.current?.(null);
           });
         }
 
@@ -306,6 +311,45 @@ export default function S7_1({ scrollYProgress, onCompleted }: S7_1Props) {
           animations={animations}
           containerAspectRatio={isMobile ? "1080 / 1920" : "1920 / 1080"}
         >
+          {/* Starlight (Lottie) */}
+          {isMobile ? (
+            <m.div
+              className="absolute"
+              style={{
+                width: "87.63%",
+                height: "22.01%",
+                left: "6.18%",
+                top: "-9.82%",
+                opacity: starlightOpacity,
+              }}
+            >
+              <LazyLottie
+                src={getJsonUrl("Scene/Scene7/02/s7-starlight-mb.json")}
+                className="w-full h-full"
+                loop
+                playTrigger={starlightOpacity}
+              />
+            </m.div>
+          ) : (
+            <m.div
+              className="absolute"
+              style={{
+                width: "90.12%",
+                height: "39.13%",
+                left: "4.94%",
+                top: "-0.35%",
+                opacity: starlightOpacity,
+              }}
+            >
+              <LazyLottie
+                src={getJsonUrl("Scene/Scene7/02/s7-starlight.json")}
+                className="w-full h-full"
+                loop
+                playTrigger={starlightOpacity}
+              />
+            </m.div>
+          )}
+
           {/* Content Layer */}
           <div className="absolute inset-0 flex flex-col items-center justify-start p-[6.7%] portrait:p-0 portrait:pt-[15.74%] portrait:gap-[2%]">
             {/*? Question Text */}
@@ -331,7 +375,7 @@ export default function S7_1({ scrollYProgress, onCompleted }: S7_1Props) {
                 style={{ opacity: carouselOpacity }}
               >
                 เลือกแล้ว {selectedSkills.length} (ขั้นต่ำ {MIN_SELECTIONS}{" "}
-                อย่าง)
+                อย่าง เพื่อเลื่อนไปยังส่วนถัดไป)
               </m.p>
             </m.div>
 

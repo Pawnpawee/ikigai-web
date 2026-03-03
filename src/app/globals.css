@@ -271,6 +271,18 @@
   );
 }
 
+@utility bg-result {
+  background: linear-gradient(
+    180deg,
+    #09345b 0%,
+    #083054 5%,
+    #062137 29%,
+    #051622 54%,
+    #041015 77%,
+    #040e11 100%
+  );
+}
+
 body {
   background: var(--color-background);
   color: var(--color-foreground);
@@ -299,4 +311,24 @@ p {
 * {
   -ms-overflow-style: none;
   scrollbar-width: none;
+}
+
+/* ─── Modal Scrollbar ─── */
+.modal-scrollbar {
+  scrollbar-width: thin;
+  scrollbar-color: rgba(255, 255, 255, 0.3) transparent;
+}
+.modal-scrollbar::-webkit-scrollbar {
+  display: block;
+  width: 6px;
+}
+.modal-scrollbar::-webkit-scrollbar-track {
+  background: transparent;
+}
+.modal-scrollbar::-webkit-scrollbar-thumb {
+  background: rgba(255, 255, 255, 0.3);
+  border-radius: 9999px;
+}
+.modal-scrollbar::-webkit-scrollbar-thumb:hover {
+  background: rgba(255, 255, 255, 0.5);
 }

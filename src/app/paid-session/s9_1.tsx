@@ -12,6 +12,8 @@ import {
   S9_1_QUESTION_TEXT,
   SCENE_S9_1_ITEMS,
 } from "@/app/data/scene_s9_1.data";
+import { getJsonUrl } from "@/utils/cloudinaryUtils";
+import LazyLottie from "../components/reusable/LazyLottie";
 import { useDevice } from "../contexts/DeviceContext";
 
 // ────────────────────────────────────────────────────
@@ -110,7 +112,6 @@ export default function S9_1({ scrollYProgress, onCompleted }: S9_1Props) {
       6: { opacity: humanMiddleOpacity, x: humanMiddleX },
       7: { opacity: humanBackOpacity, y: humanBackY },
       8: { opacity: humanFrontOpacity, y: humanFrontY },
-      9: { opacity: catOpacity, y: catY },
     }),
     [
       wallOpacity,
@@ -129,8 +130,6 @@ export default function S9_1({ scrollYProgress, onCompleted }: S9_1Props) {
       humanBackY,
       humanFrontOpacity,
       humanFrontY,
-      catOpacity,
-      catY,
     ],
   );
 
@@ -166,6 +165,26 @@ export default function S9_1({ scrollYProgress, onCompleted }: S9_1Props) {
             className="fixed inset-0 bg-black"
             style={{ opacity: darkOverlayOpacity }}
           />
+
+          {/* ═══ Phase 2: Cat (LazyLottie) ═══ */}
+          <m.div
+            className="absolute z-1"
+            style={{
+              width: isMobile ? "58.67%" : "33.00%",
+              height: isMobile ? "30.59%" : "54.39%",
+              left: isMobile ? "20.66%" : "10.13%",
+              top: isMobile ? "51.65%" : "28.33%",
+              opacity: catOpacity,
+              y: catY,
+            }}
+          >
+            <LazyLottie
+              src={getJsonUrl("Scene/Scene9/01/cat1.json")}
+              className="w-full h-full"
+              loop
+              playTrigger={catOpacity}
+            />
+          </m.div>
 
           {/*? Question Overlay — flex-col container ตาม Figma frame (869:929 / 889:5143) */}
           <m.div

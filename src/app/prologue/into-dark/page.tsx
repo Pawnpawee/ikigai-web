@@ -8,7 +8,7 @@ import { getAudioUrl } from "@/utils/cloudinaryUtils";
 import IntoDark from "./IntoDark";
 
 export default function IntoDarkPage() {
-  const { setBgMusic, isMuted } = useAudio();
+  const { setBgMusic } = useAudio();
 
   useLayoutEffect(() => {
     if (typeof window !== "undefined") {
@@ -17,11 +17,10 @@ export default function IntoDarkPage() {
     }
   }, []);
 
+  //? ตั้งเพลง bg ทุกครั้งที่เข้าหน้า ไม่ว่าจะ mute หรือไม่ เพื่อให้ soundRef ตรงกับหน้าปัจจุบัน
   useEffect(() => {
-    if (!isMuted) {
-      setBgMusic(getAudioUrl("Sound/5/mysterious-dark-background.mp3"));
-    }
-  }, [setBgMusic, isMuted]);
+    setBgMusic(getAudioUrl("Sound/5/mysterious-dark-background.mp3"));
+  }, [setBgMusic]);
 
   return (
     <div>

@@ -85,7 +85,7 @@ export default function WalkingDesert() {
           style={{ opacity: set1Opacity }}
         >
           <LazyLottie
-            src={getJsonUrl("Scene/Scene10/sky.json")}
+            src={getJsonUrl("Scene/Scene3/sky.json")}
             loop={true}
             playTrigger={set1Opacity}
             className="w-full object-cover"
@@ -126,7 +126,7 @@ export default function WalkingDesert() {
             style={{ right: humanCamelRight }}
           >
             <LazyLottie
-              src={getJsonUrl("Scene/Scene10/human_camel.json")}
+              src={getJsonUrl("Scene/Scene10/human-camel.json")}
               loop={true}
               playTrigger={set2Opacity}
               className="w-full h-full"

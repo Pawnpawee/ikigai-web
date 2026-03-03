@@ -70,25 +70,9 @@ export default function TempleArrival({ onStartCeremony }: TempleArrivalProps) {
     return 1000 * (1 - 1 / scale);
   });
 
-  // ============ HEART DROP (0.35-0.5) ============
-  //? Heart: หมุนเอียงลงเมื่อหนักกว่า
-  const heartRotate = useTransform(scrollYProgress, [0.35, 0.5], [0, -15]);
-  //? Heart plate: ตกลงตาม
-  const heartPlateY = useTransform(
-    scrollYProgress,
-    [0.35, 0.5],
-    isMobile ? [0, 8] : [0, 30],
-  );
-  //? Feather plate: ลอยขึ้นเล็กน้อย
-  const featherPlateY = useTransform(
-    scrollYProgress,
-    [0.35, 0.5],
-    isMobile ? [0, -3] : [0, -10],
-  );
-
   // ============ CAT APPEARANCE (0.5-0.6) ============
-  const catOpacity = useTransform(scrollYProgress, [0.5, 0.6], [0, 1]);
-  const catY = useTransform(scrollYProgress, [0.5, 0.6], [50, 0]);
+  const catOpacity = useTransform(scrollYProgress, [0.1, 0.2], [0, 1]);
+  const catY = useTransform(scrollYProgress, [0.5, 0.6], [20, 0]);
 
   // ============ TEXT + BUTTON (0.55-0.75) ============
   const textOpacity = useTransform(scrollYProgress, [0.55, 0.65], [0, 1]);
@@ -103,30 +87,18 @@ export default function TempleArrival({ onStartCeremony }: TempleArrivalProps) {
     () => ({
       //? Building + Ground
       4: { y: set4Y, opacity: set4Opacity },
-      //? Scale bar (หมุนตาม heartRotate)
-      69: { y: set6Y, opacity: set6Opacity, rotate: heartRotate },
+      //? Scale bar
+      69: { y: set6Y, opacity: set6Opacity },
       //? Scale center
       6: { y: set6Y, opacity: set6Opacity },
-      //? Heart plate (ตกลง)
-      66: { y: heartPlateY, opacity: set6Opacity },
-      //? Feather plate (ลอยขึ้น)
-      67: { y: featherPlateY, opacity: set6Opacity },
+      //? Heart plate
+      66: { opacity: set6Opacity },
+      //? Feather plate
+      67: { opacity: set6Opacity },
       //? Light overlay
       68: { y: set6Y, opacity: set6Opacity },
-      //? Cat light halo
-      10: { opacity: catOpacity, y: catY },
     }),
-    [
-      set4Y,
-      set4Opacity,
-      set6Y,
-      set6Opacity,
-      heartRotate,
-      heartPlateY,
-      featherPlateY,
-      catOpacity,
-      catY,
-    ],
+    [set4Y, set4Opacity, set6Y, set6Opacity],
   );
 
   return (
@@ -178,10 +150,15 @@ export default function TempleArrival({ onStartCeremony }: TempleArrivalProps) {
                 </m.div>
 
                 {/* Cat Lottie - ปรากฏตอนท้าย */}
-                {/* Figma: x=760.07, y=737.13, w=314.67, h=325.53 */}
+                {/*? Desktop: x=760.07, y=737.13, w=314.67, h=325.53 in 1920×1080 */}
+                {/*? Mobile:  x=248.99, y=1003.95, w=574.84, h=574.84 in 1080×1920 */}
                 <m.div
-                  className="absolute left-[39.6%] top-[68.3%] w-[16.4%] h-[30.1%]"
+                  className="absolute z-1"
                   style={{
+                    left: isMobile ? "11.525%" : "44.5%",
+                    top: isMobile ? "26.145%" : "62.5%",
+                    width: isMobile ? "26.615%" : "8.195%",
+                    height: isMobile ? "14.97%" : "15.07%",
                     opacity: catOpacity,
                     y: catY,
                   }}
@@ -202,7 +179,7 @@ export default function TempleArrival({ onStartCeremony }: TempleArrivalProps) {
 
       {/* Text overlay - คำสนทนาของเทพ */}
       <m.div
-        className="fixed bottom-[15%] left-0 right-0 text-center px-4 pointer-events-none z-10"
+        className="fixed top-[15%] left-0 right-0 text-center px-4 pointer-events-none z-10"
         style={{ opacity: textOpacity }}
       >
         <WordByWordAnimation

@@ -20,7 +20,8 @@ import {
   S8_1_TEXT_BUBBLES,
   SCENE_S8_1_ITEMS,
 } from "@/app/data/scene_s8_1.data";
-import { getAudioUrl } from "@/utils/cloudinaryUtils";
+import { getAudioUrl, getJsonUrl } from "@/utils/cloudinaryUtils";
+import LazyLottie from "../components/reusable/LazyLottie";
 import { useAudio } from "../contexts/AudioContext";
 import { useDevice } from "../contexts/DeviceContext";
 
@@ -158,7 +159,6 @@ export default function S8_1({ scrollYProgress, onCompleted }: S8_1Props) {
       9: { opacity: bloom2Opacity },
       10: { opacity: bloom1Opacity },
       11: { opacity: bloom3Opacity },
-      12: { opacity: catOpacity },
     }),
     [
       mountainLakeOpacity,
@@ -179,7 +179,6 @@ export default function S8_1({ scrollYProgress, onCompleted }: S8_1Props) {
       bloom2Opacity,
       bloom1Opacity,
       bloom3Opacity,
-      catOpacity,
     ],
   );
 
@@ -239,6 +238,25 @@ export default function S8_1({ scrollYProgress, onCompleted }: S8_1Props) {
             className="fixed inset-0 bg-black"
             style={{ opacity: darkOverlayOpacity }}
           />
+
+          {/* ═══ Phase 3: Cat (LazyLottie) ═══ */}
+          <m.div
+            className="absolute z-1"
+            style={{
+              width: isMobile ? "64.11%" : "32.68%",
+              height: isMobile ? "42.62%" : "68.67%",
+              left: isMobile ? "21.02%" : "9.07%",
+              top: isMobile ? "46.18%" : "19.21%",
+              opacity: catOpacity,
+            }}
+          >
+            <LazyLottie
+              src={getJsonUrl("Scene/Scene8/01/cat1.json")}
+              className="w-full h-full"
+              loop
+              playTrigger={catOpacity}
+            />
+          </m.div>
 
           {/* ═══ Phase 3: Cat Dialogue (MysteriousText overlay on dark scene) ═══ */}
           <div

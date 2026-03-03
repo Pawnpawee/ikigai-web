@@ -22,7 +22,7 @@ import S6_4 from "./s6_4";
 export default function SessionLovePage() {
   //? Single ref for entire page
   const ref = useRef<HTMLDivElement>(null);
-  const { setBgMusic, isMuted } = useAudio();
+  const { setBgMusic } = useAudio();
   const { userId, isLoading } = useUser();
   const lenis = useLenis();
   const router = useRouter();
@@ -52,11 +52,10 @@ export default function SessionLovePage() {
     }
   }, []);
 
+  //? ตั้งเพลง bg ทุกครั้งที่เข้าหน้า ไม่ว่าจะ mute หรือไม่ เพื่อให้ soundRef ตรงกับหน้าปัจจุบัน
   useEffect(() => {
-    if (!isMuted) {
-      setBgMusic(getAudioUrl("Sound/6/majestic-sky.mp3"));
-    }
-  }, [setBgMusic, isMuted]);
+    setBgMusic(getAudioUrl("Sound/6/majestic-sky.mp3"));
+  }, [setBgMusic]);
 
   const isResettingScroll = useRef(false);
 
@@ -195,7 +194,7 @@ export default function SessionLovePage() {
       <div className="h-[700vh] w-full">
         <S6_4 scrollYProgress={s6_4Progress} onContinue={handleS6_4Continue} />
       </div>
-      
+
       {/* ProgressBar: scrollYProgress ของหน้านี้ */}
       <div className="pointer-events-none">
         <ProgressBar scrollYProgress={scrollYProgress} />
