@@ -13,7 +13,8 @@ import SceneLayer, {
   type AnimationMap,
 } from "@/app/components/reusable/SceneLayer";
 import { SCENE_S8_3_ITEMS } from "@/app/data/scene_s8_3.data";
-import { getAudioUrl } from "@/utils/cloudinaryUtils";
+import { getAudioUrl, getJsonUrl } from "@/utils/cloudinaryUtils";
+import LazyLottie from "../components/reusable/LazyLottie";
 import { useAudio } from "../contexts/AudioContext";
 import { useDevice } from "../contexts/DeviceContext";
 
@@ -61,7 +62,7 @@ export default function S8_3({ scrollYProgress }: S8_3Props) {
 
   // ─── Phase 1: Stagger fade-in + slide-up ───
 
-  //? animGroup 1: starlight
+  //? animGroup 1: starlight — now Lottie
   const starlightOpacity = useTransform(scrollYProgress, [0, 0.12], [0, 1]);
   const starlightY = useTransform(scrollYProgress, [0, 0.12], [60, 0]);
 
@@ -187,20 +188,11 @@ export default function S8_3({ scrollYProgress }: S8_3Props) {
 
   const animations: AnimationMap = useMemo(
     () => ({
-      1: { opacity: starlightOpacity, y: starlightY },
       2: { opacity: leafOpacity, y: leafY },
       3: { opacity: lotusOpacity, y: lotusY },
       5: { opacity: lotusBloomOpacity },
     }),
-    [
-      starlightOpacity,
-      starlightY,
-      leafOpacity,
-      leafY,
-      lotusOpacity,
-      lotusY,
-      lotusBloomOpacity,
-    ],
+    [leafOpacity, leafY, lotusOpacity, lotusY, lotusBloomOpacity],
   );
 
   return (
@@ -214,6 +206,30 @@ export default function S8_3({ scrollYProgress }: S8_3Props) {
           animations={animations}
           containerAspectRatio={isMobile ? "1080 / 1920" : "1920 / 1080"}
         >
+          {/* ═══ Starlight Background (LazyLottie) ═══ */}
+          <m.div
+            className="absolute"
+            style={{
+              width: "100%",
+              height: "100%",
+              left: "0%",
+              top: "0%",
+              opacity: starlightOpacity,
+              y: starlightY,
+            }}
+          >
+            <LazyLottie
+              src={getJsonUrl(
+                isMobile
+                  ? "Scene/Scene8/03/s8-starlight-mb.json"
+                  : "Scene/Scene8/03/s8-starlight.json",
+              )}
+              className="w-full h-full"
+              loop
+              playTrigger={starlightOpacity}
+            />
+          </m.div>
+
           {/*? Butterfly: sine-wave flight from original → butterfly_2 position */}
           <m.div
             className="absolute"

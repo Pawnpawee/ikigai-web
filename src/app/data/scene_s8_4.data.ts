@@ -7,8 +7,8 @@ import type { SceneItemData } from "../components/reusable/SceneLayer";
 //?
 //? Animation Groups:
 //? 1 = lotus   (phase 1 only, bottom decoration)
-//? 2 = icon_1  (phase 1 work illustration)
-//? 3 = icon_2  (phase 2 work illustration)
+//? 2 = icon_1  (ย้ายไปใช้ LazyLottie ใน s8_4.tsx แล้ว — ไม่ loop)
+//? 3 = icon_2  (ย้ายไปใช้ LazyLottie ใน s8_4.tsx แล้ว — ไม่ loop)
 
 // ────────────────────────────────────────────────────
 //  SceneLayer Items (images only)
@@ -34,48 +34,6 @@ export const SCENE_S8_4_ITEMS: SceneItemData[] = [
       top: "49.83%",
     },
     animGroup: 1,
-  },
-  {
-    id: "icon_1",
-    src: getImgPath("Scene/Scene8/04/icon.webp"),
-    alt: "Work illustration — phase 1",
-    className: "[filter:drop-shadow(0_0_40px_rgba(255,255,255,0.75))]",
-    style: {
-      //? Desktop: 1011.13×591.49 at (454.43, 268.50) in 1920×1080
-      width: "52.66%",
-      height: "54.77%",
-      left: "23.67%",
-      top: "24.86%",
-    },
-    mobileStyle: {
-      //? Mobile: 989.85×579.02 at (45.08, 458.52) in 1080×1920
-      width: "91.65%",
-      height: "30.16%",
-      left: "4.17%",
-      top: "23.88%",
-    },
-    animGroup: 2,
-  },
-  {
-    id: "icon_2",
-    src: getImgPath("Scene/Scene8/04/icon_2.webp"),
-    alt: "Work illustration — phase 2",
-    className: "[filter:drop-shadow(0_0_40px_rgba(255,255,255,0.75))]",
-    style: {
-      //? Desktop: 1019.85×596.58 at (450.06, 267.65) in 1920×1080
-      width: "53.12%",
-      height: "55.24%",
-      left: "23.44%",
-      top: "24.78%",
-    },
-    mobileStyle: {
-      //? Mobile: 994.06×581.50 at (42.98, 455.65) in 1080×1920
-      width: "92.04%",
-      height: "30.29%",
-      left: "3.98%",
-      top: "23.73%",
-    },
-    animGroup: 3,
   },
 ];
 

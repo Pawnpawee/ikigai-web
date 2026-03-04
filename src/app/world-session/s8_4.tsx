@@ -24,7 +24,8 @@ import {
   S8_4_QUESTION_2,
   SCENE_S8_4_ITEMS,
 } from "@/app/data/scene_s8_4.data";
-import { getAudioUrl } from "@/utils/cloudinaryUtils";
+import { getAudioUrl, getJsonUrl } from "@/utils/cloudinaryUtils";
+import LazyLottie from "../components/reusable/LazyLottie";
 import { useAudio } from "../contexts/AudioContext";
 import { useDevice } from "../contexts/DeviceContext";
 
@@ -82,7 +83,7 @@ export default function S8_4({
   //? animGroup 1: lotus (bottom decoration, phase 1 only)
   const lotusOpacity = useTransform(scrollYProgress, [0, 0.1, 0.1], [0, 1, 1]);
 
-  //? animGroup 2: icon_1 (work illustration, phase 1)
+  //? animGroup 2: icon_1 — now Lottie (ไม่ loop)
   const icon1Opacity = useTransform(
     scrollYProgress,
     [0.05, 0.15, 0.667, 0.73],
@@ -96,7 +97,7 @@ export default function S8_4({
 
   // ─── Phase 2: Images (fade in after boundary) ───
 
-  //? animGroup 3: icon_2 (work illustration, phase 2)
+  //? animGroup 3: icon_2 — now Lottie (ไม่ loop)
   const icon2Opacity = useTransform(scrollYProgress, [0.667, 0.77], [0, 1]);
   const icon2ZIndex = useTransform(scrollYProgress, [0.667, 0.77], [-10, 5]);
 
@@ -129,10 +130,8 @@ export default function S8_4({
   const animations: AnimationMap = useMemo(
     () => ({
       1: { opacity: lotusOpacity },
-      2: { opacity: icon1Opacity, zIndex: icon1ZIndex },
-      3: { opacity: icon2Opacity, zIndex: icon2ZIndex },
     }),
-    [lotusOpacity, icon1Opacity, icon1ZIndex, icon2Opacity, icon2ZIndex],
+    [lotusOpacity],
   );
 
   // ─── SFX Events ───
@@ -187,6 +186,52 @@ export default function S8_4({
           animations={animations}
           containerAspectRatio={isMobile ? "1080 / 1920" : "1920 / 1080"}
         >
+          {/* ═══ Icon 1: Work Illustration Phase 1 (LazyLottie, ไม่ loop) ═══ */}
+          <m.div
+            className="absolute filter-[drop-shadow(0_0_40px_rgba(255,255,255,0.75))]"
+            style={{
+              //? Desktop: 1011.13×591.49 at (454.43, 268.50) in 1920×1080
+              //? Mobile: 989.85×579.02 at (45.08, 458.52) in 1080×1920
+              width: isMobile ? "91.65%" : "52.66%",
+              height: isMobile ? "30.16%" : "54.77%",
+              left: isMobile ? "4.17%" : "23.67%",
+              top: isMobile ? "23.88%" : "24.86%",
+              opacity: icon1Opacity,
+              zIndex: icon1ZIndex,
+            }}
+          >
+            <LazyLottie
+              src={getJsonUrl("Scene/Scene8/04/s8-icon-1.json")}
+              className="w-full h-full"
+              loop={false}
+              play={icon1Opacity.get() > 0}
+              playTrigger={icon1Opacity}
+            />
+          </m.div>
+
+          {/* ═══ Icon 2: Work Illustration Phase 2 (LazyLottie, ไม่ loop) ═══ */}
+          <m.div
+            className="absolute filter-[drop-shadow(0_0_40px_rgba(255,255,255,0.75))]"
+            style={{
+              //? Desktop: 1019.85×596.58 at (450.06, 267.65) in 1920×1080
+              //? Mobile: 994.06×581.50 at (42.98, 455.65) in 1080×1920
+              width: isMobile ? "92.04%" : "53.12%",
+              height: isMobile ? "30.29%" : "55.24%",
+              left: isMobile ? "3.98%" : "23.44%",
+              top: isMobile ? "23.73%" : "24.78%",
+              opacity: icon2Opacity,
+              zIndex: icon2ZIndex,
+            }}
+          >
+            <LazyLottie
+              src={getJsonUrl("Scene/Scene8/04/s8-icon-2.json")}
+              className="w-full h-full"
+              loop={false}
+              play={icon2Opacity.get() > 0}
+              playTrigger={icon2Opacity}
+            />
+          </m.div>
+
           {/* ═══ Phase 1: Question 1 — No Manual Work ═══ */}
 
           {/*? Q1 Text (Figma: "question 1") */}

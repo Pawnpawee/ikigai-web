@@ -8,7 +8,7 @@ import type { SceneItemData } from "../components/reusable/SceneLayer";
 //?
 //? Animation Groups — Phase 1 (lake scene):
 //? 1 = mountain_lake  (full frame bg)
-//? 2 = stone_lake     (full frame lake overlay)
+//? 2 = stone_lake     (ย้ายไปใช้ LazyLottie ใน s8_5.tsx แล้ว)
 //? 3 = lotus_5        (right lotus cluster)
 //? 4 = lotus_4        (left bottom lotus)
 //? 5 = lotus_2        (center-left lotus)
@@ -45,27 +45,6 @@ export const SCENE_S8_5_ITEMS: SceneItemData[] = [
     },
     animGroup: 1,
     priority: true,
-  },
-  {
-    id: "stone_lake",
-    src: getImgPath("Scene/Scene8/05/stone_lake.webp"),
-    mobileSrc: getImgPath("Scene/Scene8/05/stone_lake_mb.webp"),
-    alt: "Stone lake overlay",
-    //? Desktop: 867:5050 x=-527.81, y=219.15, w=2834.72, h=724.84 → full frame
-    style: {
-      width: "147.64%",
-      height: "67.11%",
-      left: "-27.49%",
-      bottom: "12.59%",
-    },
-    //? Mobile: 867:12158 x=-1622.99, y=522.60, w=3839.04, h=528.58 → full frame
-    mobileStyle: {
-      width: "355.47%",
-      height: "27.53%",
-      left: "-150.28%",
-      top: "27.22%",
-    },
-    animGroup: 2,
   },
   {
     id: "lotus_5",

@@ -1,6 +1,7 @@
 "use client";
 
 import { type MotionValue, m, useTransform } from "framer-motion";
+import type { AnimationItem } from "lottie-web";
 import { useCallback, useMemo, useRef, useState } from "react";
 import { HiCheck, HiOutlineX } from "react-icons/hi";
 import ChoiceButton from "@/app/components/button/ChoiceButton";
@@ -82,6 +83,17 @@ export default function S7_2({ scrollYProgress, onCompleted }: S7_2Props) {
   //? 5. Choices grid
   const choicesOpacity = useTransform(scrollYProgress, [0.25, 0.4], [0, 1]);
   const choicesY = useTransform(scrollYProgress, [0.25, 0.4], [30, 0]);
+
+  //? Painting Lottie: ping-pong (เล่นไป-กลับ)
+  //? ใช้ loop=false + complete event เพื่อหลีกเลี่ยงการกระตุกจาก loop restart
+  const handlePaintingRef = useCallback((instance: AnimationItem | null) => {
+    if (instance) {
+      instance.addEventListener("complete", () => {
+        instance.setDirection(instance.playDirection === 1 ? -1 : 1);
+        instance.play();
+      });
+    }
+  }, []);
 
   //? Animation Map for SceneLayer background
   const animations: AnimationMap = useMemo(
@@ -239,8 +251,9 @@ export default function S7_2({ scrollYProgress, onCompleted }: S7_2Props) {
             <LazyLottie
               src={getJsonUrl("Scene/Scene7/03/s7-painting.json")}
               className="w-full h-full"
-              loop
+              loop={false}
               playTrigger={paintingOpacity}
+              getRef={handlePaintingRef}
             />
           </m.div>
 

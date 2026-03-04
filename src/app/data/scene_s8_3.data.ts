@@ -6,7 +6,7 @@ import type { SceneItemData } from "../components/reusable/SceneLayer";
 //? 300vh total: 200vh (starlight, leaf, lotus, butterfly) + 100vh (lotus bloom, butterfly 2)
 //?
 //? Animation Groups:
-//? 1 = starlight    (full frame, stars background)
+//? 1 = starlight    (ย้ายไปใช้ LazyLottie ใน s8_3.tsx แล้ว)
 //? 2 = leaf         (full frame, leaf decoration)
 //? 3 = lotus        (positioned lotus flower)
 //? 4 = butterfly    (positioned butterfly, left)
@@ -18,26 +18,6 @@ import type { SceneItemData } from "../components/reusable/SceneLayer";
 // ────────────────────────────────────────────────────
 
 export const SCENE_S8_3_ITEMS: SceneItemData[] = [
-  {
-    id: "starlight",
-    src: getImgPath("Scene/Scene8/03/starlight.webp"),
-    mobileSrc: getImgPath("Scene/Scene8/03/starlight_mb.webp"),
-    alt: "Starlight background with stars",
-    style: {
-      width: "100%",
-      height: "100%",
-      left: "0%",
-      top: "0%",
-    },
-    mobileStyle: {
-      width: "100%",
-      height: "100%",
-      left: "0%",
-      top: "0%",
-    },
-    animGroup: 1,
-    priority: true,
-  },
   {
     id: "leaf",
     src: getImgPath("Scene/Scene8/03/leaf.webp"),

@@ -69,7 +69,7 @@ export default function S8_1({ scrollYProgress, onCompleted }: S8_1Props) {
   //? animGroup 1: mountain_lake — stays visible, slides up
   const mountainLakeOpacity = useTransform(scrollYProgress, [0, 0.12], [0, 1]);
   const mountainLakeY = useTransform(scrollYProgress, [0, 0.12], [60, 0]);
-  //? animGroup 2: stone_lake — stays visible, slides up
+  //? animGroup 2: stone_lake — now Lottie, keep opacity + y for the wrapper
   const stoneLakeOpacity = useTransform(scrollYProgress, [0.03, 0.15], [0, 1]);
   const stoneLakeY = useTransform(scrollYProgress, [0.03, 0.15], [80, 0]);
   //? animGroup 3: lotus_5 — stays visible, slides up
@@ -149,7 +149,6 @@ export default function S8_1({ scrollYProgress, onCompleted }: S8_1Props) {
   const animations: AnimationMap = useMemo(
     () => ({
       1: { opacity: mountainLakeOpacity, y: mountainLakeY },
-      2: { opacity: stoneLakeOpacity, y: stoneLakeY },
       3: { opacity: lotus5Opacity, y: lotus5Y },
       4: { opacity: lotus4Opacity, y: lotus4Y },
       5: { opacity: lotus2Opacity, y: lotus2Y },
@@ -163,8 +162,6 @@ export default function S8_1({ scrollYProgress, onCompleted }: S8_1Props) {
     [
       mountainLakeOpacity,
       mountainLakeY,
-      stoneLakeOpacity,
-      stoneLakeY,
       lotus5Opacity,
       lotus5Y,
       lotus4Opacity,
@@ -212,6 +209,27 @@ export default function S8_1({ scrollYProgress, onCompleted }: S8_1Props) {
           animations={animations}
           containerAspectRatio={isMobile ? "1080 / 1920" : "1920 / 1080"}
         >
+          {/* ═══ Stone Lake (LazyLottie) ═══ */}
+          <m.div
+            className="absolute"
+            style={{
+              //? Desktop: 2834.72×724.84 at (-527.81, 219.15) in 1920×1080
+              //? Mobile: 3918.11×539.48 at (-1659.24, 506.39) in 1080×1920
+              width: isMobile ? "362.79%" : "147.64%",
+              height: isMobile ? "28.10%" : "67.11%",
+              left: isMobile ? "-153.63%" : "-27.49%",
+              top: isMobile ? "30%" : "20.29%",
+              opacity: stoneLakeOpacity,
+              y: stoneLakeY,
+            }}
+          >
+            <LazyLottie
+              src={getJsonUrl("Scene/Scene8/01/s8-stone-lake.json")}
+              loop
+              playTrigger={stoneLakeOpacity}
+            />
+          </m.div>
+
           {/* ═══ Phase 2: Text Bubbles (real text overlays on lotus scene) ═══ */}
           {S8_1_TEXT_BUBBLES.map((bubble, index) => {
             const pos = isMobile ? bubble.mobileStyle : bubble.style;

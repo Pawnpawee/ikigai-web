@@ -1,7 +1,13 @@
 "use client";
 
-import { type MotionValue, m, useTransform } from "framer-motion";
-import { useMemo, useState } from "react";
+import {
+  type MotionValue,
+  m,
+  useMotionValueEvent,
+  useTransform,
+} from "framer-motion";
+import type { AnimationItem } from "lottie-web";
+import { useCallback, useMemo, useRef, useState } from "react";
 import { HiOutlineChevronDown } from "react-icons/hi";
 import GradientButton from "@/app/components/button/GradientButton";
 import MysteriousText from "@/app/components/reusable/MysteriousText";
@@ -91,18 +97,55 @@ export default function S7_3({ scrollYProgress, onCompleted }: S7_3Props) {
   const starOpacity = useTransform(scrollYProgress, [0, 0.08], [0, 1]);
   //? Q1 cat sitting (animGroup 3)
   const q1CatOpacity = useTransform(scrollYProgress, [0.05, 0.15], [0, 1]);
-  //? Q1 paper (animGroup 4)
+  //? Q1 paper (Lottie — loop frames 30-50)
   const q1PaperOpacity = useTransform(scrollYProgress, [0.08, 0.18], [0, 1]);
   //? Q2 cat sleeping (animGroup 5)
   const q2CatOpacity = useTransform(scrollYProgress, [0.5, 0.6], [0, 1]);
+
+  //? Lottie ref for paper — used to set playSegments
+  const paperLottieRef = useRef<AnimationItem | null>(null);
+
+  //? เล่น 0-120 (intro) ตอนที่ opacity > 0 ครั้งแรก แล้ว loop 120-200 ไปเรื่อยๆ
+  //? ใช้ loop=false + complete event เพื่อหลีกเลี่ยงการกระตุก
+  const hasPlayedIntroRef = useRef(false);
+
+  const handlePaperRef = useCallback((instance: AnimationItem | null) => {
+    paperLottieRef.current = instance;
+    if (instance) {
+      //? หยุดไว้ที่ frame 0 ก่อน รอ opacity > 0 ค่อยเล่น
+      instance.goToAndStop(0, true);
+      instance.addEventListener("complete", () => {
+        //? ไม่ว่าจะ intro หรือ loop segment → เล่น 120-200 ซ้ำ
+        hasPlayedIntroRef.current = true;
+        instance.playSegments([120, 200], true);
+      });
+    }
+  }, []);
+
+  //? สั่ง play/pause ตาม opacity — เริ่ม intro เมื่อปรากฏครั้งแรก
+  useMotionValueEvent(q1PaperOpacity, "change", (latest) => {
+    const anim = paperLottieRef.current;
+    if (!anim) return;
+    if (latest > 0) {
+      if (anim.isPaused) {
+        //? เริ่ม intro (0→120) ทุกครั้งที่กลับมาเห็น
+        hasPlayedIntroRef.current = false;
+        anim.playSegments([0, 120], true);
+      }
+    } else {
+      //? opacity = 0 → หยุดแล้ว reset กลับ frame 0
+      if (!anim.isPaused) anim.pause();
+      anim.goToAndStop(0, true);
+      hasPlayedIntroRef.current = false;
+    }
+  });
 
   //? Combined Animation Map for single SceneLayer
   const animations: AnimationMap = useMemo(
     () => ({
       1: { opacity: q1BgOpacity },
-      4: { opacity: q1PaperOpacity },
     }),
-    [q1BgOpacity, q1PaperOpacity],
+    [q1BgOpacity],
   );
 
   // ─── Content Animations ───
@@ -196,6 +239,28 @@ export default function S7_3({ scrollYProgress, onCompleted }: S7_3Props) {
               />
             </m.div>
           )}
+
+          {/* Q1: Flying papers (Lottie — loop frames 30-50) */}
+          <m.div
+            className="absolute"
+            style={{
+              //? Desktop: 1945.97×853.18 at (-56.30, 406.03) in 1920×2160
+              //? Mobile: 1346.51×246.45 at (-136.84, 1355.42) in 1080×3840
+              width: isMobile ? "124.68%" : "101.35%",
+              height: isMobile ? "6.42%" : "39.50%",
+              left: isMobile ? "-12.67%" : "-2.93%",
+              top: isMobile ? "35.30%" : "18.80%",
+              opacity: q1PaperOpacity,
+            }}
+          >
+            <LazyLottie
+              src={getJsonUrl("Scene/Scene7/03/s7-paper.json")}
+              className="w-full h-full"
+              loop={false}
+              getRef={handlePaperRef}
+              ignoreAspectRatio
+            />
+          </m.div>
 
           {/* Q1: Cat sitting on mat (Lottie) */}
           <m.div

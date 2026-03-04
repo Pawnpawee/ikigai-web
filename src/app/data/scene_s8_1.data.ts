@@ -7,7 +7,7 @@ import type { SceneItemData } from "../components/reusable/SceneLayer";
 //?
 //? Animation Groups:
 //? 1  = mountain_lake       (0→0.08 fade in, 0.55→0.62 fade out)
-//? 2  = stone_lake          (0.02→0.10 fade in, 0.55→0.62 fade out)
+//? 2  = stone_lake          (ย้ายไปใช้ LazyLottie ใน s8_1.tsx แล้ว)
 //? 3  = lotus_5             (0.04→0.12 fade in, 0.55→0.62 fade out)
 //? 4  = lotus_4             (0.06→0.14 fade in, 0.55→0.62 fade out)
 //? 5  = lotus_2             (0.08→0.16 fade in, 0.38→0.42 fade out for bloom)
@@ -52,26 +52,6 @@ export const SCENE_S8_1_ITEMS: SceneItemData[] = [
     },
     animGroup: 1,
     priority: true,
-  },
-  {
-    id: "stone_lake",
-    src: getImgPath("Scene/Scene8/01/stone_lake.webp"),
-    alt: "Stone formations on the lake",
-    style: {
-      //? Desktop: 2834.72×724.84 at (-527.81, 219.15) in 1920×1080
-      width: "147.64%",
-      height: "67.11%",
-      left: "-27.49%",
-      top: "20.29%",
-    },
-    mobileStyle: {
-      //? Mobile: 3918.11×539.48 at (-1659.24, 506.39) in 1080×1920
-      width: "362.79%",
-      height: "28.10%",
-      left: "-153.63%",
-      top: "30%",
-    },
-    animGroup: 2,
   },
   {
     id: "lotus_5",

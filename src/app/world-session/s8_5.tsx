@@ -74,7 +74,7 @@ export default function S8_5({ scrollYProgress, onCompleted }: S8_5Props) {
   //? animGroup 1: mountain_lake (fade in → fade out at boundary)
   const mountainOpacity = useTransform(scrollYProgress, [0, 0.52], [0, 1]);
 
-  //? animGroup 2: stone_lake
+  //? animGroup 2: stone_lake — now Lottie
   const stoneOpacity = useTransform(scrollYProgress, [0.03, 0.52], [0, 1]);
   const stoneY = useTransform(scrollYProgress, [0.03, 0.1], [30, 0]);
 
@@ -134,7 +134,6 @@ export default function S8_5({ scrollYProgress, onCompleted }: S8_5Props) {
   const animations: AnimationMap = useMemo(
     () => ({
       1: { opacity: mountainOpacity },
-      2: { opacity: stoneOpacity, y: stoneY },
       3: { opacity: lotus5Opacity, y: lotus5Y },
       4: { opacity: lotus4Opacity, y: lotus4Y },
       5: { opacity: lotus2Opacity, y: lotus2Y },
@@ -144,8 +143,6 @@ export default function S8_5({ scrollYProgress, onCompleted }: S8_5Props) {
     }),
     [
       mountainOpacity,
-      stoneOpacity,
-      stoneY,
       lotus5Opacity,
       lotus5Y,
       lotus4Opacity,
@@ -208,6 +205,27 @@ export default function S8_5({ scrollYProgress, onCompleted }: S8_5Props) {
           animations={animations}
           containerAspectRatio={isMobile ? "1080 / 1920" : "1920 / 1080"}
         >
+          {/* ═══ Stone Lake Night (LazyLottie) ═══ */}
+          <m.div
+            className="absolute"
+            style={{
+              //? Desktop: 2834.72×724.84 at (-527.81, 219.15) in 1920×1080
+              //? Mobile: 3918.11×539.48 at (-1659.24, 506.39) in 1080×1920
+              width: isMobile ? "362.79%" : "147.64%",
+              height: isMobile ? "28.10%" : "67.11%",
+              left: isMobile ? "-153.63%" : "-27.49%",
+              top: isMobile ? "30%" : "20.29%",
+              opacity: stoneOpacity,
+              y: stoneY,
+            }}
+          >
+            <LazyLottie
+              src={getJsonUrl("Scene/Scene8/05/s8-stone-lake-night.json")}
+              loop
+              playTrigger={stoneOpacity}
+            />
+          </m.div>
+
           {/* ═══ Phase 2: CSS Dark Overlay (replaces bgblack image) ═══ */}
           <m.div
             className="fixed inset-0 bg-black"

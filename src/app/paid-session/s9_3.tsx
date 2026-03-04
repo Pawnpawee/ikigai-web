@@ -50,7 +50,7 @@ export default function S9_3({ scrollYProgress, onCompleted }: S9_3Props) {
   //? animGroup 1: money_bg — fade in
   const moneyBgOpacity = useTransform(scrollYProgress, [0, 0.12], [0, 1]);
 
-  //? animGroup 2: starlight — fade in
+  //? starlight — now Lottie, fade in
   const starlightOpacity = useTransform(scrollYProgress, [0.05, 0.15], [0, 1]);
 
   //? animGroup 3: cat — y + opacity
@@ -71,9 +71,8 @@ export default function S9_3({ scrollYProgress, onCompleted }: S9_3Props) {
   const animations: AnimationMap = useMemo(
     () => ({
       1: { opacity: moneyBgOpacity },
-      2: { opacity: starlightOpacity },
     }),
-    [moneyBgOpacity, starlightOpacity],
+    [moneyBgOpacity],
   );
 
   // ─── Handlers ───
@@ -119,6 +118,31 @@ export default function S9_3({ scrollYProgress, onCompleted }: S9_3Props) {
           animations={animations}
           containerAspectRatio={isMobile ? "1080 / 1920" : "1920 / 1080"}
         >
+          {/* ═══ Starlight (LazyLottie — desktop/mobile) ═══ */}
+          <m.div
+            className="absolute"
+            style={{
+              //? Desktop: 1800.58×969.21 in 1920×1080
+              //? Mobile: 1027.51×1631.52 in 1080×1920
+              width: isMobile ? "95.14%" : "93.78%",
+              height: isMobile ? "84.97%" : "89.74%",
+              left: isMobile ? "4.82%" : "3.30%",
+              top: isMobile ? "7.51%" : "17.12%",
+              opacity: starlightOpacity,
+            }}
+          >
+            <LazyLottie
+              src={getJsonUrl(
+                isMobile
+                  ? "Scene/Scene8/03/s8-starlight-mb.json"
+                  : "Scene/Scene8/03/s8-starlight.json",
+              )}
+              className="w-full h-full"
+              loop
+              playTrigger={starlightOpacity}
+            />
+          </m.div>
+
           {/* ═══ Cat (LazyLottie) ═══ */}
           <m.div
             className="absolute"

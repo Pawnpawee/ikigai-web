@@ -5,7 +5,7 @@ import type { SceneItemData } from "../components/reusable/SceneLayer";
 //? Layout: Desktop 1920x1080, Mobile 1080x1920
 //? Animation Groups:
 //?  1 = money_bg    (0 → 0.12)  — coin/money background illustration
-//?  2 = starlight   (0.05→ 0.15) — decorative stars
+//?  (starlight ย้ายไปใช้ LazyLottie ใน s9_3.tsx แล้ว)
 //?  3 = cat         (0.10→ 0.25) — mysterious cat guide
 
 // ────────────────────────────────────────────────────
@@ -33,27 +33,6 @@ export const SCENE_S9_3_ITEMS: SceneItemData[] = [
       top: "1.60%",
     },
     animGroup: 1,
-  },
-  {
-    id: "starlight",
-    src: getImgPath("Scene/Scene9/03/starlight.webp"),
-    mobileSrc: getImgPath("Scene/Scene9/03/starlight_mb.webp"),
-    alt: "Decorative starlight",
-    //? Desktop: 1800.58/1920 = 93.78%, 969.21/1080 = 89.74%
-    style: {
-      width: "93.78%",
-      height: "89.74%",
-      left: "3.30%",
-      top: "17.12%",
-    },
-    //? Mobile: 1027.51/1080 = 95.14%, 1631.52/1920 = 84.97%
-    mobileStyle: {
-      width: "95.14%",
-      height: "84.97%",
-      left: "4.82%",
-      top: "7.51%",
-    },
-    animGroup: 2,
   },
   //? cat ย้ายไปใช้ LazyLottie ใน s9_3.tsx แล้ว (cat1.json)
 ];
