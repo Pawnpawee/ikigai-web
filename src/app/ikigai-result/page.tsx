@@ -259,7 +259,7 @@ export default function IkigaiResultPage() {
         title="เกิดข้อผิดพลาด"
         message={errorMessage}
       />
-  
+
       <IkigaiResultDisplay
         analysis={ikigaiAnalysis}
         scores={ikigaiScores}
