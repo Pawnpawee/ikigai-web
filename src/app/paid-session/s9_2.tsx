@@ -341,7 +341,7 @@ export default function S9_2({ scrollYProgress, onCompleted }: S9_2Props) {
                 style={{ opacity: carouselOpacity }}
               >
                 {selectedCards.length > 0
-                  ? `เลือกแล้ว: ${selectedCards[0]}`
+                  ? `เลือกเพียง 1 สาขา คุณเลือก: ${selectedCards[0]}`
                   : "กรุณาเลือก 1 สาขา"}
               </m.p>
             </m.div>

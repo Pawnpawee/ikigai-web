@@ -17,7 +17,7 @@ export const SCENE_WALK_DESERT_ITEMS: SceneItemData[] = [
       width: "52.5%",
       height: "29.5%",
     },
-    animGroup: 1,
+    animGroup: 2,
     sizes: "(max-width: 768px) 60vw, 50vw",
   },
 
@@ -33,7 +33,7 @@ export const SCENE_WALK_DESERT_ITEMS: SceneItemData[] = [
       width: "100%",
       height: "53.5%",
     },
-    animGroup: 2,
+    animGroup: 1,
     sizes: "100vw",
   },
 ];

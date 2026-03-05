@@ -204,7 +204,6 @@ export default function S8_4({
               src={getJsonUrl("Scene/Scene8/04/s8-icon-1.json")}
               className="w-full h-full"
               loop={false}
-              play={icon1Opacity.get() > 0}
               playTrigger={icon1Opacity}
             />
           </m.div>
@@ -227,7 +226,6 @@ export default function S8_4({
               src={getJsonUrl("Scene/Scene8/04/s8-icon-2.json")}
               className="w-full h-full"
               loop={false}
-              play={icon2Opacity.get() > 0}
               playTrigger={icon2Opacity}
             />
           </m.div>

@@ -160,11 +160,11 @@ export default function PaidSessionPage() {
   }, [lenis, isS9_1Completed, isS9_2Completed]);
 
   //? Check user authentication
-  useEffect(() => {
-    if (!isLoading && !userId) {
-      router.push("/prologue/into-dark");
-    }
-  }, [userId, isLoading, router]);
+  // useEffect(() => {
+  //   if (!isLoading && !userId) {
+  //     router.push("/prologue/into-dark");
+  //   }
+  // }, [userId, isLoading, router]);
 
   //? ตั้งเพลง bg ทุกครั้งที่เข้าหน้า ไม่ว่าจะ mute หรือไม่ เพื่อให้ soundRef ตรงกับหน้าปัจจุบัน
   useEffect(() => {

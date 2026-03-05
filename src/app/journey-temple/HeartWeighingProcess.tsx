@@ -137,7 +137,7 @@ export default function HeartWeighingProcess({
       {/* Lottie Background — intro 0-225, loop 226-304 */}
       <div className="absolute inset-0">
         <LazyLottie
-          src={getJsonUrl("Scene/Result/Dreamer.json")}
+          src={getJsonUrl("Scene/Result/s11.json")}
           className="w-full h-full"
           loop={false}
           play={isProcessing}

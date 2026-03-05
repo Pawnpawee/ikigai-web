@@ -29,7 +29,7 @@ export default function Hero({ shouldAnimate }: HeroProps) {
     if (shouldAnimate) {
       const timer = setTimeout(() => {
         setShouldPlayLottie(true);
-        playSfx(getAudioUrl("Sound/12/magical-sparkling.mp3"));
+        playSfx(getAudioUrl("Sound/1-2/logo.mp3"));
       }, 2000);
 
       return () => clearTimeout(timer);

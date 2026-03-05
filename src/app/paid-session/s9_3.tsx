@@ -169,7 +169,7 @@ export default function S9_3({ scrollYProgress, onCompleted }: S9_3Props) {
                 Desktop: (275, 218) on 1920x1080 → left 14.32%, top 20.19%, w 71.41%
                 Mobile:  (41, 172) on 1080x1920  → left 3.80%, top 8.96%, w 92.50% */}
             <m.div
-              className="absolute flex flex-col items-center left-[14.32%] top-[20.19%] w-[71.41%]
+              className="absolute flex flex-col items-center left-[14.32%] top-[17%] w-[71.41%]
                 portrait:left-[3.80%] portrait:top-[8.96%] portrait:w-[92.50%]"
               style={{ opacity: questionOpacity }}
             >

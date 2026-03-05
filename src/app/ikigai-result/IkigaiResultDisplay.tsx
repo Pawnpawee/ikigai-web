@@ -113,12 +113,18 @@ export default function IkigaiResultDisplay({
     setSaveStatus("saving");
 
     // ⭐ 1. เตรียมตัวแปรสำหรับ DOM Interception เพื่อแก้ปัญหา Next.js Image + Cloudinary จอดำ
-    const imgElements = captureRef.current.querySelectorAll("img");
+    const captureEl = captureRef.current;
+    const imgElements = captureEl.querySelectorAll("img");
     const originalAttributes: Array<{
       src: string;
       srcset: string | null;
       crossOrigin: string | null;
     }> = [];
+
+    //? ใส่ bg-result gradient ชั่วคราว เพราะ parent อยู่นอก captureRef
+    const originalBackground = captureEl.style.background;
+    captureEl.style.background =
+      "linear-gradient(180deg, #09345b 0%, #083054 5%, #062137 29%, #051622 54%, #041015 77%, #040e11 100%)";
 
     // ⭐ 2. แอบสลับ URL ของ Next.js กลับไปเป็น URL ของ Cloudinary แท้ๆ ชั่วคราว
     imgElements.forEach((img, index) => {
@@ -174,6 +180,7 @@ export default function IkigaiResultDisplay({
     } finally {
       // ⭐ 3. สำคัญมาก: ต้องคืนค่า DOM กลับสู่สภาพเดิมเสมอ! ไม่ว่าจะแคปสำเร็จหรือ Error
       // เพื่อป้องกันไม่ให้ Virtual DOM ของ React ทำงานผิดพลาดในภายหลัง
+      captureEl.style.background = originalBackground;
       imgElements.forEach((img, index) => {
         img.src = originalAttributes[index].src;
 
