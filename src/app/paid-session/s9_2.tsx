@@ -72,6 +72,7 @@ function CarouselArrow({
         alt={direction === "left" ? "Previous" : "Next"}
         width={48}
         height={80}
+        crossOrigin="anonymous"
         className="w-full h-full object-contain drop-shadow-lg"
       />
     </m.button>
@@ -114,6 +115,7 @@ function JobAvatarCard({
           alt=""
           fill
           sizes="25vw"
+          crossOrigin="anonymous"
           className="w-full pointer-events-none"
         />
 
@@ -129,6 +131,7 @@ function JobAvatarCard({
               alt={category}
               fill
               sizes="20vw"
+              crossOrigin="anonymous"
               className="object-contain"
             />
           </div>
@@ -219,6 +222,7 @@ export default function S9_2({ scrollYProgress, onCompleted }: S9_2Props) {
     ];
     for (const src of sources) {
       const img = new window.Image();
+      img.crossOrigin = "anonymous";
       img.src = src;
     }
   }, []);

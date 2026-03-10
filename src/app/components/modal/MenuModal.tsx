@@ -62,6 +62,7 @@ export default function MenuModal({ isOpen, onClose }: MenuModalProps) {
                     alt="Close"
                     width={27}
                     height={27}
+                    crossOrigin="anonymous"
                     className="h-4 md:h-[27px] w-auto"
                   />
                 </button>
@@ -80,6 +81,7 @@ export default function MenuModal({ isOpen, onClose }: MenuModalProps) {
                       alt="Mute"
                       width={27}
                       height={37}
+                      crossOrigin="anonymous"
                       className="h-5 md:h-[37px] w-auto"
                     />
                     <input
@@ -117,6 +119,7 @@ export default function MenuModal({ isOpen, onClose }: MenuModalProps) {
                       alt="Unmute"
                       width={43}
                       height={37}
+                      crossOrigin="anonymous"
                       className="h-5 md:h-[37px] w-auto"
                     />
                   </div>
@@ -133,6 +136,7 @@ export default function MenuModal({ isOpen, onClose }: MenuModalProps) {
                       alt="Mute"
                       width={27}
                       height={37}
+                      crossOrigin="anonymous"
                       className="h-5 md:h-[37px] w-auto"
                     />
                     <input
@@ -170,6 +174,7 @@ export default function MenuModal({ isOpen, onClose }: MenuModalProps) {
                       alt="Unmute"
                       width={43}
                       height={37}
+                      crossOrigin="anonymous"
                       className="h-5 md:h-[37px] w-auto"
                     />
                   </div>
@@ -191,6 +196,7 @@ export default function MenuModal({ isOpen, onClose }: MenuModalProps) {
                         alt="About"
                         width={47}
                         height={47}
+                        crossOrigin="anonymous"
                         className="h-[25px] md:h-14 w-auto"
                       />
                       <div className="flex flex-col px-2.5">
@@ -207,6 +213,7 @@ export default function MenuModal({ isOpen, onClose }: MenuModalProps) {
                       alt="Next"
                       width={19}
                       height={25}
+                      crossOrigin="anonymous"
                       className="h-[13px] md:h-[25px] w-auto"
                     />
                   </m.div>

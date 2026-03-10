@@ -51,6 +51,7 @@ export default function WelcomeSoundModal({
                   alt="Sound icon"
                   width={52}
                   height={43}
+                  crossOrigin="anonymous"
                   className="h-5 md:h-10 w-auto"
                 />
               </m.div>

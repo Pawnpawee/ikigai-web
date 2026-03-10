@@ -74,6 +74,7 @@ function CarouselArrow({
         alt={direction === "left" ? "Previous" : "Next"}
         width={48}
         height={80}
+        crossOrigin="anonymous"
         className="w-full h-full object-contain drop-shadow-lg"
       />
     </m.button>
@@ -112,6 +113,7 @@ function GiftCard({
           alt=""
           fill
           sizes="25vw"
+          crossOrigin="anonymous"
           className="w-full z-10 pointer-events-none"
         />
 
@@ -122,6 +124,7 @@ function GiftCard({
             alt={label}
             fill
             sizes="30vw"
+            crossOrigin="anonymous"
             className="object-contain"
           />
         </div>
@@ -211,6 +214,7 @@ export default function S8_2({ scrollYProgress, onCompleted }: S8_2Props) {
     ];
     for (const src of sources) {
       const img = new window.Image();
+      img.crossOrigin = "anonymous";
       img.src = src;
     }
   }, []);

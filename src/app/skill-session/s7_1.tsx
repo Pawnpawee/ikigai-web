@@ -72,6 +72,7 @@ function CarouselArrow({
         alt={direction === "left" ? "Previous" : "Next"}
         width={48}
         height={80}
+        crossOrigin="anonymous"
         className="w-full h-full object-contain drop-shadow-lg"
       />
     </m.button>
@@ -111,6 +112,7 @@ function SkillCard({
           alt=""
           fill
           sizes="25vw"
+          crossOrigin="anonymous"
           className="w-full z-10 pointer-events-none"
         />
 
@@ -121,6 +123,7 @@ function SkillCard({
             alt={label}
             fill
             sizes="30vw"
+            crossOrigin="anonymous"
             className="object-contain"
           />
         </div>
@@ -207,6 +210,7 @@ export default function S7_1({ scrollYProgress, onCompleted }: S7_1Props) {
     ];
     for (const src of sources) {
       const img = new window.Image();
+      img.crossOrigin = "anonymous";
       img.src = src;
     }
   }, []);

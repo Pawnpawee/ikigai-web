@@ -102,6 +102,7 @@ export default function SectionDetailModal({
                     src={config.iconSrc}
                     alt={config.title}
                     fill
+                    crossOrigin="anonymous"
                     className="object-contain"
                     sizes="70px"
                   />
@@ -172,6 +173,7 @@ export default function SectionDetailModal({
                             src={section.iconSrc}
                             alt={section.label}
                             fill
+                            crossOrigin="anonymous"
                             className="object-contain"
                             sizes="24px"
                           />

@@ -248,6 +248,7 @@ export default function S8_3({ scrollYProgress }: S8_3Props) {
               src={butterflySrc}
               alt="Flying butterfly"
               fill
+              crossOrigin="anonymous"
               sizes="(max-width: 768px) 25vw, 15vw"
               className="object-contain"
               quality={85}

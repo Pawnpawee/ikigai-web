@@ -46,6 +46,7 @@ export default function Icon({
     <Component
       src={src}
       alt={alt || label || ""}
+      crossOrigin="anonymous"
       className={`${className} ${onClick ? "cursor-pointer" : ""}`}
       sizes={typeof size === "number" ? `${size}px` : size}
       style={{ width: size, height: size, color, ...style }}

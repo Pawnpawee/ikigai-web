@@ -150,6 +150,7 @@ const IkigaiCircle = memo(
               alt=""
               width={56}
               height={56}
+              crossOrigin="anonymous"
               quality={100}
               sizes="(max-width: 768px) 40px, 56px"
             />

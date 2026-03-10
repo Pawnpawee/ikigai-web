@@ -71,6 +71,7 @@ export default function GifCursor() {
         alt="Spirit Cursor"
         width={60}
         height={60}
+        crossOrigin="anonymous"
         priority={true}
         unoptimized={true}
         className="pointer-events-none select-none"

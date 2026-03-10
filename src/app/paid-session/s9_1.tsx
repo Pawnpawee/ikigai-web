@@ -191,7 +191,7 @@ export default function S9_1({ scrollYProgress, onCompleted }: S9_1Props) {
             className="absolute flex flex-col items-center pointer-events-none
               left-[46.88%] top-[34.72%] w-[46.09%]
               portrait:left-0 portrait:top-[24.84%] portrait:w-full
-              gap-4 md:gap-8 lg:gap-[60px]"
+              gap-4 md:gap-8 2xl:gap-[60px]"
             style={{ opacity: questionOpacity }}
           >
             {/*? Question Text — h3 (40px) Figma */}
@@ -201,12 +201,12 @@ export default function S9_1({ scrollYProgress, onCompleted }: S9_1Props) {
               scrollYProgress={scrollYProgress}
               startProgress={0.65}
               endProgress={0.85}
-              className="text-white text-base md:text-2xl lg:text-3xl leading-normal tracking-[0.6px] text-center"
+              className="text-white text-base md:text-2xl 2xl:text-3xl leading-normal tracking-[0.6px] text-center"
             />
 
             {/*? Choice Buttons — ได้ / ไม่ได้ (gap 130px Figma) */}
             <m.div
-              className="flex gap-8 md:gap-16 lg:gap-[130px] pointer-events-auto"
+              className="flex gap-8 md:gap-16 2xl:gap-[130px] pointer-events-auto"
               style={{ opacity: buttonsOpacity }}
             >
               {PAID_ANSWER_CHOICES.map((choice) => (
@@ -218,7 +218,7 @@ export default function S9_1({ scrollYProgress, onCompleted }: S9_1Props) {
                   variant={
                     selectedAnswer === choice.id ? "default" : "transparent"
                   }
-                  className="px-8 py-2 md:px-16 md:py-4 text-sm md:text-2xl lg:text-3xl shrink-0"
+                  className="px-8 py-2 md:px-16 md:py-4 text-sm md:text-2xl 2xl:text-3xl shrink-0"
                 />
               ))}
             </m.div>

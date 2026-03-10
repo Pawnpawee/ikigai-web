@@ -192,6 +192,7 @@ const SceneItem = ({
         src={responsiveSrc}
         alt={item.alt}
         fill
+        crossOrigin="anonymous"
         priority={item.priority}
         fetchPriority={item.priority ? "high" : "auto"}
         sizes={item.sizes || "(max-width: 768px) 100vw, 50vw"}

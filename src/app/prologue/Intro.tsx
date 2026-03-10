@@ -87,6 +87,7 @@ export default function Intro() {
                   src={getImgPath("Icon/star.svg")}
                   alt="star"
                   fill
+                  crossOrigin="anonymous"
                   className="object-contain"
                 />
               </div>

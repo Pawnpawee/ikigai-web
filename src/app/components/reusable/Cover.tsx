@@ -124,6 +124,7 @@ export default function Cover({
                   alt="What You Love"
                   width={700}
                   height={100}
+                  crossOrigin="anonymous"
                   className="w-2xs md:w-[500px] xl:w-[700px] h-auto"
                   style={{
                     opacity: titleOpacity,
@@ -138,6 +139,7 @@ export default function Cover({
                 alt="love"
                 width={250}
                 height={250}
+                crossOrigin="anonymous"
                 className="w-32 md:w-[200px] xl:w-[250px] h-auto"
                 style={{
                   opacity: titleOpacity,

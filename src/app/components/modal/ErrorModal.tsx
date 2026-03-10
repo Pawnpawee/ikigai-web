@@ -69,6 +69,7 @@ export default function ErrorModal({
                 alt="Error icon"
                 width={48}
                 height={48}
+                crossOrigin="anonymous"
                 className="w-full h-full block max-w-none"
               />
             </m.div>
