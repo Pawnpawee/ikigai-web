@@ -459,8 +459,13 @@ export default function S6_1({
                               isSelected={true}
                               onClick={() => {
                                 setCustomHobbies((prev) => {
-                                  const next = prev.filter((a) => a !== activity);
-                                  if (selectedHobbies.length + next.length < MIN_SELECTIONS) {
+                                  const next = prev.filter(
+                                    (a) => a !== activity,
+                                  );
+                                  if (
+                                    selectedHobbies.length + next.length <
+                                    MIN_SELECTIONS
+                                  ) {
                                     queueMicrotask(() => onCompleted?.(null));
                                   }
                                   return next;
@@ -659,8 +664,13 @@ export default function S6_1({
                               isSelected={true}
                               onClick={() => {
                                 setCustomHobbies((prev) => {
-                                  const next = prev.filter((a) => a !== activity);
-                                  if (selectedHobbies.length + next.length < MIN_SELECTIONS) {
+                                  const next = prev.filter(
+                                    (a) => a !== activity,
+                                  );
+                                  if (
+                                    selectedHobbies.length + next.length <
+                                    MIN_SELECTIONS
+                                  ) {
                                     queueMicrotask(() => onCompleted?.(null));
                                   }
                                   return next;

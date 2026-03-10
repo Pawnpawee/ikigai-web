@@ -45,8 +45,8 @@ export const SCENE_S7_3_ITEMS: SceneItemData[] = [
 export const S7_3_QUESTION_1 =
   "จากความถนัดของเจ้า มีตรงกับความต้องการของงานหรือไม่?";
 
-  export const S7_3_QUESTION_1_MOBILE =
-    "จากความถนัดของเจ้า \n มีตรงกับความต้องการของงานหรือไม่?";
+export const S7_3_QUESTION_1_MOBILE =
+  "จากความถนัดของเจ้า \n มีตรงกับความต้องการของงานหรือไม่?";
 
 export const S7_3_QUESTION_2 =
   "เมื่อเปลี่ยนบทบาทใหม่ \n เจ้าคิดว่าจะได้ใช้ความถนัดของเจ้าไหม?";

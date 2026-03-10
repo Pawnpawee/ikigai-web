@@ -290,7 +290,7 @@ export default function IntoDarkSubmit({
             className="absolute flex flex-col gap-6 md:gap-12 2xl:gap-[60px]"
             style={{
               left: isMobile ? "11.46%" : undefined,
-              right: isMobile ? undefined: "5.2%",
+              right: isMobile ? undefined : "5.2%",
               top: isMobile ? "54.82%" : "68.40%",
               width: isMobile ? "77.07%" : undefined,
               alignItems: isMobile ? "center" : "flex-start",

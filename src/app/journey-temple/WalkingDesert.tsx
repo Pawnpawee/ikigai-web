@@ -117,8 +117,9 @@ export default function WalkingDesert() {
           {/* Figma Desktop: w=924.08/1920=48.1%, h=638.51/1080=59.1% */}
           <m.div
             className="absolute w-[48.1%] h-[59.1%] bottom-[-5.3%]"
-            style={{ 
-              right: humanCamelRight }}
+            style={{
+              right: humanCamelRight,
+            }}
           >
             <LazyLottie
               src={getJsonUrl("Scene/Scene10/human-camel.json")}
