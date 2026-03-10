@@ -1,7 +1,7 @@
 "use client";
 import { m, useMotionValue } from "framer-motion";
 import Image from "next/image";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useDevice } from "@/app/contexts/DeviceContext";
 
 export default function GifCursor() {
@@ -11,8 +11,10 @@ export default function GifCursor() {
   const mouseX = useMotionValue(-100);
   const mouseY = useMotionValue(-100);
 
-  // 3. State สำหรับเช็ค Hover
+  //? useRef เก็บค่า hover จริง + useState สำหรับ batch update
+  const isHoverRef = useRef(false);
   const [isHover, setIsHover] = useState(false);
+  const rafId = useRef<number | null>(null);
 
   useEffect(() => {
     if (isMobile) return;
@@ -23,14 +25,25 @@ export default function GifCursor() {
 
       // เช็คว่า Hover ปุ่มไหม
       const target = e.target as HTMLElement;
-      const isInteractive = target.closest(
+      const hovering = !!target.closest(
         "button, a, input, textarea, [role='button'], .cursor-pointer",
       );
-      setIsHover(!!isInteractive);
+
+      //? อัปเดต React state เฉพาะเมื่อ hover เปลี่ยนจริง + throttle ด้วย rAF
+      if (hovering !== isHoverRef.current) {
+        isHoverRef.current = hovering;
+        if (rafId.current) cancelAnimationFrame(rafId.current);
+        rafId.current = requestAnimationFrame(() => {
+          setIsHover(hovering);
+        });
+      }
     };
 
     window.addEventListener("mousemove", moveCursor);
-    return () => window.removeEventListener("mousemove", moveCursor);
+    return () => {
+      window.removeEventListener("mousemove", moveCursor);
+      if (rafId.current) cancelAnimationFrame(rafId.current);
+    };
   }, [isMobile, mouseX, mouseY]);
 
   if (isMobile) return null;

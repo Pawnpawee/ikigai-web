@@ -1,15 +1,20 @@
 "use client";
 
+import dynamic from "next/dynamic";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import WelcomeSoundModal from "./components/modal/WelcomeSoundModal";
-import DecisionSection from "./components/reusable/DecisionSection";
 import EyelidOverlay from "./components/reusable/EyeLidOverlay";
 import { useAudio } from "./contexts/AudioContext";
 import Hero from "./prologue/Hero";
-import Intro from "./prologue/Intro";
-import JobApplication from "./prologue/JobApplication";
-import Sleeping from "./prologue/Sleeping";
+
+//? Dynamic import below-fold components เพื่อลด TBT
+const Intro = dynamic(() => import("./prologue/Intro"));
+const JobApplication = dynamic(() => import("./prologue/JobApplication"));
+const Sleeping = dynamic(() => import("./prologue/Sleeping"));
+const DecisionSection = dynamic(
+  () => import("./components/reusable/DecisionSection"),
+);
 
 export default function Home() {
   const router = useRouter();

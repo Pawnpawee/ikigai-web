@@ -2,8 +2,10 @@
 import {
   createContext,
   type ReactNode,
+  useCallback,
   useContext,
   useEffect,
+  useMemo,
   useState,
 } from "react";
 import {
@@ -37,22 +39,25 @@ export function UserProvider({ children }: { children: ReactNode }) {
     setIsLoading(false);
   }, []);
 
-  const saveUser = (id: string, name: string) => {
+  const saveUser = useCallback((id: string, name: string) => {
     setUserId(id);
     setPlayerName(name);
     saveSessionUser(id, name);
-  };
+  }, []);
 
-  const clearUser = () => {
+  const clearUser = useCallback(() => {
     setUserId(null);
     setPlayerName(null);
     clearSessionUser();
-  };
+  }, []);
+
+  const value = useMemo(
+    () => ({ userId, playerName, isLoading, saveUser, clearUser }),
+    [userId, playerName, isLoading, saveUser, clearUser],
+  );
 
   return (
-    <UserContext.Provider
-      value={{ userId, playerName, isLoading, saveUser, clearUser }}
-    >
+    <UserContext.Provider value={value}>
       {children}
     </UserContext.Provider>
   );
