@@ -1,7 +1,6 @@
 "use client";
 
 import { AnimatePresence, m } from "framer-motion";
-import { toPng } from "html-to-image";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
 import { useCallback, useMemo, useRef, useState } from "react";
@@ -153,7 +152,8 @@ export default function IkigaiResultDisplay({
     });
 
     try {
-      //? Screenshot ทั้ง container ด้วย html-to-image
+      //? Screenshot ทั้ง container ด้วย html-to-image (dynamic import เพื่อลด bundle)
+      const { toPng } = await import("html-to-image");
       const dataUrl = await toPng(captureRef.current, {
         // ❌ ลบ cacheBust: true ออกเด็ดขาด เพื่อป้องกัน Next.js HTTP 400 Error
         pixelRatio: 2,

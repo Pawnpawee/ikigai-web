@@ -22,16 +22,11 @@ const nextConfig: NextConfig = {
   //? information: React Strict Mode ช่วยดักจับ Bug ในช่วง Dev
   reactStrictMode: true,
 
-  transpilePackages: ["lottie-react", "howler", "framer-motion"],
+  transpilePackages: ["howler", "framer-motion"],
 
   //* คอมเมนต์สีเขียวธรรมดา: เพิ่ม experimental config เพื่อช่วย Tree-shaking ไลบรารีหนักๆ
   experimental: {
-    optimizePackageImports: [
-      "react-icons",
-      "lottie-react",
-      "react-howler",
-      "framer-motion",
-    ],
+    optimizePackageImports: ["react-icons", "framer-motion"],
   },
 
   webpack: (config) => {

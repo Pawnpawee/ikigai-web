@@ -56,11 +56,7 @@ export function UserProvider({ children }: { children: ReactNode }) {
     [userId, playerName, isLoading, saveUser, clearUser],
   );
 
-  return (
-    <UserContext.Provider value={value}>
-      {children}
-    </UserContext.Provider>
-  );
+  return <UserContext.Provider value={value}>{children}</UserContext.Provider>;
 }
 
 // Custom Hook เพื่อเรียกใช้ง่ายๆ
