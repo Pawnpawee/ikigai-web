@@ -112,7 +112,7 @@ export default function S9_3({ scrollYProgress, onCompleted }: S9_3Props) {
       className="fixed flex justify-center top-0 h-screen w-screen overflow-hidden bg-s9-2"
       style={{ opacity, zIndex }}
     >
-      <m.div className="flex items-center h-screen w-screen portrait:w-auto ">
+      <m.div className="flex items-center h-screen w-screen portrait:w-auto">
         <SceneLayer
           items={SCENE_S9_3_ITEMS}
           animations={animations}
@@ -150,7 +150,7 @@ export default function S9_3({ scrollYProgress, onCompleted }: S9_3Props) {
               width: isMobile ? "64.24%" : "36.13%",
               height: isMobile ? "32.89%" : "58.47%",
               left: isMobile ? "17.88%" : "61.17%",
-              top: isMobile ? "55.47%" : "32.19%",
+              top: isMobile ? "65%" : "32.19%",
               opacity: catOpacity,
               y: catY,
             }}
@@ -178,7 +178,7 @@ export default function S9_3({ scrollYProgress, onCompleted }: S9_3Props) {
                 scrollYProgress={scrollYProgress}
                 startProgress={0.2}
                 endProgress={0.4}
-                className="text-white text-base md:text-2xl lg:text-3xl leading-normal tracking-[0.6px] text-center"
+                className="text-white text-base md:text-2xl 2xl:text-3xl leading-normal tracking-[0.6px] text-center"
               />
             </m.div>
 
@@ -201,7 +201,7 @@ export default function S9_3({ scrollYProgress, onCompleted }: S9_3Props) {
                   className="w-full h-full p-[6.38%] resize-none
                     bg-black/20
                      rounded-2xl
-                    text-white text-base md:text-lg lg:text-xl
+                    text-white text-base md:text-lg 2xl:text-xl
                     placeholder:text-white/40
                     focus:outline-none focus:border-white/60
                     transition-colors duration-300"
@@ -230,7 +230,7 @@ export default function S9_3({ scrollYProgress, onCompleted }: S9_3Props) {
                   isSelected={experience.trim().length > 0}
                   onClick={handleSubmit}
                   disabled={experience.trim().length === 0}
-                  className="px-8 py-2 md:px-16 md:py-4 text-base md:text-lg lg:text-xl"
+                  className="px-8 py-2 md:px-16 md:py-4 text-base md:text-lg 2xl:text-xl"
                 />
               </m.div>
             </m.div>

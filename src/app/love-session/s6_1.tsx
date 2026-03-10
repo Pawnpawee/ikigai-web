@@ -29,7 +29,7 @@ export interface S6_1Data {
 interface S6_1Props {
   scrollYProgress: MotionValue<number>;
   playerName?: string;
-  onCompleted?: (data: S6_1Data) => void;
+  onCompleted?: (data: S6_1Data | null) => void;
 }
 
 const MIN_SELECTIONS = 1;
@@ -137,7 +137,12 @@ export default function S6_1({
 
     setSelectedHobbies((prev) => {
       if (prev.includes(label)) {
-        return prev.filter((actLabel) => actLabel !== label);
+        const next = prev.filter((actLabel) => actLabel !== label);
+        //! Unselect ต่ำกว่า threshold → แจ้ง parent ให้ล็อค scroll กลับ
+        if (next.length + customHobbies.length < MIN_SELECTIONS) {
+          queueMicrotask(() => onCompleted?.(null));
+        }
+        return next;
       }
 
       // ตรวจสอบรวมกับ custom activities
@@ -217,7 +222,12 @@ export default function S6_1({
 
     setTopThreeHobbies((prev) => {
       if (prev.includes(activity)) {
-        return prev.filter((a) => a !== activity);
+        const next = prev.filter((a) => a !== activity);
+        //! Unselect ต่ำกว่า threshold → แจ้ง parent ให้ล็อค scroll กลับ
+        if (next.length < STEP2_MIN_SELECTIONS) {
+          queueMicrotask(() => onCompleted?.(null));
+        }
+        return next;
       }
 
       if (prev.length >= STEP2_MAX_SELECTIONS) {
@@ -233,9 +243,23 @@ export default function S6_1({
     setStep(1);
     setTopThreeHobbies([]);
     setActivitiesError("");
+    onCompleted?.(null);
   };
 
   const totalSelected = selectedHobbies.length + customHobbies.length;
+
+  //? Shared button logic: ปุ่ม "ไปต่อ" ใช้ร่วมกันทั้ง 2 step
+  const showProceed =
+    (step === 1 && totalSelected >= MIN_SELECTIONS) ||
+    (step === 2 && topThreeHobbies.length >= STEP2_MIN_SELECTIONS);
+
+  const handleProceed = () => {
+    if (step === 1) {
+      handleProceedToStep2();
+    } else if (onCompleted) {
+      onCompleted({ selectedHobbies, customHobbies, topThreeHobbies });
+    }
+  };
 
   //? Filter activities: แสดงทั้งหมด แต่เมื่อเพิ่ม custom activities ให้ลดอันที่ไม่ได้เลือกออกทีละ 1
   const visibleActivities = (() => {
@@ -275,7 +299,7 @@ export default function S6_1({
   return (
     <m.div className="sticky w-full overflow-hidden" style={{ top }}>
       <m.div
-        className="flex items-center justify-center bg-s6 min-h-screen "
+        className="flex items-center justify-center bg-s6 min-h-screen"
         style={{ opacity, zIndex }}
       >
         <SceneLayer
@@ -328,7 +352,7 @@ export default function S6_1({
           <div className="absolute inset-0 flex flex-col items-center justify-between py-20">
             {/* Text Top */}
             <m.div
-              className="flex items-center justify-center w-full py-40 md:py-100 lg:py-120 xl:py-80 select-none"
+              className="flex items-center justify-center w-full py-40 md:py-100 2xl:py-120 xl:py-80 select-none"
               style={{
                 opacity: textTopOpacity,
                 y: textTopY,
@@ -343,13 +367,13 @@ export default function S6_1({
                 scrollYProgress={scrollYProgress}
                 startProgress={0.1}
                 endProgress={0.2}
-                className="text-white text-lg md:text-3xl lg:text-4xl leading-normal text-center"
+                className="text-white text-lg md:text-3xl 2xl:text-4xl leading-normal text-center"
               />
             </m.div>
 
             {/* Text Bottom */}
             <m.div
-              className="absolute flex flex-col gap-5 pl-4 md:pl-8 lg:pl-10 pr-6 md:pr-15 lg:pr-23 xl:pr-30 items-center justify-center"
+              className="absolute flex flex-col gap-1 md:gap-5 pl-4 md:pl-8 2xl:pl-10 pr-6 md:pr-15 lg:pr-23 2xl:pr-30 items-center justify-center"
               style={{
                 opacity: textBottomOpacity,
                 y: textBottomY,
@@ -371,7 +395,7 @@ export default function S6_1({
                           scrollYProgress={scrollYProgress}
                           startProgress={0.5}
                           endProgress={0.55}
-                          className="text-4xl leading-normal"
+                          className="text-3xl 2xl:text-4xl leading-normal"
                         />
                         <p
                           className={`text-xl mt-2 ${
@@ -400,9 +424,9 @@ export default function S6_1({
                   </div>
 
                   {/* Choices (scroll ได้) */}
-                  <div className="flex flex-col gap-5 w-full mt-5 ">
+                  <div className="flex flex-col gap-3 2xl:gap-5 w-full mt-5 ">
                     <m.div
-                      className="flex flex-wrap gap-[30px_40px] items-start justify-center"
+                      className="flex flex-wrap gap-[20px_30px] 2xl:gap-[30px_40px] items-start justify-center"
                       style={{
                         opacity: choicesOpacity,
                         y: choicesY,
@@ -434,9 +458,13 @@ export default function S6_1({
                               text={activity}
                               isSelected={true}
                               onClick={() => {
-                                setCustomHobbies((prev) =>
-                                  prev.filter((a) => a !== activity),
-                                );
+                                setCustomHobbies((prev) => {
+                                  const next = prev.filter((a) => a !== activity);
+                                  if (selectedHobbies.length + next.length < MIN_SELECTIONS) {
+                                    queueMicrotask(() => onCompleted?.(null));
+                                  }
+                                  return next;
+                                });
                               }}
                               className="px-5 py-3 text-2xl"
                             />
@@ -507,84 +535,43 @@ export default function S6_1({
                       )}
                     </m.div>
 
-                    {/* Proceed Button Container */}
-                    <m.div
-                      className="flex w-full justify-end py-2 px-6"
-                      initial={{ opacity: 0, y: 20 }}
-                      animate={{
-                        opacity:
-                          step === 1 && totalSelected >= MIN_SELECTIONS ? 1 : 0,
-                        y:
-                          step === 1 && totalSelected >= MIN_SELECTIONS
-                            ? 0
-                            : 20,
-                      }}
-                      transition={{ duration: 0.5, ease: "easeOut" }}
-                    >
-                      {/* Proceed Button */}
-                      {step === 1 && totalSelected >= MIN_SELECTIONS && (
-                        <GradientButton
-                          text="ไปต่อ"
-                          isSelected={true}
-                          onClick={handleProceedToStep2}
-                          variant="white"
-                          className="text-2xl"
-                        >
-                          <HiOutlineChevronDown className="ml-2" />
-                        </GradientButton>
-                      )}
-                    </m.div>
-
-                    <div className="flex w-full justify-between p-6">
-                      <m.div
-                        initial={{ opacity: 0, y: 20 }}
-                        animate={{
-                          opacity: step === 2 ? 1 : 0,
-                          y: step === 2 ? 0 : 20,
-                        }}
-                        transition={{ duration: 0.5, ease: "easeOut" }}
-                      >
+                    {/* Navigation Buttons */}
+                    <div className="flex w-full justify-between py-2 px-6">
+                      {/* Back (Step 2 only) — แสดงทันทีเมื่ออยู่ step 2 */}
+                      <div>
                         {step === 2 && (
-                          <GradientButton
-                            text="กลับไป"
-                            isSelected={true}
-                            onClick={handleBacktoStep1}
-                            variant="white"
-                            className="text-2xl"
+                          <m.div
+                            initial={{ opacity: 0, y: 20 }}
+                            animate={{ opacity: 1, y: 0 }}
+                            transition={{ duration: 0.5, ease: "easeOut" }}
                           >
-                            <HiOutlineChevronUp className="ml-2" />
-                          </GradientButton>
+                            <GradientButton
+                              text="กลับไป"
+                              isSelected={true}
+                              onClick={handleBacktoStep1}
+                              variant="white"
+                              className="text-2xl"
+                            >
+                              <HiOutlineChevronUp className="ml-2" />
+                            </GradientButton>
+                          </m.div>
                         )}
-                      </m.div>
+                      </div>
 
-                      {/* Proceed Button for Step 2 */}
+                      {/* Proceed (ใช้ร่วมกันทั้ง 2 step) */}
                       <m.div
                         initial={{ opacity: 0, y: 20 }}
                         animate={{
-                          opacity:
-                            topThreeHobbies.length >= STEP2_MIN_SELECTIONS
-                              ? 1
-                              : 0,
-                          y:
-                            topThreeHobbies.length >= STEP2_MIN_SELECTIONS
-                              ? 0
-                              : 20,
+                          opacity: showProceed ? 1 : 0,
+                          y: showProceed ? 0 : 20,
                         }}
                         transition={{ duration: 0.5, ease: "easeOut" }}
                       >
-                        {topThreeHobbies.length >= STEP2_MIN_SELECTIONS && (
+                        {showProceed && (
                           <GradientButton
                             text="ไปต่อ"
                             isSelected={true}
-                            onClick={() => {
-                              if (onCompleted) {
-                                onCompleted({
-                                  selectedHobbies,
-                                  customHobbies,
-                                  topThreeHobbies,
-                                });
-                              }
-                            }}
+                            onClick={handleProceed}
                             variant="white"
                             className="text-2xl"
                           >
@@ -608,10 +595,10 @@ export default function S6_1({
                           scrollYProgress={scrollYProgress}
                           startProgress={0.5}
                           endProgress={0.55}
-                          className="text-lg md:text-3xl lg:text-4xl leading-normal"
+                          className="text-lg md:text-3xl 2xl:text-4xl leading-normal"
                         />
                         <p
-                          className={`text-xs md:text-xl lg:text-2xl mt-2 ${
+                          className={`text-xs md:text-xl 2xl:text-2xl mt-2 ${
                             activitiesError ? "text-red-500 font-bold" : ""
                           }`}
                         >
@@ -621,11 +608,11 @@ export default function S6_1({
                       </>
                     ) : (
                       <>
-                        <div className="text-lg md:text-3xl lg:text-4xl leading-normal whitespace-pre-wrap">
+                        <div className="text-lg md:text-3xl 2xl:text-4xl leading-normal whitespace-pre-wrap">
                           {`เลือก 3 สิ่งที่เจ้าจะทำมันอยู่ดี \n แม้ว่าเจ้าจะไม่ได้อะไรตอบแทนเลยก็ตาม?`}
                         </div>
                         <p
-                          className={`text-xs md:text-xl lg:text-2xl mt-2 ${
+                          className={`text-xs md:text-xl 2xl:text-2xl mt-2 ${
                             activitiesError ? "text-red-500 font-bold" : ""
                           }`}
                         >
@@ -637,9 +624,9 @@ export default function S6_1({
                   </div>
 
                   {/* Choices (scroll ได้) - Mobile */}
-                  <div className="flex flex-col gap-2 md:gap-5 overflow-y-auto overflow-x-hidden w-full mt-5">
+                  <div className="flex flex-col gap-2 md:gap-5 overflow-y-auto overflow-x-hidden w-full mt-5 modal-scrollbar">
                     <m.div
-                      className="flex flex-wrap gap-[14px_18px] md:gap-[30px_40px] lg:gap-[40px_30px]    items-start justify-center"
+                      className="flex flex-wrap gap-[14px_18px] md:gap-[20px_25px] xl:gap-[30px_40px] 2xl:gap-[40px_30px] items-start justify-center"
                       style={{
                         opacity: choicesOpacity,
                         y: choicesY,
@@ -659,7 +646,7 @@ export default function S6_1({
                                 onClick={() =>
                                   handleActivityToggle(activity.label)
                                 }
-                                className="px-1 md:px-5 py-0 md:py-3 w-26 md:w-auto h-12 md:h-auto text-sm md:text-2xl lg:text-3xl"
+                                className="px-1 md:px-5 py-0 md:py-3 w-26 md:w-auto h-12 md:h-auto text-sm md:text-2xl 2xl:text-3xl"
                               />
                             ),
                           )}
@@ -671,11 +658,15 @@ export default function S6_1({
                               text={activity}
                               isSelected={true}
                               onClick={() => {
-                                setCustomHobbies((prev) =>
-                                  prev.filter((a) => a !== activity),
-                                );
+                                setCustomHobbies((prev) => {
+                                  const next = prev.filter((a) => a !== activity);
+                                  if (selectedHobbies.length + next.length < MIN_SELECTIONS) {
+                                    queueMicrotask(() => onCompleted?.(null));
+                                  }
+                                  return next;
+                                });
                               }}
-                              className="px-1 md:px-5 py-0 md:py-3 w-26 md:w-auto h-12 md:h-auto text-sm md:text-2xl lg:text-3xl"
+                              className="px-1 md:px-5 py-0 md:py-3 w-26 md:w-auto h-12 md:h-auto text-sm md:text-2xl 2xl:text-3xl"
                             />
                           ))}
 
@@ -687,7 +678,7 @@ export default function S6_1({
                               disabled={totalSelected >= MAX_SELECTIONS}
                               variant="default"
                               isSelected={true}
-                              className="text-sm md:text-2xl lg:text-3xl"
+                              className="text-sm md:text-2xl 2xl:text-3xl"
                             />
                           ) : (
                             <div className="flex items-center gap-2 md:gap-4">
@@ -696,14 +687,14 @@ export default function S6_1({
                                 onChange={setInputValue}
                                 placeholder="ระบุกิจกรรม"
                                 maxLength={20}
-                                className="text-sm md:text-2xl lg:text-3xl"
+                                className="text-sm md:text-2xl 2xl:text-3xl"
                               />
                               <GradientButton
                                 text=""
                                 isSelected={true}
                                 onClick={handleCustomActivitySubmit}
                                 variant="white"
-                                className="p-3! md:p-6 lg:p-8"
+                                className="p-3! md:p-6 2xl:p-8"
                               >
                                 <HiCheck />
                               </GradientButton>
@@ -712,7 +703,7 @@ export default function S6_1({
                                 isSelected={true}
                                 onClick={handleCustomActivityCancel}
                                 variant="transparent"
-                                className="p-3! md:p-6 lg:p-8"
+                                className="p-3! md:p-6 2xl:p-8"
                               >
                                 <HiOutlineX />
                               </GradientButton>
@@ -728,7 +719,7 @@ export default function S6_1({
                               text={label}
                               isSelected={topThreeHobbies.includes(label)}
                               onClick={() => handleSecondStepToggle(label)}
-                              className="px-1 md:px-5 py-0 md:py-3 w-26 md:w-auto h-12 md:h-auto text-sm md:text-2xl lg:text-3xl"
+                              className="px-1 md:px-5 py-0 md:py-3 w-26 md:w-auto h-12 md:h-auto text-sm md:text-2xl 2xl:text-3xl"
                             />
                           ))}
 
@@ -738,100 +729,55 @@ export default function S6_1({
                               text={activity}
                               isSelected={topThreeHobbies.includes(activity)}
                               onClick={() => handleSecondStepToggle(activity)}
-                              className="px-1 md:px-5 py-0 md:py-3 w-26 md:w-auto h-12 md:h-auto text-sm md:text-2xl lg:text-3xl"
+                              className="px-1 md:px-5 py-0 md:py-3 w-26 md:w-auto h-12 md:h-auto text-sm md:text-2xl 2xl:text-3xl"
                             />
                           ))}
                         </>
                       )}
                     </m.div>
 
-                    {/* Proceed Button Container */}
-                    <m.div
-                      className="flex w-full justify-center py-2 px-6"
-                      initial={{ opacity: 0, y: 20 }}
-                      animate={{
-                        opacity:
-                          step === 1 && totalSelected >= MIN_SELECTIONS ? 1 : 0,
-                        y:
-                          step === 1 && totalSelected >= MIN_SELECTIONS
-                            ? 0
-                            : 20,
-                      }}
-                      transition={{ duration: 0.5, ease: "easeOut" }}
-                    >
-                      {/* Proceed Button */}
-                      {step === 1 && totalSelected >= MIN_SELECTIONS && (
-                        <GradientButton
-                          text="ไปต่อ"
-                          isSelected={true}
-                          onClick={handleProceedToStep2}
-                          variant="white"
-                          className="text-lg md:text-2xl lg:text-3xl"
+                    {/* Navigation Buttons */}
+                    <div className="flex w-full justify-center gap-5 md:gap-10 py-2 px-6">
+                      {/* Back (Step 2 only) — แสดงทันทีเมื่ออยู่ step 2 */}
+                      {step === 2 && (
+                        <m.div
+                          initial={{ opacity: 0, y: 20 }}
+                          animate={{ opacity: 1, y: 0 }}
+                          transition={{ duration: 0.5, ease: "easeOut" }}
                         >
-                          <HiOutlineChevronDown className="ml-2" />
-                        </GradientButton>
+                          <GradientButton
+                            text="กลับไป"
+                            isSelected={true}
+                            onClick={handleBacktoStep1}
+                            variant="white"
+                            className="text-sm md:text-2xl 2xl:text-3xl px-5! md:px-10!"
+                          >
+                            <HiOutlineChevronUp className="ml-2" />
+                          </GradientButton>
+                        </m.div>
                       )}
-                    </m.div>
 
-                    <div className="flex justify-center py-2 px-6">
-                      <div className="flex flex-col gap-5 md:gap-10">
-                        <m.div
-                          initial={{ opacity: 0, y: 20 }}
-                          animate={{
-                            opacity: step === 2 ? 1 : 0,
-                            y: step === 2 ? 0 : 20,
-                          }}
-                          transition={{ duration: 0.5, ease: "easeOut" }}
-                        >
-                          {step === 2 && (
-                            <GradientButton
-                              text="กลับไป"
-                              isSelected={true}
-                              onClick={handleBacktoStep1}
-                              variant="white"
-                              className="text-lg md:text-2xl lg:text-3xl"
-                            >
-                              <HiOutlineChevronUp className="ml-2" />
-                            </GradientButton>
-                          )}
-                        </m.div>
-
-                        {/* Proceed Button for Step 2 */}
-                        <m.div
-                          initial={{ opacity: 0, y: 20 }}
-                          animate={{
-                            opacity:
-                              topThreeHobbies.length >= STEP2_MIN_SELECTIONS
-                                ? 1
-                                : 0,
-                            y:
-                              topThreeHobbies.length >= STEP2_MIN_SELECTIONS
-                                ? 0
-                                : 20,
-                          }}
-                          transition={{ duration: 0.5, ease: "easeOut" }}
-                        >
-                          {topThreeHobbies.length >= STEP2_MIN_SELECTIONS && (
-                            <GradientButton
-                              text="ไปต่อ"
-                              isSelected={true}
-                              onClick={() => {
-                                if (onCompleted) {
-                                  onCompleted({
-                                    selectedHobbies,
-                                    customHobbies,
-                                    topThreeHobbies,
-                                  });
-                                }
-                              }}
-                              variant="white"
-                              className="text-lg md:text-2xl lg:text-3xl"
-                            >
-                              <HiOutlineChevronDown className="ml-2" />
-                            </GradientButton>
-                          )}
-                        </m.div>
-                      </div>
+                      {/* Proceed (ใช้ร่วมกันทั้ง 2 step) */}
+                      <m.div
+                        initial={{ opacity: 0, y: 20 }}
+                        animate={{
+                          opacity: showProceed ? 1 : 0,
+                          y: showProceed ? 0 : 20,
+                        }}
+                        transition={{ duration: 0.5, ease: "easeOut" }}
+                      >
+                        {showProceed && (
+                          <GradientButton
+                            text="ไปต่อ"
+                            isSelected={true}
+                            onClick={handleProceed}
+                            variant="white"
+                            className="text-sm md:text-2xl 2xl:text-3xl px-5! md:px-10!"
+                          >
+                            <HiOutlineChevronDown className="ml-2" />
+                          </GradientButton>
+                        )}
+                      </m.div>
                     </div>
                   </div>
                 </>

@@ -1,7 +1,7 @@
 "use client";
 
 import { m, useScroll, useTransform } from "framer-motion";
-import { useMemo, useRef } from "react";
+import { useMemo, useRef, useState } from "react";
 import { getJsonUrl } from "@/utils/cloudinaryUtils";
 import GradientButton from "../components/button/GradientButton";
 import LazyLottie from "../components/reusable/LazyLottie";
@@ -26,6 +26,12 @@ interface TempleArrivalProps {
 export default function TempleArrival({ onStartCeremony }: TempleArrivalProps) {
   const ref = useRef<HTMLDivElement>(null);
   const { isMobile } = useDevice();
+  const [fadeOut, setFadeOut] = useState(false);
+
+  const handleStartCeremony = () => {
+    setFadeOut(true);
+    onStartCeremony();
+  };
 
   const { scrollYProgress } = useScroll({
     target: ref,
@@ -102,7 +108,13 @@ export default function TempleArrival({ onStartCeremony }: TempleArrivalProps) {
   );
 
   return (
-    <m.div ref={ref} className="relative h-[400vh]" style={{ opacity }}>
+    <m.div
+      ref={ref}
+      className="relative h-[400vh]"
+      style={{ opacity }}
+      animate={{ opacity: fadeOut ? 0 : 1 }}
+      transition={{ duration: 1, ease: "easeOut" }}
+    >
       {/* Background */}
       <div className="absolute w-screen inset-0" />
 
@@ -150,15 +162,9 @@ export default function TempleArrival({ onStartCeremony }: TempleArrivalProps) {
                 </m.div>
 
                 {/* Cat Lottie - ปรากฏตอนท้าย */}
-                {/*? Desktop: x=760.07, y=737.13, w=314.67, h=325.53 in 1920×1080 */}
-                {/*? Mobile:  x=248.99, y=1003.95, w=574.84, h=574.84 in 1080×1920 */}
                 <m.div
-                  className="absolute z-1"
+                  className="absolute z-1 top-[62.5%] left-[44.5%] w-[8.195%] h-[15.07%]"
                   style={{
-                    left: isMobile ? "11.525%" : "44.5%",
-                    top: isMobile ? "26.145%" : "62.5%",
-                    width: isMobile ? "26.615%" : "8.195%",
-                    height: isMobile ? "14.97%" : "15.07%",
                     opacity: catOpacity,
                     y: catY,
                   }}
@@ -186,7 +192,8 @@ export default function TempleArrival({ onStartCeremony }: TempleArrivalProps) {
           text={TEMPLE_DIALOGUE.deity}
           scrollYProgress={textProgress}
           as="p"
-          className="text-lg md:text-2xl text-white leading-relaxed drop-shadow-[0_0_10px_rgba(0,0,0,0.8)]"
+          className="text-lg md:text-2xl text-white leading-relaxed
+          drop-shadow-[0_0_5px_#ffffff]"
         />
       </m.div>
 
@@ -201,7 +208,7 @@ export default function TempleArrival({ onStartCeremony }: TempleArrivalProps) {
         <GradientButton
           text="เริ่มพิธีชั่งหัวใจ"
           isSelected={false}
-          onClick={onStartCeremony}
+          onClick={handleStartCeremony}
           variant="white"
           className="text-xl md:text-3xl"
         />

@@ -7,7 +7,7 @@ import {
   useTransform,
 } from "framer-motion";
 import Image from "next/image";
-import { useCallback, useMemo, useRef, useState } from "react";
+import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import MysteriousText from "@/app/components/reusable/MysteriousText";
 import SceneLayer, {
   type AnimationMap,
@@ -101,7 +101,7 @@ function JobAvatarCard({
       onClick={onClick}
       //? Desktop: 450.40/1680 = 26.81%, Mobile: 389.35/1080 = 36.05%
       className="flex flex-col items-center justify-center cursor-pointer
-        w-[26.81%] portrait:w-[69%] gap-0"
+        w-[26.81%] portrait:w-[68%] gap-0"
       whileHover={{ scale: 1.03 }}
       whileTap={{ scale: 0.97 }}
       transition={{ type: "spring", stiffness: 300, damping: 20 }}
@@ -137,14 +137,14 @@ function JobAvatarCard({
           <div className="flex flex-col items-center w-full gap-[4%] h-full">
             <p
               className={`
-                flex items-center justify-center text-center text-[10px] min-[375px]:text-xs md:text-base lg:text-xl select-none w-[140%] min-h-[50%] align-middle whitespace-pre-line
+                flex items-center justify-center text-center text-[10px] min-[376px]:text-xs md:text-base 2xl:text-xl select-none w-[140%] min-h-[50%] align-middle whitespace-pre-line
                  transition-colors duration-300
                 ${isSelected ? "text-yellow-300 font-semibold" : "text-white/90"}
               `}
             >
               {category}
             </p>
-            <p className="text-center text-[9px] min-[375px]:text-xs md:text-sm lg:text-base text-black line-clamp-2 select-none">
+            <p className="text-center text-[9px] min-[376px]:text-xs md:text-sm 2xl:text-base text-black line-clamp-2 select-none">
               {jobs.slice(0, 3).join(" · ")}
               {jobs.length > 3 && ` +${jobs.length - 3}`}
             </p>
@@ -207,6 +207,21 @@ export default function S9_2({ scrollYProgress, onCompleted }: S9_2Props) {
   const [slideDirection, setSlideDirection] = useState<1 | -1>(1);
 
   const totalPages = Math.ceil(JOB_CARDS.length / ITEMS_PER_PAGE);
+
+  //? Preload all card images เพื่อให้ icon ขึ้นเร็วเมื่อเลื่อนหน้า carousel
+  useEffect(() => {
+    const sources = [
+      CARD_FRAME_SRC,
+      SELECTED_FRAME_SRC,
+      ARROW_L_SRC,
+      ARROW_R_SRC,
+      ...JOB_CARDS.map((c) => c.avatarSrc),
+    ];
+    for (const src of sources) {
+      const img = new window.Image();
+      img.src = src;
+    }
+  }, []);
 
   //? Get cards for the current page
   const currentCards = useMemo(
@@ -333,11 +348,11 @@ export default function S9_2({ scrollYProgress, onCompleted }: S9_2Props) {
                 scrollYProgress={scrollYProgress}
                 startProgress={0.15}
                 endProgress={0.25}
-                className="text-white text-base md:text-2xl lg:text-3xl leading-normal text-center"
+                className="text-white text-sm md:text-2xl 2xl:text-3xl leading-normal text-center"
               />
               {/*? Selection Counter */}
               <m.p
-                className="text-center mt-1 sm:mt-2 select-none text-xs md:text-base xl:text-lg text-white"
+                className="text-center mt-1 sm:mt-2 select-none text-xs md:text-base xl:text-lg text-white whitespace-pre-line md:whitespace-normal"
                 style={{ opacity: carouselOpacity }}
               >
                 {selectedCards.length > 0
@@ -380,7 +395,7 @@ export default function S9_2({ scrollYProgress, onCompleted }: S9_2Props) {
                         opacity: { duration: 0.2 },
                       }}
                       className="flex justify-center items-center
-                        gap-[2.38%] portrait:flex-col portrait:gap-[2.80%]
+                        gap-[2.38%] portrait:flex-col portrai:gap-4
                         w-full h-full"
                     >
                       {currentCards.map((card) => (
@@ -406,7 +421,7 @@ export default function S9_2({ scrollYProgress, onCompleted }: S9_2Props) {
               </div>
 
               {/* Dot Navigation */}
-              <div className="mt-3 sm:mt-5 md:mt-10">
+              <div className="mt-5 xl:mt-10">
                 <DotNavigation
                   totalPages={totalPages}
                   currentPage={currentPage}

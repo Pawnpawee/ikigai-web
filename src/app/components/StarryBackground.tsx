@@ -1,7 +1,6 @@
 // app/components/layout/GlobalBackground.tsx
 "use client";
 
-import { m } from "framer-motion";
 import { useEffect, useState } from "react";
 import { useUI } from "@/app/contexts/UIStarContext";
 import { getJsonUrl } from "@/utils/cloudinaryUtils";
@@ -15,26 +14,19 @@ const StarryBackground = () => {
     setIsMounted(true);
   }, []);
 
-  if (!isMounted) return null;
+  //? Unmount ทั้ง component เลยเมื่อไม่ต้องการ เพื่อหยุด Lottie animation loop
+  if (!isMounted || !showStars) return null;
 
   return (
-    <>
-      {showStars && (
-        <m.div
-          key="global-starry-bg"
-          transition={{ duration: 1 }}
-          className="fixed inset-0 w-full h-full pointer-events-none flex justify-center items-center z-1"
-        >
-          <LazyLottie
-            src={getJsonUrl("Scene/Hero/starry-bg.json")}
-            loop
-            play={true}
-            ignoreAspectRatio={true}
-            className="w-full h-full"
-          />
-        </m.div>
-      )}
-    </>
+    <div className="fixed inset-0 w-full h-full pointer-events-none flex justify-center items-center z-1">
+      <LazyLottie
+        src={getJsonUrl("Scene/Hero/starry-bg.json")}
+        loop
+        play={true}
+        ignoreAspectRatio={true}
+        className="w-full h-full"
+      />
+    </div>
   );
 };
 

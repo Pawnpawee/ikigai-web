@@ -131,43 +131,41 @@ export const ANALYSIS_STEPS_CONFIG = [
     id: 1,
     text: "กำลังวิเคราะห์ What you love",
     duration: 15000, // 15 seconds
-    icon: "❤️",
+    icon: getImgPath("Icon/love.webp"),
   },
   {
     id: 2,
     text: "กำลังวิเคราะห์ What you good at",
     duration: 15000, // 15 seconds
-    icon: "⭐",
+    icon: getImgPath("Icon/skill.webp"),
   },
   {
     id: 3,
     text: "กำลังวิเคราะห์ What the world need",
     duration: 15000, // 15 seconds
-    icon: "🌍",
+    icon: getImgPath("Icon/world.webp"),
   },
   {
     id: 4,
     text: "กำลังวิเคราะห์ What you can be paid for",
     duration: 15000, // 15 seconds
-    icon: "💰",
+    icon: getImgPath("Icon/paid.webp"),
   },
   {
     id: 5,
     text: "กำลังวิเคราะห์ อาชีพที่ใช่สำหรับคุณ",
     duration: 30000, // 30 seconds
-    icon: "💼",
+    icon: getImgPath("Icon/paid.webp"),
   },
   {
     id: 6,
     text: "กำลังวิเคราะห์ ikigai ของคุณ",
     duration: 30000, // 30 seconds
-    icon: "✨",
   },
   {
     id: 7,
     text: "ใกล้เสร็จแล้ว...",
     duration: 10000, // 10 seconds
-    icon: "🎯",
   },
 ];
 

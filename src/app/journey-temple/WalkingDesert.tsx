@@ -8,7 +8,6 @@ import SceneLayer, {
 } from "@/app/components/reusable/SceneLayer";
 import { useDevice } from "@/app/contexts/DeviceContext";
 import { SCENE_WALK_DESERT_ITEMS } from "@/app/data/scene_walk_desert.data";
-import { useStarsVisibility } from "@/app/hooks/useStarsVisibility";
 import { getJsonUrl } from "@/utils/cloudinaryUtils";
 
 //? Scene 10.1: Walking through the desert
@@ -43,7 +42,7 @@ export default function WalkingDesert() {
   const humanCamelRight = useTransform(
     scrollYProgress,
     [0.3, 1],
-    ["-50%", isMobile ? "30%" : "8%"],
+    ["-50%", isMobile ? "40%" : "8%"],
   );
 
   //? Sun: เคลื่อนที่แนวทแยง ตลอดการ scroll
@@ -62,11 +61,6 @@ export default function WalkingDesert() {
     }),
     [set1Y, set2Y, set1Opacity, set2Opacity],
   );
-
-  //? Stars: ซ่อนจนกว่าจะถึงท้าย section
-  useStarsVisibility(scrollYProgress, {
-    shouldShow: (p) => p >= 1,
-  });
 
   return (
     <m.div
@@ -112,7 +106,7 @@ export default function WalkingDesert() {
         </m.div>
 
         {/* Desert layers + human_camel */}
-        <m.div className="absolute aspect-video w-full portrait:h-full portrait:w-[200%]">
+        <m.div className="absolute aspect-video w-full  portrait:h-full portrait:w-[200%]">
           <SceneLayer
             items={SCENE_WALK_DESERT_ITEMS}
             animations={animations}
@@ -122,8 +116,9 @@ export default function WalkingDesert() {
           {/* human_camel (Lottie - คนขี่อูฐเดินทาง) */}
           {/* Figma Desktop: w=924.08/1920=48.1%, h=638.51/1080=59.1% */}
           <m.div
-            className="absolute w-[48.1%] h-[59.1%] bottom-[-5.3%] portrait:bottom-[-3%]"
-            style={{ right: humanCamelRight }}
+            className="absolute w-[48.1%] h-[59.1%] bottom-[-5.3%]"
+            style={{ 
+              right: humanCamelRight }}
           >
             <LazyLottie
               src={getJsonUrl("Scene/Scene10/human-camel.json")}

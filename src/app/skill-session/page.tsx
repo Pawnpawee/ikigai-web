@@ -13,6 +13,7 @@ import { useStarsVisibility } from "@/app/hooks/useStarsVisibility";
 import { API_BASE_URL } from "@/utils/appConfig";
 import { getAudioUrl } from "@/utils/cloudinaryUtils";
 import ErrorModal from "../components/modal/ErrorModal";
+import LoadingScreen from "../components/reusable/LoadingScreen";
 import ProgressBar from "../components/reusable/ProgressBar";
 import { useAudio } from "../contexts/AudioContext";
 import { useUser } from "../contexts/UserContext";
@@ -37,6 +38,7 @@ export default function SessionSkillPage() {
   const lenis = useLenis();
   const router = useRouter();
 
+  const [isSubmitting, setIsSubmitting] = useState(false);
   const [isS7_1Completed, setIsS7_1Completed] = useState(false);
   const [isS7_2Completed, setIsS7_2Completed] = useState(false);
   const [s7_1Data, setS7_1Data] = useState<S7_1Data | null>(null);
@@ -188,6 +190,7 @@ export default function SessionSkillPage() {
 
   //? Submit skill data to API
   const handleSkillSubmit = async (data: SkillData) => {
+    setIsSubmitting(true);
     try {
       const response = await fetch(`${API_BASE_URL}/api/user/progress/skill`, {
         method: "POST",
@@ -204,6 +207,7 @@ export default function SessionSkillPage() {
       });
 
       if (!response.ok) {
+        setIsSubmitting(false);
         setShowErrorModal(true);
         return;
       }
@@ -212,6 +216,7 @@ export default function SessionSkillPage() {
       router.push("/world-session");
     } catch (error) {
       console.error("Error submitting skill data:", error);
+      setIsSubmitting(false);
       setShowErrorModal(true);
     }
   };
@@ -223,6 +228,9 @@ export default function SessionSkillPage() {
 
   return (
     <div ref={ref} className="h-[1000vh] w-full relative bg-black">
+      {/* Loading Screen */}
+      <LoadingScreen isLoading={isSubmitting} />
+
       {/* Error Modal */}
       <ErrorModal
         isOpen={showErrorModal}

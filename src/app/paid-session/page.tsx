@@ -13,6 +13,7 @@ import { useStarsVisibility } from "@/app/hooks/useStarsVisibility";
 import { API_BASE_URL } from "@/utils/appConfig";
 import { getAudioUrl } from "@/utils/cloudinaryUtils";
 import ErrorModal from "../components/modal/ErrorModal";
+import LoadingScreen from "../components/reusable/LoadingScreen";
 import ProgressBar from "../components/reusable/ProgressBar";
 import { useAudio } from "../contexts/AudioContext";
 import { useUser } from "../contexts/UserContext";
@@ -47,6 +48,7 @@ export default function PaidSessionPage() {
   const [s9_1Data, setS9_1Data] = useState<S9_1Data | null>(null);
   const [s9_2Data, setS9_2Data] = useState<S9_2Data | null>(null);
   const [showErrorModal, setShowErrorModal] = useState(false);
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
   //? SFX tracking ref สำหรับเสียง ambient (market + person_walking)
   const hasPlayedAmbient = useRef(false);
@@ -218,6 +220,7 @@ export default function PaidSessionPage() {
 
   //? Submit paid data to API
   const handlePaidSubmit = async (data: PaidData) => {
+    setIsSubmitting(true);
     try {
       const response = await fetch(`${API_BASE_URL}/api/user/progress/paid`, {
         method: "POST",
@@ -231,6 +234,7 @@ export default function PaidSessionPage() {
       });
 
       if (!response.ok) {
+        setIsSubmitting(false);
         setShowErrorModal(true);
         return;
       }
@@ -239,6 +243,7 @@ export default function PaidSessionPage() {
       router.push("/journey-temple");
     } catch (error) {
       console.error("Error submitting paid data:", error);
+      setIsSubmitting(false);
       setShowErrorModal(true);
     }
   };
@@ -250,6 +255,9 @@ export default function PaidSessionPage() {
 
   return (
     <div ref={ref} className="h-[1000vh] w-full relative bg-black">
+      {/* Loading Screen */}
+      <LoadingScreen isLoading={isSubmitting} />
+
       {/* Error Modal */}
       <ErrorModal
         isOpen={showErrorModal}

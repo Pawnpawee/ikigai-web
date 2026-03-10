@@ -247,13 +247,13 @@ export default function S8_4({
               scrollYProgress={scrollYProgress}
               startProgress={0.12}
               endProgress={0.22}
-              className="text-white text-xs md:text-xl lg:text-2xl leading-relaxed tracking-wide"
+              className="text-white text-xs md:text-xl 2xl:text-2xl leading-relaxed tracking-wide"
             />
           </m.div>
 
           {/*? Choice 1 Buttons — horizontal spread (Figma: "choice 1") */}
           <m.div
-            className="absolute flex justify-between items-center md:gap-5"
+            className="absolute flex justify-between items-center md:gap-5 portrait:flex-col portrait:gap-5"
             style={{
               ...getPos(
                 S8_4_CHOICE1_POSITION.style,
@@ -273,7 +273,7 @@ export default function S8_4({
                 variant={
                   noManualAnswer === choice.id ? "default" : "transparent"
                 }
-                className="px-6 py-2 md:px-12 md:py-4 text-xs md:text-lg lg:text-xl shrink-0 whitespace-pre-line"
+                className="px-6 py-2 md:px-12 md:py-4 text-xs md:text-lg 2xl:text-xl shrink-0 whitespace-pre-line"
               />
             ))}
           </m.div>
@@ -295,7 +295,7 @@ export default function S8_4({
               scrollYProgress={scrollYProgress}
               startProgress={0.7}
               endProgress={0.8}
-              className="text-white text-xs md:text-xl lg:text-2xl leading-relaxed tracking-wide"
+              className="text-white text-xs md:text-xl 2xl:text-2xl leading-relaxed tracking-wide"
             />
           </m.div>
 
@@ -325,7 +325,7 @@ export default function S8_4({
                       variant={
                         mismatchAnswer === choice.id ? "default" : "transparent"
                       }
-                      className="px-6 py-2 md:px-12 md:py-4 text-xs md:text-lg lg:text-xl shrink-0 whitespace-pre-line"
+                      className="px-6 py-2 md:px-12 md:py-4 text-xs md:text-lg 2xl:text-xl shrink-0 whitespace-pre-line"
                     />
                   ))}
                 </div>
@@ -338,7 +338,7 @@ export default function S8_4({
                       ? "default"
                       : "transparent"
                   }
-                  className="px-6 py-2 md:px-12 md:py-4 text-xs md:text-lg lg:text-xl shrink-0 whitespace-pre-line"
+                  className="px-6 py-2 md:px-12 md:py-4 text-xs md:text-lg 2xl:text-xl shrink-0 whitespace-pre-line"
                 />
               </div>
             ) : (
@@ -354,7 +354,7 @@ export default function S8_4({
                       variant={
                         mismatchAnswer === choice.id ? "default" : "transparent"
                       }
-                      className="px-8 py-3 md:px-12 md:py-4 text-sm md:text-lg lg:text-xl shrink-0 whitespace-pre-line"
+                      className="px-8 py-3 md:px-12 md:py-4 text-sm md:text-lg 2xl:text-xl shrink-0 whitespace-pre-line"
                     />
                   ))}
                 </div>
@@ -367,7 +367,7 @@ export default function S8_4({
                       ? "default"
                       : "transparent"
                   }
-                  className="px-8 py-3 md:px-12 md:py-4 text-sm md:text-lg lg:text-xl shrink-0"
+                  className="px-8 py-3 md:px-12 md:py-4 text-sm md:text-lg 2xl:text-xl shrink-0"
                 />
               </div>
             )}

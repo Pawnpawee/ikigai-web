@@ -43,9 +43,7 @@ export default function Home() {
 
   const sleepyTexts = [
     "งั้นอีก 5 นาทีนะ...",
-    "ฝันนี้ยังดีอยู่เลยหรอ...",
-    "โลกความจริงมันเหนื่อยสินะ...",
-    "ZZZzzz...",
+    "ถึงเวลาที่ต้อง 'ตื่น' แล้วล่ะ...",
   ];
   const [snoozeCount, setSnoozeCount] = useState(0);
   const [secondaryBtnText, setSecondaryBtnText] = useState<string | null>(
@@ -63,13 +61,12 @@ export default function Home() {
     setTimeout(() => {
       const nextIndex = snoozeCount;
 
-      //? เช็คว่ายังมีข้อความเหลือไหม?
-      if (nextIndex < sleepyTexts.length) {
-        setDecisionText(sleepyTexts[nextIndex]);
-        setSnoozeCount((prev) => prev + 1);
-      } else {
-        //? ข้อความหมดแล้ว บังคับตื่น
-        setDecisionText("ถึงเวลาที่ต้อง 'ตื่น' แล้วล่ะ...");
+      const text = sleepyTexts[nextIndex];
+      setDecisionText(text);
+      setSnoozeCount((prev) => prev + 1);
+
+      //? คลิกครั้งที่ 2 = ข้อความสุดท้าย → ซ่อนปุ่ม บังคับตื่น
+      if (nextIndex >= sleepyTexts.length - 1) {
         setSecondaryBtnText(null);
       }
 

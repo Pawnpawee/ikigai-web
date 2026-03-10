@@ -223,7 +223,7 @@ export default function S6_4({ scrollYProgress, onContinue }: S6_4Props) {
           </m.div>
 
           {/* Text and Choice Buttons Container */}
-          <div className="flex flex-col items-center justify-between h-screen w-full gap-12">
+          <div className="flex flex-col items-center justify-between h-full w-full gap-12">
             <m.div
               className="flex flex-col items-center gap-12 pt-30 md:pt-50 "
               style={{
@@ -232,7 +232,7 @@ export default function S6_4({ scrollYProgress, onContinue }: S6_4Props) {
             >
               {/* Question Text */}
               <div className="flex flex-col items-center text-center text-white">
-                <div className="text-lg md:text-3xl lg:text-4xl leading-relaxed">
+                <div className="text-lg md:text-3xl 2xl:text-4xl leading-relaxed">
                   <MysteriousText
                     text="ดูเหมือนจะเป็นงานอดิเรกที่ดีเลยนะ"
                     scrollYProgress={scrollYProgress}
@@ -261,7 +261,7 @@ export default function S6_4({ scrollYProgress, onContinue }: S6_4Props) {
                     text={choice.text}
                     isSelected={selectedChoice === choice.id}
                     onClick={() => handleChoiceSelect(choice.id)}
-                    className="px-8 py-2 md:px-16 md:py-4 text-sm md:text-2xl lg:text-3xl"
+                    className="px-8 py-2 md:px-16 md:py-4 text-sm md:text-2xl 2xl:text-3xl"
                   />
                 ))}
               </div>
@@ -269,7 +269,7 @@ export default function S6_4({ scrollYProgress, onContinue }: S6_4Props) {
 
             {/* Continue Button */}
             <m.div
-              className="flex w-full justify-end portrait:justify-center px-25 lg:px-50 portrait:py-20"
+              className="flex w-full justify-end portrait:justify-center px-25 2xl:px-50  pb-18 min-[376px]:pb-25 2xl:pb-35"
               style={{ opacity: continueButtonOpacity }}
               initial={{ y: 20 }}
               animate={{ y: showContinueButton ? 0 : 20 }}
@@ -280,7 +280,7 @@ export default function S6_4({ scrollYProgress, onContinue }: S6_4Props) {
                 isSelected={true}
                 onClick={handleContinue}
                 variant="default"
-                className="text-lg md:text-2xl lg:text-3xl"
+                className="text-sm md:text-2xl 2xl:text-3xl"
               >
                 <HiOutlineChevronDown className="ml-2" />
               </GradientButton>

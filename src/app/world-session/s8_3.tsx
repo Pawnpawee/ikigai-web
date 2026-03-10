@@ -200,7 +200,7 @@ export default function S8_3({ scrollYProgress }: S8_3Props) {
       className="fixed flex justify-center top-0 h-screen w-screen bg-s8-3 overflow-hidden"
       style={{ opacity, zIndex }}
     >
-      <m.div className="flex items-center h-screen w-screen portrait:w-auto">
+      <m.div className="flex items-center h-screen w-screen  portrait:w-auto">
         <SceneLayer
           items={sceneItems}
           animations={animations}

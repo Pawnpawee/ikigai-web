@@ -199,7 +199,7 @@ export default function S8_5({ scrollYProgress, onCompleted }: S8_5Props) {
       className="fixed flex justify-center top-0 h-screen w-screen bg-s8-5 overflow-hidden"
       style={{ opacity, zIndex }}
     >
-      <m.div className="flex items-center h-screen w-screen portrait:w-auto">
+      <m.div className="flex items-center h-screen w-screen  portrait:w-auto">
         <SceneLayer
           items={SCENE_S8_5_ITEMS}
           animations={animations}
@@ -207,7 +207,7 @@ export default function S8_5({ scrollYProgress, onCompleted }: S8_5Props) {
         >
           {/* ═══ Stone Lake Night (LazyLottie) ═══ */}
           <m.div
-            className="absolute"
+            className="absolute z-0"
             style={{
               //? Desktop: 2834.72×724.84 at (-527.81, 219.15) in 1920×1080
               //? Mobile: 3918.11×539.48 at (-1659.24, 506.39) in 1080×1920
@@ -228,13 +228,13 @@ export default function S8_5({ scrollYProgress, onCompleted }: S8_5Props) {
 
           {/* ═══ Phase 2: CSS Dark Overlay (replaces bgblack image) ═══ */}
           <m.div
-            className="fixed inset-0 bg-black"
+            className="fixed inset-0 bg-black z-3"
             style={{ opacity: darkOverlayOpacity }}
           />
 
           {/* ═══ Phase 2: Cat (LazyLottie) ═══ */}
           <m.div
-            className="absolute z-1"
+            className="absolute z-4"
             style={{
               width: isMobile ? "67.28%" : "33.74%",
               height: isMobile ? "38.55%" : "61.11%",
@@ -256,7 +256,7 @@ export default function S8_5({ scrollYProgress, onCompleted }: S8_5Props) {
           {/*? Desktop: 867:8161 question frame — flex-col, items-center */}
           {/*? Text 40px, gap 60px, btn row w=444/582=76.29% justify-between */}
           <m.div
-            className="absolute flex flex-col items-center"
+            className="absolute flex flex-col items-center z-5"
             style={{
               ...(isMobile
                 ? S8_5_QUESTION_POSITION.mobileStyle
@@ -272,7 +272,7 @@ export default function S8_5({ scrollYProgress, onCompleted }: S8_5Props) {
                 scrollYProgress={scrollYProgress}
                 startProgress={0.6}
                 endProgress={0.7}
-                className="text-white text-base md:text-2xl lg:text-3xl leading-normal tracking-[0.6px]"
+                className="text-white text-base md:text-2xl 2xl:text-3xl leading-normal tracking-[0.6px]"
               />
             </div>
 
@@ -298,7 +298,7 @@ export default function S8_5({ scrollYProgress, onCompleted }: S8_5Props) {
                   variant={
                     futureAnswer === choice.id ? "default" : "transparent"
                   }
-                  className="px-8 py-2 md:px-14 md:py-4 text-sm md:text-2xl lg:text-3xl shrink-0"
+                  className="px-8 py-2 md:px-14 md:py-4 text-sm md:text-2xl 2xl:text-3xl shrink-0"
                 />
               ))}
             </div>
@@ -316,7 +316,7 @@ export default function S8_5({ scrollYProgress, onCompleted }: S8_5Props) {
                 isSelected={true}
                 onClick={handleContinue}
                 variant="default"
-                className="text-lg md:text-2xl lg:text-3xl"
+                className="text-sm md:text-2xl 2xl:text-3xl"
               >
                 <HiOutlineChevronDown className="ml-2" />
               </GradientButton>

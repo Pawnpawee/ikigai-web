@@ -22,9 +22,7 @@ export default function DreamingPage() {
 
   const notLookTexts = [
     "ไม่อยากดูหรอกหรอ?...",
-    "จะอยู่ตรงนี้ก่อน?...",
-    "มันส่งเสียงเรียกซะแล้ว...",
-    "บางอย่างกำลังเข้ามาใกล้แล้ว...",
+    "ต้องเผชิญหน้ากับมัน แล้วล่ะ...",
   ];
   const [snoozeCount, setSnoozeCount] = useState(0);
   const [secondaryBtnText, setSecondaryBtnText] = useState<string | null>(
@@ -32,7 +30,7 @@ export default function DreamingPage() {
   );
   const [isSnoozing, setIsSnoozing] = useState(false);
   const [decisionText, setDecisionText] = useState(
-    "คุณตกลงมาจุดสิ้นสุด.... คุณเจอกับบางอย่างกำลังเดินใกล้เข้ามาจะดูมันไหม",
+    "คุณตกลงมาจุดสิ้นสุด.... \n คุณเจอกับบางอย่างกำลังเดินใกล้เข้ามาจะดูมันไหม",
   );
 
   //? ตั้งเพลง bg ทุกครั้งที่เข้าหน้า ไม่ว่าจะ mute หรือไม่ เพื่อให้ soundRef ตรงกับหน้าปัจจุบัน
@@ -47,19 +45,18 @@ export default function DreamingPage() {
     setTimeout(() => {
       const nextIndex = snoozeCount;
 
-      //? เช็คว่ายังมีข้อความเหลือไหม?
-      if (nextIndex < notLookTexts.length) {
-        setDecisionText(notLookTexts[nextIndex]);
-        setSnoozeCount((prev) => prev + 1);
+      const text = notLookTexts[nextIndex];
+      setDecisionText(text);
+      setSnoozeCount((prev) => prev + 1);
 
-        //? เล่นเสียงแมวเมี่ยวตอนข้อความที่ 3
-        if (nextIndex === 2 && !isMuted) {
-          playSfx(getAudioUrl("Sound/3-4/cat-meow.mp3"));
-        }
-      } else {
-        //? ข้อความหมดแล้ว บังคับตื่น
-        setDecisionText("ต้องเผชิญหน้ากับมัน แล้วล่ะ...");
+      //? คลิกครั้งที่ 2 = ข้อความสุดท้าย → ซ่อนปุ่ม บังคับดู
+      if (nextIndex >= notLookTexts.length - 1) {
         setSecondaryBtnText(null);
+      }
+
+      //? เล่นเสียงแมวเมี่ยวตอนคลิกครั้งแรก
+      if (nextIndex === 0 && !isMuted) {
+        playSfx(getAudioUrl("Sound/3-4/cat-meow.mp3"));
       }
 
       // จบ Effect ตาปรือ

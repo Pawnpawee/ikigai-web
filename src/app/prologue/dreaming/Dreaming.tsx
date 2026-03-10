@@ -67,6 +67,12 @@ export default function Dreaming() {
     [],
   );
 
+  const textMobile = useMemo(
+    () =>
+      `ตำนานอียิปต์เชื่อว่า \nเมื่อตายไปแล้วจะต้องเดินทางไปยัง\n'ดินแดนแห่งการพิพากษา\n ภายในห้องโถงแห่งสัจจะ\nหัวใจจะถูกนำไปชั่งเทียบกับขนนก\n หากหัวใจเบากว่าขนนก\nก็จะเข้าถึงชีวิตหลังความตาย\n เดินทางสู่ทุ่งแห่งความสุข\nแต่ถ้าหากจิตใจหนักแน่น \nมักถูกกลืนกินด้วยบางสิ่ง…`,
+    [],
+  );
+
   const animations: AnimationMap = useMemo(
     () => ({
       1: { y: set1Y, opacity: set1Opacity },
@@ -125,11 +131,11 @@ export default function Dreaming() {
         </m.div>
 
         {/* ส่วนล่าง: desert และ animal (bottom-0) */}
-        <m.div className="absolute aspect-video w-full portrait:h-full portrait:w-[200%] ">
+        <m.div className="absolute aspect-video w-full portrait:h-full portrait:w-[200%] scene-fit">
           <SceneLayer
             items={SCENE_DREAMING_ITEMS}
             animations={animations}
-            containerAspectRatio="16 / 9"
+            containerAspectRatio="1920 / 1080"
           />
 
           {/* animal */}
@@ -156,7 +162,7 @@ export default function Dreaming() {
         <div className="absolute inset-0 flex items-center justify-center text-center px-4">
           <m.div style={{ opacity: set1Opacity }}>
             <WordByWordAnimation
-              text={text}
+              text={isMobile ? textMobile : text}
               scrollYProgress={textAnimationProgress}
               as="p"
               className="text-lg md:text-2xl text-white w-80 md:w-140 xl:w-full"

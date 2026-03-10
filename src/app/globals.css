@@ -55,6 +55,15 @@
   }
 }
 /* Gradient utilities */
+
+/*? Desktop device ที่ ratio ไม่ตรง 16:9 (เช่น MacBook 16:10)
+    ให้ SceneLayer เต็มจอแนวตั้ง โดย width เกินออกไปแล้ว clip ด้วย parent overflow-hidden */
+@utility scene-fit {
+  @media (orientation: landscape) {
+    min-width: calc(100vh * 16 / 9);
+  }
+}
+
 @utility bg-s1 {
   background: linear-gradient(
     180deg,

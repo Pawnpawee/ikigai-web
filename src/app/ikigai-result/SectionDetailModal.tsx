@@ -2,6 +2,7 @@
 
 import { AnimatePresence, m } from "framer-motion";
 import Image from "next/image";
+import { createPortal } from "react-dom";
 import { useDevice } from "@/app/contexts/DeviceContext";
 import { getModalConfig } from "@/app/data/ikigai_modal.data";
 import type { IkigaiAnalysis, IkigaiSection } from "@/app/types/ikigai.types";
@@ -59,7 +60,7 @@ export default function SectionDetailModal({
     },
   ];
 
-  return (
+  return createPortal(
     <AnimatePresence>
       {isOpen && (
         <>
@@ -108,7 +109,7 @@ export default function SectionDetailModal({
 
                 {/* Title */}
                 <h2
-                  className="font-bold text-lg md:text-3xl lg:text-4xl leading-tight"
+                  className="font-bold text-lg md:text-3xl 2xl:text-4xl leading-tight"
                   style={{ color: config.titleColor }}
                 >
                   {config.title}
@@ -175,14 +176,14 @@ export default function SectionDetailModal({
                             sizes="24px"
                           />
                         </div>
-                        <h3 className="text-white font-semibold text-base md:text-xl lg:text-2xl">
+                        <h3 className="text-white font-semibold text-base md:text-xl 2xl:text-2xl">
                           {section.label}
                         </h3>
                       </div>
 
                       {/* Section Content */}
                       {section.type === "text" ? (
-                        <p className="text-white/90 leading-relaxed text-sm md:text-base lg:text-lg whitespace-pre-line pl-[3.44%]">
+                        <p className="text-white/90 leading-relaxed text-sm md:text-base 2xl:text-lg whitespace-pre-line pl-[3.44%]">
                           {section.content as string}
                         </p>
                       ) : (
@@ -190,7 +191,7 @@ export default function SectionDetailModal({
                           {(section.content as string[]).map((item, idx) => (
                             <m.li
                               key={`${section.id}-${idx}`}
-                              className="flex gap-[1.17%] text-white/90 leading-relaxed text-sm md:text-base lg:text-lg"
+                              className="flex gap-[1.17%] text-white/90 leading-relaxed text-sm md:text-base 2xl:text-lg"
                               initial={{ opacity: 0, x: -12 }}
                               animate={{ opacity: 1, x: 0 }}
                               transition={{
@@ -214,6 +215,7 @@ export default function SectionDetailModal({
           </m.div>
         </>
       )}
-    </AnimatePresence>
+    </AnimatePresence>,
+    document.body,
   );
 }

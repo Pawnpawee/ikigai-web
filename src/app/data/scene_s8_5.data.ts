@@ -65,6 +65,7 @@ export const SCENE_S8_5_ITEMS: SceneItemData[] = [
       top: "51.32%",
     },
     animGroup: 3,
+    className: "z-1",
   },
   {
     id: "lotus_4",
@@ -85,6 +86,7 @@ export const SCENE_S8_5_ITEMS: SceneItemData[] = [
       top: "53.48%",
     },
     animGroup: 4,
+    className: "z-1",
   },
   {
     id: "lotus_2",
@@ -105,6 +107,7 @@ export const SCENE_S8_5_ITEMS: SceneItemData[] = [
       top: "49.68%",
     },
     animGroup: 5,
+    className: "z-1",
   },
   {
     id: "lotus_1",
@@ -125,6 +128,7 @@ export const SCENE_S8_5_ITEMS: SceneItemData[] = [
       top: "60.55%",
     },
     animGroup: 6,
+    className: "z-1",
   },
   {
     id: "lotus_3",
@@ -145,6 +149,7 @@ export const SCENE_S8_5_ITEMS: SceneItemData[] = [
       top: "43.69%",
     },
     animGroup: 7,
+    className: "z-1",
   },
   {
     id: "head",
@@ -165,6 +170,7 @@ export const SCENE_S8_5_ITEMS: SceneItemData[] = [
       top: "69.69%",
     },
     animGroup: 8,
+    className: "z-2",
   },
 
   // ────────────────────────────────────────────────────

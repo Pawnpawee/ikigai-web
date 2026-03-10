@@ -107,13 +107,13 @@ export const SCENE_S6_1_ITEMS: SceneItemData[] = [
       width: "108.84%", // 2089.82 / 1920
       height: "26.99%", // 583.06 / 2160
       left: "-6.79%", // -130.348 / 1920
-      top: "73.01%", // 1576.94 / 2160
+      bottom: "-0.5%", // 1576.94 / 2160
     },
     mobileStyle: {
       width: "301.78%",
       height: "19.33%",
       left: "-92.31%",
-      top: "80.67%",
+      bottom: "-0.5%",
     },
     animGroup: 7,
   },

@@ -326,7 +326,7 @@ export const PERCENT_TEXT_POS = {
   //? Desktop: x=354 (center), y=949
   desktop: { left: "18.44%", top: "87.87%" },
   //? Mobile: x=391 (center ~540 centered), y=903
-  mobile: { left: "0%", top: "47.03%" },
+  mobile: { left: "0%", top: "45.8%" },
 };
 
 export const DESCRIPTION_POS = {
@@ -350,8 +350,8 @@ export const SAVE_BTN_POS = {
   },
   //? Mobile: x=950.39, y=111.91, w=69.44, h=69.44
   mobile: {
-    left: "88%",
-    top: "5.83%",
+    left: "77.5%",
+    top: "31%",
     width: "6.43%",
     height: "3.62%",
   },
@@ -367,8 +367,8 @@ export const SHARE_BTN_POS = {
   },
   //? Mobile: x=950.39, y=202.49, w=69.44, h=69.44
   mobile: {
-    left: "88%",
-    top: "10.55%",
+    left: "77.5%",
+    top: "36%",
     width: "6.43%",
     height: "3.62%",
   },
@@ -384,8 +384,8 @@ export const CONTINUE_BTN_POS = {
   },
   //? Mobile: ถัดจาก share button ลงล่าง
   mobile: {
-    left: "88%",
-    top: "16%",
+    left: "77.5%",
+    top: "41%",
     width: "6.43%",
     height: "3.62%",
   },

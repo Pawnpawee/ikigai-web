@@ -72,6 +72,7 @@ export const SCENE_S8_1_ITEMS: SceneItemData[] = [
       top: "50.97%",
     },
     animGroup: 3,
+    className: "z-1",
   },
   {
     id: "lotus_4",
@@ -92,6 +93,7 @@ export const SCENE_S8_1_ITEMS: SceneItemData[] = [
       top: "53.18%",
     },
     animGroup: 4,
+    className: "z-1",
   },
   {
     id: "lotus_2",
@@ -112,6 +114,7 @@ export const SCENE_S8_1_ITEMS: SceneItemData[] = [
       top: "49.48%",
     },
     animGroup: 5,
+    className: "z-1",
   },
   {
     id: "lotus_1",
@@ -132,6 +135,7 @@ export const SCENE_S8_1_ITEMS: SceneItemData[] = [
       top: "60.28%",
     },
     animGroup: 6,
+    className: "z-1",
   },
   {
     id: "lotus_3",
@@ -152,6 +156,7 @@ export const SCENE_S8_1_ITEMS: SceneItemData[] = [
       top: "43.03%",
     },
     animGroup: 7,
+    className: "z-1",
   },
   {
     id: "head",
@@ -172,7 +177,7 @@ export const SCENE_S8_1_ITEMS: SceneItemData[] = [
       top: "69.64%",
     },
     animGroup: 8,
-    className: "z-1",
+    className: "z-2",
   },
 
   //? ── Phase 2: Bloom Lotuses (100vh) ──
@@ -196,6 +201,7 @@ export const SCENE_S8_1_ITEMS: SceneItemData[] = [
       top: "49.01%",
     },
     animGroup: 9,
+    className: "z-1",
   },
   {
     id: "lotus_1_bloom",
@@ -216,6 +222,7 @@ export const SCENE_S8_1_ITEMS: SceneItemData[] = [
       top: "60.01%",
     },
     animGroup: 10,
+    className: "z-1",
   },
   {
     id: "lotus_3_bloom",
@@ -236,6 +243,7 @@ export const SCENE_S8_1_ITEMS: SceneItemData[] = [
       top: "42.90%",
     },
     animGroup: 11,
+    className: "z-1",
   },
 
   //? ── Phase 3: Cat (200vh) ──

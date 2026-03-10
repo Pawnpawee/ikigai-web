@@ -8,7 +8,7 @@ const getApiBaseUrl = (): string => {
 
   if (nodeEnv === "production") {
     throw new Error(
-      "❌ NEXT_PUBLIC_API_BASE_URL is not set in production environment.",
+      "NEXT_PUBLIC_API_BASE_URL is not set in production environment.",
     );
   }
 

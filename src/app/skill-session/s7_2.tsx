@@ -228,7 +228,7 @@ export default function S7_2({ scrollYProgress, onCompleted }: S7_2Props) {
       className="fixed flex justify-center top-0 h-screen w-screen overflow-hidden"
       style={{ opacity, zIndex }}
     >
-      <m.div className="flex items-center h-screen w-screen portrait:w-auto">
+      <m.div className="flex items-center h-screen w-screen  portrait:w-auto">
         <SceneLayer
           items={SCENE_S7_2_ITEMS}
           animations={animations}
@@ -264,7 +264,7 @@ export default function S7_2({ scrollYProgress, onCompleted }: S7_2Props) {
               /* flex flex-col items-center justify-center pt-[9.26%] */
               <div className="flex flex-col items-center justify-center w-full h-full pt-[9.26%]">
                 {/*? Text frame*/}
-                <div className="w-full h-full shrink-0 flex flex-col items-center px-[8%] md:px-[5%] gap-[8%] ">
+                <div className="w-full h-full shrink-0 flex flex-col items-center px-[8%] md:px-[5%] gap-15 md:gap-20 xl:gap-[8%]">
                   {/*? Question — Figma 810:11145 */}
                   <m.div
                     className="w-full shrink-0 flex flex-col items-center  select-none"
@@ -277,7 +277,7 @@ export default function S7_2({ scrollYProgress, onCompleted }: S7_2Props) {
                       scrollYProgress={scrollYProgress}
                       startProgress={0.15}
                       endProgress={0.25}
-                      className="text-white text-sm md:text-lg lg:text-2xl  leading-normal text-center"
+                      className="text-white text-sm md:text-lg 2xl:text-2xl  leading-normal text-center"
                     />
                     {/*? Counter */}
                     <m.p
@@ -302,7 +302,7 @@ export default function S7_2({ scrollYProgress, onCompleted }: S7_2Props) {
                         text={skill}
                         isSelected={selectedSoftSkills.includes(skill)}
                         onClick={() => handleSkillToggle(skill)}
-                        className="px-3 py-2 text-xs md:text-lg lg:text-2xl"
+                        className="px-3 py-2 text-xs md:text-lg 2xl:text-2xl"
                       />
                     ))}
                     {customSoftSkills.map((skill) => (
@@ -311,7 +311,7 @@ export default function S7_2({ scrollYProgress, onCompleted }: S7_2Props) {
                         text={skill}
                         isSelected={true}
                         onClick={() => handleRemoveCustom(skill)}
-                        className="px-3 py-2 text-xs md:text-lg lg:text-2xl"
+                        className="px-3 py-2 text-xs md:text-lg 2xl:text-2xl"
                       />
                     ))}
                     {!showInput ? (
@@ -320,7 +320,7 @@ export default function S7_2({ scrollYProgress, onCompleted }: S7_2Props) {
                         onClick={handleAddCustom}
                         variant="default"
                         isSelected={true}
-                        className="py-2! text-xs md:text-lg lg:text-2xl"
+                        className="py-2! text-xs md:text-lg 2xl:text-2xl"
                       />
                     ) : (
                       <div className="flex items-center gap-2">
@@ -329,7 +329,7 @@ export default function S7_2({ scrollYProgress, onCompleted }: S7_2Props) {
                           onChange={setInputValue}
                           placeholder="ระบุทักษะ"
                           maxLength={50}
-                          className="py-2! text-xs md:text-lg lg:text-2xl"
+                          className="py-2! text-xs md:text-lg 2xl:text-2xl"
                         />
                         <GradientButton
                           text=""
@@ -388,7 +388,7 @@ export default function S7_2({ scrollYProgress, onCompleted }: S7_2Props) {
                       scrollYProgress={scrollYProgress}
                       startProgress={0.15}
                       endProgress={0.25}
-                      className="text-white text-sm md:text-lg lg:text-2xl  leading-normal text-center"
+                      className="text-white text-sm md:text-lg 2xl:text-2xl  leading-normal text-center"
                     />
 
                     {/*? Counter (functional, not in Figma — sits inside question block) */}
@@ -417,7 +417,7 @@ export default function S7_2({ scrollYProgress, onCompleted }: S7_2Props) {
                         text={skill}
                         isSelected={selectedSoftSkills.includes(skill)}
                         onClick={() => handleSkillToggle(skill)}
-                        className="px-5 py-3 text-sm md:text-lg lg:text-2xl"
+                        className="px-5 py-3 text-sm md:text-lg 2xl:text-2xl"
                       />
                     ))}
                     {customSoftSkills.map((skill) => (
@@ -426,7 +426,7 @@ export default function S7_2({ scrollYProgress, onCompleted }: S7_2Props) {
                         text={skill}
                         isSelected={true}
                         onClick={() => handleRemoveCustom(skill)}
-                        className="px-5 py-3 text-sm md:text-lg lg:text-2xl"
+                        className="px-5 py-3 text-sm md:text-lg 2xl:text-2xl"
                       />
                     ))}
                     {!showInput ? (
@@ -444,7 +444,7 @@ export default function S7_2({ scrollYProgress, onCompleted }: S7_2Props) {
                           onChange={setInputValue}
                           placeholder="ระบุทักษะ"
                           maxLength={20}
-                          className="text-sm md:text-lg lg:text-2xl"
+                          className="text-sm md:text-lg 2xl:text-2xl"
                         />
                         <GradientButton
                           text=""

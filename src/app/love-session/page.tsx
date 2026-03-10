@@ -13,6 +13,7 @@ import { useStarsVisibility } from "@/app/hooks/useStarsVisibility";
 import { API_BASE_URL } from "@/utils/appConfig";
 import { getAudioUrl } from "@/utils/cloudinaryUtils";
 import ErrorModal from "../components/modal/ErrorModal";
+import LoadingScreen from "../components/reusable/LoadingScreen";
 import ProgressBar from "../components/reusable/ProgressBar";
 import { useAudio } from "../contexts/AudioContext";
 import { useUser } from "../contexts/UserContext";
@@ -30,6 +31,7 @@ export default function SessionLovePage() {
   const [isS6_1Completed, setIsS6_1Completed] = useState(false);
   const [s6_1Data, setS6_1Data] = useState<S6_1Data | null>(null);
   const [showErrorModal, setShowErrorModal] = useState(false);
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
   //? Single scrollYProgress for entire page (0-1 for 1500vh)
   const { scrollYProgress } = useScroll({
@@ -113,24 +115,30 @@ export default function SessionLovePage() {
     }
   }, [userId, isLoading, router]);
 
-  //? Handler: Auto-scroll to s6_4 เมื่อ s6_1 completed
-  const handleS6_1Completed = (data: S6_1Data) => {
-    //? เก็บข้อมูล hobbies ที่ user เลือก
-    setS6_1Data(data);
+  //? Handler: S6_1 status change (hobbies selected/unselected)
+  const handleS6_1Completed = (data: S6_1Data | null) => {
+    if (data) {
+      //? เก็บข้อมูล hobbies ที่ user เลือก
+      setS6_1Data(data);
+      setIsS6_1Completed(true);
 
-    setIsS6_1Completed(true);
-
-    if (ref.current && lenis) {
-      const scrollStart = ref.current.offsetTop;
-      const scrollableDistance = ref.current.scrollHeight - window.innerHeight;
-      //? Scroll to start of S6_4 section (at 0.55 = 800vh / 1500vh)
-      const scrollTarget = scrollStart + scrollableDistance * 0.56;
-      lenis.scrollTo(scrollTarget, { duration: 1.5 });
+      if (ref.current && lenis) {
+        const scrollStart = ref.current.offsetTop;
+        const scrollableDistance =
+          ref.current.scrollHeight - window.innerHeight;
+        //? Scroll to start of S6_4 section (at 0.55 = 800vh / 1500vh)
+        const scrollTarget = scrollStart + scrollableDistance * 0.56;
+        lenis.scrollTo(scrollTarget, { duration: 1.5 });
+      }
+    } else {
+      //! Unselect ต่ำกว่า threshold → ล็อค scroll กลับ
+      setIsS6_1Completed(false);
     }
   };
 
   //? Handler: Navigate to next session after s6_4 completed
   const handleS6_4Continue = async (selectedChoice: string) => {
+    setIsSubmitting(true);
     try {
       const response = await fetch(`${API_BASE_URL}/api/user/progress/love`, {
         method: "POST",
@@ -145,6 +153,7 @@ export default function SessionLovePage() {
       });
 
       if (!response.ok) {
+        setIsSubmitting(false);
         setShowErrorModal(true);
         return;
       }
@@ -152,6 +161,7 @@ export default function SessionLovePage() {
       router.push("/skill-session");
     } catch (error) {
       console.error("Error submitting data:", error);
+      setIsSubmitting(false);
       setShowErrorModal(true);
     }
   };
@@ -163,6 +173,9 @@ export default function SessionLovePage() {
 
   return (
     <div ref={ref} className="h-[1500vh] w-full relative bg-black">
+      {/* Loading Screen */}
+      <LoadingScreen isLoading={isSubmitting} />
+
       {/* Error Modal */}
       <ErrorModal
         isOpen={showErrorModal}

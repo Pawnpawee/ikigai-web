@@ -87,7 +87,7 @@ export default function ClosingPage() {
 
   //? แทนที่ (playerName) ด้วยชื่อจริงของผู้เล่น
   const closingText = useMemo(
-    () => CLOSING_DIALOGUE.text.replace("(playerName)", playerName),
+    () => CLOSING_DIALOGUE.text.replace("(playerName)", `**"${playerName}"**`),
     [playerName],
   );
 
@@ -147,7 +147,7 @@ export default function ClosingPage() {
         </m.div>
 
         {/* Scene Layer: pyramid, water, tree_land, human */}
-        <m.div className="absolute inset-0 w-full h-full">
+        <m.div className="fixed flex justify-center items-center top-0 h-screen w-screen portrait:w-auto">
           <SceneLayer
             items={SCENE_CLOSING_ITEMS}
             animations={animations}

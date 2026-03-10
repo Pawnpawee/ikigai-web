@@ -4,16 +4,16 @@ import { useRef } from "react";
 import { useUI } from "@/app/contexts/UIStarContext";
 
 interface StarsVisibilityConfig {
-  //? เงื่อนไขการแสดง/ซ่อน stars
+  //? เงื่อนไขการ mount/unmount stars
   shouldShow: (progress: number) => boolean;
 }
 
 /**
- * Custom Hook สำหรับจัดการการแสดง/ซ่อน Stars โดยอัตโนมัติ
+ * Custom Hook สำหรับ mount/unmount Stars โดยอัตโนมัติตาม scroll
+ * เมื่อ shouldShow คืน false → component จะถูก unmount ออกจาก DOM เพื่อหยุด Lottie loop
  * @param scrollYProgress - Motion value จาก useScroll
  * @param config - Configuration object
  * @example
- * // Show stars when scrollYProgress < 1
  * useStarsVisibility(scrollYProgress, {
  *   shouldShow: (p) => p < 1
  * });

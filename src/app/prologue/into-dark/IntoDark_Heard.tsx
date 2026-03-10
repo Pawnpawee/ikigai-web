@@ -59,7 +59,7 @@ export default function IntoDarkHeard({
   return (
     <div className="sticky top-0 h-screen w-screen flex justify-center items-center overflow-hidden bg-s5-3">
       <m.div
-        className="relative flex justify-start items-center w-screen portrait:w-auto h-full"
+        className="relative flex justify-start items-center w-screen portrait:w-auto h-full "
         style={{ zIndex }}
       >
         <SceneLayer
@@ -147,7 +147,7 @@ export default function IntoDarkHeard({
                 opacity: set3Opacity,
               }}
             >
-              <div className="text-white leading-relaxed select-none text-lg md:text-3xl">
+              <div className="text-white leading-relaxed select-none text-lg md:text-2xl 2xl:text-3xl">
                 <div className="mb-2">
                   <MysteriousText
                     text={

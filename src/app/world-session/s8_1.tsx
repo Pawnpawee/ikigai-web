@@ -203,7 +203,7 @@ export default function S8_1({ scrollYProgress, onCompleted }: S8_1Props) {
       className="fixed flex justify-center top-0 h-screen w-screen bg-s8-1 overflow-hidden"
       style={{ opacity, zIndex }}
     >
-      <m.div className="flex items-center h-screen w-screen portrait:w-auto ">
+      <m.div className="flex items-center h-screen w-screen  portrait:w-auto">
         <SceneLayer
           items={SCENE_S8_1_ITEMS}
           animations={animations}
@@ -211,7 +211,7 @@ export default function S8_1({ scrollYProgress, onCompleted }: S8_1Props) {
         >
           {/* ═══ Stone Lake (LazyLottie) ═══ */}
           <m.div
-            className="absolute"
+            className="absolute z-0"
             style={{
               //? Desktop: 2834.72×724.84 at (-527.81, 219.15) in 1920×1080
               //? Mobile: 3918.11×539.48 at (-1659.24, 506.39) in 1080×1920
@@ -236,7 +236,7 @@ export default function S8_1({ scrollYProgress, onCompleted }: S8_1Props) {
             return (
               <m.div
                 key={bubble.id}
-                className="absolute flex shrink-0 items-center justify-center bg-black/20 px-[1%] py-[0.5%]"
+                className="absolute flex shrink-0 items-center justify-center bg-black/20 px-[1%] py-[0.5%] z-3"
                 style={{
                   left: pos.left,
                   top: pos.top,
@@ -244,7 +244,7 @@ export default function S8_1({ scrollYProgress, onCompleted }: S8_1Props) {
                   opacity: textBubbleOpacities[index],
                 }}
               >
-                <p className="whitespace-pre-line text-center text-[0.55rem] leading-normal tracking-[0.6px] text-white md:text-base lg:text-xl">
+                <p className="whitespace-pre-line text-center text-[0.55rem] leading-normal tracking-[0.6px] text-white md:text-base 2xl:text-xl">
                   {bubble.text}
                 </p>
               </m.div>
@@ -253,13 +253,13 @@ export default function S8_1({ scrollYProgress, onCompleted }: S8_1Props) {
 
           {/* ═══ Phase 3: CSS Dark Overlay (replaces bgblack image) ═══ */}
           <m.div
-            className="fixed inset-0 bg-black"
+            className="fixed inset-0 bg-black z-4"
             style={{ opacity: darkOverlayOpacity }}
           />
 
           {/* ═══ Phase 3: Cat (LazyLottie) ═══ */}
           <m.div
-            className="absolute z-1"
+            className="absolute z-5"
             style={{
               width: isMobile ? "64.11%" : "32.68%",
               height: isMobile ? "42.62%" : "68.67%",
@@ -278,7 +278,7 @@ export default function S8_1({ scrollYProgress, onCompleted }: S8_1Props) {
 
           {/* ═══ Phase 3: Cat Dialogue (MysteriousText overlay on dark scene) ═══ */}
           <div
-            className="absolute flex flex-col items-center"
+            className="absolute flex flex-col items-center z-6"
             style={{
               left: isMobile
                 ? S8_1_CAT_DIALOGUE_POSITION.mobileStyle.left
@@ -296,7 +296,7 @@ export default function S8_1({ scrollYProgress, onCompleted }: S8_1Props) {
               scrollYProgress={scrollYProgress}
               startProgress={0.78}
               endProgress={0.85}
-              className="text-center leading-relaxed tracking-wide text-white text-base md:text-2xl lg:text-3xl"
+              className="text-center leading-relaxed tracking-wide text-white text-base md:text-2xl 2xl:text-3xl"
             />
           </div>
 
@@ -307,7 +307,7 @@ export default function S8_1({ scrollYProgress, onCompleted }: S8_1Props) {
           {/*? → left=11.94%, top=26.15%, w=76.11% */}
           <m.div
             className={`
-              absolute flex flex-col items-center
+              absolute flex flex-col items-center z-7
               ${
                 isMobile
                   ? "top-[26.15%] w-full"
@@ -323,7 +323,7 @@ export default function S8_1({ scrollYProgress, onCompleted }: S8_1Props) {
                 scrollYProgress={scrollYProgress}
                 startProgress={0.78}
                 endProgress={0.88}
-                className="text-white text-base md:text-2xl lg:text-3xl leading-normal tracking-[0.6px]"
+                className="text-white text-base md:text-2xl 2xl:text-3xl leading-normal tracking-[0.6px]"
               />
             </div>
 
@@ -334,7 +334,7 @@ export default function S8_1({ scrollYProgress, onCompleted }: S8_1Props) {
                 ${
                   isMobile
                     ? "justify-center gap-8 mt-8"
-                    : "justify-between w-[54.01%] mt-[9.38%]"
+                    : "justify-between gap-8 mt-[9.38%]"
                 }
               `}
             >
@@ -347,7 +347,7 @@ export default function S8_1({ scrollYProgress, onCompleted }: S8_1Props) {
                   variant={
                     calledUponAnswer === choice.id ? "default" : "transparent"
                   }
-                  className="px-8 py-2 md:px-16 md:py-4 text-sm md:text-2xl lg:text-3xl shrink-0"
+                  className="px-8 py-2 md:px-16 md:py-4 text-sm md:text-2xl 2xl:text-3xl shrink-0"
                 />
               ))}
             </div>

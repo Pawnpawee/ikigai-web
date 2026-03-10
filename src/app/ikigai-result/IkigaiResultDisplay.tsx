@@ -322,7 +322,7 @@ export default function IkigaiResultDisplay({
             className="absolute portrait:w-full"
             style={getPos(PERCENT_TEXT_POS)}
           >
-            <p className="text-white font-semibold text-base md:text-xl xl:text-3xl leading-10 text-center whitespace-nowrap">
+            <p className="text-white font-semibold text-sm min-[376px]:text-base md:text-xl xl:text-3xl leading-10 text-center whitespace-nowrap">
               <span style={{ color: accentColor }}>{playersInSessionPct}%</span>{" "}
               จากผู้เล่นทั้งหมด
             </p>
@@ -370,19 +370,19 @@ export default function IkigaiResultDisplay({
                   </div>
 
                   {/* Label */}
-                  <p className="text-white text-center text-xs md:text-sm xl:text-xl leading-tight whitespace-pre-line">
+                  <p className="text-white text-center text-[10px] min-[376px]:text-xs md:text-sm xl:text-xl leading-tight whitespace-pre-line">
                     {circle.label}
                   </p>
 
                   {/* Percent Badge */}
                   <div className="bg-white/50 rounded-full px-[5.27%] py-[1.32%]">
-                    <p className="text-black font-semibold text-xs md:text-base xl:text-2xl text-center">
+                    <p className="text-black font-semibold text-[10px] min-[376px]:text-xs md:text-base xl:text-2xl text-center">
                       {sectionScore} %
                     </p>
                   </div>
 
                   {/* Short Summary */}
-                  <p className="text-white text-center text-[10px] md:text-sm xl:text-base whitespace-pre-line">
+                  <p className="text-white text-center text-[8px] min-[376px]:text-[10px] md:text-sm xl:text-base whitespace-pre-line">
                     {shortSummary}
                   </p>
                 </div>
@@ -400,7 +400,7 @@ export default function IkigaiResultDisplay({
             }}
             {...popUpVariant(SEQUENCE_DELAYS.ikigaiCenter)}
           >
-            <p className="text-white font-semibold text-xs md:text-base xl:text-3xl text-center">
+            <p className="text-white font-semibold text-[10px] min-[376px]:text-xs md:text-base xl:text-3xl text-center">
               IKIGAI
             </p>
           </m.div>
@@ -422,7 +422,7 @@ export default function IkigaiResultDisplay({
                 whileTap={{ scale: 0.95 }}
                 onClick={() => handleSectionClick(label.key)}
               >
-                <p className="text-white font-semibold text-sm md:text-lg xl:text-2xl text-center py-[2.6%] px-[7.8%] whitespace-nowrap">
+                <p className="text-white font-semibold text-xs min-[376px]:text-sm md:text-lg xl:text-2xl text-center py-[2.6%] px-[7.8%] whitespace-nowrap">
                   {label.label}
                 </p>
               </m.button>
@@ -435,10 +435,10 @@ export default function IkigaiResultDisplay({
             style={getPos(DESCRIPTION_POS)}
             {...fadeInVariant(SEQUENCE_DELAYS.description)}
           >
-            <p className="font-semibold text-base md:text-xl xl:text-2xl">
+            <p className="font-semibold text-sm min-[376px]:text-base md:text-xl xl:text-2xl">
               เส้นทางแห่งการปรับตัวเพื่อเข้าสู่สังคมการทำงาน
             </p>
-            <p className="text-xs md:text-sm xl:text-base mt-[1%]">
+            <p className="text-[10px] min-[376px]:text-xs md:text-sm xl:text-base mt-[1%]">
               กดคลิกแต่ละวงกลมเพื่ออ่านเพิ่มเติม
             </p>
           </m.div>

@@ -62,7 +62,7 @@ export const SCENE_CLOSING_ITEMS: SceneItemData[] = [
       top: "40.9%",
       width: "100.2%",
       height: "32.6%",
-      zIndex: 3,
+      zIndex: 1,
     },
     //? Mobile: x=-419.98, y=975.33, w=1920.30, h=135.05
     mobileStyle: {
@@ -71,7 +71,7 @@ export const SCENE_CLOSING_ITEMS: SceneItemData[] = [
       width: "177.9%",
       height: "7%",
     },
-    animGroup: 2,
+    animGroup: 1,
     sizes: "100vw",
   },
   {

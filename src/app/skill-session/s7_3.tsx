@@ -16,6 +16,7 @@ import SceneLayer, {
 } from "@/app/components/reusable/SceneLayer";
 import {
   S7_3_QUESTION_1,
+  S7_3_QUESTION_1_MOBILE,
   S7_3_QUESTION_2,
   SCENE_S7_3_ITEMS,
   SKILLS_MATCH_CHOICES,
@@ -193,7 +194,7 @@ export default function S7_3({ scrollYProgress, onCompleted }: S7_3Props) {
   return (
     <m.div className="sticky top-0 w-full overflow-hidden" style={{ top }}>
       <m.div
-        className="flex items-center justify-center min-h-screen"
+        className="flex items-center justify-center min-h-screen "
         style={{ opacity: 1, zIndex: containerZIndex }}
       >
         <SceneLayer
@@ -313,11 +314,11 @@ export default function S7_3({ scrollYProgress, onCompleted }: S7_3Props) {
             {/*? Question 1 Text — h3: 40px desktop */}
             <div className="text-center w-full shrink-0">
               <MysteriousText
-                text={S7_3_QUESTION_1}
+                text={isMobile ? S7_3_QUESTION_1_MOBILE : S7_3_QUESTION_1}
                 scrollYProgress={scrollYProgress}
                 startProgress={0.1}
                 endProgress={0.25}
-                className="text-white text-lg md:text-2xl lg:text-3xl leading-normal tracking-[0.6px]"
+                className="text-white text-lg md:text-2xl 2xl:text-3xl leading-normal tracking-[0.6px]"
               />
             </div>
 
@@ -328,7 +329,7 @@ export default function S7_3({ scrollYProgress, onCompleted }: S7_3Props) {
                 ${
                   isMobile
                     ? "justify-center gap-8 mt-8"
-                    : "justify-between w-[49.40%] mt-[7.52%]"
+                    : "justify-between gap-8 mt-[7.52%]"
                 }
               `}
             >
@@ -341,7 +342,7 @@ export default function S7_3({ scrollYProgress, onCompleted }: S7_3Props) {
                   variant={
                     skillsMatchJob === choice.id ? "default" : "transparent"
                   }
-                  className="px-8 py-2 md:px-16 md:py-4 text-sm md:text-2xl lg:text-3xl shrink-0"
+                  className="px-8 py-2 md:px-16 md:py-4 text-sm md:text-2xl 2xl:text-3xl shrink-0"
                 />
               ))}
             </div>
@@ -368,7 +369,7 @@ export default function S7_3({ scrollYProgress, onCompleted }: S7_3Props) {
                 scrollYProgress={scrollYProgress}
                 startProgress={0.7}
                 endProgress={0.9}
-                className="text-white text-lg md:text-2xl lg:text-3xl leading-normal tracking-[0.6px]"
+                className="text-white text-lg md:text-2xl 2xl:text-3xl leading-normal tracking-[0.6px]"
               />
             </div>
 
@@ -379,7 +380,7 @@ export default function S7_3({ scrollYProgress, onCompleted }: S7_3Props) {
                 ${
                   isMobile
                     ? "justify-center gap-8 mt-8"
-                    : "justify-between w-[70.59%] mt-[12.72%]"
+                    : "justify-between gap-8 mt-[12.72%]"
                 }
               `}
             >
@@ -392,7 +393,7 @@ export default function S7_3({ scrollYProgress, onCompleted }: S7_3Props) {
                   variant={
                     useSkillsInNewRole === choice.id ? "default" : "transparent"
                   }
-                  className="px-8 py-2 md:px-16 md:py-4 text-sm md:text-2xl lg:text-3xl shrink-0"
+                  className="px-8 py-2 md:px-16 md:py-4 text-sm md:text-2xl 2xl:text-3xl shrink-0"
                 />
               ))}
             </div>
@@ -410,7 +411,7 @@ export default function S7_3({ scrollYProgress, onCompleted }: S7_3Props) {
                 isSelected={true}
                 onClick={handleContinue}
                 variant="default"
-                className="text-lg md:text-2xl lg:text-3xl"
+                className="text-sm md:text-2xl 2xl:text-3xl"
               >
                 <HiOutlineChevronDown className="ml-2" />
               </GradientButton>

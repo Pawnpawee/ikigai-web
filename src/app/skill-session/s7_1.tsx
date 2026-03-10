@@ -7,7 +7,7 @@ import {
   useTransform,
 } from "framer-motion";
 import Image from "next/image";
-import { useCallback, useMemo, useRef, useState } from "react";
+import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import MysteriousText from "@/app/components/reusable/MysteriousText";
 import SceneLayer, {
   type AnimationMap,
@@ -98,7 +98,7 @@ function SkillCard({
     <m.button
       type="button"
       onClick={onClick}
-      className="flex flex-col items-center justify-center cursor-pointer w-[23.56%] portrait:w-[55%] gap-3 md:gap-5"
+      className="flex flex-col items-center justify-center cursor-pointer w-[23.56%] portrait:w-[55%] gap-3 lg:gap-5"
       whileHover={{ scale: 1.03 }}
       whileTap={{ scale: 0.97 }}
       transition={{ type: "spring", stiffness: 300, damping: 20 }}
@@ -130,8 +130,8 @@ function SkillCard({
         {/*? Card label below the frame */}
         <p
           className={`
-          text-white text-center text-xs md:text-base lg:text-xl
-          leading-tight select-none px-1
+          text-white text-center text-xs md:text-base 2xl:text-xl
+          leading-tight select-none px-1 text-nowrap
           transition-colors duration-300
           ${isSelected ? "text-yellow-300 font-semibold" : "text-white/90"}
         `}
@@ -195,6 +195,21 @@ export default function S7_1({ scrollYProgress, onCompleted }: S7_1Props) {
   const [slideDirection, setSlideDirection] = useState<1 | -1>(1);
 
   const totalPages = Math.ceil(HARD_SKILL_CARDS.length / ITEMS_PER_PAGE);
+
+  //? Preload all card images เพื่อให้ icon ขึ้นเร็วเมื่อเลื่อนหน้า carousel
+  useEffect(() => {
+    const sources = [
+      CARD_FRAME_SRC,
+      SELECTED_FRAME_SRC,
+      ARROW_L_SRC,
+      ARROW_R_SRC,
+      ...HARD_SKILL_CARDS.map((c) => c.imageSrc),
+    ];
+    for (const src of sources) {
+      const img = new window.Image();
+      img.src = src;
+    }
+  }, []);
 
   //? Get cards for the current page
   const currentCards = useMemo(
@@ -305,7 +320,7 @@ export default function S7_1({ scrollYProgress, onCompleted }: S7_1Props) {
       className="fixed flex justify-center top-0 h-screen w-screen bg-s7-1 overflow-hidden"
       style={{ opacity, zIndex }}
     >
-      <m.div className="flex items-center h-screen w-screen portrait:w-auto">
+      <m.div className="flex items-center h-screen w-screen  portrait:w-auto">
         <SceneLayer
           items={SCENE_S7_1_ITEMS}
           animations={animations}
@@ -367,7 +382,7 @@ export default function S7_1({ scrollYProgress, onCompleted }: S7_1Props) {
                 scrollYProgress={scrollYProgress}
                 startProgress={0.15}
                 endProgress={0.25}
-                className="text-white text-sm md:text-lg lg:text-2xl leading-normal text-center"
+                className="text-white text-sm md:text-lg 2xl:text-2xl leading-normal text-center"
               />
               {/*? Selection Counter */}
               <m.p

@@ -1,7 +1,8 @@
 "use client";
-import { m, useAnimate } from "framer-motion";
+import { m } from "framer-motion";
 import type { Howl } from "howler";
 import type { AnimationItem } from "lottie-web";
+import Image from "next/image";
 import { useCallback, useEffect, useRef, useState } from "react";
 import { getAudioUrl, getJsonUrl } from "@/utils/cloudinaryUtils";
 import LazyLottie from "../components/reusable/LazyLottie";
@@ -24,7 +25,7 @@ export default function HeartWeighingProcess({
 }: HeartWeighingProcessProps) {
   const [currentStep, setCurrentStep] = useState(0);
   const [showDialogue, setShowDialogue] = useState(false);
-  const [scope, animate] = useAnimate();
+  const [progress, setProgress] = useState(0);
   const { playSfx } = useAudio();
 
   //? Lottie BG ref
@@ -76,12 +77,25 @@ export default function HeartWeighingProcess({
     };
   }, [isProcessing, playSfx]);
 
-  //? Progress through analysis steps - ไล่ step ตามลำดับ
+  //? Progress through analysis steps - ไล่ step ตามลำดับ + อัพเดท progress bar
   useEffect(() => {
     if (!isProcessing) return;
 
+    const totalDuration = ANALYSIS_STEPS_CONFIG.reduce(
+      (sum, s) => sum + s.duration,
+      0,
+    );
     let timeoutId: NodeJS.Timeout;
+    let intervalId: ReturnType<typeof setInterval>;
     let currentStepIndex = 0;
+    let elapsed = 0;
+
+    //? อัพเดท progress bar ทุก 100ms
+    intervalId = setInterval(() => {
+      elapsed += 100;
+      const pct = Math.min((elapsed / totalDuration) * 100, 100);
+      setProgress(pct);
+    }, 100);
 
     const progressThroughSteps = () => {
       if (currentStepIndex < ANALYSIS_STEPS_CONFIG.length) {
@@ -99,41 +113,14 @@ export default function HeartWeighingProcess({
 
     return () => {
       if (timeoutId) clearTimeout(timeoutId);
+      clearInterval(intervalId);
     };
   }, [isProcessing]);
-
-  //? Animate heart glow - เรืองแสงรอบหัวใจ
-  useEffect(() => {
-    if (!isProcessing) return;
-
-    const heartAnimation = async () => {
-      await animate(
-        ".heart-glow",
-        {
-          opacity: [0.6, 1, 0.6],
-          scale: [1, 1.1, 1],
-        },
-        {
-          duration: 3,
-          repeat: Number.POSITIVE_INFINITY,
-          ease: "easeInOut",
-        },
-      );
-    };
-
-    heartAnimation();
-  }, [isProcessing, animate]);
 
   if (!isProcessing) return null;
 
   return (
-    <m.div
-      ref={scope}
-      className="fixed inset-0 z-50 flex flex-col items-center justify-center"
-      initial={{ opacity: 0 }}
-      animate={{ opacity: 1 }}
-      transition={{ duration: 1 }}
-    >
+    <m.div className="fixed inset-0 z-50 flex flex-col items-center justify-center">
       {/* Lottie Background — intro 0-225, loop 226-304 */}
       <div className="absolute inset-0">
         <LazyLottie
@@ -154,7 +141,7 @@ export default function HeartWeighingProcess({
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 1 }}
         >
-          <p className="text-white text-base md:text-xl leading-relaxed whitespace-pre-line drop-shadow-[0_0_10px_rgba(0,0,0,0.8)]">
+          <p className="text-white text-xl md:text-2xl leading-relaxed whitespace-pre-line  drop-shadow-[0_0_10px_#ffffff]">
             {TEMPLE_DIALOGUE.weighing}
           </p>
         </m.div>
@@ -169,34 +156,32 @@ export default function HeartWeighingProcess({
         exit={{ opacity: 0, y: -20 }}
         transition={{ duration: 0.8 }}
       >
-        <div className="flex items-center justify-center gap-3 mb-2">
-          <span className="text-2xl md:text-4xl">
-            {ANALYSIS_STEPS_CONFIG[currentStep]?.icon}
-          </span>
-        </div>
+        {ANALYSIS_STEPS_CONFIG[currentStep]?.icon && (
+          <div className="flex items-center justify-center gap-3 mb-2">
+            <Image
+              src={ANALYSIS_STEPS_CONFIG[currentStep].icon}
+              alt=""
+              width={48}
+              height={48}
+              className="w-8 h-8 md:w-12 md:h-12"
+            />
+          </div>
+        )}
         <p className="text-white text-xl md:text-3xl font-light tracking-wide">
           {ANALYSIS_STEPS_CONFIG[currentStep]?.text}
         </p>
 
-        {/* Progress dots */}
-        <div className="flex justify-center gap-2 mt-6">
-          {ANALYSIS_STEPS_CONFIG.map((step) => (
-            <m.div
-              key={`dot-${step.id}`}
-              className="w-2 h-2 md:w-3 md:h-3 rounded-full"
-              animate={{
-                backgroundColor:
-                  step.id - 1 === currentStep
-                    ? "#ffffff"
-                    : step.id - 1 < currentStep
-                      ? "#fbbf24"
-                      : "#4b5563",
-                scale: step.id - 1 === currentStep ? 1.5 : 1,
-              }}
-              transition={{ duration: 0.3 }}
-            />
-          ))}
+        {/* Progress Bar */}
+        <div className="w-full h-2 md:h-3 bg-white/20 rounded-full mt-6 overflow-hidden">
+          <m.div
+            className="h-full rounded-full bg-linear-to-r from-amber-400 to-yellow-200"
+            animate={{ width: `${progress}%` }}
+            transition={{ duration: 0.1, ease: "linear" }}
+          />
         </div>
+        <p className="text-white/60 text-sm md:text-base mt-2">
+          {Math.round(progress)}%
+        </p>
       </m.div>
     </m.div>
   );

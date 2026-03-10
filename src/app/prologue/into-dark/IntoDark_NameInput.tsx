@@ -155,7 +155,7 @@ export default function IntoDarkNameInput({
       style={{ opacity, zIndex }}
     >
       <m.div
-        className={`flex items-center h-screen w-screen portrait:w-auto ${
+        className={`flex items-center h-screen w-screen  portrait:w-auto ${
           isMobile ? "justify-center" : "justify-end"
         }`}
       >

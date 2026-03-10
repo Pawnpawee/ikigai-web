@@ -95,7 +95,7 @@ export default function Cover({
       className="fixed flex w-full h-full items-center justify-center bg-cover"
       style={{ opacity }}
     >
-      <div className="fixed flex justify-center items-center top-0 h-screen w-screen portrait:w-auto">
+      <div className="fixed flex justify-center items-center top-0 h-screen w-screen portrait:w-auto scene-fit">
         {/* Scene Items */}
         <SceneLayer
           items={allItems}

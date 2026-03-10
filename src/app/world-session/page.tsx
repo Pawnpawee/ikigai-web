@@ -13,6 +13,7 @@ import { useStarsVisibility } from "@/app/hooks/useStarsVisibility";
 import { API_BASE_URL } from "@/utils/appConfig";
 import { getAudioUrl } from "@/utils/cloudinaryUtils";
 import ErrorModal from "../components/modal/ErrorModal";
+import LoadingScreen from "../components/reusable/LoadingScreen";
 import ProgressBar from "../components/reusable/ProgressBar";
 import { useAudio } from "../contexts/AudioContext";
 import { useUser } from "../contexts/UserContext";
@@ -52,6 +53,7 @@ export default function WorldSessionPage() {
   const [isS8_4_Q1Completed, setIsS8_4_Q1Completed] = useState(false);
   const [isS8_4Completed, setIsS8_4Completed] = useState(false);
   const [showErrorModal, setShowErrorModal] = useState(false);
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
   //? Accumulated data from each section
   const [s8_1Data, setS8_1Data] = useState<S8_1Data | null>(null);
@@ -128,7 +130,7 @@ export default function WorldSessionPage() {
 
       //? Lock S8_2: prevent scrolling past S8_2 until gifts selected (at 1100/2100 ≈ 0.5238)
       if (isS8_1Completed && !isS8_2Completed) {
-        const s8_2Lock = scrollStart + scrollableDistance * 0.505;
+        const s8_2Lock = scrollStart + scrollableDistance * 0.49;
         if (e.animatedScroll > s8_2Lock + tolerance && e.velocity > 0) {
           isResettingScroll.current = true;
           lenis.scrollTo(s8_2Lock, {
@@ -262,6 +264,7 @@ export default function WorldSessionPage() {
 
   //? Submit world data to API (all sections 1-5)
   const handleWorldSubmit = async (data: WorldData) => {
+    setIsSubmitting(true);
     try {
       const response = await fetch(`${API_BASE_URL}/api/user/progress/world`, {
         method: "POST",
@@ -278,6 +281,7 @@ export default function WorldSessionPage() {
       });
 
       if (!response.ok) {
+        setIsSubmitting(false);
         setShowErrorModal(true);
         return;
       }
@@ -286,6 +290,7 @@ export default function WorldSessionPage() {
       router.push("/paid-session");
     } catch (error) {
       console.error("Error submitting world data:", error);
+      setIsSubmitting(false);
       setShowErrorModal(true);
     }
   };
@@ -310,6 +315,9 @@ export default function WorldSessionPage() {
 
   return (
     <div ref={ref} className="h-[2100vh] w-full relative bg-black">
+      {/* Loading Screen */}
+      <LoadingScreen isLoading={isSubmitting} />
+
       {/* Error Modal */}
       <ErrorModal
         isOpen={showErrorModal}
