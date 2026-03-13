@@ -115,7 +115,7 @@ export default function JobApplication() {
     >
       {/* bg */}
       <m.div
-        className="absolute w-screen inset-0 bg-s1"
+        className="absolute w-screen inset-0 bg-[linear-gradient(180deg,#000_0%,#0a121b_8%,#132232_17%,#192e43_26%,#1d344d_37%,#1f3751_50%,#1d344d_66%,#132232_79%,#0a121b_91%,#000_100%)]"
         style={{
           opacity: opacity_bg,
         }}

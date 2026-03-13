@@ -323,7 +323,7 @@ export default function S9_2({ scrollYProgress, onCompleted }: S9_2Props) {
 
   return (
     <m.div
-      className="fixed flex justify-center top-0 h-screen w-screen overflow-hidden bg-s9-2"
+      className="fixed flex justify-center top-0 h-screen w-screen overflow-hidden bg-[linear-gradient(180deg,#ffd064_2.82%,#efbd5a_10.35%,#cd9345_29.15%,#b17234_47.95%,#9d5a27_65.82%,#924b20_82.74%,#8e471e_96.84%)]"
       style={{ opacity, zIndex }}
     >
       <m.div className="flex items-center h-screen w-screen portrait:w-auto">

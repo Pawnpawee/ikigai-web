@@ -4,7 +4,7 @@ import { useRouter, useSearchParams } from "next/navigation";
 import { useEffect, useState } from "react";
 import { API_BASE_URL } from "@/utils/appConfig";
 import { getAudioUrl } from "@/utils/cloudinaryUtils";
-import { getSessionResult } from "@/utils/storage";
+import { getSessionResult, saveSessionResult } from "@/utils/storage";
 import ErrorModal from "../components/modal/ErrorModal";
 import LoadingScreen from "../components/reusable/LoadingScreen";
 import { useAudio } from "../contexts/AudioContext";
@@ -157,70 +157,52 @@ export default function IkigaiResultPage() {
   useEffect(() => {
     const fetchIkigaiResult = async () => {
       if (!userId) return;
-
       try {
         setIsLoading(true);
 
-        // Step 1: Try SessionStorage
+        // ⭐ Step 1: ลองอ่านจาก Session ก่อน (มาแบบท่อ SSE ปกติ)
         const cachedResult = getSessionResult();
-        if (cachedResult?.ikigai_analysis) {
-          console.log("Loading result from sessionStorage");
-          setIkigaiAnalysis(cachedResult.ikigai_analysis);
-          if (cachedResult.scores) {
-            setIkigaiScores(cachedResult.scores);
-          }
-          if (cachedResult.playersInSessionPct != null) {
+
+        // ถ้ามีข้อมูล (ก้อน DTO ใหม่ที่เราส่งมาจาก C# จะมี summaries และ scores)
+        if (cachedResult?.summaries) {
+          console.log("Loading result from SessionStorage");
+
+          setIkigaiAnalysis(transformDtoToAnalysis(cachedResult));
+          if (cachedResult.scores)
+            setIkigaiScores(transformDtoScores(cachedResult.scores));
+          if (cachedResult.playersInSessionPct != null)
             setPlayersInSessionPct(cachedResult.playersInSessionPct);
-          }
-          if (cachedResult.maxSessionPercentage) {
+          if (cachedResult.maxSessionPercentage)
             setMaxSessionPercentage(cachedResult.maxSessionPercentage);
-          }
+
           setIsLoading(false);
           return;
         }
 
-        // Step 2: Fetch API
-        const processId = searchParams.get("id");
-        const endpoint = `${API_BASE_URL}/api/ikigai/status/${processId}`;
+        // ⭐ Step 2: แผนสำรอง ถ้ารีเฟรชแล้ว Session หาย หรือไม่มีข้อมูล
+        const processId =
+          sessionStorage.getItem("ikigaiProcessId") || searchParams.get("id");
+        if (!processId) throw new Error("ไม่พบรหัสการประมวลผล");
+
+        const endpoint = `${API_BASE_URL}/api/ikigai/results/${processId}`;
         const response = await fetch(endpoint, {
           method: "GET",
           headers: { "Content-Type": "application/json" },
         });
 
-        if (!response.ok) {
-          throw new Error("Failed to fetch Ikigai result");
-        }
+        if (!response.ok) throw new Error("Failed to fetch fallback result");
 
         const data = await response.json();
 
-        // Step 3: Handle Transformation
-        if (data.summaries && Array.isArray(data.summaries)) {
-          // เรียกใช้ Helper function ที่อยู่นอก Component ได้เลย โดยไม่ต้องใส่ใน dependency array
-          const analysis = transformDtoToAnalysis(data);
-          setIkigaiAnalysis(analysis);
-          if (data.scores) {
-            setIkigaiScores(transformDtoScores(data.scores));
-          }
-          if (data.playersInSessionPct != null) {
-            setPlayersInSessionPct(data.playersInSessionPct);
-          }
-          if (data.maxSessionPercentage) {
-            setMaxSessionPercentage(data.maxSessionPercentage);
-          }
-        } else if (data.ikigai_analysis) {
-          setIkigaiAnalysis(data.ikigai_analysis);
-          if (data.scores) {
-            setIkigaiScores(transformDtoScores(data.scores));
-          }
-          if (data.playersInSessionPct != null) {
-            setPlayersInSessionPct(data.playersInSessionPct);
-          }
-          if (data.maxSessionPercentage) {
-            setMaxSessionPercentage(data.maxSessionPercentage);
-          }
-        } else {
-          throw new Error("Invalid result format");
-        }
+        // ⭐ ใช้ saveSessionResult เก็บข้อมูลลง Storage
+        saveSessionResult(data);
+
+        setIkigaiAnalysis(transformDtoToAnalysis(data));
+        if (data.scores) setIkigaiScores(transformDtoScores(data.scores));
+        if (data.playersInSessionPct != null)
+          setPlayersInSessionPct(data.playersInSessionPct);
+        if (data.maxSessionPercentage)
+          setMaxSessionPercentage(data.maxSessionPercentage);
       } catch (error) {
         console.error("Error fetching Ikigai result:", error);
         setErrorMessage("ไม่สามารถโหลดผลลัพธ์ได้ กรุณาลองอีกครั้ง");
@@ -230,9 +212,7 @@ export default function IkigaiResultPage() {
       }
     };
 
-    if (userId && !userLoading) {
-      fetchIkigaiResult();
-    }
+    if (userId && !userLoading) fetchIkigaiResult();
   }, [userId, userLoading, searchParams]);
 
   const handleErrorClose = () => {
@@ -252,7 +232,7 @@ export default function IkigaiResultPage() {
   }
 
   return (
-    <div className="bg-result w-screen h-screen">
+    <div className="bg-[linear-gradient(180deg,#09345b_0%,#083054_5%,#062137_29%,#051622_54%,#041015_77%,#040e11_100%)] w-screen h-screen">
       <ErrorModal
         isOpen={showErrorModal}
         onClose={handleErrorClose}

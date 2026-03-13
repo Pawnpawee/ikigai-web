@@ -70,7 +70,7 @@ export default function WalkingDesert() {
     >
       {/* Sticky Container */}
       <div
-        className="sticky top-0 w-screen h-screen overflow-hidden flex items-center justify-center bg-s3"
+        className="sticky top-0 w-screen h-screen overflow-hidden flex items-center justify-center bg-[linear-gradient(180deg,#e79f66_7%,#e69a64_20%,#e38d5f_30%,#de7756_43%,#d7594a_55%,#d65147_58%)]"
         style={{ willChange: "transform, opacity" }}
       >
         {/* Sky (Lottie - เมฆเคลื่อนไหว) */}

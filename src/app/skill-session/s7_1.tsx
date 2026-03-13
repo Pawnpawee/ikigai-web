@@ -317,7 +317,7 @@ export default function S7_1({ scrollYProgress, onCompleted }: S7_1Props) {
 
   return (
     <m.div
-      className="fixed flex justify-center top-0 h-screen w-screen bg-s7-1 overflow-hidden"
+      className="fixed flex justify-center top-0 h-screen w-screen bg-[linear-gradient(0deg,#28286f_0%,#26276b_23%,#222461_43%,#1b1f4f_62%,#121836_80%,#060f16_97%,#040e11_100%)] overflow-hidden"
       style={{ opacity, zIndex }}
     >
       <m.div className="flex items-center h-screen w-screen  portrait:w-auto">

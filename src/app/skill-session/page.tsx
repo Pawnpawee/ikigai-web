@@ -249,7 +249,7 @@ export default function SessionSkillPage() {
           sessionText={COVER_SESSION2_CONFIG.sessionText}
         />
       </div>
-      <div className="bg-s7">
+      <div className="bg-[linear-gradient(0deg,#060129_1.32%,#0b0735_9.19%,#18154f_30.84%,#212061_52.48%,#26266c_75.11%,rgba(0,0,0,0)_100%)]">
         {/* S7_1 Section - Hard Skills - 200vh (200-400vh, progress: 0.2-0.4) */}
         <div className="h-[200vh] w-full">
           <S7_1

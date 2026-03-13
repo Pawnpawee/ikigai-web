@@ -320,7 +320,7 @@ export default function S8_2({ scrollYProgress, onCompleted }: S8_2Props) {
 
   return (
     <m.div
-      className="fixed flex justify-center top-0 h-screen w-screen bg-s8-2 overflow-hidden"
+      className="fixed flex justify-center top-0 h-screen w-screen bg-[linear-gradient(0deg,#b1e588_0%,#a9dd85_1%,#89c17b_7%,#6ea872_14%,#58946b_22%,#478466_31%,#3b7962_42%,#347360_57%,#337260_100%)] overflow-hidden"
       style={{ opacity, zIndex }}
     >
       <m.div className="flex items-center h-screen w-screen scene-fit portrait:w-auto">

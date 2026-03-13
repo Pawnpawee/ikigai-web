@@ -299,7 +299,7 @@ export default function S6_1({
   return (
     <m.div className="sticky w-full overflow-hidden" style={{ top }}>
       <m.div
-        className="flex items-center justify-center bg-s6 min-h-screen"
+        className="flex items-center justify-center bg-[linear-gradient(0deg,#d6a5b8_0%,#485b83_34%,#364560_61%,#192435_85%,#0b1521_100%)] min-h-screen"
         style={{ opacity, zIndex }}
       >
         <SceneLayer

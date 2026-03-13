@@ -50,16 +50,16 @@ export default function ProgressBar({ scrollYProgress }: ProgressBarProps) {
   );
 
   return (
-    <div className="fixed bottom-0 left-0 w-full h-2 z-40 pointer-events-none">
+    <div className="fixed bottom-0 left-0 w-full h-1.5 z-40 pointer-events-none">
       <div className="relative w-full h-full">
         {/* Gradient Bar */}
         <div
-          className="absolute left-0 top-0 w-full h-2 rounded-full bg-linear-to-r"
-          style={{ background: "white" }}
+          className="absolute left-0 top-0 w-full h-1.5 rounded-full bg-linear-to-r"
+          style={{ background: "rgba(255, 255, 255, 0.1)" }}
         />
         {/* Fill */}
         <m.div
-          className="absolute left-0 top-0 h-2 rounded-full overflow-hidden"
+          className="absolute left-0 top-0 h-1.5 rounded-full overflow-hidden"
           style={{ width: fillWidth }}
         >
           <div className="h-full w-screen" style={{ background: GRADIENT }} />
@@ -83,7 +83,7 @@ export default function ProgressBar({ scrollYProgress }: ProgressBarProps) {
                   transform: "translate(-50%, 0)",
                 }}
               >
-                <Icon src={icon.src} alt={icon.alt} size={20} />
+                <Icon src={icon.src} alt={icon.alt} size={15} />
               </div>
             );
           })}

@@ -169,7 +169,7 @@ export default function S6_4({ scrollYProgress, onContinue }: S6_4Props) {
 
   return (
     <m.div
-      className="fixed flex justify-center top-0 h-screen w-screen bg-s6-4 overflow-hidden"
+      className="fixed flex justify-center top-0 h-screen w-screen bg-[linear-gradient(180deg,#485b83_0%,#4b5c84_18%,#566288_35%,#696c8f_51%,#837a99_67%,#a58ba6_82%,#cea1b5_97%,#d6a5b8_100%)] overflow-hidden"
       style={{ opacity, zIndex }}
     >
       <m.div

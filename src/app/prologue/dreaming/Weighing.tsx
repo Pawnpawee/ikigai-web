@@ -319,7 +319,7 @@ export default function Weighing() {
         {/* fixed Container with aspect-video layout */}
         <m.div
           className="fixed
-          w-full h-full flex items-center justify-center bg-s4"
+          w-full h-full flex items-center justify-center bg-[linear-gradient(0deg,#3473c3_2%,#316cb7_7%,#25548a_27%,#1b4165_47%,#143148_69%,#0f2633_89%,#0c2027_109%,#0b1e23_128%)]"
           style={{
             // replace scale with 3D perspective + translateZ (z)
             top: containerTop,
@@ -361,7 +361,7 @@ export default function Weighing() {
 
         {/* Human (750-1000vh) */}
         <m.div
-          className="fixed inset-0 w-screen flex items-center justify-center pointer-events-none bg-s5"
+          className="fixed inset-0 w-screen flex items-center justify-center pointer-events-none bg-[linear-gradient(180deg,#101518_1%,#0c1b1f_77%,#0b1e23_100%)]"
           style={{
             opacity: videoOpacity,
           }}

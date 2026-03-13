@@ -109,7 +109,7 @@ export default function ClosingPage() {
     >
       {/* Sticky Container */}
       <div
-        className="fixed top-0 w-screen h-screen overflow-hidden flex items-center justify-center bg-closing"
+        className="fixed top-0 w-screen h-screen overflow-hidden flex items-center justify-center bg-[linear-gradient(0deg,#fff0a2_31.48%,#fcefa3_48.82%,#f2eba9_61.31%,#e2e6b2_72.41%,#cbdebf_82.82%,#aed5cf_92.53%,#91cbe1_100.86%)]"
         style={{
           willChange: "transform, opacity",
         }}

@@ -92,7 +92,7 @@ export default function Cover({
 
   return (
     <m.div
-      className="fixed flex w-full h-full items-center justify-center bg-cover"
+      className="fixed flex w-full h-full items-center justify-center bg-[linear-gradient(180deg,#0b1e23_0%,#091a1f_48%,#051115_89%,#040e11_100%)]"
       style={{ opacity }}
     >
       <div className="fixed flex justify-center items-center top-0 h-screen w-screen portrait:w-auto scene-fit">

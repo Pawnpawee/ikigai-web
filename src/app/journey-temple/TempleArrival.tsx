@@ -128,7 +128,7 @@ export default function TempleArrival({ onStartCeremony }: TempleArrivalProps) {
         }}
       >
         <m.div
-          className="fixed w-full h-full flex items-center justify-center bg-s4"
+          className="fixed w-full h-full flex items-center justify-center bg-[linear-gradient(0deg,#3473c3_2%,#316cb7_7%,#25548a_27%,#1b4165_47%,#143148_69%,#0f2633_89%,#0c2027_109%,#0b1e23_128%)]"
           style={{
             top: containerTop,
             z: z_move,
