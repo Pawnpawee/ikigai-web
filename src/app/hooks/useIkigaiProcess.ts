@@ -46,7 +46,6 @@ export const useIkigaiProcess = () => {
         setStatusText(sseData.status);
 
         if (sseData.progress === 100) {
-          setIsProcessing(false);
           saveSessionResult(sseData.result);
           eventSource?.close();
         }
