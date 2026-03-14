@@ -44,14 +44,14 @@ export default function WelcomeSoundModal({
                 initial={{ scale: 0 }}
                 animate={{ scale: 1 }}
                 transition={{ delay: 0.2, type: "spring", stiffness: 200 }}
-                className="bg-[#515c64] rounded-full px-2.5 md:px-5 py-3 md:py-6 flex items-center justify-center"
+                className="bg-[#515c64] rounded-full flex items-center justify-center"
               >
                 <Image
                   src={getImgPath("Icon/cat_icon.webp")}
                   alt="cat icon"
-                  width={47}
-                  height={46.5}
-                  className="h-5 md:h-10 w-auto"
+                  width={94}
+                  height={93}
+                  className="h-10 md:h-20 w-auto"
                 />
               </m.div>
 
