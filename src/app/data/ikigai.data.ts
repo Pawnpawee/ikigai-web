@@ -58,17 +58,6 @@ const CARD_ASSETS: Record<CardType, CardAsset> = {
   },
 };
 
-//? Flat list of all assets used on the result page — for preloading
-export const RESULT_PRELOAD_ASSETS: string[] = [
-  //? All 5 card Lotties (preload all since we don't know which one until API responds)
-  ...Object.values(CARD_ASSETS).map((a) => a.cardLottie),
-  //? Card frame (shared)
-  getImgPath("Scene/Result/card.webp"),
-  //? UI buttons
-  getImgPath("Scene/Result/save_btn.webp"),
-  getImgPath("Scene/Result/share_btn.webp"),
-  getImgPath("Icon/continue_btn.webp"),
-];
 
 //? Map MaxSessionPercentage string → CardType
 const MAX_SESSION_TO_CARD: Record<string, CardType> = {
