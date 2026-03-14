@@ -294,11 +294,11 @@ export default function S6_1({
     scrollYProgress,
     [0, 0.3, 0.6, 0.8, 1],
     [
-      "calc(0vh - 0%)", 
-      "calc(30vh - 30%)", 
+      "calc(0vh - 0%)",
+      "calc(30vh - 30%)",
       "calc(50vh - 50%)",
-      "calc(80vh - 80%)", 
-      "calc(100vh - 100%)", 
+      "calc(80vh - 80%)",
+      "calc(100vh - 100%)",
     ],
   );
 
