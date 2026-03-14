@@ -1,8 +1,6 @@
-// WordByWordAnimation.tsx
 "use client";
 import { type MotionValue, m, useTransform } from "framer-motion";
 import { createElement, type FC } from "react";
-import { useDevice } from "@/app/contexts/DeviceContext";
 
 interface WordByWordAnimationProps {
   text: string;
@@ -51,25 +49,6 @@ const WordByWordAnimation: FC<WordByWordAnimationProps> = ({
   className = "text-sm",
   style,
 }) => {
-  const { isMobile } = useDevice();
-
-  //? Mobile: แสดงข้อความตรงๆ ไม่ต้องมี animation เพื่อเพิ่ม performance
-  if (isMobile) {
-    const parts = text.split(/(\*\*.*?\*\*)/g);
-    return createElement(
-      as,
-      { className, style },
-      <span className="flex flex-wrap items-center justify-center whitespace-pre-line select-none">
-        {parts.map((part) => {
-          if (part.startsWith("**") && part.endsWith("**")) {
-            return <strong key={`bold-${part}`}>{part.slice(2, -2)}</strong>;
-          }
-          return <span key={`text-${part}`}>{part}</span>;
-        })}
-      </span>,
-    );
-  }
-
   const allWords = text.split(/\s+/).filter(Boolean);
   const totalWords = allWords.length;
   const lines = text.split("\n");
