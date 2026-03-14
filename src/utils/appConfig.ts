@@ -16,3 +16,9 @@ const getApiBaseUrl = (): string => {
 };
 
 export const API_BASE_URL = getApiBaseUrl();
+
+const getFeedbackFormUrl = (): string => {
+  return process.env.NEXT_PUBLIC_FEEDBACK_FORM_URL || "#";
+};
+
+export const FEEDBACK_FORM_URL = getFeedbackFormUrl();

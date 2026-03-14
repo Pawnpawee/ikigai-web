@@ -2,10 +2,11 @@
 
 import { useRouter, useSearchParams } from "next/navigation";
 import { useEffect, useState } from "react";
-import { API_BASE_URL } from "@/utils/appConfig";
+import { API_BASE_URL, FEEDBACK_FORM_URL } from "@/utils/appConfig";
 import { getAudioUrl } from "@/utils/cloudinaryUtils";
 import { getSessionResult, saveSessionResult } from "@/utils/storage";
 import ErrorModal from "../components/modal/ErrorModal";
+import ResultSaveFeedbackModal from "../components/modal/ResultSaveFeedbackModal";
 import LoadingScreen from "../components/reusable/LoadingScreen";
 import { useAudio } from "../contexts/AudioContext";
 import { useUser } from "../contexts/UserContext";
@@ -140,6 +141,8 @@ export default function IkigaiResultPage() {
   const [isLoading, setIsLoading] = useState(true);
   const [showErrorModal, setShowErrorModal] = useState(false);
   const [errorMessage, setErrorMessage] = useState("");
+  const [isResultFeedbackModalOpen, setIsResultFeedbackModalOpen] =
+    useState(false);
 
   //? ตั้งเพลง bg ทุกครั้งที่เข้าหน้า
   useEffect(() => {
@@ -220,6 +223,14 @@ export default function IkigaiResultPage() {
     router.push("/journey-temple");
   };
 
+  const handleOpenResultFeedbackModal = () => {
+    setIsResultFeedbackModalOpen(true);
+  };
+
+  const handleCloseResultFeedbackModal = () => {
+    setIsResultFeedbackModalOpen(false);
+  };
+
   // if (userLoading || isLoading) return <LoadingScreen isLoading={true} />;
   if (isLoading) {
     return <LoadingScreen isLoading={true} />;
@@ -248,6 +259,13 @@ export default function IkigaiResultPage() {
         playersInSessionPct={playersInSessionPct}
         maxSessionPercentage={maxSessionPercentage}
         playerName={playerName || undefined}
+        onSaveSuccess={handleOpenResultFeedbackModal}
+      />
+
+      <ResultSaveFeedbackModal
+        isOpen={isResultFeedbackModalOpen}
+        feedbackFormUrl={FEEDBACK_FORM_URL}
+        onClose={handleCloseResultFeedbackModal}
       />
     </div>
   );

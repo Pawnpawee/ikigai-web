@@ -137,7 +137,7 @@ export default function SessionSkillPage() {
         const s7_1Lock = scrollStart + scrollableDistance * 0.3;
         if (e.animatedScroll >= s7_1Lock - tolerance) {
           setLockMessage(
-            "ยังเลื่อนไปต่อไม่ได้ เลือก Hard Skills อย่างน้อย 2 ข้อ",
+            "ยังเลื่อนไปต่อไม่ได้ เลือก Hard Skills อย่างน้อย 1 ข้อ",
           );
         } else {
           setLockMessage(null);

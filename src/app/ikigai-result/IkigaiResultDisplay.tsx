@@ -73,6 +73,7 @@ interface IkigaiResultDisplayProps {
   playersInSessionPct?: number;
   maxSessionPercentage?: string;
   playerName?: string;
+  onSaveSuccess?: () => void;
 }
 
 export default function IkigaiResultDisplay({
@@ -81,6 +82,7 @@ export default function IkigaiResultDisplay({
   playersInSessionPct = 0,
   maxSessionPercentage,
   playerName,
+  onSaveSuccess,
 }: IkigaiResultDisplayProps) {
   const { isMobile } = useDevice();
   const router = useRouter();
@@ -203,6 +205,7 @@ export default function IkigaiResultDisplay({
       document.body.removeChild(link);
 
       setSaveStatus("saved");
+      onSaveSuccess?.();
       setTimeout(() => setSaveStatus("idle"), 3000);
     } catch (error) {
       console.error("Error saving screenshot:", error);
@@ -231,7 +234,7 @@ export default function IkigaiResultDisplay({
         }
       });
     }
-  }, [playerName, saveStatus]); // Dependencies ครบถ้วนตามที่คุณตั้งไว้
+  }, [onSaveSuccess, playerName, saveStatus]); // Dependencies ครบถ้วนตามที่คุณตั้งไว้
 
   const handleShareResult = useCallback(async () => {
     const shareText =

@@ -144,7 +144,7 @@ function JobAvatarCard({
             >
               {category}
             </p>
-            <p className="text-center text-[9px] min-[376px]:text-xs md:text-sm 2xl:text-base text-black line-clamp-2 select-none">
+            <p className="text-center text-[9px] min-[376px]:text-xs md:text-sm text-black line-clamp-2 select-none">
               {jobs.slice(0, 3).join(" · ")}
               {jobs.length > 3 && ` +${jobs.length - 3}`}
             </p>

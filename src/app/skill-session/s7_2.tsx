@@ -38,7 +38,7 @@ interface S7_2Props {
 //  Constants
 // ────────────────────────────────────────────────────
 
-const MIN_SELECTIONS = 3;
+const MIN_SELECTIONS = 1;
 
 // ────────────────────────────────────────────────────
 //  Main Component: S7_2 (Soft Skills - ChoiceButton Grid)

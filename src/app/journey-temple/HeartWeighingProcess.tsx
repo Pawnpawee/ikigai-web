@@ -3,13 +3,14 @@ import { AnimatePresence, m } from "framer-motion";
 import type { Howl } from "howler";
 import Image from "next/image";
 import { useEffect, useRef, useState } from "react";
+import { useSeamlessVideoLoop } from "@/app/hooks/useSeamlessVideoLoop";
 import { getAudioUrl, getVideoUrl } from "@/utils/cloudinaryUtils";
 import { useAudio } from "../contexts/AudioContext";
 import { TEMPLE_DIALOGUE } from "../data/scene_temple.data";
 
 const VIDEO_FPS = 25;
 const LOOP_START_FRAME = 226;
-const LOOP_START_TIME = LOOP_START_FRAME / VIDEO_FPS;
+const LOOP_END_FRAME = 304;
 
 interface HeartWeighingProcessProps {
   isProcessing: boolean;
@@ -22,21 +23,29 @@ export default function HeartWeighingProcess({
   isProcessing,
   progress,
   statusText,
-  statusIcon, 
+  statusIcon,
 }: HeartWeighingProcessProps) {
   const [showDialogue, setShowDialogue] = useState(false);
   const { playSfx } = useAudio();
   const videoSrc = getVideoUrl("Scene/Result/s11.mp4");
-  const videoRef = useRef<HTMLVideoElement | null>(null);
+  const {
+    activeVideoIndex,
+    handleVideoLoadedMetadata,
+    hasLoopStarted,
+    primaryVideoRef,
+    secondaryVideoRef,
+  } = useSeamlessVideoLoop({
+    enabled: isProcessing,
+    loopStartTime: LOOP_START_FRAME / VIDEO_FPS,
+    loopEndTime: LOOP_END_FRAME / VIDEO_FPS,
+  });
 
   const sparklingSoundRef = useRef<Howl | null>(null);
   const shimmeringSoundRef = useRef<Howl | null>(null);
 
   useEffect(() => {
-    if (!isProcessing) {
-      setShowDialogue(false);
-    }
-  }, [isProcessing]);
+    setShowDialogue(hasLoopStarted);
+  }, [hasLoopStarted]);
 
   useEffect(() => {
     if (isProcessing) {
@@ -79,20 +88,28 @@ export default function HeartWeighingProcess({
           transition={{ duration: 2, delay: 0.5, ease: "easeOut" }} // ให้พื้นหลังมาเต็มก่อน แล้ววิดีโอค่อยๆ โผล่ตาม
         >
           <video
-            ref={videoRef}
+            ref={primaryVideoRef}
             src={videoSrc} // ใส่ URL ของ Video
-            className="w-full h-full object-cover" // object-cover ทำให้เต็มจอสวยงาม
+            className={`absolute inset-0 h-full w-full object-cover ${
+              activeVideoIndex === 0 ? "opacity-100" : "opacity-0"
+            }`} // object-cover ทำให้เต็มจอสวยงาม
             autoPlay
             muted
             preload="auto"
             playsInline // สำคัญสำหรับ iOS
-            onEnded={() => {
-              setShowDialogue(true);
-              if (videoRef.current) {
-                videoRef.current.currentTime = LOOP_START_TIME;
-                void videoRef.current.play();
-              }
-            }}
+            onLoadedMetadata={() => handleVideoLoadedMetadata(0)}
+          />
+
+          <video
+            ref={secondaryVideoRef}
+            src={videoSrc}
+            className={`absolute inset-0 h-full w-full object-cover ${
+              activeVideoIndex === 1 ? "opacity-100" : "opacity-0"
+            }`}
+            muted
+            preload="auto"
+            playsInline
+            onLoadedMetadata={() => handleVideoLoadedMetadata(1)}
           />
         </m.div>
       </div>

@@ -1,6 +1,7 @@
 interface InputButtonProps {
   value: string;
   onChange: (value: string) => void;
+  onKeyDown?: React.KeyboardEventHandler<HTMLInputElement>;
   placeholder?: string;
   className?: string;
   style?: React.CSSProperties;
@@ -10,6 +11,7 @@ interface InputButtonProps {
 export default function InputButton({
   value,
   onChange,
+  onKeyDown,
   placeholder = "พิมพ์ข้อความ...",
   className = "",
   style = {},
@@ -34,6 +36,7 @@ export default function InputButton({
         type="text"
         value={value}
         onChange={(e) => onChange(e.target.value)}
+        onKeyDown={onKeyDown}
         placeholder={placeholder}
         maxLength={maxLength}
         className="text-center text-black bg-transparent border-none outline-none p-0"

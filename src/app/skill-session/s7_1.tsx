@@ -8,6 +8,9 @@ import {
 } from "framer-motion";
 import Image from "next/image";
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
+import { HiCheck, HiOutlineX } from "react-icons/hi";
+import GradientButton from "@/app/components/button/GradientButton";
+import InputButton from "@/app/components/button/InputButton";
 import MysteriousText from "@/app/components/reusable/MysteriousText";
 import SceneLayer, {
   type AnimationMap,
@@ -37,7 +40,18 @@ interface S7_1Props {
   onCompleted?: (data: S7_1Data | null) => void;
 }
 
-const MIN_SELECTIONS = 2;
+const MIN_SELECTIONS = 1;
+const MAX_SELECTIONS = 3;
+const ADD_SKILL_CARD_ID = "custom-add-skill";
+
+interface DisplayCard {
+  id: string;
+  label: string;
+  imageSrc?: string;
+  isAddCard?: boolean;
+  isCustomSkillCard?: boolean;
+  customSkillValue?: string;
+}
 
 // ────────────────────────────────────────────────────
 //  Carousel Navigation Arrow
@@ -92,7 +106,6 @@ function SkillCard({
   label: string;
   isSelected: boolean;
   onClick: () => void;
-  isMobile: boolean;
 }) {
   return (
     <m.button
@@ -139,6 +152,187 @@ function SkillCard({
           {label}
         </p>
       </div>
+    </m.button>
+  );
+}
+
+// ────────────────────────────────────────────────────
+//  Add Skill Card — 3 states: before_add / after_click_add
+// ────────────────────────────────────────────────────
+
+function AddSkillCard({
+  onAdd,
+  disabled,
+}: {
+  onAdd: (value: string) => string | null;
+  disabled: boolean;
+}) {
+  const [isInputMode, setIsInputMode] = useState(false);
+  const [inputValue, setInputValue] = useState("");
+  const [errorMsg, setErrorMsg] = useState<string | null>(null);
+
+  const handleConfirm = () => {
+    const error = onAdd(inputValue);
+    if (error === null) {
+      setIsInputMode(false);
+      setInputValue("");
+      setErrorMsg(null);
+    } else {
+      setErrorMsg(error);
+    }
+  };
+
+  const handleCancel = () => {
+    setIsInputMode(false);
+    setInputValue("");
+    setErrorMsg(null);
+  };
+
+  if (!isInputMode) {
+    //? before_add: รูปการ์ด + ปกติ
+    return (
+      <m.button
+        type="button"
+        onClick={() => setIsInputMode(true)}
+        disabled={disabled}
+        className="flex flex-col items-center justify-center cursor-pointer w-[23.56%] portrait:w-[55%] gap-3 lg:gap-5 disabled:opacity-60 disabled:cursor-not-allowed"
+        whileHover={disabled ? {} : { scale: 1.03 }}
+        whileTap={disabled ? {} : { scale: 0.97 }}
+        transition={{ type: "spring", stiffness: 300, damping: 20 }}
+        aria-label="เพิ่มทักษะ"
+      >
+        <div className="relative w-full aspect-396/428 transition-all duration-300">
+          <Image
+            src={CARD_FRAME_SRC}
+            alt=""
+            fill
+            sizes="25vw"
+            className="w-full z-10 pointer-events-none"
+          />
+          <div className="absolute inset-[15%] z-20 flex items-center justify-center">
+            <span className="text-yellow-200 text-5xl md:text-7xl leading-none">
+              +
+            </span>
+          </div>
+        </div>
+        <p className="text-white text-center text-xs md:text-base 2xl:text-xl leading-tight select-none px-1 text-nowrap">
+          เพิ่มทักษะ
+        </p>
+      </m.button>
+    );
+  }
+
+  //? after_click_add: input pill + confirm / cancel
+  return (
+    <m.div
+      className="flex flex-col items-center justify-center w-[23.56%] portrait:w-[55%] gap-3 lg:gap-5"
+      initial={{ opacity: 0 }}
+      animate={{ opacity: 1 }}
+      transition={{ duration: 0.15 }}
+    >
+      <div className="relative w-full aspect-396/428 transition-all duration-300">
+        <Image
+          src={CARD_FRAME_SRC}
+          alt=""
+          fill
+          sizes="25vw"
+          className="w-full z-10 pointer-events-none"
+        />
+        <div className="absolute inset-[15%] z-20 flex flex-col items-center justify-center gap-2 px-2">
+          <div className="flex flex-col w-full items-center gap-5">
+            <InputButton
+              value={inputValue}
+              onChange={(value) => {
+                setInputValue(value);
+                setErrorMsg(null);
+              }}
+              onKeyDown={(e) => {
+                if (e.key === "Enter") {
+                  e.preventDefault();
+                  handleConfirm();
+                }
+                if (e.key === "Escape") handleCancel();
+              }}
+              placeholder="ระบุทักษะ"
+              maxLength={30}
+              className="w-full px-2! md:px-6! py-2! text-xs md:text-base 2xl:text-xl"
+            />
+            <div className="flex gap-3">
+              <GradientButton
+                text=""
+                isSelected={true}
+                onClick={handleConfirm}
+                variant="white"
+                className="p-2! md:p-3!"
+              >
+                <HiCheck className="text-xs md:text-base 2xl:text-xl" />
+              </GradientButton>
+              <GradientButton
+                text=""
+                isSelected={true}
+                onClick={handleCancel}
+                variant="transparent"
+                className="p-2! md:p-3!"
+              >
+                <HiOutlineX className="text-xs md:text-base 2xl:text-xl" />
+              </GradientButton>
+            </div>
+            {errorMsg && (
+              <p className="text-rose-300 text-[10px] md:text-xs 2xl:text-sm text-center leading-tight px-1">
+                {errorMsg}
+              </p>
+            )}
+          </div>
+        </div>
+      </div>
+      <p className="text-white text-center text-xs md:text-base 2xl:text-xl leading-tight select-none px-1 text-nowrap">
+        เพิ่มทักษะ
+      </p>
+    </m.div>
+  );
+}
+
+// ────────────────────────────────────────────────────
+//  Custom Skill Card — 1 skill per card
+// ────────────────────────────────────────────────────
+
+function CustomSkillCard({
+  skill,
+  onRemove,
+}: {
+  skill: string;
+  onRemove: (skill: string) => void;
+}) {
+  return (
+    <m.button
+      type="button"
+      onClick={() => onRemove(skill)}
+      title={`คลิกเพื่อลบ: ${skill}`}
+      aria-label={`ลบทักษะ ${skill}`}
+      className="flex flex-col items-center justify-center cursor-pointer w-[23.56%] portrait:w-[55%] gap-3 lg:gap-5"
+      initial={{ opacity: 0, scale: 0.9 }}
+      animate={{ opacity: 1, scale: 1 }}
+      transition={{ type: "spring", stiffness: 300, damping: 22 }}
+      whileHover={{ scale: 1.03 }}
+      whileTap={{ scale: 0.97 }}
+    >
+      <div className="relative w-full aspect-396/428 transition-all duration-300">
+        <Image
+          src={SELECTED_FRAME_SRC}
+          alt=""
+          fill
+          sizes="25vw"
+          className="w-full z-10 pointer-events-none"
+        />
+        <div className="absolute inset-[15%] z-20 flex flex-col items-center justify-center gap-2 px-2">
+          <div className="w-full px-3 md:px-5 py-2 md:py-3 text-xs md:text-lg 2xl:text-2xl text-white transition-colors truncate">
+            {skill}
+          </div>
+        </div>
+      </div>
+      <p className="text-yellow-200 text-center text-xs md:text-base 2xl:text-xl leading-tight select-none px-1 text-nowrap">
+        ทักษะที่เพิ่มเอง
+      </p>
     </m.button>
   );
 }
@@ -196,9 +390,44 @@ export default function S7_1({ scrollYProgress, onCompleted }: S7_1Props) {
   //? Carousel State
   const [currentPage, setCurrentPage] = useState(0);
   const [selectedSkills, setSelectedSkills] = useState<string[]>([]);
+  const [customSkills, setCustomSkills] = useState<string[]>([]);
+  const [validationMessage, setValidationMessage] = useState<string | null>(
+    null,
+  );
   const [slideDirection, setSlideDirection] = useState<1 | -1>(1);
+  const totalSelections = selectedSkills.length + customSkills.length;
 
-  const totalPages = Math.ceil(HARD_SKILL_CARDS.length / ITEMS_PER_PAGE);
+  //? inject custom-skills-list card เมื่อมีทักษะที่เพิ่มเอง
+  const displayCards = useMemo<DisplayCard[]>(() => {
+    const cards: DisplayCard[] = [
+      ...HARD_SKILL_CARDS,
+      ...customSkills.map((skill) => ({
+        id: `custom-skill-${skill}`,
+        label: "ทักษะที่เพิ่มเอง",
+        isCustomSkillCard: true,
+        customSkillValue: skill,
+      })),
+    ];
+    if (totalSelections < MAX_SELECTIONS) {
+      cards.push({
+        id: ADD_SKILL_CARD_ID,
+        label: "เพิ่มทักษะ",
+        isAddCard: true,
+      });
+    }
+    return cards;
+  }, [customSkills, totalSelections]);
+
+  const totalPages = Math.ceil(displayCards.length / ITEMS_PER_PAGE);
+
+  //? Clamp currentPage เมื่อการ์ดหายออกจาก displayCards
+  useEffect(() => {
+    const maxPage = Math.max(
+      0,
+      Math.ceil(displayCards.length / ITEMS_PER_PAGE) - 1,
+    );
+    if (currentPage > maxPage) setCurrentPage(maxPage);
+  }, [displayCards.length, currentPage]);
 
   //? Preload all card images เพื่อให้ icon ขึ้นเร็วเมื่อเลื่อนหน้า carousel
   useEffect(() => {
@@ -218,11 +447,11 @@ export default function S7_1({ scrollYProgress, onCompleted }: S7_1Props) {
   //? Get cards for the current page
   const currentCards = useMemo(
     () =>
-      HARD_SKILL_CARDS.slice(
+      displayCards.slice(
         currentPage * ITEMS_PER_PAGE,
         (currentPage + 1) * ITEMS_PER_PAGE,
       ),
-    [currentPage],
+    [currentPage, displayCards],
   );
 
   // ─── Animation Timeline (0-1 within 200vh) ───
@@ -264,33 +493,85 @@ export default function S7_1({ scrollYProgress, onCompleted }: S7_1Props) {
   const onCompletedRef = useRef(onCompleted);
   onCompletedRef.current = onCompleted;
 
+  const emitCompletion = useCallback(
+    (nextSelected: string[], nextCustom: string[]) => {
+      const total = nextSelected.length + nextCustom.length;
+      if (total >= MIN_SELECTIONS && total <= MAX_SELECTIONS) {
+        queueMicrotask(() => {
+          onCompletedRef.current?.({
+            selectedHardSkills: nextSelected,
+            customHardSkills: nextCustom,
+          });
+        });
+        return;
+      }
+
+      queueMicrotask(() => {
+        onCompletedRef.current?.(null);
+      });
+    },
+    [],
+  );
+
   const handleCardToggle = useCallback(
     (label: string) => {
       playSfx(getAudioUrl("Sound/Pop_Select_Button.mp3"));
+      setValidationMessage(null);
       setSelectedSkills((prev) => {
-        const next = prev.includes(label)
-          ? prev.filter((s) => s !== label)
-          : [...prev, label];
-
-        //? แจ้ง parent ทุกครั้งที่สถานะเปลี่ยน (ครบ/ไม่ครบ)
-        if (next.length >= MIN_SELECTIONS) {
-          queueMicrotask(() => {
-            onCompletedRef.current?.({
-              selectedHardSkills: next,
-              customHardSkills: [],
-            });
-          });
-        } else {
-          //! Unselect ต่ำกว่า threshold → แจ้ง parent ให้ล็อค scroll กลับ
-          queueMicrotask(() => {
-            onCompletedRef.current?.(null);
-          });
+        if (prev.includes(label)) {
+          const next = prev.filter((s) => s !== label);
+          emitCompletion(next, customSkills);
+          return next;
         }
 
+        if (prev.length + customSkills.length >= MAX_SELECTIONS) {
+          setValidationMessage(`เลือกได้สูงสุด ${MAX_SELECTIONS} อย่าง`);
+          return prev;
+        }
+
+        const next = [...prev, label];
+        emitCompletion(next, customSkills);
         return next;
       });
     },
-    [playSfx],
+    [playSfx, customSkills, emitCompletion],
+  );
+
+  //? handleAddSkill: ส่งผ่าน AddSkillCard เพื่อ validate และเพิ่มทักษะ
+  //? Return null = สำเร็จ, return string = error message แสดงใน card
+  const handleAddSkill = useCallback(
+    (value: string): string | null => {
+      const trimmed = value.trim();
+      if (!trimmed) return "กรุณากรอกชื่อทักษะก่อนเพิ่ม";
+      if (trimmed.length > 30) return "ชื่อทักษะต้องไม่เกิน 30 ตัวอักษร";
+      const normalized = trimmed.toLowerCase();
+      if (
+        selectedSkills.some((s) => s.toLowerCase() === normalized) ||
+        customSkills.some((s) => s.toLowerCase() === normalized)
+      ) {
+        return "ทักษะนี้มีอยู่แล้ว";
+      }
+      if (selectedSkills.length + customSkills.length >= MAX_SELECTIONS) {
+        return `เลือกได้สูงสุด ${MAX_SELECTIONS} อย่าง`;
+      }
+      playSfx(getAudioUrl("Sound/Pop_Select_Button.mp3"));
+      const nextCustom = [...customSkills, trimmed];
+      setCustomSkills(nextCustom);
+      emitCompletion(selectedSkills, nextCustom);
+      return null;
+    },
+    [selectedSkills, customSkills, playSfx, emitCompletion],
+  );
+
+  const handleRemoveCustomSkill = useCallback(
+    (skill: string) => {
+      playSfx(getAudioUrl("Sound/Pop_Select_Button.mp3"));
+      const nextCustom = customSkills.filter((item) => item !== skill);
+      setCustomSkills(nextCustom);
+      setValidationMessage(null);
+      emitCompletion(selectedSkills, nextCustom);
+    },
+    [customSkills, selectedSkills, playSfx, emitCompletion],
   );
 
   const goToPage = useCallback(
@@ -382,7 +663,7 @@ export default function S7_1({ scrollYProgress, onCompleted }: S7_1Props) {
             >
               <MysteriousText
                 text={
-                  "จงเลือกสิ่งที่เจ้าถนัดมากที่สุด อย่างน้อย 2 อย่าง \n ถ้าไม่แน่ใจ ให้เลือกสิ่งที่คิดว่าทำได้ดี ณ ตอนนี้ ? (Hard Skills)"
+                  "จงเลือกสิ่งที่เจ้าถนัดมากที่สุด อย่างน้อย 1 อย่าง และไม่เกิน 3 อย่าง \n ถ้าไม่แน่ใจ ให้เลือกสิ่งที่คิดว่าทำได้ดี ณ ตอนนี้ ? (Hard Skills)"
                 }
                 scrollYProgress={scrollYProgress}
                 startProgress={0.15}
@@ -394,8 +675,8 @@ export default function S7_1({ scrollYProgress, onCompleted }: S7_1Props) {
                 className="text-center mt-1 sm:mt-2 select-none text-xs md:text-base xl:text-lg text-gray-300"
                 style={{ opacity: carouselOpacity }}
               >
-                เลือกแล้ว {selectedSkills.length} (ขั้นต่ำ {MIN_SELECTIONS}{" "}
-                อย่าง เพื่อเลื่อนไปยังส่วนถัดไป)
+                เลือกแล้ว {totalSelections}/{MAX_SELECTIONS} (ขั้นต่ำ{" "}
+                {MIN_SELECTIONS} อย่าง เพื่อเลื่อนไปยังส่วนถัดไป)
               </m.p>
             </m.div>
 
@@ -429,16 +710,29 @@ export default function S7_1({ scrollYProgress, onCompleted }: S7_1Props) {
                       }}
                       className="flex justify-center items-center gap-[5%] portrait:flex-col portrait:gap-[1.56%] w-full h-full"
                     >
-                      {currentCards.map((card) => (
-                        <SkillCard
-                          key={card.id}
-                          imageSrc={card.imageSrc}
-                          label={card.label}
-                          isSelected={selectedSkills.includes(card.label)}
-                          onClick={() => handleCardToggle(card.label)}
-                          isMobile={isMobile}
-                        />
-                      ))}
+                      {currentCards.map((card) =>
+                        card.isCustomSkillCard && card.customSkillValue ? (
+                          <CustomSkillCard
+                            key={card.id}
+                            skill={card.customSkillValue}
+                            onRemove={handleRemoveCustomSkill}
+                          />
+                        ) : card.isAddCard ? (
+                          <AddSkillCard
+                            key={card.id}
+                            onAdd={handleAddSkill}
+                            disabled={totalSelections >= MAX_SELECTIONS}
+                          />
+                        ) : (
+                          <SkillCard
+                            key={card.id}
+                            imageSrc={card.imageSrc ?? ""}
+                            label={card.label}
+                            isSelected={selectedSkills.includes(card.label)}
+                            onClick={() => handleCardToggle(card.label)}
+                          />
+                        ),
+                      )}
                     </m.div>
                   </AnimatePresence>
                 </div>
@@ -459,6 +753,12 @@ export default function S7_1({ scrollYProgress, onCompleted }: S7_1Props) {
                   onPageChange={goToPage}
                 />
               </div>
+
+              {validationMessage && (
+                <p className="mt-2 text-center text-xs md:text-sm text-rose-300 pointer-events-none">
+                  {validationMessage}
+                </p>
+              )}
             </m.div>
           </div>
         </SceneLayer>

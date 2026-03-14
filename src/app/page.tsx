@@ -3,6 +3,7 @@
 import dynamic from "next/dynamic";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
+import { getAudioUrl } from "@/utils/cloudinaryUtils";
 import WelcomeSoundModal from "./components/modal/WelcomeSoundModal";
 import DecisionSection from "./components/reusable/DecisionSection";
 import EyelidOverlay from "./components/reusable/EyeLidOverlay";
@@ -26,7 +27,7 @@ const Sleeping = dynamic(() => import("./prologue/Sleeping"), {
 export default function Home() {
   const router = useRouter();
   const [showWelcomeModal, setShowWelcomeModal] = useState(false);
-  const { start, stop } = useAudio();
+  const { start, stop, setBgMusic } = useAudio();
 
   const [shouldAnimate, setShouldAnimate] = useState(false);
 
@@ -40,6 +41,13 @@ export default function Home() {
       setShouldAnimate(true);
     }
   }, []);
+
+  //? กลับมาหน้า main ให้ใช้เพลงหลักเสมอ
+  useEffect(() => {
+    setBgMusic(getAudioUrl("Sound/bg-music.mp3"), {
+      immediate: true,
+    });
+  }, [setBgMusic]);
 
   const handleAcceptSoundModal = () => {
     setShowWelcomeModal(false);
