@@ -59,10 +59,7 @@ export const SCENE_S8_5_ITEMS: SceneItemData[] = [
     },
     mobileStyle: {
       //? Mobile: 867:12294 x=881.19, y=985.32, w=294.28, h=94.84
-      width: "27.25%",
-      height: "4.94%",
-      left: "81.59%",
-      top: "51.32%",
+      width: "0%",
     },
     animGroup: 3,
     className: "z-1",
@@ -80,10 +77,7 @@ export const SCENE_S8_5_ITEMS: SceneItemData[] = [
     },
     mobileStyle: {
       //? Mobile: 867:12174 x=-99.21, y=1026.91, w=214.72, h=69.47
-      width: "19.88%",
-      height: "3.62%",
-      left: "-9.19%",
-      top: "53.48%",
+      width: "0%",
     },
     animGroup: 4,
     className: "z-1",

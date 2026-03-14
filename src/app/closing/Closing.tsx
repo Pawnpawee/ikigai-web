@@ -37,7 +37,10 @@ export default function ClosingPage() {
 
   //? ตั้งเพลง bg ทุกครั้งที่เข้าหน้า ไม่ว่าจะ mute หรือไม่ เพื่อให้ soundRef ตรงกับหน้าปัจจุบัน
   useEffect(() => {
-    setBgMusic(getAudioUrl("Sound/10/egypt_expedition.mp3"));
+    //? ตัดเพลงหน้าก่อนหน้าทันที เพื่อลดการได้ยินเสียงค้างระหว่างเปลี่ยนฉาก
+    setBgMusic(getAudioUrl("Sound/10/egypt_expedition.mp3"), {
+      immediate: true,
+    });
   }, [setBgMusic]);
 
   const { scrollYProgress } = useScroll({

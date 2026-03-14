@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import { API_BASE_URL } from "@/utils/appConfig";
 import { getImgPath } from "@/utils/cloudinaryUtils";
 import { saveSessionResult } from "@/utils/storage";
@@ -14,6 +14,22 @@ export const useIkigaiProcess = () => {
   } | null>(null);
   const [isProcessing, setIsProcessing] = useState(false);
   const [errorMsg, setErrorMsg] = useState("");
+
+  //? Mid-phase (40 -> 50 -> 60) timer control
+  const isMidPhaseStartedRef = useRef(false);
+  const midPhaseTimer1Ref = useRef<NodeJS.Timeout | null>(null);
+  const midPhaseTimer2Ref = useRef<NodeJS.Timeout | null>(null);
+
+  const clearMidPhaseTimers = useCallback(() => {
+    if (midPhaseTimer1Ref.current) {
+      clearTimeout(midPhaseTimer1Ref.current);
+      midPhaseTimer1Ref.current = null;
+    }
+    if (midPhaseTimer2Ref.current) {
+      clearTimeout(midPhaseTimer2Ref.current);
+      midPhaseTimer2Ref.current = null;
+    }
+  }, []);
 
   // 🌟 1. Effect สำหรับช่วงปกติ (วิ่งเนียนๆ ทีละ 1%)
   useEffect(() => {
@@ -33,128 +49,135 @@ export const useIkigaiProcess = () => {
     }
   }, [displayProgress, targetProgress]);
 
-  // 🌟 2. Effect เปลี่ยนข้อความและเลข 40->50->60
+  // 🌟 2. Effect เปลี่ยนข้อความและเลขสถานะ
   useEffect(() => {
-    let timer: NodeJS.Timeout;
-
     if (targetProgress >= 100) {
+      clearMidPhaseTimers();
+      isMidPhaseStartedRef.current = false;
       setStatusText("ใกล้เสร็จแล้ว กำลังบันทึกผลลัพธ์...");
       setStatusIcon(null);
     } else if (targetProgress >= 80) {
+      clearMidPhaseTimers();
+      isMidPhaseStartedRef.current = false;
       setStatusText('กำลังวิเคราะห์ "อิคิไก" ของคุณ...');
       setStatusIcon(null);
     } else if (targetProgress >= 40) {
-      const sequence = [
-        {
-          text: "กำลังวิเคราะห์สิ่งที่คุณถนัด...",
-          icon: { src: getImgPath("Icon/skill.webp"), alt: "Skill" },
-          pct: 40,
-        },
-        {
-          text: "กำลังวิเคราะห์สิ่งที่โลกต้องการ...",
-          icon: { src: getImgPath("Icon/world.webp"), alt: "World" },
-          pct: 50,
-        },
-        {
-          text: "กำลังวิเคราะห์สิ่งที่คุณสามารถสร้างรายได้ได้...",
-          icon: { src: getImgPath("Icon/paid.webp"), alt: "Paid" },
-          pct: 60,
-        },
-      ];
+      //? เริ่ม phase นี้แค่ครั้งเดียวต่อรอบ process เพื่อกันการรีเซ็ตจาก SSE ช่วง 40-79
+      if (!isMidPhaseStartedRef.current) {
+        isMidPhaseStartedRef.current = true;
+        clearMidPhaseTimers();
 
-      let step = 0;
+        // แสดง 40% ทันที
+        setStatusText("กำลังวิเคราะห์สิ่งที่คุณถนัด...");
+        setStatusIcon({ src: getImgPath("Icon/skill.webp"), alt: "Skill" });
+        setDisplayProgress(40);
 
-      // แสดง 40% ทันที
-      setStatusText(sequence[0].text);
-      setStatusIcon(sequence[0].icon);
-      setDisplayProgress(sequence[0].pct);
+        // ผ่านไป 10 วิ -> 50%
+        midPhaseTimer1Ref.current = setTimeout(() => {
+          setStatusText("กำลังวิเคราะห์สิ่งที่โลกต้องการ...");
+          setStatusIcon({ src: getImgPath("Icon/world.webp"), alt: "World" });
+          setDisplayProgress(50);
 
-      timer = setInterval(() => {
-        // 🛑 เช็คว่ายังไม่ถึงอันสุดท้าย (60%) ใช่ไหม? ถ้าใช่ก็ไปต่อ
-        if (step < sequence.length - 1) {
-          step++;
-          setStatusText(sequence[step].text);
-          setStatusIcon(sequence[step].icon);
-          setDisplayProgress(sequence[step].pct);
-        } else {
-          // 🛑 ถ้าถึง 60% แล้ว (step = 2) ให้ "หยุด" สไลด์โชว์ทันที
-          // ไม่ต้องวนกลับไป 40 อีก หลอดจะค้างที่ 60% สวยๆ เพื่อรอ Backend ส่ง 80 มา
-          clearInterval(timer);
-        }
-      }, 2500); // หน่วงเวลา 2.5 วินาทีต่อการเปลี่ยน 1 ครั้ง
+          // ผ่านไปอีก 10 วิ -> 60% แล้วค้างจนกว่า targetProgress >= 80
+          midPhaseTimer2Ref.current = setTimeout(() => {
+            setStatusText("กำลังวิเคราะห์สิ่งที่คุณสามารถสร้างรายได้ได้...");
+            setStatusIcon({ src: getImgPath("Icon/paid.webp"), alt: "Paid" });
+            setDisplayProgress(60);
+          }, 10000);
+        }, 10000);
+      }
     } else if (targetProgress >= 20) {
+      clearMidPhaseTimers();
+      isMidPhaseStartedRef.current = false;
       setStatusText("กำลังวิเคราะห์สิ่งที่คุณรัก...");
       setStatusIcon({ src: getImgPath("Icon/love.webp"), alt: "Love" });
     } else if (targetProgress > 0) {
+      clearMidPhaseTimers();
+      isMidPhaseStartedRef.current = false;
       setStatusText("กำลังเตรียมข้อมูล...");
       setStatusIcon(null);
     } else {
+      clearMidPhaseTimers();
+      isMidPhaseStartedRef.current = false;
       setStatusText("กำลังอัญเชิญดวงดาว...");
       setStatusIcon(null);
     }
+  }, [targetProgress, clearMidPhaseTimers]);
 
+  //? cleanup timers on unmount
+  useEffect(() => {
     return () => {
-      if (timer) clearInterval(timer);
+      clearMidPhaseTimers();
     };
-  }, [targetProgress]);
+  }, [clearMidPhaseTimers]);
 
-  const startProcess = useCallback(async (userId: string) => {
-    setIsProcessing(true);
-    setErrorMsg("");
-    setTargetProgress(0);
-    setDisplayProgress(0); // รีเซ็ตหลอดกลับเป็น 0
-    setStatusIcon(null);
+  const startProcess = useCallback(
+    async (userId: string) => {
+      setIsProcessing(true);
+      setErrorMsg("");
+      setTargetProgress(0);
+      setDisplayProgress(0); // รีเซ็ตหลอดกลับเป็น 0
+      setStatusIcon(null);
+      isMidPhaseStartedRef.current = false;
+      clearMidPhaseTimers();
 
-    let eventSource: EventSource | null = null;
+      let eventSource: EventSource | null = null;
 
-    try {
-      const res = await fetch(`${API_BASE_URL}/api/ikigai/generate/${userId}`, {
-        method: "POST",
-      });
-      if (!res.ok) throw new Error("Failed to start process");
+      try {
+        const res = await fetch(
+          `${API_BASE_URL}/api/ikigai/generate/${userId}`,
+          {
+            method: "POST",
+          },
+        );
+        if (!res.ok) throw new Error("Failed to start process");
 
-      const data = await res.json();
-      const processId = data.processId;
-      sessionStorage.setItem("ikigaiProcessId", processId);
+        const data = await res.json();
+        const processId = data.processId;
+        sessionStorage.setItem("ikigaiProcessId", processId);
 
-      eventSource = new EventSource(
-        `${API_BASE_URL}/api/ikigai/stream/${processId}`,
-      );
+        eventSource = new EventSource(
+          `${API_BASE_URL}/api/ikigai/stream/${processId}`,
+        );
 
-      eventSource.onmessage = (event) => {
-        const sseData = JSON.parse(event.data);
+        eventSource.onmessage = (event) => {
+          const sseData = JSON.parse(event.data);
 
-        if (sseData.progress === -1) {
-          setErrorMsg(`เกิดข้อผิดพลาด: ${sseData.error}`);
-          setIsProcessing(false);
+          if (sseData.progress === -1) {
+            setErrorMsg(`เกิดข้อผิดพลาด: ${sseData.error}`);
+            setIsProcessing(false);
+            eventSource?.close();
+            return;
+          }
+
+          // ⭐ รับเลขมา แต่ใส่ไว้ใน Target แล้วให้ Effect ข้างบนค่อยๆ วิ่งตามไปเอง
+          setTargetProgress(sseData.progress);
+
+          if (sseData.progress === 100) {
+            saveSessionResult(sseData.result);
+            eventSource?.close();
+          }
+        };
+
+        eventSource.onerror = (err) => {
+          console.error("SSE Error:", err);
+          setErrorMsg(
+            "การเชื่อมต่อขาดหาย ระบบกำลังพยายามทำงานต่อเบื้องหลัง...",
+          );
           eventSource?.close();
-          return;
-        }
+        };
+      } catch (error: unknown) {
+        console.error(error);
+        setErrorMsg("ไม่สามารถเริ่มการประมวลผลได้ กรุณาลองใหม่");
+        setIsProcessing(false);
+      }
 
-        // ⭐ รับเลขมา แต่ใส่ไว้ใน Target แล้วให้ Effect ข้างบนค่อยๆ วิ่งตามไปเอง
-        setTargetProgress(sseData.progress);
-
-        if (sseData.progress === 100) {
-          saveSessionResult(sseData.result);
-          eventSource?.close();
-        }
+      return () => {
+        if (eventSource) eventSource.close();
       };
-
-      eventSource.onerror = (err) => {
-        console.error("SSE Error:", err);
-        setErrorMsg("การเชื่อมต่อขาดหาย ระบบกำลังพยายามทำงานต่อเบื้องหลัง...");
-        eventSource?.close();
-      };
-    } catch (error: unknown) {
-      console.error(error);
-      setErrorMsg("ไม่สามารถเริ่มการประมวลผลได้ กรุณาลองใหม่");
-      setIsProcessing(false);
-    }
-
-    return () => {
-      if (eventSource) eventSource.close();
-    };
-  }, []);
+    },
+    [clearMidPhaseTimers],
+  );
 
   // ⭐ ส่ง displayProgress กลับไปให้ Component เพื่อให้เลข/หลอด ค่อยๆ วิ่ง
   return {

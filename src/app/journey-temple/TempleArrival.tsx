@@ -202,7 +202,7 @@ export default function TempleArrival({ onStartCeremony }: TempleArrivalProps) {
 
       {/* Ceremony button - ปุ่มเริ่มพิธีชั่งหัวใจ */}
       <m.div
-        className="fixed bottom-[5%] left-0 right-0 flex justify-center z-20"
+        className="fixed bottom-[8%] left-0 right-0 flex justify-center z-20"
         style={{
           opacity: buttonOpacity,
           y: buttonY,

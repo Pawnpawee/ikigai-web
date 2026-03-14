@@ -152,6 +152,36 @@ export default function IkigaiResultDisplay({
       }
     });
 
+    //? รอให้รูปทั้งหมดโหลด/ถอดรหัสเสร็จก่อน capture
+    //? โดยเฉพาะบน mobile ที่ network ช้ากว่า ทำให้บางรูป (เช่นวงกลม) ยังไม่พร้อมตอน toPng
+    const waitForImageReady = (img: HTMLImageElement) => {
+      return new Promise<void>((resolve) => {
+        // complete + naturalWidth > 0 = โหลดสำเร็จแล้ว
+        if (img.complete && img.naturalWidth > 0) {
+          if (typeof img.decode === "function") {
+            img
+              .decode()
+              .catch(() => undefined)
+              .finally(() => resolve());
+            return;
+          }
+          resolve();
+          return;
+        }
+
+        const done = () => {
+          img.removeEventListener("load", done);
+          img.removeEventListener("error", done);
+          resolve();
+        };
+
+        img.addEventListener("load", done, { once: true });
+        img.addEventListener("error", done, { once: true });
+      });
+    };
+
+    await Promise.all(Array.from(imgElements).map(waitForImageReady));
+
     try {
       //? Screenshot ทั้ง container ด้วย html-to-image
       const dataUrl = await toPng(captureRef.current, {

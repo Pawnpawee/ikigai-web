@@ -21,7 +21,7 @@ interface AudioContextType {
   // Actions
   start: () => void;
   stop: () => void;
-  setBgMusic: (src: string | null) => void;
+  setBgMusic: (src: string | null, options?: { immediate?: boolean }) => void;
   setVolume: (vol: number) => void;
   setSfxVolume: (vol: number) => void;
   playSfx: (
@@ -84,6 +84,17 @@ export function AudioProvider({ children }: { children: React.ReactNode }) {
         setIsMuted(true);
         isMutedRef.current = true;
         Howler.mute(true);
+      } else {
+        //? savedMuted === false: restore unmuted state for returning users
+        //! Without this, isMuted stays true (useState default) → all SFX blocked
+        setIsMuted(false);
+        isMutedRef.current = false;
+        Howler.mute(false);
+        //? iOS Safari: AudioContext starts suspended on every page load.
+        //? Resume it here so scroll-triggered sounds work without requiring a gesture.
+        if (Howler.ctx && Howler.ctx.state === "suspended") {
+          Howler.ctx.resume();
+        }
       }
     } else {
       // Default state
@@ -118,6 +129,10 @@ export function AudioProvider({ children }: { children: React.ReactNode }) {
     setIsMuted(false);
     isMutedRef.current = false;
     Howler.mute(false);
+    //? iOS Safari: resume suspended AudioContext when user explicitly enables audio
+    if (Howler.ctx && Howler.ctx.state === "suspended") {
+      Howler.ctx.resume();
+    }
     saveSettings({ isMuted: false });
 
     //? Resume หรือ fade in เพลงที่เล่นอยู่ (อาจเล่นอยู่แล้วที่ volume 0)
@@ -154,20 +169,29 @@ export function AudioProvider({ children }: { children: React.ReactNode }) {
   };
 
   // 4. Set Background Music (with Fade In/Out)
-  const setBgMusic = (src: string | null) => {
+  const setBgMusic = (
+    src: string | null,
+    options?: { immediate?: boolean },
+  ) => {
+    const immediate = options?.immediate ?? false;
     if (currentBgMusic === src) return;
 
     const prevSound = soundRef.current;
 
     // Step A: Fade out เพลงเก่าก่อน
     if (prevSound?.playing()) {
-      prevSound.fade(prevSound.volume(), 0, 500);
-
-      //? รอให้ fade out เสร็จก่อน stop และ unload
-      setTimeout(() => {
+      if (immediate) {
         prevSound.stop();
         prevSound.unload();
-      }, 500);
+      } else {
+        prevSound.fade(prevSound.volume(), 0, 500);
+
+        //? รอให้ fade out เสร็จก่อน stop และ unload
+        setTimeout(() => {
+          prevSound.stop();
+          prevSound.unload();
+        }, 500);
+      }
     } else if (prevSound) {
       //? ถ้าไม่ได้เล่นอยู่ก็ unload ทันที
       prevSound.unload();
@@ -192,6 +216,12 @@ export function AudioProvider({ children }: { children: React.ReactNode }) {
         });
 
         soundRef.current = newSound;
+
+        //? Mobile Safari: ให้ resume AudioContext ก่อน play เพื่อกันเสียงไม่ออก
+        if (!isMuted && Howler.ctx && Howler.ctx.state === "suspended") {
+          Howler.ctx.resume();
+        }
+
         newSound.play();
 
         //? Fade in เพลงใหม่
@@ -205,7 +235,7 @@ export function AudioProvider({ children }: { children: React.ReactNode }) {
     };
 
     //? เริ่มเล่นเพลงใหม่หลังจากเพลงเก่า fade out เสร็จ (หรือทันทีถ้าไม่มีเพลงเก่า)
-    if (prevSound?.playing()) {
+    if (prevSound?.playing() && !immediate) {
       setTimeout(playNewSound, 500);
     } else {
       playNewSound();

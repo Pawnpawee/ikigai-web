@@ -39,7 +39,7 @@ export default function ScrollTo({
     >
       <div className="flex flex-col gap-0 items-center animate-fade-loop">
         <div className="flex gap-2 items-center relative shrink-0">
-          <p className={`text-base ${toneClasses}`}>{message}</p>
+          <p className={`text-xs sm:text-sm md:text-base ${toneClasses}`}>{message}</p>
         </div>
 
         <div className={icon === "down" ? "animate-bounce-slow" : ""}>

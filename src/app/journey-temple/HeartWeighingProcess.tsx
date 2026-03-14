@@ -63,9 +63,9 @@ export default function HeartWeighingProcess({
 
       <div className="absolute inset-0">
         <m.div
-          className="absolute inset-0 z-10"
-          initial={{ opacity: 0, scale: 1.05 }} // เทคนิคแถม: เฟดพร้อมกับหดลงนิดๆ ให้ดูลึกมีมิติ
-          animate={{ opacity: 1, scale: 1 }}
+          className="absolute inset-0"
+          initial={{ opacity: 0  }} // เทคนิคแถม: เฟดพร้อมกับหดลงนิดๆ ให้ดูลึกมีมิติ
+          animate={{ opacity: 1 }}
           transition={{ duration: 2, delay: 0.5, ease: "easeOut" }} // ให้พื้นหลังมาเต็มก่อน แล้ววิดีโอค่อยๆ โผล่ตาม
         >
           <video
@@ -73,10 +73,9 @@ export default function HeartWeighingProcess({
             src={getVideoUrl("Scene/Result/s11.mp4")} // ใส่ URL ของ Video
             className="w-full h-full object-cover" // object-cover ทำให้เต็มจอสวยงาม
             autoPlay
-            muted // สำคัญ: ต้อง muted ถึงจะ autoPlay บน Browser สมัยใหม่ได้ (เสียงเราใช้ Howler อยู่แล้ว)
+            muted 
             playsInline // สำคัญสำหรับ iOS
             onEnded={() => {
-              // ⭐ เมื่อวิดีโอเล่นจบ จะเทียบเท่ากับ instance.addEventListener("complete")
               setShowDialogue(true);
               if (videoRef.current) {
                 videoRef.current.currentTime = 9.04;
@@ -94,7 +93,7 @@ export default function HeartWeighingProcess({
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 1 }}
         >
-          <p className="text-white text-xl md:text-2xl leading-relaxed whitespace-pre-line drop-shadow-[0_0_10px_#ffffff]">
+          <p className="text-white text-lg md:text-2xl leading-relaxed whitespace-pre-line drop-shadow-[0_0_10px_#ffffff]">
             {TEMPLE_DIALOGUE.weighing}
           </p>
         </m.div>
@@ -123,6 +122,7 @@ export default function HeartWeighingProcess({
                   src={statusIcon.src}
                   alt={statusIcon.alt}
                   fill
+                  sizes="(max-width: 768px) 48px, 64px"
                   className="object-contain animate-pulse" // ให้รูปเต้นตุ๊บๆ เบาๆ
                 />
               </m.div>
@@ -143,7 +143,7 @@ export default function HeartWeighingProcess({
           key={statusText}
           initial={{ opacity: 0, y: 10 }}
           animate={{ opacity: 1, y: 0 }}
-          className="text-white text-xl md:text-3xl font-light tracking-wide drop-shadow-[0_0_8px_rgba(255,255,255,0.8)]"
+          className="text-white  text-lg md:text-2xl font-light tracking-wide drop-shadow-[0_0_8px_rgba(255,255,255,0.8)]"
         >
           {statusText || "กำลังเชื่อมต่อ..."}
         </m.p>

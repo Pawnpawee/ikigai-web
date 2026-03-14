@@ -65,7 +65,7 @@ export default function WalkingDesert() {
   return (
     <m.div
       ref={ref}
-      className="relative w-screen h-[200vh]"
+      className="relative w-screen h-[300vh]"
       style={{ opacity }}
     >
       {/* Sticky Container */}

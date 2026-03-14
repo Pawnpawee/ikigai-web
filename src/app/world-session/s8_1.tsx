@@ -236,7 +236,7 @@ export default function S8_1({ scrollYProgress, onCompleted }: S8_1Props) {
             return (
               <m.div
                 key={bubble.id}
-                className="absolute flex shrink-0 items-center justify-center bg-black/20 px-[1%] py-[0.5%] z-3"
+                className="absolute flex shrink-0 items-center justify-center bg-black/20 px-[1%] py-[1%] z-3"
                 style={{
                   left: pos.left,
                   top: pos.top,
@@ -244,7 +244,7 @@ export default function S8_1({ scrollYProgress, onCompleted }: S8_1Props) {
                   opacity: textBubbleOpacities[index],
                 }}
               >
-                <p className="whitespace-pre-line text-center text-[0.55rem] leading-normal tracking-[0.6px] text-white md:text-base 2xl:text-xl">
+                <p className="whitespace-pre-line text-center leading-normal tracking-[0.6px] text-white text-sm md:text-lg 2xl:text-2xl">
                   {bubble.text}
                 </p>
               </m.div>

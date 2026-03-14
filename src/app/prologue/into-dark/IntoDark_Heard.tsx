@@ -196,11 +196,7 @@ export default function IntoDarkHeard({
                 </div>
                 <div className="mb-2">
                   <MysteriousText
-                    text={
-                      isMobile
-                        ? `และอีกสิ่งคือสิ่งที่โลกยอมจ่ายให้ \n (What you can be paid for)`
-                        : `— และอีกสิ่งคือสิ่งที่โลกยอมจ่ายให้ \n (What you can be paid for)`
-                    }
+                    text={`— และอีกสิ่งคือสิ่งที่โลกยอมจ่ายให้ \n (What you can be paid for)`}
                     scrollYProgress={scrollYProgress}
                     startProgress={0.63}
                     endProgress={0.65}

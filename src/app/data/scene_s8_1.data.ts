@@ -66,10 +66,7 @@ export const SCENE_S8_1_ITEMS: SceneItemData[] = [
     },
     mobileStyle: {
       //? Mobile: 300.33×96.80 at (896.54, 978.67) in 1080×1920
-      width: "27.81%",
-      height: "5.04%",
-      left: "83.01%",
-      top: "50.97%",
+      width: "0%",
     },
     animGroup: 3,
     className: "z-1",
@@ -87,10 +84,7 @@ export const SCENE_S8_1_ITEMS: SceneItemData[] = [
     },
     mobileStyle: {
       //? Mobile: 219.16×70.91 at (-104.06, 1021.10) in 1080×1920
-      width: "20.29%",
-      height: "3.69%",
-      left: "-9.64%",
-      top: "53.18%",
+      width: "0%",
     },
     animGroup: 4,
     className: "z-1",
@@ -263,7 +257,7 @@ export const S8_1_TEXT_BUBBLES = [
     //? Desktop: 238×140 at (576, 371) in 1920×1080
     style: { left: "30.00%", top: "34.35%", width: "12.40%" },
     //? Mobile: 198×116 at (62, 739) in 1080×1920
-    mobileStyle: { left: "5.74%", top: "38.49%", width: "18.33%" },
+    mobileStyle: { left: "10%", top: "40%", width: "22%" },
   },
   {
     id: "text_2",
@@ -271,7 +265,7 @@ export const S8_1_TEXT_BUBBLES = [
     //? Desktop: 423×140 at (882, 296) in 1920×1080
     style: { left: "45.94%", top: "27.41%", width: "22.03%" },
     //? Mobile: 346×116 at (529, 662) in 1080×1920
-    mobileStyle: { left: "48.98%", top: "34.48%", width: "32.04%" },
+    mobileStyle: { left: "48.98%", top: "34.48%", width: "40%" },
   },
   {
     id: "text_3",
@@ -279,7 +273,7 @@ export const S8_1_TEXT_BUBBLES = [
     //? Desktop: 228×140 at (1207, 512) in 1920×1080
     style: { left: "62.86%", top: "47.41%", width: "11.88%" },
     //? Mobile: 191×116 at (835, 974) in 1080×1920
-    mobileStyle: { left: "77.31%", top: "50.73%", width: "17.69%" },
+    mobileStyle: { left: "70%", top: "52%", width: "20%" },
   },
 ] as const;
 

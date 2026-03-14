@@ -57,6 +57,7 @@ interface S7_3Props {
 
 export default function S7_3({ scrollYProgress, onCompleted }: S7_3Props) {
   const { isMobile } = useDevice();
+  const sectionRef = useRef<HTMLDivElement>(null);
 
   //? State: user selections
   const [skillsMatchJob, setSkillsMatchJob] = useState<string | null>(null);
@@ -64,6 +65,7 @@ export default function S7_3({ scrollYProgress, onCompleted }: S7_3Props) {
     null,
   );
   const [showContinueButton, setShowContinueButton] = useState(false);
+  const [showQ1Validation, setShowQ1Validation] = useState(false);
 
   // ─── Container Animations ───
 
@@ -86,8 +88,8 @@ export default function S7_3({ scrollYProgress, onCompleted }: S7_3Props) {
   //? 0vh = shows Q1 (top half), -100vh = shows Q2 (bottom half)
   const top = useTransform(
     scrollYProgress,
-    [0, 0.35, 0.9, 1],
-    ["0vh", "0vh", "-100vh", "-100vh"],
+    [0.35, 0.9, 1],
+    ["calc(0vh - 0%)", "calc(50vh - 50%)", "calc(100vh - 100%)"],
   );
 
   // ─── Background Item Animations ───
@@ -172,6 +174,7 @@ export default function S7_3({ scrollYProgress, onCompleted }: S7_3Props) {
   //? Q1: Select skills match answer
   const handleQ1Select = (choiceId: string) => {
     setSkillsMatchJob(choiceId);
+    setShowQ1Validation(false);
   };
 
   //? Q2: Select use-skills-in-new-role answer → show continue button
@@ -183,6 +186,15 @@ export default function S7_3({ scrollYProgress, onCompleted }: S7_3Props) {
 
   //? Handle continue button click → submit S7_3 data
   const handleContinue = () => {
+    if (!skillsMatchJob) {
+      setShowQ1Validation(true);
+
+      //? Scroll back to the start of S7_3 so Q1 is visible immediately
+      const q1Top = sectionRef.current?.offsetTop ?? 0;
+      window.scrollTo({ top: Math.max(0, q1Top), behavior: "smooth" });
+      return;
+    }
+
     if (skillsMatchJob && useSkillsInNewRole) {
       onCompleted?.({
         skillsMatchJob,
@@ -192,7 +204,11 @@ export default function S7_3({ scrollYProgress, onCompleted }: S7_3Props) {
   };
 
   return (
-    <m.div className="sticky top-0 w-full overflow-hidden" style={{ top }}>
+    <m.div
+      ref={sectionRef}
+      className="sticky top-0 w-full overflow-hidden"
+      style={{ top }}
+    >
       <m.div
         className="flex items-center justify-center min-h-screen "
         style={{ opacity: 1, zIndex: containerZIndex }}
@@ -215,7 +231,7 @@ export default function S7_3({ scrollYProgress, onCompleted }: S7_3Props) {
               }}
             >
               <LazyLottie
-                src={getJsonUrl("Scene/Scene7/04/star_mb.json")}
+                src={getJsonUrl("Scene/Scene7/04/star-mb.json")}
                 className="w-full h-full"
                 loop
                 playTrigger={starOpacity}
@@ -245,12 +261,10 @@ export default function S7_3({ scrollYProgress, onCompleted }: S7_3Props) {
           <m.div
             className="absolute"
             style={{
-              //? Desktop: 1945.97×853.18 at (-56.30, 406.03) in 1920×2160
-              //? Mobile: 1346.51×246.45 at (-136.84, 1355.42) in 1080×3840
-              width: isMobile ? "124.68%" : "101.35%",
-              height: isMobile ? "6.42%" : "39.50%",
-              left: isMobile ? "-12.67%" : "-2.93%",
-              top: isMobile ? "35.30%" : "18.80%",
+              width: isMobile ? "178.88%" : "101.35%",
+              height: isMobile ? "22.06%" : "39.50%",
+              left: isMobile ? "-43.8%" : "-2.93%",
+              top: isMobile ? "25.52%" : "18.80%",
               opacity: q1PaperOpacity,
             }}
           >
@@ -346,6 +360,18 @@ export default function S7_3({ scrollYProgress, onCompleted }: S7_3Props) {
                 />
               ))}
             </div>
+
+            <m.p
+              className="mt-4 text-center text-sm md:text-lg text-red-300"
+              initial={{ opacity: 0, y: 6 }}
+              animate={{
+                opacity: showQ1Validation ? 1 : 0,
+                y: showQ1Validation ? 0 : 6,
+              }}
+              transition={{ duration: 0.25, ease: "easeOut" }}
+            >
+              กรุณาเลือกคำตอบข้อแรกก่อน
+            </m.p>
           </m.div>
 
           {/* ═══ Q2 Content ═══ */}

@@ -293,7 +293,13 @@ export default function S6_1({
   const top = useTransform(
     scrollYProgress,
     [0, 0.3, 0.6, 0.8, 1],
-    ["0vh", "-30vh", "-50vh", "-80vh", "-100vh"],
+    [
+      "calc(0vh - 0%)", 
+      "calc(30vh - 30%)", 
+      "calc(50vh - 50%)",
+      "calc(80vh - 80%)", 
+      "calc(100vh - 100%)", 
+    ],
   );
 
   return (
@@ -747,7 +753,7 @@ export default function S6_1({
                     </m.div>
 
                     {/* Navigation Buttons */}
-                    <div className="flex w-full justify-center gap-5 md:gap-10 py-2 px-6">
+                    <div className="flex w-full justify-center gap-5 md:gap-10 py-2 md:px-6">
                       {/* Back (Step 2 only) — แสดงทันทีเมื่ออยู่ step 2 */}
                       {step === 2 && (
                         <m.div

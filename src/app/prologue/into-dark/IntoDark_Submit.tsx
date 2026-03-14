@@ -86,7 +86,11 @@ export default function IntoDarkSubmit({
   const top = useTransform(
     scrollYProgress,
     [0.667, 0.7, 1],
-    ["0vh", "-50vh", "-100vh"],
+    [
+      "calc(0vh - 0%)", 
+      "calc(50vh - 50%)", 
+      "calc(100vh - 100%)", 
+    ],
   );
 
   return (

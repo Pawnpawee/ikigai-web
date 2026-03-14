@@ -264,7 +264,7 @@ export default function S7_2({ scrollYProgress, onCompleted }: S7_2Props) {
               /* flex flex-col items-center justify-center pt-[9.26%] */
               <div className="flex flex-col items-center justify-center w-full h-full pt-[9.26%]">
                 {/*? Text frame*/}
-                <div className="w-full h-full shrink-0 flex flex-col items-center px-[8%] md:px-[5%] gap-15 md:gap-20 xl:gap-[8%]">
+                <div className="w-full h-full shrink-0 flex flex-col items-center min-[376px]:px-15 md:px-5 gap-15 md:gap-20 xl:gap-10">
                   {/*? Question — Figma 810:11145 */}
                   <m.div
                     className="w-full shrink-0 flex flex-col items-center  select-none"
