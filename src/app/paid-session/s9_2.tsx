@@ -169,7 +169,7 @@ function DotNavigation({
   onPageChange: (page: number) => void;
 }) {
   return (
-    <div className="flex items-center justify-center gap-2 md:gap-3">
+    <div className="flex items-center justify-center gap-0 md:gap-1">
       {Array.from({ length: totalPages }).map((_, i) => {
         const pageNum = i + 1;
         return (
@@ -177,16 +177,20 @@ function DotNavigation({
             type="button"
             key={`dot-page-${pageNum}`}
             onClick={() => onPageChange(i)}
-            className={`
-              rounded-full transition-all duration-300 cursor-pointer
+            className="p-2 md:p-2.5 cursor-pointer"
+            aria-label={`Go to page ${pageNum}`}
+          >
+            <span
+              className={`
+              block rounded-full transition-all duration-300
               ${
                 currentPage === i
                   ? "w-2 h-2 md:w-3.5 md:h-3.5 bg-white shadow-[0_0_8px_rgba(255,255,255,0.6)]"
-                  : "w-1.5 h-1.5 md:w-3 md:h-3 bg-white/30 hover:bg-white/50"
+                  : "w-1.5 h-1.5 md:w-3 md:h-3 bg-white/30 hover:bg-white/60"
               }
             `}
-            aria-label={`Go to page ${pageNum}`}
-          />
+            />
+          </button>
         );
       })}
     </div>
@@ -297,10 +301,11 @@ export default function S9_2({ scrollYProgress, onCompleted }: S9_2Props) {
 
   const goToPage = useCallback(
     (page: number) => {
-      if (page < 0 || page >= totalPages || page === currentPage) return;
+      const next = ((page % totalPages) + totalPages) % totalPages;
+      if (next === currentPage) return;
       playSfx(getAudioUrl("Sound/Pop_Select_Button.mp3"));
       setSlideDirection(page > currentPage ? 1 : -1);
-      setCurrentPage(page);
+      setCurrentPage(next);
     },
     [totalPages, currentPage, playSfx],
   );
@@ -377,7 +382,7 @@ export default function S9_2({ scrollYProgress, onCompleted }: S9_2Props) {
                 <CarouselArrow
                   direction="left"
                   onClick={() => goToPage(currentPage - 1)}
-                  disabled={currentPage === 0}
+                  disabled={false}
                 />
 
                 {/* Cards Container */}
@@ -416,12 +421,12 @@ export default function S9_2({ scrollYProgress, onCompleted }: S9_2Props) {
                 <CarouselArrow
                   direction="right"
                   onClick={() => goToPage(currentPage + 1)}
-                  disabled={currentPage === totalPages - 1}
+                  disabled={false}
                 />
               </div>
 
               {/* Dot Navigation */}
-              <div className="mt-5 xl:mt-10">
+              <div className="mt-5 xl:mt-10 pointer-events-auto relative z-10">
                 <DotNavigation
                   totalPages={totalPages}
                   currentPage={currentPage}

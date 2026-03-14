@@ -1,26 +1,13 @@
 "use client";
 
-import { useEffect, useLayoutEffect, useMemo } from "react";
-import LoadingScreen from "@/app/components/reusable/LoadingScreen";
+import { useEffect, useLayoutEffect } from "react";
 import { useAudio } from "@/app/contexts/AudioContext";
-import { useAssetPreloader } from "@/app/hooks/useAssetPreloader";
-import { createSceneAssetGroup } from "@/app/utils/assetGroups";
 import { getAudioUrl } from "@/utils/cloudinaryUtils";
 
 import IntoDark from "./IntoDark";
 
 export default function IntoDarkPage() {
   const { setBgMusic } = useAudio();
-  const { areGroupsLoaded, preloadGroups } = useAssetPreloader();
-
-  const assetGroup = useMemo(
-    () =>
-      createSceneAssetGroup({
-        id: "into-dark",
-        extraAssets: [getAudioUrl("Sound/5/mysterious-dark-background.mp3")],
-      }),
-    [],
-  );
 
   useLayoutEffect(() => {
     if (typeof window !== "undefined") {
@@ -33,13 +20,6 @@ export default function IntoDarkPage() {
   useEffect(() => {
     setBgMusic(getAudioUrl("Sound/5/mysterious-dark-background.mp3"));
   }, [setBgMusic]);
-
-  useEffect(() => {
-    void preloadGroups([assetGroup]);
-  }, [assetGroup, preloadGroups]);
-
-  if (!areGroupsLoaded([assetGroup.id]))
-    return <LoadingScreen isLoading={true} />;
 
   return (
     <div>

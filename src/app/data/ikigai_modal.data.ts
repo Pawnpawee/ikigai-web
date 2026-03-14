@@ -29,7 +29,6 @@ interface IkigaiModalConfig {
   developIcon: string;
 }
 
-
 const IKIGAI_MODAL_CONFIGS: IkigaiModalConfig[] = [
   {
     key: "what_you_love",
@@ -164,3 +163,18 @@ const IKIGAI_MODAL_CONFIGS: IkigaiModalConfig[] = [
 //? Helper: หา Modal Config จาก key
 export const getModalConfig = (key: keyof IkigaiAnalysis) =>
   IKIGAI_MODAL_CONFIGS.find((c) => c.key === key);
+
+//? Flat list of all modal icon assets — for preloading
+export const MODAL_PRELOAD_ASSETS: string[] = [
+  //? Section icons (dedupe — same icons used across configs)
+  ...Array.from(
+    new Set(
+      IKIGAI_MODAL_CONFIGS.flatMap((c) => [
+        c.iconSrc,
+        c.overallIcon,
+        c.strengthIcon,
+        c.developIcon,
+      ]),
+    ),
+  ),
+];

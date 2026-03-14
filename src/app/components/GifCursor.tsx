@@ -6,22 +6,18 @@ import { useDevice } from "@/app/contexts/DeviceContext";
 
 export default function GifCursor() {
   const { isMobile } = useDevice();
-
-  // 1. Motion Values
   const mouseX = useMotionValue(-100);
   const mouseY = useMotionValue(-100);
-
-  // 3. State สำหรับเช็ค Hover
   const [isHover, setIsHover] = useState(false);
 
   useEffect(() => {
     if (isMobile) return;
 
     const moveCursor = (e: MouseEvent) => {
+      // ✅ เมาส์จริงอยู่ตรงไหน อัปเดตพิกัดตามนั้น
       mouseX.set(e.clientX);
       mouseY.set(e.clientY);
 
-      // เช็คว่า Hover ปุ่มไหม
       const target = e.target as HTMLElement;
       const isInteractive = target.closest(
         "button, a, input, textarea, [role='button'], .cursor-pointer",
@@ -37,17 +33,14 @@ export default function GifCursor() {
 
   return (
     <m.div
-      className="fixed top-0 left-0 pointer-events-none z-9999"
+      className="fixed top-0 left-0 pointer-events-none z-999"
       style={{
         x: mouseX,
         y: mouseY,
-        translateX: "-50%",
-        translateY: "-35%",
       }}
-      animate={{
-        opacity: 1,
-      }}
-      transition={{ type: "spring", stiffness: 300, damping: 20 }}
+      animate={{ opacity: 1 }}
+      // ลด Damping ลงนิดหน่อยเพื่อให้เมาส์ตามติดมือไวขึ้น (ลดความหน่วง)
+      transition={{ type: "spring", stiffness: 400, damping: 25 }}
     >
       <Image
         src={
@@ -60,7 +53,7 @@ export default function GifCursor() {
         height={60}
         priority={true}
         unoptimized={true}
-        className="pointer-events-none select-none"
+        className="pointer-events-none select-none -translate-x-[15px] -translate-y-[15px]"
       />
     </m.div>
   );

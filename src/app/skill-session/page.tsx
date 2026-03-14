@@ -1,30 +1,23 @@
 "use client";
 
-import { useMotionValueEvent, useScroll, useTransform } from "framer-motion";
+import { useScroll, useTransform } from "framer-motion";
 import { useLenis } from "lenis/react";
 import { useRouter } from "next/navigation";
-import { useEffect, useLayoutEffect, useMemo, useRef, useState } from "react";
+import { useEffect, useLayoutEffect, useRef, useState } from "react";
 import Cover from "@/app/components/reusable/Cover";
 import {
   COVER_SESSION2_CONFIG,
   COVER_SESSION2_ITEMS,
 } from "@/app/data/cover_session2.data";
-import { SCENE_S7_1_ITEMS } from "@/app/data/scene_s7_1.data";
-import { SCENE_S7_2_ITEMS } from "@/app/data/scene_s7_2.data";
-import { SCENE_S7_3_ITEMS } from "@/app/data/scene_s7_3.data";
 import { useStarsVisibility } from "@/app/hooks/useStarsVisibility";
-import {
-  createCoverAssetGroup,
-  createSceneAssetGroup,
-} from "@/app/utils/assetGroups";
 import { API_BASE_URL } from "@/utils/appConfig";
-import { getAudioUrl, getJsonUrl } from "@/utils/cloudinaryUtils";
+import { getAudioUrl } from "@/utils/cloudinaryUtils";
 import ErrorModal from "../components/modal/ErrorModal";
 import LoadingScreen from "../components/reusable/LoadingScreen";
 import ProgressBar from "../components/reusable/ProgressBar";
+import ScrollTo from "../components/ScrollTo";
 import { useAudio } from "../contexts/AudioContext";
 import { useUser } from "../contexts/UserContext";
-import { useAssetPreloader } from "../hooks/useAssetPreloader";
 import S7_1, { type S7_1Data } from "./s7_1";
 import S7_2, { type S7_2Data } from "./s7_2";
 import S7_3, { type S7_3Data } from "./s7_3";
@@ -45,8 +38,6 @@ export default function SessionSkillPage() {
   const { userId, isLoading } = useUser();
   const lenis = useLenis();
   const router = useRouter();
-  const { areGroupsLoaded, preloadGroups } = useAssetPreloader();
-  const [activeSceneIndex, setActiveSceneIndex] = useState(0);
 
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isS7_1Completed, setIsS7_1Completed] = useState(false);
@@ -54,6 +45,10 @@ export default function SessionSkillPage() {
   const [s7_1Data, setS7_1Data] = useState<S7_1Data | null>(null);
   const [s7_2Data, setS7_2Data] = useState<S7_2Data | null>(null);
   const [showErrorModal, setShowErrorModal] = useState(false);
+  const [scrollLockMessage, setScrollLockMessage] = useState<string | null>(
+    null,
+  );
+  const scrollLockMessageRef = useRef<string | null>(null);
 
   //? Single scrollYProgress for entire page (0-1 for 1000vh)
   //? Cover 200vh + S7_1 200vh + S7_2 200vh + S7_3 400vh = 1000vh
@@ -71,6 +66,11 @@ export default function SessionSkillPage() {
   const s7_2Progress = useTransform(scrollYProgress, [0.4, 0.6], [0, 1]);
   //? S7_3: 0.6-1.0 → 0-1 (400vh / 1000vh)
   const s7_3Progress = useTransform(scrollYProgress, [0.6, 1.0], [0, 1]);
+  const scrollToOpacity = useTransform(
+    scrollYProgress,
+    [0, 0.9, 0.98, 1],
+    [1, 1, 0, 0],
+  );
 
   useLayoutEffect(() => {
     if (typeof window !== "undefined") {
@@ -84,69 +84,6 @@ export default function SessionSkillPage() {
     setBgMusic(getAudioUrl("Sound/7/living-art.mp3"));
   }, [setBgMusic]);
 
-  const assetGroups = useMemo(
-    () => [
-      createCoverAssetGroup({
-        id: "cover",
-        items: COVER_SESSION2_ITEMS,
-        titleImage: COVER_SESSION2_CONFIG.titleImage,
-        iconImage: COVER_SESSION2_CONFIG.iconImage,
-        extraAssets: [getAudioUrl("Sound/7/living-art.mp3")],
-      }),
-      createSceneAssetGroup({
-        id: "s7-1",
-        items: SCENE_S7_1_ITEMS,
-        extraAssets: [
-          getAudioUrl("Sound/Pop_Select_Button.mp3"),
-          getJsonUrl("Scene/Scene7/02/s7-starlight-mb.json"),
-          getJsonUrl("Scene/Scene7/02/s7-starlight.json"),
-        ],
-      }),
-      createSceneAssetGroup({
-        id: "s7-2",
-        items: SCENE_S7_2_ITEMS,
-        extraAssets: [getJsonUrl("Scene/Scene7/03/s7-painting.json")],
-      }),
-      createSceneAssetGroup({
-        id: "s7-3",
-        items: SCENE_S7_3_ITEMS,
-        extraAssets: [
-          getJsonUrl("Scene/Scene7/04/star_mb.json"),
-          getJsonUrl("Scene/Scene7/04/star.json"),
-          getJsonUrl("Scene/Scene7/03/s7-paper.json"),
-          getJsonUrl("Scene/Scene7/04/cat_frame.json"),
-          getJsonUrl("Scene/Scene7/04/cat_pics.json"),
-        ],
-      }),
-    ],
-    [],
-  );
-
-  useEffect(() => {
-    void preloadGroups(
-      assetGroups.slice(0, Math.min(assetGroups.length, activeSceneIndex + 2)),
-    );
-  }, [activeSceneIndex, assetGroups, preloadGroups]);
-
-  useMotionValueEvent(scrollYProgress, "change", (latest) => {
-    if (latest < 0.2) {
-      setActiveSceneIndex(0);
-      return;
-    }
-
-    if (latest < 0.4) {
-      setActiveSceneIndex(1);
-      return;
-    }
-
-    if (latest < 0.6) {
-      setActiveSceneIndex(2);
-      return;
-    }
-
-    setActiveSceneIndex(3);
-  });
-
   const isResettingScroll = useRef(false);
 
   //? Scroll lock effect: ล็อคไม่ให้ scroll ผ่าน section ที่ยังไม่เสร็จ
@@ -156,12 +93,22 @@ export default function SessionSkillPage() {
   useEffect(() => {
     if (!lenis || !ref.current) return;
 
+    const setLockMessage = (message: string | null) => {
+      if (scrollLockMessageRef.current === message) return;
+      scrollLockMessageRef.current = message;
+      setScrollLockMessage(message);
+    };
+
     const handleScroll = (e: {
       scroll: number;
       animatedScroll: number;
       velocity: number;
     }) => {
-      if (!ref.current || isResettingScroll.current) return;
+      if (!ref.current) return;
+
+      if (isResettingScroll.current) {
+        return;
+      }
 
       const scrollStart = ref.current.offsetTop;
       const sectionHeight = ref.current.scrollHeight;
@@ -173,7 +120,14 @@ export default function SessionSkillPage() {
       //? Cover=200vh + S7_1*0.9=180vh → 380/900 = 0.422
       if (!isS7_1Completed) {
         const s7_1Lock = scrollStart + scrollableDistance * 0.3;
-        if (e.animatedScroll > s7_1Lock + tolerance && e.velocity > 0) {
+        if (e.animatedScroll >= s7_1Lock - tolerance) {
+          setLockMessage(
+            "ยังเลื่อนไปต่อไม่ได้ เลือก Hard Skills อย่างน้อย 2 ข้อ",
+          );
+        } else {
+          setLockMessage(null);
+        }
+        if (e.animatedScroll > s7_1Lock + tolerance) {
           isResettingScroll.current = true;
           lenis.scrollTo(s7_1Lock, {
             immediate: true,
@@ -193,7 +147,14 @@ export default function SessionSkillPage() {
       //? Cover=200vh + S7_1=200vh + S7_2*0.9=180vh → 580/900 = 0.644
       if (!isS7_2Completed) {
         const s7_2Lock = scrollStart + scrollableDistance * 0.5;
-        if (e.animatedScroll > s7_2Lock + tolerance && e.velocity > 0) {
+        if (e.animatedScroll >= s7_2Lock - tolerance) {
+          setLockMessage(
+            "ยังเลื่อนไปต่อไม่ได้ เลือก Soft Skills อย่างน้อย 3 ข้อ",
+          );
+        } else {
+          setLockMessage(null);
+        }
+        if (e.animatedScroll > s7_2Lock + tolerance) {
           isResettingScroll.current = true;
           lenis.scrollTo(s7_2Lock, {
             immediate: true,
@@ -208,6 +169,8 @@ export default function SessionSkillPage() {
           return;
         }
       }
+
+      setLockMessage(null);
     };
 
     lenis.on("scroll", handleScroll);
@@ -229,6 +192,8 @@ export default function SessionSkillPage() {
     if (data) {
       setS7_1Data(data);
       setIsS7_1Completed(true);
+      scrollLockMessageRef.current = null;
+      setScrollLockMessage(null);
     } else {
       //! Unselect ต่ำกว่า threshold → ล็อค scroll กลับ
       setIsS7_1Completed(false);
@@ -240,6 +205,8 @@ export default function SessionSkillPage() {
     if (data) {
       setS7_2Data(data);
       setIsS7_2Completed(true);
+      scrollLockMessageRef.current = null;
+      setScrollLockMessage(null);
     } else {
       //! Unselect ต่ำกว่า threshold → ล็อค scroll กลับ
       setIsS7_2Completed(false);
@@ -299,15 +266,15 @@ export default function SessionSkillPage() {
     shouldShow: (p) => p <= 0.2,
   });
 
-  const currentGroupId =
-    assetGroups[Math.min(activeSceneIndex, assetGroups.length - 1)]?.id;
-
-  if (!currentGroupId || !areGroupsLoaded([currentGroupId])) {
-    return <LoadingScreen isLoading={true} />;
-  }
-
   return (
     <div ref={ref} className="h-[1000vh] w-full relative bg-black">
+      <ScrollTo
+        opacity={scrollToOpacity}
+        message={scrollLockMessage ?? "เลื่อนต่อเพื่อดำเนินเรื่อง..."}
+        tone={scrollLockMessage ? "warning" : "default"}
+        icon={scrollLockMessage ? "lock" : "down"}
+      />
+
       {/* Loading Screen */}
       <LoadingScreen isLoading={isSubmitting} />
 

@@ -6,6 +6,7 @@ import {
   useTransform,
 } from "framer-motion";
 import ReactLenis from "lenis/react";
+import { usePathname } from "next/navigation";
 import React from "react";
 import { getLenisOptions } from "@/utils/lenisConfig";
 import GifCursor from "./components/GifCursor";
@@ -14,6 +15,7 @@ import ScrollTo from "./components/ScrollTo";
 import { useDevice } from "./contexts/DeviceContext";
 
 function AppLogic({ children }: { children: React.ReactNode }) {
+  const pathname = usePathname();
   const { scrollYProgress } = useScroll();
 
   const scrollToOpacity = useTransform(
@@ -28,7 +30,13 @@ function AppLogic({ children }: { children: React.ReactNode }) {
       {/* //todo: wait for design */}
 
       <Navbar />
-      <ScrollTo opacity={scrollToOpacity} />
+      {!pathname.startsWith("/love-session") &&
+      !pathname.startsWith("/skill-session") &&
+      !pathname.startsWith("/world-session") &&
+      !pathname.startsWith("/paid-session") &&
+      !pathname.startsWith("/journey-temple") ? (
+        <ScrollTo opacity={scrollToOpacity} />
+      ) : null}
       <main className="relative w-full">{children}</main>
       {/* ProgressBar ถูกย้ายไปแต่ละหน้า ไม่ต้อง render ที่นี่ */}
     </>

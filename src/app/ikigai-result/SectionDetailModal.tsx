@@ -66,7 +66,7 @@ export default function SectionDetailModal({
         <>
           {/* ─── Backdrop ─── */}
           <m.div
-            className="fixed inset-0 w-screen h-screen bg-black/70 z-50 backdrop-blur-sm"
+            className="fixed inset-0 w-screen h-screen bg-black/70 z-50"
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}

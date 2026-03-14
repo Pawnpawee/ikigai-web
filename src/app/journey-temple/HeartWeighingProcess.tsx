@@ -1,11 +1,9 @@
 "use client";
-import { AnimatePresence, m } from "framer-motion"; // ⭐ Import AnimatePresence เพิ่ม
+import { AnimatePresence, m } from "framer-motion";
 import type { Howl } from "howler";
-import type { AnimationItem } from "lottie-web";
-import Image from "next/image"; // ⭐ Import Image component ของ Next.js
-import { useCallback, useEffect, useRef, useState } from "react";
-import { getAudioUrl, getJsonUrl } from "@/utils/cloudinaryUtils";
-import LazyLottie from "../components/reusable/LazyLottie";
+import Image from "next/image";
+import { useEffect, useRef, useState } from "react";
+import { getAudioUrl, getVideoUrl } from "@/utils/cloudinaryUtils";
 import { useAudio } from "../contexts/AudioContext";
 import { TEMPLE_DIALOGUE } from "../data/scene_temple.data";
 
@@ -25,20 +23,8 @@ export default function HeartWeighingProcess({
 }: HeartWeighingProcessProps) {
   const [showDialogue, setShowDialogue] = useState(false);
   const { playSfx } = useAudio();
-  const bgLottieRef = useRef<AnimationItem | null>(null);
 
-  const handleBgRef = useCallback((instance: AnimationItem | null) => {
-    bgLottieRef.current = instance;
-    if (instance) {
-      instance.goToAndStop(0, true);
-      instance.addEventListener("complete", () => {
-        setShowDialogue(true);
-        instance.playSegments([904, 1216], true);
-      });
-      instance.playSegments([0, 1216], true);
-    }
-  }, []);
-
+  const videoRef = useRef<HTMLVideoElement | null>(null);
   const sparklingSoundRef = useRef<Howl | null>(null);
   const shimmeringSoundRef = useRef<Howl | null>(null);
 
@@ -69,16 +55,36 @@ export default function HeartWeighingProcess({
   if (!isProcessing) return null;
 
   return (
-    <m.div className="fixed inset-0 z-50 flex flex-col items-center justify-center">
+    <m.div className="fixed inset-0 z-50 flex flex-col items-center justify-center ">
+      <div
+        className="absolute inset-0 mix-blend-soft-light pointer-events-none z-0"
+        style={{ backgroundColor: "var(--color-overlay)", opacity: 0.5 }}
+      />
+
       <div className="absolute inset-0">
-        <LazyLottie
-          src={getJsonUrl("Scene/Result/s11.json")}
-          className="w-full h-full"
-          loop={false}
-          play={isProcessing}
-          getRef={handleBgRef}
-          ignoreAspectRatio
-        />
+        <m.div
+          className="absolute inset-0 z-10"
+          initial={{ opacity: 0, scale: 1.05 }} // เทคนิคแถม: เฟดพร้อมกับหดลงนิดๆ ให้ดูลึกมีมิติ
+          animate={{ opacity: 1, scale: 1 }}
+          transition={{ duration: 2, delay: 0.5, ease: "easeOut" }} // ให้พื้นหลังมาเต็มก่อน แล้ววิดีโอค่อยๆ โผล่ตาม
+        >
+          <video
+            ref={videoRef}
+            src={getVideoUrl("Scene/Result/s11.mp4")} // ใส่ URL ของ Video
+            className="w-full h-full object-cover" // object-cover ทำให้เต็มจอสวยงาม
+            autoPlay
+            muted // สำคัญ: ต้อง muted ถึงจะ autoPlay บน Browser สมัยใหม่ได้ (เสียงเราใช้ Howler อยู่แล้ว)
+            playsInline // สำคัญสำหรับ iOS
+            onEnded={() => {
+              // ⭐ เมื่อวิดีโอเล่นจบ จะเทียบเท่ากับ instance.addEventListener("complete")
+              setShowDialogue(true);
+              if (videoRef.current) {
+                videoRef.current.currentTime = 9.04;
+                videoRef.current.play();
+              }
+            }}
+          />
+        </m.div>
       </div>
 
       {showDialogue && (

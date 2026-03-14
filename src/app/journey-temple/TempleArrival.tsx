@@ -29,8 +29,11 @@ export default function TempleArrival({ onStartCeremony }: TempleArrivalProps) {
   const [fadeOut, setFadeOut] = useState(false);
 
   const handleStartCeremony = () => {
-    setFadeOut(true);
-    onStartCeremony();
+    setFadeOut(true); 
+
+    setTimeout(() => {
+      onStartCeremony();
+    }, 1000);
   };
 
   const { scrollYProgress } = useScroll({

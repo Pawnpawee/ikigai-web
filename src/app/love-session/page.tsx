@@ -1,29 +1,23 @@
 "use client";
 
-import { useMotionValueEvent, useScroll, useTransform } from "framer-motion";
+import { useScroll, useTransform } from "framer-motion";
 import { useLenis } from "lenis/react";
 import { useRouter } from "next/navigation";
-import { useEffect, useLayoutEffect, useMemo, useRef, useState } from "react";
+import { useEffect, useLayoutEffect, useRef, useState } from "react";
 import Cover from "@/app/components/reusable/Cover";
 import {
   COVER_SESSION1_CONFIG,
   COVER_SESSION1_ITEMS,
 } from "@/app/data/cover_session1.data";
-import { SCENE_S6_1_ITEMS } from "@/app/data/scene_s6_1.data";
-import { SCENE_S6_4_ITEMS } from "@/app/data/scene_s6_4.data";
 import { useStarsVisibility } from "@/app/hooks/useStarsVisibility";
-import {
-  createCoverAssetGroup,
-  createSceneAssetGroup,
-} from "@/app/utils/assetGroups";
 import { API_BASE_URL } from "@/utils/appConfig";
-import { getAudioUrl, getJsonUrl } from "@/utils/cloudinaryUtils";
+import { getAudioUrl } from "@/utils/cloudinaryUtils";
 import ErrorModal from "../components/modal/ErrorModal";
 import LoadingScreen from "../components/reusable/LoadingScreen";
 import ProgressBar from "../components/reusable/ProgressBar";
+import ScrollTo from "../components/ScrollTo";
 import { useAudio } from "../contexts/AudioContext";
 import { useUser } from "../contexts/UserContext";
-import { useAssetPreloader } from "../hooks/useAssetPreloader";
 import S6_1, { type S6_1Data } from "./s6_1";
 import S6_4 from "./s6_4";
 
@@ -34,13 +28,13 @@ export default function SessionLovePage() {
   const { userId, isLoading } = useUser();
   const lenis = useLenis();
   const router = useRouter();
-  const { areGroupsLoaded, preloadGroups } = useAssetPreloader();
-  const [activeSceneIndex, setActiveSceneIndex] = useState(0);
 
   const [isS6_1Completed, setIsS6_1Completed] = useState(false);
   const [s6_1Data, setS6_1Data] = useState<S6_1Data | null>(null);
   const [showErrorModal, setShowErrorModal] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [isScrollLockedByGate, setIsScrollLockedByGate] = useState(false);
+  const isScrollLockedByGateRef = useRef(false);
 
   //? Single scrollYProgress for entire page (0-1 for 1500vh)
   const { scrollYProgress } = useScroll({
@@ -55,6 +49,11 @@ export default function SessionLovePage() {
   const s6_1Progress = useTransform(scrollYProgress, [0.133, 0.533], [0, 1]);
   // S6_4: 0.533-1.0 → 0-1
   const s6_4Progress = useTransform(scrollYProgress, [0.533, 1.0], [0, 1]);
+  const scrollToOpacity = useTransform(
+    scrollYProgress,
+    [0, 0.9, 0.98, 1],
+    [1, 1, 0, 0],
+  );
 
   useLayoutEffect(() => {
     if (typeof window !== "undefined") {
@@ -68,68 +67,33 @@ export default function SessionLovePage() {
     setBgMusic(getAudioUrl("Sound/6/majestic-sky.mp3"));
   }, [setBgMusic]);
 
-  const assetGroups = useMemo(
-    () => [
-      createCoverAssetGroup({
-        id: "cover",
-        items: COVER_SESSION1_ITEMS,
-        titleImage: COVER_SESSION1_CONFIG.titleImage,
-        iconImage: COVER_SESSION1_CONFIG.iconImage,
-        extraAssets: [getAudioUrl("Sound/6/majestic-sky.mp3")],
-      }),
-      createSceneAssetGroup({
-        id: "s6-1",
-        items: SCENE_S6_1_ITEMS,
-        extraAssets: [
-          getJsonUrl("Scene/Scene6/02/s6-2_mobile.json"),
-          getJsonUrl("Scene/Scene6/02/s6-2.json"),
-        ],
-      }),
-      createSceneAssetGroup({
-        id: "s6-4",
-        items: SCENE_S6_4_ITEMS,
-        extraAssets: [
-          getAudioUrl("Sound/6/walking-on-leaves.mp3"),
-          getJsonUrl("Scene/Scene6/04/s6-human-cat.json"),
-          getJsonUrl("Scene/Scene6/04/s6-leave.json"),
-        ],
-      }),
-    ],
-    [],
-  );
-
-  useEffect(() => {
-    void preloadGroups(
-      assetGroups.slice(0, Math.min(assetGroups.length, activeSceneIndex + 2)),
-    );
-  }, [activeSceneIndex, assetGroups, preloadGroups]);
-
-  useMotionValueEvent(scrollYProgress, "change", (latest) => {
-    if (latest < 0.133) {
-      setActiveSceneIndex(0);
-      return;
-    }
-
-    if (latest < 0.533) {
-      setActiveSceneIndex(1);
-      return;
-    }
-
-    setActiveSceneIndex(2);
-  });
-
   const isResettingScroll = useRef(false);
 
   //? Scroll lock effect สำหรับ s6_1
   useEffect(() => {
     if (!lenis || !ref.current) return;
 
+    const setLockHint = (locked: boolean) => {
+      if (isScrollLockedByGateRef.current === locked) return;
+      isScrollLockedByGateRef.current = locked;
+      setIsScrollLockedByGate(locked);
+    };
+
     const handleScroll = (e: {
       scroll: number;
       animatedScroll: number;
       velocity: number;
     }) => {
-      if (isS6_1Completed || !ref.current || isResettingScroll.current) return;
+      if (isS6_1Completed || !ref.current) {
+        setLockHint(false);
+        return;
+      }
+
+      if (isResettingScroll.current) {
+        //? ระหว่างเด้งกลับจาก lock ให้คงสถานะ lock ไว้ เพื่อไม่ให้ข้อความสลับกลับ
+        setLockHint(true);
+        return;
+      }
 
       const scrollStart = ref.current.offsetTop;
       const sectionHeight = ref.current.scrollHeight;
@@ -143,7 +107,13 @@ export default function SessionLovePage() {
 
       const tolerance = 2;
 
-      if (e.animatedScroll > lockThreshold + tolerance && e.velocity > 0) {
+      if (e.animatedScroll >= lockThreshold - tolerance) {
+        setLockHint(true);
+      } else {
+        setLockHint(false);
+      }
+
+      if (e.animatedScroll > lockThreshold + tolerance) {
         isResettingScroll.current = true;
 
         lenis.scrollTo(lockThreshold, {
@@ -230,15 +200,19 @@ export default function SessionLovePage() {
     shouldShow: (p) => p <= 0.133,
   });
 
-  const currentGroupId =
-    assetGroups[Math.min(activeSceneIndex, assetGroups.length - 1)]?.id;
-
-  if (!currentGroupId || !areGroupsLoaded([currentGroupId])) {
-    return <LoadingScreen isLoading={true} />;
-  }
-
   return (
     <div ref={ref} className="h-[1500vh] w-full relative bg-black">
+      <ScrollTo
+        opacity={scrollToOpacity}
+        message={
+          !isS6_1Completed && isScrollLockedByGate
+            ? "ยังเลื่อนไปต่อไม่ได้ เลือกอย่างน้อย 1 ข้อ"
+            : "เลื่อนต่อเพื่อดำเนินเรื่อง..."
+        }
+        tone={!isS6_1Completed && isScrollLockedByGate ? "warning" : "default"}
+        icon={!isS6_1Completed && isScrollLockedByGate ? "lock" : "down"}
+      />
+
       {/* Loading Screen */}
       <LoadingScreen isLoading={isSubmitting} />
 

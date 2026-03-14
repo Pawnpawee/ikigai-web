@@ -3,30 +3,21 @@
 import { useMotionValueEvent, useScroll, useTransform } from "framer-motion";
 import { useLenis } from "lenis/react";
 import { useRouter } from "next/navigation";
-import { useEffect, useLayoutEffect, useMemo, useRef, useState } from "react";
+import { useEffect, useLayoutEffect, useRef, useState } from "react";
 import Cover from "@/app/components/reusable/Cover";
 import {
   COVER_SESSION3_CONFIG,
   COVER_SESSION3_ITEMS,
 } from "@/app/data/cover_session3.data";
-import { SCENE_S8_1_ITEMS } from "@/app/data/scene_s8_1.data";
-import { SCENE_S8_2_ITEMS } from "@/app/data/scene_s8_2.data";
-import { SCENE_S8_3_ITEMS } from "@/app/data/scene_s8_3.data";
-import { SCENE_S8_4_ITEMS } from "@/app/data/scene_s8_4.data";
-import { SCENE_S8_5_ITEMS } from "@/app/data/scene_s8_5.data";
 import { useStarsVisibility } from "@/app/hooks/useStarsVisibility";
-import {
-  createCoverAssetGroup,
-  createSceneAssetGroup,
-} from "@/app/utils/assetGroups";
 import { API_BASE_URL } from "@/utils/appConfig";
-import { getAudioUrl, getJsonUrl } from "@/utils/cloudinaryUtils";
+import { getAudioUrl } from "@/utils/cloudinaryUtils";
 import ErrorModal from "../components/modal/ErrorModal";
 import LoadingScreen from "../components/reusable/LoadingScreen";
 import ProgressBar from "../components/reusable/ProgressBar";
+import ScrollTo from "../components/ScrollTo";
 import { useAudio } from "../contexts/AudioContext";
 import { useUser } from "../contexts/UserContext";
-import { useAssetPreloader } from "../hooks/useAssetPreloader";
 import S8_1, { type S8_1Data } from "./s8_1";
 import S8_2, { type S8_2Data } from "./s8_2";
 import S8_3 from "./s8_3";
@@ -53,8 +44,7 @@ export default function WorldSessionPage() {
   const { setBgMusic, playSfx, stopAllSfx } = useAudio();
   const lenis = useLenis();
   const router = useRouter();
-  const { areGroupsLoaded, preloadGroups } = useAssetPreloader();
-  const [activeSceneIndex, setActiveSceneIndex] = useState(0);
+  const [, setActiveSceneIndex] = useState(0);
 
   //? SFX tracking ref สำหรับเสียง ambient (river_flow + bird_sound)
   const hasPlayedAmbient = useRef(false);
@@ -66,6 +56,10 @@ export default function WorldSessionPage() {
   const [isS8_4Completed, setIsS8_4Completed] = useState(false);
   const [showErrorModal, setShowErrorModal] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [scrollLockMessage, setScrollLockMessage] = useState<string | null>(
+    null,
+  );
+  const scrollLockMessageRef = useRef<string | null>(null);
 
   //? Accumulated data from each section
   const [s8_1Data, setS8_1Data] = useState<S8_1Data | null>(null);
@@ -92,62 +86,10 @@ export default function WorldSessionPage() {
   const s8_4Progress = useTransform(scrollYProgress, [0.6667, 0.8095], [0, 1]);
   //? S8_5: 1700/2100 ≈ 0.8095 → 2100/2100 = 1.0
   const s8_5Progress = useTransform(scrollYProgress, [0.8095, 1.0], [0, 1]);
-
-  const assetGroups = useMemo(
-    () => [
-      createCoverAssetGroup({
-        id: "cover",
-        items: COVER_SESSION3_ITEMS,
-        titleImage: COVER_SESSION3_CONFIG.titleImage,
-        iconImage: COVER_SESSION3_CONFIG.iconImage,
-        extraAssets: [getAudioUrl("Sound/8/ancient-egypt.mp3")],
-      }),
-      createSceneAssetGroup({
-        id: "s8-1",
-        items: SCENE_S8_1_ITEMS,
-        extraAssets: [
-          getAudioUrl("Sound/8/river_flow.mp3"),
-          getAudioUrl("Sound/8/bird_sound.mp3"),
-          getAudioUrl("Sound/8/flower_bloom.mp3"),
-          getJsonUrl("Scene/Scene8/01/s8-stone-lake.json"),
-          getJsonUrl("Scene/Scene8/01/cat1.json"),
-        ],
-      }),
-      createSceneAssetGroup({
-        id: "s8-2",
-        items: SCENE_S8_2_ITEMS,
-        extraAssets: [getAudioUrl("Sound/Pop_Select_Button.mp3")],
-      }),
-      createSceneAssetGroup({
-        id: "s8-3",
-        items: SCENE_S8_3_ITEMS,
-        extraAssets: [
-          getAudioUrl("Sound/8/chime.mp3"),
-          getAudioUrl("Sound/8/flower_bloom.mp3"),
-          getJsonUrl("Scene/Scene8/03/s8-starlight-mb.json"),
-          getJsonUrl("Scene/Scene8/03/s8-starlight.json"),
-        ],
-      }),
-      createSceneAssetGroup({
-        id: "s8-4",
-        items: SCENE_S8_4_ITEMS,
-        extraAssets: [
-          getAudioUrl("Sound/8/icon_popup.mp3"),
-          getJsonUrl("Scene/Scene8/04/s8-icon-1.json"),
-          getJsonUrl("Scene/Scene8/04/s8-icon-2.json"),
-        ],
-      }),
-      createSceneAssetGroup({
-        id: "s8-5",
-        items: SCENE_S8_5_ITEMS,
-        extraAssets: [
-          getAudioUrl("Sound/1-2/heart-beat.mp3"),
-          getJsonUrl("Scene/Scene8/05/s8-stone-lake-night.json"),
-          getJsonUrl("Scene/Scene8/05/cat2.json"),
-        ],
-      }),
-    ],
-    [],
+  const scrollToOpacity = useTransform(
+    scrollYProgress,
+    [0, 0.9, 0.98, 1],
+    [1, 1, 0, 0],
   );
 
   useLayoutEffect(() => {
@@ -165,12 +107,22 @@ export default function WorldSessionPage() {
   useEffect(() => {
     if (!lenis || !ref.current) return;
 
+    const setLockMessage = (message: string | null) => {
+      if (scrollLockMessageRef.current === message) return;
+      scrollLockMessageRef.current = message;
+      setScrollLockMessage(message);
+    };
+
     const handleScroll = (e: {
       scroll: number;
       animatedScroll: number;
       velocity: number;
     }) => {
-      if (!ref.current || isResettingScroll.current) return;
+      if (!ref.current) return;
+
+      if (isResettingScroll.current) {
+        return;
+      }
 
       const scrollStart = ref.current.offsetTop;
       const sectionHeight = ref.current.scrollHeight;
@@ -181,7 +133,12 @@ export default function WorldSessionPage() {
       //? Lock S8_1: prevent scrolling past S8_1 until answered (at 900/2100 ≈ 0.4286)
       if (!isS8_1Completed) {
         const s8_1Lock = scrollStart + scrollableDistance * 0.42;
-        if (e.animatedScroll > s8_1Lock + tolerance && e.velocity > 0) {
+        if (e.animatedScroll >= s8_1Lock - tolerance) {
+          setLockMessage("ยังเลื่อนไปต่อไม่ได้ ตอบคำถามในส่วนแรกก่อน");
+        } else {
+          setLockMessage(null);
+        }
+        if (e.animatedScroll > s8_1Lock + tolerance) {
           isResettingScroll.current = true;
           lenis.scrollTo(s8_1Lock, {
             immediate: true,
@@ -200,7 +157,14 @@ export default function WorldSessionPage() {
       //? Lock S8_2: prevent scrolling past S8_2 until gifts selected (at 1100/2100 ≈ 0.5238)
       if (isS8_1Completed && !isS8_2Completed) {
         const s8_2Lock = scrollStart + scrollableDistance * 0.49;
-        if (e.animatedScroll > s8_2Lock + tolerance && e.velocity > 0) {
+        if (e.animatedScroll >= s8_2Lock - tolerance) {
+          setLockMessage(
+            "ยังเลื่อนไปต่อไม่ได้ เลือกสิ่งที่อยากมอบให้โลกอย่างน้อย 1 ข้อ",
+          );
+        } else {
+          setLockMessage(null);
+        }
+        if (e.animatedScroll > s8_2Lock + tolerance) {
           isResettingScroll.current = true;
           lenis.scrollTo(s8_2Lock, {
             immediate: true,
@@ -221,7 +185,12 @@ export default function WorldSessionPage() {
       //? Lock S8_4 Q1: prevent scrolling past Q1 until No Manual answered (at 1600/2100 ≈ 0.7619)
       if (isS8_2Completed && !isS8_4_Q1Completed) {
         const s8_4_q1Lock = scrollStart + scrollableDistance * 0.76;
-        if (e.animatedScroll > s8_4_q1Lock + tolerance && e.velocity > 0) {
+        if (e.animatedScroll >= s8_4_q1Lock - tolerance) {
+          setLockMessage("ยังเลื่อนไปต่อไม่ได้ ตอบคำถามข้อแรกให้ครบก่อน");
+        } else {
+          setLockMessage(null);
+        }
+        if (e.animatedScroll > s8_4_q1Lock + tolerance) {
           isResettingScroll.current = true;
           lenis.scrollTo(s8_4_q1Lock, {
             immediate: true,
@@ -240,7 +209,12 @@ export default function WorldSessionPage() {
       //? Lock S8_4 Q2: prevent scrolling past S8_4 until Mismatch answered (at 1700/2100 ≈ 0.8095)
       if (isS8_4_Q1Completed && !isS8_4Completed) {
         const s8_4Lock = scrollStart + scrollableDistance * 0.8;
-        if (e.animatedScroll > s8_4Lock + tolerance && e.velocity > 0) {
+        if (e.animatedScroll >= s8_4Lock - tolerance) {
+          setLockMessage("ยังเลื่อนไปต่อไม่ได้ ตอบคำถามข้อที่สองให้ครบก่อน");
+        } else {
+          setLockMessage(null);
+        }
+        if (e.animatedScroll > s8_4Lock + tolerance) {
           isResettingScroll.current = true;
           lenis.scrollTo(s8_4Lock, {
             immediate: true,
@@ -255,6 +229,8 @@ export default function WorldSessionPage() {
           return;
         }
       }
+
+      setLockMessage(null);
     };
 
     lenis.on("scroll", handleScroll);
@@ -282,12 +258,6 @@ export default function WorldSessionPage() {
     setBgMusic(getAudioUrl("Sound/8/ancient-egypt.mp3"));
   }, [setBgMusic]);
 
-  useEffect(() => {
-    void preloadGroups(
-      assetGroups.slice(0, Math.min(assetGroups.length, activeSceneIndex + 2)),
-    );
-  }, [activeSceneIndex, assetGroups, preloadGroups]);
-
   //? Cleanup: หยุด SFX ทั้งหมดเมื่อออกจากหน้า (ป้องกันเสียง ambient หลุดไปหน้าถัดไป)
   useEffect(() => {
     return () => {
@@ -299,6 +269,8 @@ export default function WorldSessionPage() {
   const handleS8_1Completed = (data: S8_1Data) => {
     setIsS8_1Completed(true);
     setS8_1Data(data);
+    scrollLockMessageRef.current = null;
+    setScrollLockMessage(null);
   };
 
   //? Handler: S8_2 completed (Gifts selected)
@@ -306,6 +278,8 @@ export default function WorldSessionPage() {
     if (data) {
       setIsS8_2Completed(true);
       setS8_2Data(data);
+      scrollLockMessageRef.current = null;
+      setScrollLockMessage(null);
     } else {
       setIsS8_2Completed(false);
     }
@@ -316,12 +290,16 @@ export default function WorldSessionPage() {
   //? Handler: S8_4 Q1 completed (No Manual answered — unlocks Q2 scroll)
   const handleS8_4_Q1Completed = () => {
     setIsS8_4_Q1Completed(true);
+    scrollLockMessageRef.current = null;
+    setScrollLockMessage(null);
   };
 
   //? Handler: S8_4 completed (both No Manual + Mismatch answered)
   const handleS8_4Completed = (data: S8_4Data) => {
     setIsS8_4Completed(true);
     setS8_4Data(data);
+    scrollLockMessageRef.current = null;
+    setScrollLockMessage(null);
   };
 
   //? Handler: S8_5 completed (Future Value answered — final section, triggers submit)
@@ -402,15 +380,15 @@ export default function WorldSessionPage() {
     }
   });
 
-  const currentGroupId =
-    assetGroups[Math.min(activeSceneIndex, assetGroups.length - 1)]?.id;
-
-  if (!currentGroupId || !areGroupsLoaded([currentGroupId])) {
-    return <LoadingScreen isLoading={true} />;
-  }
-
   return (
     <div ref={ref} className="h-[2100vh] w-full relative bg-black">
+      <ScrollTo
+        opacity={scrollToOpacity}
+        message={scrollLockMessage ?? "เลื่อนต่อเพื่อดำเนินเรื่อง..."}
+        tone={scrollLockMessage ? "warning" : "default"}
+        icon={scrollLockMessage ? "lock" : "down"}
+      />
+
       {/* Loading Screen */}
       <LoadingScreen isLoading={isSubmitting} />
 

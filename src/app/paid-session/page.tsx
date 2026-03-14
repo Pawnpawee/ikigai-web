@@ -3,28 +3,21 @@
 import { useMotionValueEvent, useScroll, useTransform } from "framer-motion";
 import { useLenis } from "lenis/react";
 import { useRouter } from "next/navigation";
-import { useEffect, useLayoutEffect, useMemo, useRef, useState } from "react";
+import { useEffect, useLayoutEffect, useRef, useState } from "react";
 import Cover from "@/app/components/reusable/Cover";
 import {
   COVER_SESSION4_CONFIG,
   COVER_SESSION4_ITEMS,
 } from "@/app/data/cover_session4.data";
-import { SCENE_S9_1_ITEMS } from "@/app/data/scene_s9_1.data";
-import { SCENE_S9_2_ITEMS } from "@/app/data/scene_s9_2.data";
-import { SCENE_S9_3_ITEMS } from "@/app/data/scene_s9_3.data";
 import { useStarsVisibility } from "@/app/hooks/useStarsVisibility";
-import {
-  createCoverAssetGroup,
-  createSceneAssetGroup,
-} from "@/app/utils/assetGroups";
 import { API_BASE_URL } from "@/utils/appConfig";
-import { getAudioUrl, getJsonUrl } from "@/utils/cloudinaryUtils";
+import { getAudioUrl } from "@/utils/cloudinaryUtils";
 import ErrorModal from "../components/modal/ErrorModal";
 import LoadingScreen from "../components/reusable/LoadingScreen";
 import ProgressBar from "../components/reusable/ProgressBar";
+import ScrollTo from "../components/ScrollTo";
 import { useAudio } from "../contexts/AudioContext";
 import { useUser } from "../contexts/UserContext";
-import { useAssetPreloader } from "../hooks/useAssetPreloader";
 import type { S9_1Data } from "./s9_1";
 import S9_1 from "./s9_1";
 import type { S9_2Data } from "./s9_2";
@@ -50,8 +43,7 @@ export default function PaidSessionPage() {
   const { userId, isLoading } = useUser();
   const lenis = useLenis();
   const router = useRouter();
-  const { areGroupsLoaded, preloadGroups } = useAssetPreloader();
-  const [activeSceneIndex, setActiveSceneIndex] = useState(0);
+  const [, setActiveSceneIndex] = useState(0);
 
   const [isS9_1Completed, setIsS9_1Completed] = useState(false);
   const [isS9_2Completed, setIsS9_2Completed] = useState(false);
@@ -59,6 +51,10 @@ export default function PaidSessionPage() {
   const [s9_2Data, setS9_2Data] = useState<S9_2Data | null>(null);
   const [showErrorModal, setShowErrorModal] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [scrollLockMessage, setScrollLockMessage] = useState<string | null>(
+    null,
+  );
+  const scrollLockMessageRef = useRef<string | null>(null);
 
   //? SFX tracking ref สำหรับเสียง ambient (market + person_walking)
   const hasPlayedAmbient = useRef(false);
@@ -94,41 +90,10 @@ export default function PaidSessionPage() {
     [800 / TOTAL_HEIGHT_VH, 1],
     [0, 1],
   );
-
-  const assetGroups = useMemo(
-    () => [
-      createCoverAssetGroup({
-        id: "cover",
-        items: COVER_SESSION4_ITEMS,
-        titleImage: COVER_SESSION4_CONFIG.titleImage,
-        iconImage: COVER_SESSION4_CONFIG.iconImage,
-        extraAssets: [getAudioUrl("Sound/9/travel_inarab.mp3")],
-      }),
-      createSceneAssetGroup({
-        id: "s9-1",
-        items: SCENE_S9_1_ITEMS,
-        extraAssets: [getJsonUrl("Scene/Scene9/01/cat1.json")],
-      }),
-      createSceneAssetGroup({
-        id: "s9-2",
-        items: SCENE_S9_2_ITEMS,
-        extraAssets: [
-          getAudioUrl("Sound/9/market.mp3"),
-          getAudioUrl("Sound/9/person_walking.mp3"),
-          getAudioUrl("Sound/Pop_Select_Button.mp3"),
-        ],
-      }),
-      createSceneAssetGroup({
-        id: "s9-3",
-        items: SCENE_S9_3_ITEMS,
-        extraAssets: [
-          getJsonUrl("Scene/Scene8/03/s8-starlight-mb.json"),
-          getJsonUrl("Scene/Scene8/03/s8-starlight.json"),
-          getJsonUrl("Scene/Scene9/03/cat2.json"),
-        ],
-      }),
-    ],
-    [],
+  const scrollToOpacity = useTransform(
+    scrollYProgress,
+    [0, 0.9, 0.98, 1],
+    [1, 1, 0, 0],
   );
 
   useLayoutEffect(() => {
@@ -144,12 +109,22 @@ export default function PaidSessionPage() {
   useEffect(() => {
     if (!lenis || !ref.current) return;
 
+    const setLockMessage = (message: string | null) => {
+      if (scrollLockMessageRef.current === message) return;
+      scrollLockMessageRef.current = message;
+      setScrollLockMessage(message);
+    };
+
     const handleScroll = (e: {
       scroll: number;
       animatedScroll: number;
       velocity: number;
     }) => {
-      if (!ref.current || isResettingScroll.current) return;
+      if (!ref.current) return;
+
+      if (isResettingScroll.current) {
+        return;
+      }
 
       const scrollStart = ref.current.offsetTop;
       const sectionHeight = ref.current.scrollHeight;
@@ -162,7 +137,12 @@ export default function PaidSessionPage() {
         //? S9_1 ends at 600vh → lock at ~93% of S9_1 range
         const s9_1Lock =
           scrollStart + scrollableDistance * (560 / TOTAL_HEIGHT_VH);
-        if (e.animatedScroll > s9_1Lock + tolerance && e.velocity > 0) {
+        if (e.animatedScroll >= s9_1Lock - tolerance) {
+          setLockMessage("ยังเลื่อนไปต่อไม่ได้ เลือกคำตอบในส่วนแรกก่อน");
+        } else {
+          setLockMessage(null);
+        }
+        if (e.animatedScroll > s9_1Lock + tolerance) {
           isResettingScroll.current = true;
           lenis.scrollTo(s9_1Lock, {
             immediate: true,
@@ -183,7 +163,12 @@ export default function PaidSessionPage() {
         //? S9_2 ends at 800vh → lock at ~93% of S9_2 range
         const s9_2Lock =
           scrollStart + scrollableDistance * (700 / TOTAL_HEIGHT_VH);
-        if (e.animatedScroll > s9_2Lock + tolerance && e.velocity > 0) {
+        if (e.animatedScroll >= s9_2Lock - tolerance) {
+          setLockMessage("ยังเลื่อนไปต่อไม่ได้ เลือกสาขาอาชีพอย่างน้อย 1 ข้อ");
+        } else {
+          setLockMessage(null);
+        }
+        if (e.animatedScroll > s9_2Lock + tolerance) {
           isResettingScroll.current = true;
           lenis.scrollTo(s9_2Lock, {
             immediate: true,
@@ -198,6 +183,8 @@ export default function PaidSessionPage() {
           return;
         }
       }
+
+      setLockMessage(null);
     };
 
     lenis.on("scroll", handleScroll);
@@ -218,12 +205,6 @@ export default function PaidSessionPage() {
   useEffect(() => {
     setBgMusic(getAudioUrl("Sound/9/travel_inarab.mp3"));
   }, [setBgMusic]);
-
-  useEffect(() => {
-    void preloadGroups(
-      assetGroups.slice(0, Math.min(assetGroups.length, activeSceneIndex + 2)),
-    );
-  }, [activeSceneIndex, assetGroups, preloadGroups]);
 
   //? Cleanup: หยุด SFX ทั้งหมดเมื่อออกจากหน้า (ป้องกันเสียง ambient หลุดไปหน้าถัดไป)
   useEffect(() => {
@@ -255,15 +236,12 @@ export default function PaidSessionPage() {
     }
   });
 
-  const currentGroupId =
-    assetGroups[Math.min(activeSceneIndex, assetGroups.length - 1)]?.id;
-  const isCurrentSceneReady =
-    Boolean(currentGroupId) && areGroupsLoaded([currentGroupId]);
-
   //? Handler: S9_1 completed (ever paid answer selected)
   const handleS9_1Completed = (data: S9_1Data) => {
     setS9_1Data(data);
     setIsS9_1Completed(true);
+    scrollLockMessageRef.current = null;
+    setScrollLockMessage(null);
   };
 
   //? Handler: S9_2 completed (job cards selected)
@@ -271,6 +249,8 @@ export default function PaidSessionPage() {
     if (data) {
       setS9_2Data(data);
       setIsS9_2Completed(true);
+      scrollLockMessageRef.current = null;
+      setScrollLockMessage(null);
     } else {
       setIsS9_2Completed(false);
     }
@@ -320,12 +300,15 @@ export default function PaidSessionPage() {
     shouldShow: (p) => p <= 200 / TOTAL_HEIGHT_VH,
   });
 
-  if (!isCurrentSceneReady) {
-    return <LoadingScreen isLoading={true} />;
-  }
-
   return (
     <div ref={ref} className="h-[1000vh] w-full relative bg-black">
+      <ScrollTo
+        opacity={scrollToOpacity}
+        message={scrollLockMessage ?? "เลื่อนต่อเพื่อดำเนินเรื่อง..."}
+        tone={scrollLockMessage ? "warning" : "default"}
+        icon={scrollLockMessage ? "lock" : "down"}
+      />
+
       {/* Loading Screen */}
       <LoadingScreen isLoading={isSubmitting} />
 
