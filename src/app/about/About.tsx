@@ -23,10 +23,17 @@ export default function About() {
     [isMobile],
   );
 
+  const containerStyle = useMemo(
+    () => ({
+      aspectRatio: isMobile ? "1080 / 1920" : "1920 / 1080",
+    }),
+    [isMobile],
+  );
+
   return (
     <div
-      className="relative w-full portrait:h-full"
-      style={{ aspectRatio: "1920 / 1080" }}
+      className="relative mx-auto w-full min-h-screen"
+      style={containerStyle}
     >
       {/* Title: เกี่ยวกับ */}
       <h1 className="absolute top-[8.74%] portrait:top-[7.86%] left-1/2 -translate-x-1/2 text-xl md:text-3xl text-white z-10">

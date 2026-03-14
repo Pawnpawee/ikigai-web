@@ -65,7 +65,7 @@ export default function Icon({
       sizes={
         typeof size === "number" ? `${size}px` : size || `${numericSize}px`
       }
-      quality={80}
+      quality={85}
       style={{ width: size, height: size, color, ...style }}
       draggable={false}
       onClick={onClick}

@@ -150,7 +150,7 @@ const IkigaiCircle = memo(
               alt=""
               width={56}
               height={56}
-              quality={100}
+              quality={85}
               sizes="(max-width: 768px) 40px, 56px"
             />
             <p className="text-sm md:text-xl font-semibold text-white whitespace-nowrap shadow-black/50 drop-shadow-md">
