@@ -1,7 +1,7 @@
 "use client";
 
 import { type MotionValue, m, useTransform } from "framer-motion";
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import {
   HiCheck,
   HiOutlineChevronDown,
@@ -290,15 +290,46 @@ export default function S6_1({
     });
   })();
 
+  const [scrollOffsets, setScrollOffsets] = useState({
+    step1: "0vh",
+    step2: "-30vh",
+    step3: "-50vh",
+    step4: "-80vh",
+    step5: "-100vh",
+  });
+
+  useEffect(() => {
+    const calculateScroll = () => {
+      const aspectMultiplier = isMobile ? 3840 / 1080 : 2160 / 1920;
+      const containerHeight = window.innerWidth * aspectMultiplier;
+      const overflowPx = Math.max(0, containerHeight - window.innerHeight);
+
+      // หาค่า final vh ที่เป็นระยะล้นจอจริงๆ ของเครื่องนั้นๆ
+      const finalVh = -(overflowPx / window.innerHeight) * 100;
+
+      setScrollOffsets({
+        step1: "0vh",
+        step2: `${finalVh * 0.3}vh`, // แทนที่ -30vh
+        step3: `${finalVh * 0.5}vh`, // แทนที่ -50vh
+        step4: `${finalVh * 0.8}vh`, // แทนที่ -80vh
+        step5: `${finalVh}vh`, // แทนที่ -100vh
+      });
+    };
+
+    calculateScroll();
+    window.addEventListener("resize", calculateScroll);
+    return () => window.removeEventListener("resize", calculateScroll);
+  }, [isMobile]);
+
   const top = useTransform(
     scrollYProgress,
     [0, 0.3, 0.6, 0.8, 1],
     [
-      "calc(0vh - 0%)",
-      "calc(30vh - 30%)",
-      "calc(50vh - 50%)",
-      "calc(80vh - 80%)",
-      "calc(100vh - 100%)",
+      scrollOffsets.step1,
+      scrollOffsets.step2,
+      scrollOffsets.step3,
+      scrollOffsets.step4,
+      scrollOffsets.step5,
     ],
   );
 
@@ -384,7 +415,7 @@ export default function S6_1({
                 opacity: textBottomOpacity,
                 y: textBottomY,
                 left: isMobile ? "14.25%" : "8.54%",
-                top: isMobile ? "53.38%" : "53.36%",
+                top: isMobile ? "50%" : "53.36%",
                 width: isMobile ? "76.93%" : "83.35%",
                 height: isMobile ? "43.98%" : "42.97%",
                 maxHeight: isMobile ? "43.98%" : "42.97%",
@@ -635,7 +666,7 @@ export default function S6_1({
                   </div>
 
                   {/* Choices (scroll ได้) - Mobile */}
-                  <div className="flex flex-col gap-2 md:gap-5 overflow-y-auto overflow-x-hidden w-full mt-5 modal-scrollbar">
+                  <div className="flex flex-col gap-2 md:gap-5 overflow-y-auto overflow-x-hidden w-full m-5 modal-scrollbar">
                     <m.div
                       className="flex flex-wrap gap-[14px_18px] md:gap-[20px_25px] xl:gap-[30px_40px] 2xl:gap-[40px_30px] items-start justify-center"
                       style={{

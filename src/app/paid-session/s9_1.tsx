@@ -154,7 +154,7 @@ export default function S9_1({ scrollYProgress, onCompleted }: S9_1Props) {
       className="fixed flex justify-center top-0 h-screen w-screen overflow-hidden bg-[#C9E1FD]"
       style={{ opacity, zIndex }}
     >
-      <m.div className="flex items-center h-screen w-screen portrait:w-auto ">
+      <m.div className="flex items-center h-screen w-screen portrait:w-auto">
         <SceneLayer
           items={SCENE_S9_1_ITEMS}
           animations={animations}

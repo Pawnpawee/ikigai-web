@@ -7,11 +7,14 @@ import { getAudioUrl, getVideoUrl } from "@/utils/cloudinaryUtils";
 import { useAudio } from "../contexts/AudioContext";
 import { TEMPLE_DIALOGUE } from "../data/scene_temple.data";
 
+const VIDEO_FPS = 25;
+const LOOP_START_FRAME = 226;
+const LOOP_START_TIME = LOOP_START_FRAME / VIDEO_FPS;
+
 interface HeartWeighingProcessProps {
   isProcessing: boolean;
   progress: number;
   statusText: string;
-  // ⭐ เพิ่ม Type ให้กับ Props ใหม่
   statusIcon: { src: string; alt: string } | null;
 }
 
@@ -19,14 +22,21 @@ export default function HeartWeighingProcess({
   isProcessing,
   progress,
   statusText,
-  statusIcon, // ⭐ รับค่า Props
+  statusIcon, 
 }: HeartWeighingProcessProps) {
   const [showDialogue, setShowDialogue] = useState(false);
   const { playSfx } = useAudio();
-
+  const videoSrc = getVideoUrl("Scene/Result/s11.mp4");
   const videoRef = useRef<HTMLVideoElement | null>(null);
+
   const sparklingSoundRef = useRef<Howl | null>(null);
   const shimmeringSoundRef = useRef<Howl | null>(null);
+
+  useEffect(() => {
+    if (!isProcessing) {
+      setShowDialogue(false);
+    }
+  }, [isProcessing]);
 
   useEffect(() => {
     if (isProcessing) {
@@ -70,16 +80,17 @@ export default function HeartWeighingProcess({
         >
           <video
             ref={videoRef}
-            src={getVideoUrl("Scene/Result/s11.mp4")} // ใส่ URL ของ Video
+            src={videoSrc} // ใส่ URL ของ Video
             className="w-full h-full object-cover" // object-cover ทำให้เต็มจอสวยงาม
             autoPlay
             muted
+            preload="auto"
             playsInline // สำคัญสำหรับ iOS
             onEnded={() => {
               setShowDialogue(true);
               if (videoRef.current) {
-                videoRef.current.currentTime = 9.03;
-                videoRef.current.play();
+                videoRef.current.currentTime = LOOP_START_TIME;
+                void videoRef.current.play();
               }
             }}
           />

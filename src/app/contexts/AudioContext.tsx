@@ -45,6 +45,30 @@ export function AudioProvider({ children }: { children: React.ReactNode }) {
   const [sfxVolume, setSfxVolumeState] = useState(50);
   const [currentBgMusic, setCurrentBgMusic] = useState<string | null>(null);
 
+  //? Create bg music Howl with loop fallback for browsers/codecs where loop can be flaky
+  const createBgHowl = useCallback((src: string) => {
+    const bgSound = new Howl({
+      src: [src],
+      loop: true,
+      volume: 0,
+      autoplay: false,
+      onplayerror: (_id, err) => {
+        console.warn("Play Error:", err);
+        bgSound.once("unlock", () => {
+          bgSound.play();
+        });
+      },
+      onend: () => {
+        //! warning Fallback replay if native loop fails on some devices/browsers
+        if (bgSound.loop() && !bgSound.playing()) {
+          bgSound.play();
+        }
+      },
+    });
+
+    return bgSound;
+  }, []);
+
   // --- Helper: Save to LocalStorage ---
   const saveSettings = useCallback(
     (settings: { isMuted?: boolean; volume?: number; sfxVolume?: number }) => {
@@ -106,11 +130,7 @@ export function AudioProvider({ children }: { children: React.ReactNode }) {
     const timer = setTimeout(() => {
       const defaultBgMusic = getAudioUrl("Sound/bg-music.mp3");
 
-      const bgSound = new Howl({
-        src: [defaultBgMusic],
-        loop: true,
-        volume: 0, //? จะ fade in ตอน start()
-      });
+      const bgSound = createBgHowl(defaultBgMusic);
 
       soundRef.current = bgSound;
       setCurrentBgMusic(defaultBgMusic);
@@ -120,7 +140,7 @@ export function AudioProvider({ children }: { children: React.ReactNode }) {
       clearTimeout(timer);
       Howler.unload();
     };
-  }, []);
+  }, [createBgHowl]);
 
   // --- Actions ---
 
@@ -202,18 +222,7 @@ export function AudioProvider({ children }: { children: React.ReactNode }) {
       if (src) {
         setCurrentBgMusic(src);
 
-        const newSound = new Howl({
-          src: [src],
-          loop: true,
-          volume: 0,
-          autoplay: false,
-          onplayerror: (_id, err) => {
-            console.warn("Play Error:", err);
-            soundRef.current?.once("unlock", () => {
-              soundRef.current?.play();
-            });
-          },
-        });
+        const newSound = createBgHowl(src);
 
         soundRef.current = newSound;
 

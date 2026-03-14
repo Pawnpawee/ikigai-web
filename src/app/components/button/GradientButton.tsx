@@ -1,5 +1,6 @@
 "use client";
 import { m } from "framer-motion";
+import { useEffect, useState } from "react";
 import { useAudio } from "@/app/contexts/AudioContext";
 import { getAudioUrl } from "@/utils/cloudinaryUtils";
 
@@ -25,6 +26,21 @@ export default function GradientButton({
   const isWhiteVariant = variant === "white";
   const isTransparentVariant = variant === "transparent";
   const { playSfx } = useAudio();
+  const [canHover, setCanHover] = useState(false);
+
+  useEffect(() => {
+    const mediaQuery = window.matchMedia("(hover: hover) and (pointer: fine)");
+    const updateCanHover = () => {
+      setCanHover(mediaQuery.matches);
+    };
+
+    updateCanHover();
+    mediaQuery.addEventListener("change", updateCanHover);
+
+    return () => {
+      mediaQuery.removeEventListener("change", updateCanHover);
+    };
+  }, []);
 
   const handleClick = () => {
     // หาก disabled เป็น true ให้ return ออกทันที ไม่เล่นเสียงและไม่เรียก onClick
@@ -91,7 +107,7 @@ export default function GradientButton({
       `}
       style={getButtonStyles()}
       //? ปิด Animation เมื่อ disabled เพื่อ Performance และ UX
-      whileHover={disabled ? {} : { scale: 1.05 }}
+      whileHover={disabled || !canHover ? {} : { scale: 1.05 }}
       whileTap={disabled ? {} : { scale: 0.95 }}
     >
       <span className="relative z-10 pointer-events-none flex items-center justify-center gap-2">

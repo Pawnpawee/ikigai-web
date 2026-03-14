@@ -114,24 +114,7 @@ export const SCENE_S9_1_ITEMS: SceneItemData[] = [
     },
     animGroup: 5,
   },
-  {
-    id: "humanmiddle",
-    src: getImgPath("Scene/Scene9/01/humanmiddle.webp"),
-    alt: "Human middle character",
-    style: {
-      width: "16.33%",
-      height: "85.96%",
-      left: "18.98%",
-      top: "38.15%",
-    },
-    mobileStyle: {
-      width: "37.86%",
-      height: "52.77%",
-      left: "-6.87%",
-      top: "43.86%",
-    },
-    animGroup: 6,
-  },
+
   {
     id: "humanback",
     src: getImgPath("Scene/Scene9/01/humanback.webp"),
@@ -151,6 +134,25 @@ export const SCENE_S9_1_ITEMS: SceneItemData[] = [
     animGroup: 7,
   },
   {
+    id: "humanmiddle",
+    src: getImgPath("Scene/Scene9/01/humanmiddle.webp"),
+    alt: "Human middle character",
+    style: {
+      width: "16.33%",
+      height: "85.96%",
+      left: "18.98%",
+      top: "38.15%",
+    },
+    mobileStyle: {
+      width: "37.86%",
+      height: "52.77%",
+      left: "2%",
+      top: "48%",
+    },
+    animGroup: 6,
+  },
+
+  {
     id: "humanfront",
     src: getImgPath("Scene/Scene9/01/humanfront.webp"),
     alt: "Human front character",
@@ -163,8 +165,8 @@ export const SCENE_S9_1_ITEMS: SceneItemData[] = [
     mobileStyle: {
       width: "49.82%",
       height: "70.31%",
-      left: "62.51%",
-      top: "32.12%",
+      left: "57%",
+      top: "35%",
     },
     animGroup: 8,
   },

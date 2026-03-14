@@ -57,6 +57,6 @@ export const SKILLS_MATCH_CHOICES = [
 ];
 
 export const USE_SKILLS_CHOICES = [
-  { id: "yes", text: "ใช่" },
-  { id: "no", text: "ไม่ใช่" },
+  { id: "yes", text: "ใช้" },
+  { id: "no", text: "ไม่ใช้" },
 ];

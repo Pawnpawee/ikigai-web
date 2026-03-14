@@ -1,7 +1,7 @@
 ﻿"use client";
 
 import { type MotionValue, m, useTransform } from "framer-motion";
-import { useMemo } from "react";
+import { useEffect, useMemo, useState } from "react";
 import GradientButton from "@/app/components/button/GradientButton";
 import IkigaiCircle from "@/app/components/reusable/IkigaiCircle";
 import LazyLottie from "@/app/components/reusable/LazyLottie";
@@ -25,6 +25,36 @@ export default function IntoDarkSubmit({
   handleSubmit,
 }: SubmitProps) {
   const { isMobile } = useDevice();
+
+  const [scrollOffsets, setScrollOffsets] = useState({
+    mid: "0vh",
+    final: "0vh",
+  });
+
+  useEffect(() => {
+    const calculateScroll = () => {
+      // คำนวณสัดส่วนความสูงของ SceneLayer (อิงตาม containerAspectRatio)
+      const aspectMultiplier = isMobile ? 3840 / 1080 : 2160 / 1920;
+
+      // คำนวณว่า Content สูงกี่ px
+      const containerHeight = window.innerWidth * aspectMultiplier;
+
+      // หาความยาวส่วนที่ล้นหน้าจอลงไปข้างล่าง
+      const overflowPx = Math.max(0, containerHeight - window.innerHeight);
+
+      // แปลง px กลับมาเป็นหน่วย vh ที่พอดีเป๊ะกับขอบล่าง
+      const finalVh = -(overflowPx / window.innerHeight) * 100;
+
+      setScrollOffsets({
+        mid: `${finalVh / 2}vh`, // จุดกึ่งกลาง
+        final: `${finalVh}vh`, // จุดสิ้นสุด
+      });
+    };
+
+    calculateScroll();
+    window.addEventListener("resize", calculateScroll);
+    return () => window.removeEventListener("resize", calculateScroll);
+  }, [isMobile]);
 
   const zIndex = useTransform(
     scrollYProgress,
@@ -86,7 +116,7 @@ export default function IntoDarkSubmit({
   const top = useTransform(
     scrollYProgress,
     [0.667, 0.7, 1],
-    ["calc(0vh - 0%)", "calc(50vh - 50%)", "calc(100vh - 100%)"],
+    ["0vh", scrollOffsets.mid, scrollOffsets.final],
   );
 
   return (
@@ -269,7 +299,7 @@ export default function IntoDarkSubmit({
             </div>
 
             {/* Long description text */}
-            <div className="text-base md:text-2xl 2xl:text-3xl leading-relaxed text-center text-slate-100 w-full shrink-0">
+            <div className="text-sm md:text-2xl 2xl:text-3xl leading-relaxed text-center text-slate-100 w-full shrink-0">
               <m.div style={{ opacity: text2_opacity }}>
                 <MysteriousText
                   text={

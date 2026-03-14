@@ -260,11 +260,9 @@ export default function S7_2({ scrollYProgress, onCompleted }: S7_2Props) {
           {/* Content Layer */}
           <div className="absolute inset-0">
             {isMobile ? (
-              /* ─── Mobile Layout (Figma 810:11017, 1080×1920) ─── */
-              /* flex flex-col items-center justify-center pt-[9.26%] */
-              <div className="flex flex-col items-center justify-center w-full h-full pt-[9.26%]">
+              <div className="flex flex-col items-center justify-center w-full h-full pt-9 md:pt-18">
                 {/*? Text frame*/}
-                <div className="w-full h-full shrink-0 flex flex-col items-center min-[376px]:px-15 md:px-5 gap-15 md:gap-20 xl:gap-10">
+                <div className="w-full h-full shrink-0 flex flex-col items-center px-13 md:px-5 gap-6 md:gap-10">
                   {/*? Question — Figma 810:11145 */}
                   <m.div
                     className="w-full shrink-0 flex flex-col items-center  select-none"
@@ -293,7 +291,7 @@ export default function S7_2({ scrollYProgress, onCompleted }: S7_2Props) {
 
                   {/*? Choice grid */}
                   <m.div
-                    className="w-full shrink-0 content-center flex flex-wrap gap-[5%_3%]  items-center justify-center"
+                    className="w-full shrink-0 content-center flex flex-wrap gap-[15px_10px] md:gap-[25px_15px]  items-center justify-center"
                     style={{ opacity: choicesOpacity, y: choicesY }}
                   >
                     {SOFT_SKILLS_OPTIONS.map((skill) => (
@@ -356,27 +354,17 @@ export default function S7_2({ scrollYProgress, onCompleted }: S7_2Props) {
               </div>
             ) : (
               /* ─── Desktop Layout (Figma pixel-perfect) ─── */
-              /* Figma: Frame 810:9287 → flex items-center justify-center gap-[10px] size-full */
-              /* NO margins. All positioning via flex centering + gap */
 
-              /*? Frame 810:9287: flex items-center justify-center */
-              /*? gap-x-[0.52%] = 10/1920 (gap between painting spacer & text frame) */
               <div className="absolute inset-0 flex items-center justify-center">
                 {/*? Painting spacer — Figma 810:9161 */}
-                {/*? w-[23.02%] = 442.06/1920 (painting width in SceneLayer) */}
-                {/*? aspect-[442/938] preserves painting aspect ratio */}
-                {/*? Image rendered by SceneLayer, spacer preserves flex layout position */}
                 <div
                   className="w-[23.02%] shrink-0 aspect-442/938"
                   aria-hidden="true"
                 />
 
                 {/*? Text frame — Figma 810:9128 */}
-                {/*? w-[62.5%] = 1200/1920, flex-col items-center justify-center */}
                 <div className="w-[62.5%] shrink-0 flex flex-col items-center justify-center">
                   {/*? Question — Figma 810:9129 */}
-                  {/*? w-full, px-[9.46%] = 113.5/1200 (text inset from question frame) */}
-                  {/*? mb-[5%] = 60/1200 (Figma gap-[60px] between question & choice) */}
                   <m.div
                     className="w-full shrink-0 px-[9.46%] mb-[5%] flex flex-col items-center select-none"
                     style={{ opacity: questionOpacity, y: questionY }}
@@ -404,9 +392,6 @@ export default function S7_2({ scrollYProgress, onCompleted }: S7_2Props) {
                   </m.div>
 
                   {/*? Choice grid — Figma 810:9131 */}
-                  {/*? content-center flex-wrap justify-center overflow-clip */}
-                  {/*? gap-x-[3.33%] = 40/1200 (col gap, resolves against container width ✅) */}
-                  {/*? mb-[3.75%] on items = 45/1200 (row gap as margin, CSS margin-% = parent width ✅) */}
                   <m.div
                     className="w-full shrink-0 content-center flex flex-wrap justify-center gap-y-9 gap-x-10"
                     style={{ opacity: choicesOpacity, y: choicesY }}

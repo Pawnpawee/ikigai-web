@@ -178,20 +178,12 @@ export default function IntoDarkHeard({
                   <MysteriousText
                     text={
                       isMobile
-                        ? `— สายหนึ่งคือสิ่งที่โลกภายนอก \n กำลังรอคอยจากเจ้า`
-                        : `— สายหนึ่งคือสิ่งที่โลกภายนอก กำลังรอคอยจากเจ้า`
+                        ? `— สายหนึ่งคือสิ่งที่โลกภายนอก \n กำลังรอคอยจากเจ้า \n (What the world needs )`
+                        : `— สายหนึ่งคือสิ่งที่โลกภายนอก กำลังรอคอยจากเจ้า (What the world needs )`
                     }
                     scrollYProgress={scrollYProgress}
                     startProgress={0.59}
                     endProgress={0.61}
-                  />
-                </div>
-                <div className="mb-2">
-                  <MysteriousText
-                    text="(What the world needs )"
-                    scrollYProgress={scrollYProgress}
-                    startProgress={0.61}
-                    endProgress={0.63}
                   />
                 </div>
                 <div className="mb-2">
