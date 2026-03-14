@@ -1,5 +1,5 @@
 import { getImgPath } from "@/utils/cloudinaryUtils";
-import type { IkigaiAnalysis } from "../types/ikigai.types";
+import type { IkigaiAnalysis } from "./ikigai.data";
 
 // ─────────────────────────────────────────────────────────────
 //? Modal Config สำหรับแสดงรายละเอียดแต่ละด้าน Ikigai
@@ -7,7 +7,7 @@ import type { IkigaiAnalysis } from "../types/ikigai.types";
 //? Modal frame: x=284, y=222, w=1278.23, h=652.36
 // ─────────────────────────────────────────────────────────────
 
-export interface IkigaiModalConfig {
+interface IkigaiModalConfig {
   key: keyof IkigaiAnalysis;
   title: string;
   iconSrc: string;
@@ -29,19 +29,8 @@ export interface IkigaiModalConfig {
   developIcon: string;
 }
 
-//? สี bg สำหรับแต่ละด้าน ikigai — เตรียมไว้หลาย modal
-export const MODAL_BG_COLORS: Record<keyof IkigaiAnalysis, string> = {
-  what_you_love: "rgba(220, 38, 68, 0.85)",
-  what_you_good_at: "rgba(255, 140, 50, 0.85)",
-  what_the_world_need: "rgba(80, 180, 80, 0.85)",
-  what_you_can_be_paid_for: "rgba(60, 120, 220, 0.85)",
-  passion: "rgba(255, 100, 180, 0.85)",
-  mission: "rgba(140, 200, 60, 0.85)",
-  profession: "rgba(150, 100, 220, 0.85)",
-  vocation: "rgba(255, 160, 40, 0.85)",
-};
 
-export const IKIGAI_MODAL_CONFIGS: IkigaiModalConfig[] = [
+const IKIGAI_MODAL_CONFIGS: IkigaiModalConfig[] = [
   {
     key: "what_you_love",
     title: "What you love",

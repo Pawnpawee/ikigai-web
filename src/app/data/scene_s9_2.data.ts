@@ -39,13 +39,10 @@ export const SCENE_S9_2_ITEMS: SceneItemData[] = [
 //  Job Card Data (Carousel)
 // ────────────────────────────────────────────────────
 
-export interface JobCard {
+interface JobCard {
   id: string;
-  /** สาขาอาชีพ (category label) */
   category: string;
-  /** รายชื่อ jobs ภายในสาขา */
   jobs: string[];
-  /** Avatar illustration image */
   avatarSrc: string;
 }
 

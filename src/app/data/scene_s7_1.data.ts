@@ -37,7 +37,7 @@ export const SCENE_S7_1_ITEMS: SceneItemData[] = [
 //  Hard Skill Card Data (Carousel)
 // ────────────────────────────────────────────────────
 
-export interface HardSkillCard {
+interface HardSkillCard {
   id: string;
   label: string;
   /** Illustration image inside the card frame */

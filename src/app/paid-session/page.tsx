@@ -3,20 +3,28 @@
 import { useMotionValueEvent, useScroll, useTransform } from "framer-motion";
 import { useLenis } from "lenis/react";
 import { useRouter } from "next/navigation";
-import { useEffect, useLayoutEffect, useRef, useState } from "react";
+import { useEffect, useLayoutEffect, useMemo, useRef, useState } from "react";
 import Cover from "@/app/components/reusable/Cover";
 import {
   COVER_SESSION4_CONFIG,
   COVER_SESSION4_ITEMS,
 } from "@/app/data/cover_session4.data";
+import { SCENE_S9_1_ITEMS } from "@/app/data/scene_s9_1.data";
+import { SCENE_S9_2_ITEMS } from "@/app/data/scene_s9_2.data";
+import { SCENE_S9_3_ITEMS } from "@/app/data/scene_s9_3.data";
 import { useStarsVisibility } from "@/app/hooks/useStarsVisibility";
+import {
+  createCoverAssetGroup,
+  createSceneAssetGroup,
+} from "@/app/utils/assetGroups";
 import { API_BASE_URL } from "@/utils/appConfig";
-import { getAudioUrl } from "@/utils/cloudinaryUtils";
+import { getAudioUrl, getJsonUrl } from "@/utils/cloudinaryUtils";
 import ErrorModal from "../components/modal/ErrorModal";
 import LoadingScreen from "../components/reusable/LoadingScreen";
 import ProgressBar from "../components/reusable/ProgressBar";
 import { useAudio } from "../contexts/AudioContext";
 import { useUser } from "../contexts/UserContext";
+import { useAssetPreloader } from "../hooks/useAssetPreloader";
 import type { S9_1Data } from "./s9_1";
 import S9_1 from "./s9_1";
 import type { S9_2Data } from "./s9_2";
@@ -42,6 +50,8 @@ export default function PaidSessionPage() {
   const { userId, isLoading } = useUser();
   const lenis = useLenis();
   const router = useRouter();
+  const { areGroupsLoaded, preloadGroups } = useAssetPreloader();
+  const [activeSceneIndex, setActiveSceneIndex] = useState(0);
 
   const [isS9_1Completed, setIsS9_1Completed] = useState(false);
   const [isS9_2Completed, setIsS9_2Completed] = useState(false);
@@ -83,6 +93,42 @@ export default function PaidSessionPage() {
     scrollYProgress,
     [800 / TOTAL_HEIGHT_VH, 1],
     [0, 1],
+  );
+
+  const assetGroups = useMemo(
+    () => [
+      createCoverAssetGroup({
+        id: "cover",
+        items: COVER_SESSION4_ITEMS,
+        titleImage: COVER_SESSION4_CONFIG.titleImage,
+        iconImage: COVER_SESSION4_CONFIG.iconImage,
+        extraAssets: [getAudioUrl("Sound/9/travel_inarab.mp3")],
+      }),
+      createSceneAssetGroup({
+        id: "s9-1",
+        items: SCENE_S9_1_ITEMS,
+        extraAssets: [getJsonUrl("Scene/Scene9/01/cat1.json")],
+      }),
+      createSceneAssetGroup({
+        id: "s9-2",
+        items: SCENE_S9_2_ITEMS,
+        extraAssets: [
+          getAudioUrl("Sound/9/market.mp3"),
+          getAudioUrl("Sound/9/person_walking.mp3"),
+          getAudioUrl("Sound/Pop_Select_Button.mp3"),
+        ],
+      }),
+      createSceneAssetGroup({
+        id: "s9-3",
+        items: SCENE_S9_3_ITEMS,
+        extraAssets: [
+          getJsonUrl("Scene/Scene8/03/s8-starlight-mb.json"),
+          getJsonUrl("Scene/Scene8/03/s8-starlight.json"),
+          getJsonUrl("Scene/Scene9/03/cat2.json"),
+        ],
+      }),
+    ],
+    [],
   );
 
   useLayoutEffect(() => {
@@ -173,6 +219,12 @@ export default function PaidSessionPage() {
     setBgMusic(getAudioUrl("Sound/9/travel_inarab.mp3"));
   }, [setBgMusic]);
 
+  useEffect(() => {
+    void preloadGroups(
+      assetGroups.slice(0, Math.min(assetGroups.length, activeSceneIndex + 2)),
+    );
+  }, [activeSceneIndex, assetGroups, preloadGroups]);
+
   //? Cleanup: หยุด SFX ทั้งหมดเมื่อออกจากหน้า (ป้องกันเสียง ambient หลุดไปหน้าถัดไป)
   useEffect(() => {
     return () => {
@@ -183,6 +235,16 @@ export default function PaidSessionPage() {
   //? เล่นเสียง ambient (market + person_walking) ตลอด S9_1-S9_3
   //? Cover จบที่ 200/1000 = 0.2 → เริ่มเล่นหลัง Cover
   useMotionValueEvent(scrollYProgress, "change", (latest) => {
+    if (latest < 200 / TOTAL_HEIGHT_VH) {
+      setActiveSceneIndex(0);
+    } else if (latest < 600 / TOTAL_HEIGHT_VH) {
+      setActiveSceneIndex(1);
+    } else if (latest < 800 / TOTAL_HEIGHT_VH) {
+      setActiveSceneIndex(2);
+    } else {
+      setActiveSceneIndex(3);
+    }
+
     if (latest > 0.2 && !hasPlayedAmbient.current) {
       playSfx(getAudioUrl("Sound/9/market.mp3"), { loop: true });
       playSfx(getAudioUrl("Sound/9/person_walking.mp3"), { loop: true });
@@ -192,6 +254,11 @@ export default function PaidSessionPage() {
       hasPlayedAmbient.current = false;
     }
   });
+
+  const currentGroupId =
+    assetGroups[Math.min(activeSceneIndex, assetGroups.length - 1)]?.id;
+  const isCurrentSceneReady =
+    Boolean(currentGroupId) && areGroupsLoaded([currentGroupId]);
 
   //? Handler: S9_1 completed (ever paid answer selected)
   const handleS9_1Completed = (data: S9_1Data) => {
@@ -252,6 +319,10 @@ export default function PaidSessionPage() {
   useStarsVisibility(scrollYProgress, {
     shouldShow: (p) => p <= 200 / TOTAL_HEIGHT_VH,
   });
+
+  if (!isCurrentSceneReady) {
+    return <LoadingScreen isLoading={true} />;
+  }
 
   return (
     <div ref={ref} className="h-[1000vh] w-full relative bg-black">

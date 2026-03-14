@@ -55,8 +55,3 @@ export const getSessionResult = () => {
   }
 };
 
-// ลบ Result (ใช้เมื่อเริ่มใหม่ หรือออกจากระบบ)
-export const clearSessionResult = () => {
-  if (typeof window === "undefined") return;
-  sessionStorage.removeItem(StorageKeys.IKIGAI_RESULT);
-};

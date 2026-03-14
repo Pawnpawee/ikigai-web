@@ -5,7 +5,7 @@ import Image from "next/image";
 import { createPortal } from "react-dom";
 import { useDevice } from "@/app/contexts/DeviceContext";
 import { getModalConfig } from "@/app/data/ikigai_modal.data";
-import type { IkigaiAnalysis, IkigaiSection } from "@/app/types/ikigai.types";
+import type { IkigaiAnalysis, IkigaiSection } from "../data/ikigai.data";
 
 // ─────────────────────────────────────────────────────────────
 //? Figma Reference: node 930:8328 (s12-modal)

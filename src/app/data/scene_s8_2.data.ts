@@ -53,10 +53,9 @@ export const S8_2_QUESTION_MOBILE =
 //  Gift Card Data (Carousel)
 // ────────────────────────────────────────────────────
 
-export interface GiftCard {
+interface GiftCard {
   id: string;
   label: string;
-  /** Illustration image inside the card frame */
   imageSrc: string;
 }
 

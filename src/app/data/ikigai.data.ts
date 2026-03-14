@@ -1,22 +1,41 @@
 import { getImgPath, getJsonUrl } from "@/utils/cloudinaryUtils";
-import type { IkigaiAnalysis } from "../types/ikigai.types";
 
 // ─────────────────────────────────────────────────────────────
 //? Card Types — 5 การ์ดตาม MaxSessionPercentage จาก API
 //? การ์ดเป็น Lottie file, glow เป็น CSS radial-gradient
 // ─────────────────────────────────────────────────────────────
 
-//? MaxSessionPercentage → CardType mapping
-export type CardType = "Lover" | "Master" | "Solver" | "Earner" | "Dreamer";
+export interface IkigaiSection {
+  short_summary?: string;
+  overall_summary: string;
+  strengths: string[];
+  development_points: string[];
+}
 
-export interface CardAsset {
+export interface IkigaiAnalysis {
+  what_you_love: IkigaiSection;
+  what_you_good_at: IkigaiSection;
+  what_the_world_need: IkigaiSection;
+  what_you_can_be_paid_for: IkigaiSection;
+  passion: IkigaiSection;
+  mission: IkigaiSection;
+  profession: IkigaiSection;
+  vocation: IkigaiSection;
+}
+
+export type IkigaiScores = Partial<Record<keyof IkigaiAnalysis, number>>;
+
+//? MaxSessionPercentage → CardType mapping
+type CardType = "Lover" | "Master" | "Solver" | "Earner" | "Dreamer";
+
+interface CardAsset {
   //? Lottie JSON URL สำหรับการ์ดตัวละคร
   cardLottie: string;
   //? กรอบการ์ด (frame) ครอบรอบ Lottie card
   cardFrame: string;
 }
 
-export const CARD_ASSETS: Record<CardType, CardAsset> = {
+const CARD_ASSETS: Record<CardType, CardAsset> = {
   Lover: {
     cardLottie: getJsonUrl("Scene/Result/Lover.json"),
     cardFrame: getImgPath("Scene/Result/card.webp"),
@@ -40,7 +59,7 @@ export const CARD_ASSETS: Record<CardType, CardAsset> = {
 };
 
 //? Map MaxSessionPercentage string → CardType
-export const MAX_SESSION_TO_CARD: Record<string, CardType> = {
+const MAX_SESSION_TO_CARD: Record<string, CardType> = {
   LovePercentage: "Lover",
   GoodAtPercentage: "Master",
   WorldNeedsPercentage: "Solver",
@@ -48,7 +67,7 @@ export const MAX_SESSION_TO_CARD: Record<string, CardType> = {
   SamePercentage: "Dreamer",
 };
 
-export const getCardType = (maxSession?: string): CardType => {
+const getCardType = (maxSession?: string): CardType => {
   if (!maxSession) return "Dreamer";
   return MAX_SESSION_TO_CARD[maxSession] ?? "Dreamer";
 };
@@ -58,7 +77,7 @@ export const getCardAssets = (maxSession?: string): CardAsset => {
 };
 
 //? สี accent ของแต่ละการ์ด — ใช้แสดง percent text, highlight ฯลฯ
-export const CARD_ACCENT_COLOR: Record<CardType, string> = {
+const CARD_ACCENT_COLOR: Record<CardType, string> = {
   Lover: "#ec4151",
   Master: "#8D31FD",
   Solver: "#E1ED30",
@@ -87,9 +106,6 @@ export const CARD_POS = {
     height: "39.7%",
   },
 };
-
-//? ตำแหน่งกรอบการ์ด — ขนาดเดียวกับการ์ด (CARD_POS)
-export const CARD_FRAME_POS = CARD_POS;
 
 // ─────────────────────────────────────────────────────────────
 //? Card Glow — CSS radial-gradient แทน card_light image
@@ -148,7 +164,7 @@ export const getCardGlowGradient = (hex: string): string => {
 //? Reference Desktop: parent=1920x1080, Reference Mobile: parent=1080x1920
 // ─────────────────────────────────────────────────────────────
 
-export interface VennCircleConfig {
+interface VennCircleConfig {
   key: keyof IkigaiAnalysis;
   label: string;
   iconSrc: string;
@@ -248,7 +264,7 @@ export const VENN_CIRCLES: VennCircleConfig[] = [
 //? Intersection Labels (Passion, Mission, Profession, Vocation)
 // ─────────────────────────────────────────────────────────────
 
-export interface IntersectionLabelConfig {
+interface IntersectionLabelConfig {
   key: keyof IkigaiAnalysis;
   label: string;
   bgColor: string;

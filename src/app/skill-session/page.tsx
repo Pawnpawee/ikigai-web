@@ -1,22 +1,30 @@
 "use client";
 
-import { useScroll, useTransform } from "framer-motion";
+import { useMotionValueEvent, useScroll, useTransform } from "framer-motion";
 import { useLenis } from "lenis/react";
 import { useRouter } from "next/navigation";
-import { useEffect, useLayoutEffect, useRef, useState } from "react";
+import { useEffect, useLayoutEffect, useMemo, useRef, useState } from "react";
 import Cover from "@/app/components/reusable/Cover";
 import {
   COVER_SESSION2_CONFIG,
   COVER_SESSION2_ITEMS,
 } from "@/app/data/cover_session2.data";
+import { SCENE_S7_1_ITEMS } from "@/app/data/scene_s7_1.data";
+import { SCENE_S7_2_ITEMS } from "@/app/data/scene_s7_2.data";
+import { SCENE_S7_3_ITEMS } from "@/app/data/scene_s7_3.data";
 import { useStarsVisibility } from "@/app/hooks/useStarsVisibility";
+import {
+  createCoverAssetGroup,
+  createSceneAssetGroup,
+} from "@/app/utils/assetGroups";
 import { API_BASE_URL } from "@/utils/appConfig";
-import { getAudioUrl } from "@/utils/cloudinaryUtils";
+import { getAudioUrl, getJsonUrl } from "@/utils/cloudinaryUtils";
 import ErrorModal from "../components/modal/ErrorModal";
 import LoadingScreen from "../components/reusable/LoadingScreen";
 import ProgressBar from "../components/reusable/ProgressBar";
 import { useAudio } from "../contexts/AudioContext";
 import { useUser } from "../contexts/UserContext";
+import { useAssetPreloader } from "../hooks/useAssetPreloader";
 import S7_1, { type S7_1Data } from "./s7_1";
 import S7_2, { type S7_2Data } from "./s7_2";
 import S7_3, { type S7_3Data } from "./s7_3";
@@ -37,6 +45,8 @@ export default function SessionSkillPage() {
   const { userId, isLoading } = useUser();
   const lenis = useLenis();
   const router = useRouter();
+  const { areGroupsLoaded, preloadGroups } = useAssetPreloader();
+  const [activeSceneIndex, setActiveSceneIndex] = useState(0);
 
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isS7_1Completed, setIsS7_1Completed] = useState(false);
@@ -73,6 +83,69 @@ export default function SessionSkillPage() {
   useEffect(() => {
     setBgMusic(getAudioUrl("Sound/7/living-art.mp3"));
   }, [setBgMusic]);
+
+  const assetGroups = useMemo(
+    () => [
+      createCoverAssetGroup({
+        id: "cover",
+        items: COVER_SESSION2_ITEMS,
+        titleImage: COVER_SESSION2_CONFIG.titleImage,
+        iconImage: COVER_SESSION2_CONFIG.iconImage,
+        extraAssets: [getAudioUrl("Sound/7/living-art.mp3")],
+      }),
+      createSceneAssetGroup({
+        id: "s7-1",
+        items: SCENE_S7_1_ITEMS,
+        extraAssets: [
+          getAudioUrl("Sound/Pop_Select_Button.mp3"),
+          getJsonUrl("Scene/Scene7/02/s7-starlight-mb.json"),
+          getJsonUrl("Scene/Scene7/02/s7-starlight.json"),
+        ],
+      }),
+      createSceneAssetGroup({
+        id: "s7-2",
+        items: SCENE_S7_2_ITEMS,
+        extraAssets: [getJsonUrl("Scene/Scene7/03/s7-painting.json")],
+      }),
+      createSceneAssetGroup({
+        id: "s7-3",
+        items: SCENE_S7_3_ITEMS,
+        extraAssets: [
+          getJsonUrl("Scene/Scene7/04/star_mb.json"),
+          getJsonUrl("Scene/Scene7/04/star.json"),
+          getJsonUrl("Scene/Scene7/03/s7-paper.json"),
+          getJsonUrl("Scene/Scene7/04/cat_frame.json"),
+          getJsonUrl("Scene/Scene7/04/cat_pics.json"),
+        ],
+      }),
+    ],
+    [],
+  );
+
+  useEffect(() => {
+    void preloadGroups(
+      assetGroups.slice(0, Math.min(assetGroups.length, activeSceneIndex + 2)),
+    );
+  }, [activeSceneIndex, assetGroups, preloadGroups]);
+
+  useMotionValueEvent(scrollYProgress, "change", (latest) => {
+    if (latest < 0.2) {
+      setActiveSceneIndex(0);
+      return;
+    }
+
+    if (latest < 0.4) {
+      setActiveSceneIndex(1);
+      return;
+    }
+
+    if (latest < 0.6) {
+      setActiveSceneIndex(2);
+      return;
+    }
+
+    setActiveSceneIndex(3);
+  });
 
   const isResettingScroll = useRef(false);
 
@@ -225,6 +298,13 @@ export default function SessionSkillPage() {
   useStarsVisibility(scrollYProgress, {
     shouldShow: (p) => p <= 0.2,
   });
+
+  const currentGroupId =
+    assetGroups[Math.min(activeSceneIndex, assetGroups.length - 1)]?.id;
+
+  if (!currentGroupId || !areGroupsLoaded([currentGroupId])) {
+    return <LoadingScreen isLoading={true} />;
+  }
 
   return (
     <div ref={ref} className="h-[1000vh] w-full relative bg-black">

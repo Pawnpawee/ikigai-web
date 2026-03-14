@@ -9,7 +9,6 @@ import LazyLottie from "@/app/components/reusable/LazyLottie";
 import SceneLayer from "@/app/components/reusable/SceneLayer";
 import { useDevice } from "@/app/contexts/DeviceContext";
 import {
-  CARD_FRAME_POS,
   CARD_GLOW_POS,
   CARD_POS,
   CONTINUE_BTN_POS,
@@ -18,13 +17,14 @@ import {
   getCardAssets,
   getCardGlowGradient,
   IKIGAI_CENTER,
+  type IkigaiAnalysis,
+  type IkigaiScores,
   INTERSECTION_LABELS,
   PERCENT_TEXT_POS,
   SAVE_BTN_POS,
   SHARE_BTN_POS,
   VENN_CIRCLES,
 } from "@/app/data/ikigai.data";
-import type { IkigaiAnalysis, IkigaiScores } from "@/app/types/ikigai.types";
 import { getImgPath } from "@/utils/cloudinaryUtils";
 import SectionDetailModal from "./SectionDetailModal";
 
@@ -290,7 +290,7 @@ export default function IkigaiResultDisplay({
           {/* ─── Card Frame (กรอบการ์ด ครอบ Lottie) ─── */}
           <m.div
             className="absolute pointer-events-none"
-            style={getPos(CARD_FRAME_POS)}
+            style={getPos(CARD_POS)}
             {...popUpVariant(0.6)}
           >
             <Image

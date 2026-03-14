@@ -1,14 +1,22 @@
 "use client";
 
-import { useScroll } from "framer-motion";
+import { useMotionValueEvent, useScroll } from "framer-motion";
 import { useRouter } from "next/navigation";
-import { useEffect, useRef, useState } from "react";
-import { getAudioUrl } from "@/utils/cloudinaryUtils";
+import { useEffect, useMemo, useRef, useState } from "react";
+import {
+  ANALYSIS_STEPS_CONFIG,
+  TEMPLE_ARRIVAL_ITEMS,
+} from "@/app/data/scene_temple.data";
+import { SCENE_WALK_DESERT_ITEMS } from "@/app/data/scene_walk_desert.data";
+import { createSceneAssetGroup } from "@/app/utils/assetGroups";
+import { getAudioUrl, getImgPath, getJsonUrl } from "@/utils/cloudinaryUtils";
 import ErrorModal from "../components/modal/ErrorModal";
+import LoadingScreen from "../components/reusable/LoadingScreen";
 import ProgressBar from "../components/reusable/ProgressBar";
 import { useAudio } from "../contexts/AudioContext";
 import { useUI } from "../contexts/UIStarContext";
 import { useUser } from "../contexts/UserContext";
+import { useAssetPreloader } from "../hooks/useAssetPreloader";
 import { useIkigaiProcess } from "../hooks/useIkigaiProcess";
 import HeartWeighingProcess from "./HeartWeighingProcess";
 import TempleArrival from "./TempleArrival";
@@ -29,13 +37,64 @@ export default function JourneyTemplePage() {
   const { setShowStars } = useUI();
   const ref = useRef<HTMLDivElement>(null);
 
-  const { progress, statusText, isProcessing, errorMsg, startProcess } =
-    useIkigaiProcess();
+  const {
+    progress,
+    statusText,
+    statusIcon,
+    isProcessing,
+    errorMsg,
+    startProcess,
+  } = useIkigaiProcess();
+
+  const { areGroupsLoaded, preloadGroups } = useAssetPreloader();
+  const [activeSceneIndex, setActiveSceneIndex] = useState(0);
 
   const { scrollYProgress } = useScroll({
     target: ref,
     offset: ["start start", "end end"],
   });
+
+  const assetGroups = useMemo(
+    () => [
+      createSceneAssetGroup({
+        id: "walking-desert",
+        items: SCENE_WALK_DESERT_ITEMS,
+        extraAssets: [
+          getAudioUrl("Sound/10/egypt_expedition.mp3"),
+          getJsonUrl("Scene/Scene3/sky.json"),
+          getJsonUrl("Scene/Scene3/sun.json"),
+          getJsonUrl("Scene/Scene10/human-camel.json"),
+        ],
+      }),
+      createSceneAssetGroup({
+        id: "temple-arrival",
+        items: TEMPLE_ARRIVAL_ITEMS,
+        extraAssets: [
+          getJsonUrl("Scene/Scene4/s4-clothing.json"),
+          getJsonUrl("Scene/Scene10/cat.json"),
+        ],
+      }),
+      createSceneAssetGroup({
+        id: "heart-weighing",
+        extraAssets: [
+          getAudioUrl("Sound/10/magical_sparkling.mp3"),
+          getAudioUrl("Sound/10/shimmering_object.mp3"),
+          getJsonUrl("Scene/Result/s11.json"),
+          getImgPath("Icon/love.webp"),
+          ...ANALYSIS_STEPS_CONFIG.flatMap((step) => {
+            return step.icon ? [step.icon] : [];
+          }),
+        ],
+      }),
+    ],
+    [],
+  );
+
+  useEffect(() => {
+    void preloadGroups(
+      assetGroups.slice(0, Math.min(assetGroups.length, activeSceneIndex + 2)),
+    );
+  }, [activeSceneIndex, assetGroups, preloadGroups]);
 
   //? ซ่อน Stars ตลอดทั้งหน้า
   useEffect(() => {
@@ -55,12 +114,24 @@ export default function JourneyTemplePage() {
     setBgMusic(getAudioUrl("Sound/10/egypt_expedition.mp3"));
   }, [setBgMusic]);
 
+  useMotionValueEvent(scrollYProgress, "change", (latest) => {
+    if (!showTempleScene || isProcessing) return;
+
+    if (latest < 200 / 600) {
+      setActiveSceneIndex(0);
+      return;
+    }
+
+    setActiveSceneIndex(1);
+  });
+
   const handleStartCeremony = () => {
     if (!userId) {
       setLocalErrorMsg("ไม่พบข้อมูลผู้ใช้ กรุณาเริ่มต้นใหม่");
       setShowErrorModal(true);
       return;
     }
+    setActiveSceneIndex(2);
     setShowTempleScene(false);
     startProcess(userId); // สั่ง Hook ทำงาน
   };
@@ -82,6 +153,13 @@ export default function JourneyTemplePage() {
       return () => clearTimeout(timer);
     }
   }, [progress, router]);
+
+  const currentGroupId =
+    assetGroups[Math.min(activeSceneIndex, assetGroups.length - 1)]?.id;
+
+  if (!currentGroupId || !areGroupsLoaded([currentGroupId])) {
+    return <LoadingScreen isLoading={true} />;
+  }
 
   return (
     <div ref={ref}>
@@ -106,6 +184,7 @@ export default function JourneyTemplePage() {
         isProcessing={isProcessing}
         progress={progress}
         statusText={statusText}
+        statusIcon={statusIcon}
       />
 
       {/* ProgressBar: scrollYProgress ของหน้านี้ */}

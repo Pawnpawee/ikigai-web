@@ -3,20 +3,30 @@
 import { useMotionValueEvent, useScroll, useTransform } from "framer-motion";
 import { useLenis } from "lenis/react";
 import { useRouter } from "next/navigation";
-import { useEffect, useLayoutEffect, useRef, useState } from "react";
+import { useEffect, useLayoutEffect, useMemo, useRef, useState } from "react";
 import Cover from "@/app/components/reusable/Cover";
 import {
   COVER_SESSION3_CONFIG,
   COVER_SESSION3_ITEMS,
 } from "@/app/data/cover_session3.data";
+import { SCENE_S8_1_ITEMS } from "@/app/data/scene_s8_1.data";
+import { SCENE_S8_2_ITEMS } from "@/app/data/scene_s8_2.data";
+import { SCENE_S8_3_ITEMS } from "@/app/data/scene_s8_3.data";
+import { SCENE_S8_4_ITEMS } from "@/app/data/scene_s8_4.data";
+import { SCENE_S8_5_ITEMS } from "@/app/data/scene_s8_5.data";
 import { useStarsVisibility } from "@/app/hooks/useStarsVisibility";
+import {
+  createCoverAssetGroup,
+  createSceneAssetGroup,
+} from "@/app/utils/assetGroups";
 import { API_BASE_URL } from "@/utils/appConfig";
-import { getAudioUrl } from "@/utils/cloudinaryUtils";
+import { getAudioUrl, getJsonUrl } from "@/utils/cloudinaryUtils";
 import ErrorModal from "../components/modal/ErrorModal";
 import LoadingScreen from "../components/reusable/LoadingScreen";
 import ProgressBar from "../components/reusable/ProgressBar";
 import { useAudio } from "../contexts/AudioContext";
 import { useUser } from "../contexts/UserContext";
+import { useAssetPreloader } from "../hooks/useAssetPreloader";
 import S8_1, { type S8_1Data } from "./s8_1";
 import S8_2, { type S8_2Data } from "./s8_2";
 import S8_3 from "./s8_3";
@@ -43,6 +53,8 @@ export default function WorldSessionPage() {
   const { setBgMusic, playSfx, stopAllSfx } = useAudio();
   const lenis = useLenis();
   const router = useRouter();
+  const { areGroupsLoaded, preloadGroups } = useAssetPreloader();
+  const [activeSceneIndex, setActiveSceneIndex] = useState(0);
 
   //? SFX tracking ref สำหรับเสียง ambient (river_flow + bird_sound)
   const hasPlayedAmbient = useRef(false);
@@ -80,6 +92,63 @@ export default function WorldSessionPage() {
   const s8_4Progress = useTransform(scrollYProgress, [0.6667, 0.8095], [0, 1]);
   //? S8_5: 1700/2100 ≈ 0.8095 → 2100/2100 = 1.0
   const s8_5Progress = useTransform(scrollYProgress, [0.8095, 1.0], [0, 1]);
+
+  const assetGroups = useMemo(
+    () => [
+      createCoverAssetGroup({
+        id: "cover",
+        items: COVER_SESSION3_ITEMS,
+        titleImage: COVER_SESSION3_CONFIG.titleImage,
+        iconImage: COVER_SESSION3_CONFIG.iconImage,
+        extraAssets: [getAudioUrl("Sound/8/ancient-egypt.mp3")],
+      }),
+      createSceneAssetGroup({
+        id: "s8-1",
+        items: SCENE_S8_1_ITEMS,
+        extraAssets: [
+          getAudioUrl("Sound/8/river_flow.mp3"),
+          getAudioUrl("Sound/8/bird_sound.mp3"),
+          getAudioUrl("Sound/8/flower_bloom.mp3"),
+          getJsonUrl("Scene/Scene8/01/s8-stone-lake.json"),
+          getJsonUrl("Scene/Scene8/01/cat1.json"),
+        ],
+      }),
+      createSceneAssetGroup({
+        id: "s8-2",
+        items: SCENE_S8_2_ITEMS,
+        extraAssets: [getAudioUrl("Sound/Pop_Select_Button.mp3")],
+      }),
+      createSceneAssetGroup({
+        id: "s8-3",
+        items: SCENE_S8_3_ITEMS,
+        extraAssets: [
+          getAudioUrl("Sound/8/chime.mp3"),
+          getAudioUrl("Sound/8/flower_bloom.mp3"),
+          getJsonUrl("Scene/Scene8/03/s8-starlight-mb.json"),
+          getJsonUrl("Scene/Scene8/03/s8-starlight.json"),
+        ],
+      }),
+      createSceneAssetGroup({
+        id: "s8-4",
+        items: SCENE_S8_4_ITEMS,
+        extraAssets: [
+          getAudioUrl("Sound/8/icon_popup.mp3"),
+          getJsonUrl("Scene/Scene8/04/s8-icon-1.json"),
+          getJsonUrl("Scene/Scene8/04/s8-icon-2.json"),
+        ],
+      }),
+      createSceneAssetGroup({
+        id: "s8-5",
+        items: SCENE_S8_5_ITEMS,
+        extraAssets: [
+          getAudioUrl("Sound/1-2/heart-beat.mp3"),
+          getJsonUrl("Scene/Scene8/05/s8-stone-lake-night.json"),
+          getJsonUrl("Scene/Scene8/05/cat2.json"),
+        ],
+      }),
+    ],
+    [],
+  );
 
   useLayoutEffect(() => {
     if (typeof window !== "undefined") {
@@ -213,6 +282,12 @@ export default function WorldSessionPage() {
     setBgMusic(getAudioUrl("Sound/8/ancient-egypt.mp3"));
   }, [setBgMusic]);
 
+  useEffect(() => {
+    void preloadGroups(
+      assetGroups.slice(0, Math.min(assetGroups.length, activeSceneIndex + 2)),
+    );
+  }, [activeSceneIndex, assetGroups, preloadGroups]);
+
   //? Cleanup: หยุด SFX ทั้งหมดเมื่อออกจากหน้า (ป้องกันเสียง ambient หลุดไปหน้าถัดไป)
   useEffect(() => {
     return () => {
@@ -303,6 +378,20 @@ export default function WorldSessionPage() {
   //? เล่นเสียง ambient (river_flow + bird_sound) ตลอด S8_1-S8_5
   //? เริ่มเมื่อเข้า S8_1 (progress > 0.0952), หยุดเมื่อออกจาก page
   useMotionValueEvent(scrollYProgress, "change", (latest) => {
+    if (latest < 0.0952) {
+      setActiveSceneIndex(0);
+    } else if (latest < 0.4286) {
+      setActiveSceneIndex(1);
+    } else if (latest < 0.5238) {
+      setActiveSceneIndex(2);
+    } else if (latest < 0.6667) {
+      setActiveSceneIndex(3);
+    } else if (latest < 0.8095) {
+      setActiveSceneIndex(4);
+    } else {
+      setActiveSceneIndex(5);
+    }
+
     if (latest > 0.0952 && !hasPlayedAmbient.current) {
       playSfx(getAudioUrl("Sound/8/river_flow.mp3"), { loop: true });
       playSfx(getAudioUrl("Sound/8/bird_sound.mp3"), { loop: true });
@@ -312,6 +401,13 @@ export default function WorldSessionPage() {
       hasPlayedAmbient.current = false;
     }
   });
+
+  const currentGroupId =
+    assetGroups[Math.min(activeSceneIndex, assetGroups.length - 1)]?.id;
+
+  if (!currentGroupId || !areGroupsLoaded([currentGroupId])) {
+    return <LoadingScreen isLoading={true} />;
+  }
 
   return (
     <div ref={ref} className="h-[2100vh] w-full relative bg-black">

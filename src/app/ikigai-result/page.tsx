@@ -1,7 +1,7 @@
 "use client";
 
 import { useRouter, useSearchParams } from "next/navigation";
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { API_BASE_URL } from "@/utils/appConfig";
 import { getAudioUrl } from "@/utils/cloudinaryUtils";
 import { getSessionResult, saveSessionResult } from "@/utils/storage";
@@ -9,7 +9,9 @@ import ErrorModal from "../components/modal/ErrorModal";
 import LoadingScreen from "../components/reusable/LoadingScreen";
 import { useAudio } from "../contexts/AudioContext";
 import { useUser } from "../contexts/UserContext";
-import type { IkigaiAnalysis, IkigaiScores } from "../types/ikigai.types";
+import type { IkigaiAnalysis, IkigaiScores } from "../data/ikigai.data";
+import { useAssetPreloader } from "../hooks/useAssetPreloader";
+import { createSceneAssetGroup } from "../utils/assetGroups";
 import IkigaiResultDisplay from "./IkigaiResultDisplay";
 
 //? 1. Define DTO Interfaces
@@ -127,6 +129,7 @@ export default function IkigaiResultPage() {
   const searchParams = useSearchParams();
   const { userId, playerName, isLoading: userLoading } = useUser();
   const { setBgMusic } = useAudio();
+  const { areGroupsLoaded, preloadGroups } = useAssetPreloader();
   const [ikigaiAnalysis, setIkigaiAnalysis] = useState<IkigaiAnalysis | null>(
     null,
   );
@@ -141,10 +144,24 @@ export default function IkigaiResultPage() {
   const [showErrorModal, setShowErrorModal] = useState(false);
   const [errorMessage, setErrorMessage] = useState("");
 
+  const assetGroups = useMemo(
+    () => [
+      createSceneAssetGroup({
+        id: "ikigai-result",
+        extraAssets: [getAudioUrl("Sound/12/magical-sparkling.mp3")],
+      }),
+    ],
+    [],
+  );
+
   //? ตั้งเพลง bg ทุกครั้งที่เข้าหน้า
   useEffect(() => {
     setBgMusic(getAudioUrl("Sound/12/magical-sparkling.mp3"));
   }, [setBgMusic]);
+
+  useEffect(() => {
+    void preloadGroups(assetGroups);
+  }, [assetGroups, preloadGroups]);
 
   //? Check authentication
   useEffect(() => {
@@ -221,7 +238,9 @@ export default function IkigaiResultPage() {
   };
 
   // if (userLoading || isLoading) return <LoadingScreen isLoading={true} />;
-  if (isLoading) return <LoadingScreen isLoading={true} />;
+  if (!areGroupsLoaded([assetGroups[0].id]) || isLoading) {
+    return <LoadingScreen isLoading={true} />;
+  }
   if (!userId) return null;
   if (!ikigaiAnalysis) {
     return (

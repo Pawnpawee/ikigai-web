@@ -1,17 +1,25 @@
 "use client";
 
 import { useRouter } from "next/navigation";
-import { useEffect, useLayoutEffect, useState } from "react";
+import { useEffect, useLayoutEffect, useMemo, useState } from "react";
 import DecisionSection from "@/app/components/reusable/DecisionSection";
 import EyelidOverlay from "@/app/components/reusable/EyeLidOverlay";
+import LoadingScreen from "@/app/components/reusable/LoadingScreen";
 import { useAudio } from "@/app/contexts/AudioContext";
-import { getAudioUrl } from "@/utils/cloudinaryUtils";
+import { SCENE_DREAMING_ITEMS } from "@/app/data/scene_dreaming.data";
+import { SCENE_WEIGHING_ITEMS } from "@/app/data/scene_weighing.data";
+import { useAssetPreloader } from "@/app/hooks/useAssetPreloader";
+import { createSceneAssetGroup } from "@/app/utils/assetGroups";
+import { getAudioUrl, getJsonUrl } from "@/utils/cloudinaryUtils";
 import Dreaming from "./Dreaming";
 import Weighing from "./Weighing";
 
 export default function DreamingPage() {
   const router = useRouter();
   const { playSfx, isMuted, setBgMusic } = useAudio(); //? isMuted ยังใช้สำหรับเสียง SFX แมวเมี่ยว
+  const { areGroupsLoaded, preloadGroups } = useAssetPreloader();
+  const [activeSceneIndex, setActiveSceneIndex] = useState(0);
+  const [preloadUntilIndex, setPreloadUntilIndex] = useState(0);
 
   useLayoutEffect(() => {
     if (typeof window !== "undefined") {
@@ -37,6 +45,65 @@ export default function DreamingPage() {
   useEffect(() => {
     setBgMusic(getAudioUrl("Sound/3-4/egypt-jelly-dance.mp3"));
   }, [setBgMusic]);
+
+  const assetGroups = useMemo(
+    () => [
+      createSceneAssetGroup({
+        id: "dreaming",
+        items: SCENE_DREAMING_ITEMS,
+        extraAssets: [
+          getAudioUrl("Sound/3-4/egypt-jelly-dance.mp3"),
+          getAudioUrl("Sound/3-4/cat-meow.mp3"),
+          getJsonUrl("Scene/Scene3/sky.json"),
+          getJsonUrl("Scene/Scene3/sun.json"),
+          getJsonUrl("Scene/Scene3/camel.json"),
+        ],
+      }),
+      createSceneAssetGroup({
+        id: "weighing",
+        items: SCENE_WEIGHING_ITEMS,
+        extraAssets: [
+          getAudioUrl("Sound/3-4/weighing.mp3"),
+          getAudioUrl("Sound/3-4/metal-slide.mp3"),
+          getAudioUrl("Sound/3-4/black-hole.mp3"),
+          getAudioUrl("Sound/3-4/falling.mp3"),
+          getJsonUrl("Scene/Scene4/s4-clothing.json"),
+          getJsonUrl("Scene/Scene4/human.json"),
+        ],
+      }),
+    ],
+    [],
+  );
+
+  useEffect(() => {
+    void preloadGroups(assetGroups.slice(0, preloadUntilIndex + 1));
+  }, [assetGroups, preloadGroups, preloadUntilIndex]);
+
+  useEffect(() => {
+    const handleScroll = () => {
+      const viewportHeight = window.innerHeight;
+      const scrollPosition = window.scrollY;
+
+      if (scrollPosition >= viewportHeight * 6) {
+        setActiveSceneIndex(1);
+      } else {
+        setActiveSceneIndex(0);
+      }
+
+      if (scrollPosition >= viewportHeight * 4) {
+        setPreloadUntilIndex(1);
+      } else {
+        setPreloadUntilIndex(0);
+      }
+    };
+
+    handleScroll();
+    window.addEventListener("scroll", handleScroll, { passive: true });
+
+    return () => {
+      window.removeEventListener("scroll", handleScroll);
+    };
+  }, []);
 
   const handleNotLook = () => {
     // เริ่ม Effect ตาปรือ
@@ -67,6 +134,13 @@ export default function DreamingPage() {
   const handleLook = async () => {
     router.push("/prologue/into-dark");
   };
+
+  const currentGroupId =
+    assetGroups[Math.min(activeSceneIndex, assetGroups.length - 1)]?.id;
+
+  if (!currentGroupId || !areGroupsLoaded([currentGroupId])) {
+    return <LoadingScreen isLoading={true} />;
+  }
 
   return (
     <div>
