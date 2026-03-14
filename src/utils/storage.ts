@@ -54,4 +54,3 @@ export const getSessionResult = () => {
     return null;
   }
 };
-

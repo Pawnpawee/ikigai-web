@@ -29,7 +29,6 @@ interface IkigaiModalConfig {
   developIcon: string;
 }
 
-
 const IKIGAI_MODAL_CONFIGS: IkigaiModalConfig[] = [
   {
     key: "what_you_love",

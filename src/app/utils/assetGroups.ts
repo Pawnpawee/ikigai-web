@@ -34,9 +34,7 @@ const dedupeAssets = (assets: Array<string | undefined>): string[] => {
   );
 };
 
-const collectSceneItemAssets = (
-  items: SceneItemData[] = [],
-): string[] => {
+const collectSceneItemAssets = (items: SceneItemData[] = []): string[] => {
   return dedupeAssets(
     items.flatMap((item) => {
       return [item.src, item.mobileSrc];

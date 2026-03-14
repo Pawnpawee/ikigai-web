@@ -3,7 +3,6 @@ import { API_BASE_URL } from "@/utils/appConfig";
 import { getImgPath } from "@/utils/cloudinaryUtils";
 import { saveSessionResult } from "@/utils/storage";
 
-
 export const useIkigaiProcess = () => {
   const [targetProgress, setTargetProgress] = useState(0);
   const [displayProgress, setDisplayProgress] = useState(0);
@@ -166,4 +165,4 @@ export const useIkigaiProcess = () => {
     errorMsg,
     startProcess,
   };
-};;
+};
