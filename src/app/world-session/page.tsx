@@ -2,6 +2,7 @@
 
 import { useMotionValueEvent, useScroll, useTransform } from "framer-motion";
 import { useLenis } from "lenis/react";
+import dynamic from "next/dynamic";
 import { useRouter } from "next/navigation";
 import { useEffect, useLayoutEffect, useRef, useState } from "react";
 import Cover from "@/app/components/reusable/Cover";
@@ -18,11 +19,32 @@ import ProgressBar from "../components/reusable/ProgressBar";
 import ScrollTo from "../components/ScrollTo";
 import { useAudio } from "../contexts/AudioContext";
 import { useUser } from "../contexts/UserContext";
-import S8_1, { type S8_1Data } from "./s8_1";
-import S8_2, { type S8_2Data } from "./s8_2";
-import S8_3 from "./s8_3";
-import S8_4, { type S8_4Data } from "./s8_4";
-import S8_5, { type S8_5Data } from "./s8_5";
+import type { S8_1Data } from "./s8_1";
+import type { S8_2Data } from "./s8_2";
+import type { S8_4Data } from "./s8_4";
+import type { S8_5Data } from "./s8_5";
+
+//? Lazy load below-the-fold sections — reduces initial JS
+const S8_1 = dynamic(() => import("./s8_1"), {
+  ssr: false,
+  loading: () => null,
+});
+const S8_2 = dynamic(() => import("./s8_2"), {
+  ssr: false,
+  loading: () => null,
+});
+const S8_3 = dynamic(() => import("./s8_3"), {
+  ssr: false,
+  loading: () => null,
+});
+const S8_4 = dynamic(() => import("./s8_4"), {
+  ssr: false,
+  loading: () => null,
+});
+const S8_5 = dynamic(() => import("./s8_5"), {
+  ssr: false,
+  loading: () => null,
+});
 
 // ────────────────────────────────────────────────────
 //  WorldData: accumulated data from all sections

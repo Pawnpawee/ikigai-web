@@ -2,6 +2,7 @@
 
 import { useMotionValueEvent, useScroll, useTransform } from "framer-motion";
 import { useLenis } from "lenis/react";
+import dynamic from "next/dynamic";
 import { useRouter } from "next/navigation";
 import { useEffect, useLayoutEffect, useRef, useState } from "react";
 import Cover from "@/app/components/reusable/Cover";
@@ -19,11 +20,22 @@ import ScrollTo from "../components/ScrollTo";
 import { useAudio } from "../contexts/AudioContext";
 import { useUser } from "../contexts/UserContext";
 import type { S9_1Data } from "./s9_1";
-import S9_1 from "./s9_1";
 import type { S9_2Data } from "./s9_2";
-import S9_2 from "./s9_2";
 import type { S9_3Data } from "./s9_3";
-import S9_3 from "./s9_3";
+
+//? Lazy load below-the-fold sections — reduces initial JS
+const S9_1 = dynamic(() => import("./s9_1"), {
+  ssr: false,
+  loading: () => null,
+});
+const S9_2 = dynamic(() => import("./s9_2"), {
+  ssr: false,
+  loading: () => null,
+});
+const S9_3 = dynamic(() => import("./s9_3"), {
+  ssr: false,
+  loading: () => null,
+});
 
 //! ─── Types ─────────────────────────────────────────
 //? PaidData รวมข้อมูลจากทุก section ก่อนส่ง API

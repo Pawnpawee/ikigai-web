@@ -2,6 +2,7 @@
 
 import { useScroll, useTransform } from "framer-motion";
 import { useLenis } from "lenis/react";
+import dynamic from "next/dynamic";
 import { useRouter } from "next/navigation";
 import { useEffect, useLayoutEffect, useRef, useState } from "react";
 import Cover from "@/app/components/reusable/Cover";
@@ -18,9 +19,23 @@ import ProgressBar from "../components/reusable/ProgressBar";
 import ScrollTo from "../components/ScrollTo";
 import { useAudio } from "../contexts/AudioContext";
 import { useUser } from "../contexts/UserContext";
-import S7_1, { type S7_1Data } from "./s7_1";
-import S7_2, { type S7_2Data } from "./s7_2";
-import S7_3, { type S7_3Data } from "./s7_3";
+import type { S7_1Data } from "./s7_1";
+import type { S7_2Data } from "./s7_2";
+import type { S7_3Data } from "./s7_3";
+
+//? Lazy load below-the-fold sections — reduces initial JS
+const S7_1 = dynamic(() => import("./s7_1"), {
+  ssr: false,
+  loading: () => null,
+});
+const S7_2 = dynamic(() => import("./s7_2"), {
+  ssr: false,
+  loading: () => null,
+});
+const S7_3 = dynamic(() => import("./s7_3"), {
+  ssr: false,
+  loading: () => null,
+});
 
 export interface SkillData {
   selectedHardSkills: string[];

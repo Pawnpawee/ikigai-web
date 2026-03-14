@@ -1,5 +1,6 @@
 "use client";
 
+import dynamic from "next/dynamic";
 import { useRouter } from "next/navigation";
 import { useEffect, useLayoutEffect, useState } from "react";
 import DecisionSection from "@/app/components/reusable/DecisionSection";
@@ -7,7 +8,12 @@ import EyelidOverlay from "@/app/components/reusable/EyeLidOverlay";
 import { useAudio } from "@/app/contexts/AudioContext";
 import { getAudioUrl } from "@/utils/cloudinaryUtils";
 import Dreaming from "./Dreaming";
-import Weighing from "./Weighing";
+
+//? Lazy load Weighing — only needed after scroll
+const Weighing = dynamic(() => import("./Weighing"), {
+  ssr: false,
+  loading: () => null,
+});
 
 export default function DreamingPage() {
   const router = useRouter();

@@ -1,4 +1,5 @@
 import { m } from "framer-motion";
+import Image from "next/image";
 import type { CSSProperties } from "react";
 
 interface IconProps {
@@ -13,6 +14,17 @@ interface IconProps {
   withHoverEffect?: boolean;
 }
 
+const MotionImage = m.create(Image);
+
+const getNumericSize = (size: number | string): number => {
+  if (typeof size === "number") return size;
+
+  const parsed = Number.parseInt(size, 10);
+  if (Number.isFinite(parsed) && parsed > 0) return parsed;
+
+  return 40;
+};
+
 export default function Icon({
   src,
   alt = "",
@@ -24,7 +36,8 @@ export default function Icon({
   onClick,
   withHoverEffect = false,
 }: IconProps) {
-  const Component = withHoverEffect ? m.img : "img";
+  const numericSize = getNumericSize(size);
+  const Component = withHoverEffect ? MotionImage : Image;
 
   const hoverProps = withHoverEffect
     ? {
@@ -47,7 +60,12 @@ export default function Icon({
       src={src}
       alt={alt || label || ""}
       className={`${className} ${onClick ? "cursor-pointer" : ""}`}
-      sizes={typeof size === "number" ? `${size}px` : size}
+      width={numericSize}
+      height={numericSize}
+      sizes={
+        typeof size === "number" ? `${size}px` : size || `${numericSize}px`
+      }
+      quality={80}
       style={{ width: size, height: size, color, ...style }}
       draggable={false}
       onClick={onClick}

@@ -103,10 +103,6 @@ export default function JobApplication() {
     [0, 0, 1, 1, 0],
   );
 
-  useStarsVisibility(scrollYProgress, {
-    shouldShow: () => false,
-  });
-
   return (
     <m.div
       ref={ref}

@@ -1,5 +1,6 @@
 "use client";
 
+import dynamic from "next/dynamic";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import WelcomeSoundModal from "./components/modal/WelcomeSoundModal";
@@ -7,9 +8,20 @@ import DecisionSection from "./components/reusable/DecisionSection";
 import EyelidOverlay from "./components/reusable/EyeLidOverlay";
 import { useAudio } from "./contexts/AudioContext";
 import Hero from "./prologue/Hero";
-import Intro from "./prologue/Intro";
-import JobApplication from "./prologue/JobApplication";
-import Sleeping from "./prologue/Sleeping";
+
+//? Lazy load below-the-fold sections — reduces initial JS
+const Intro = dynamic(() => import("./prologue/Intro"), {
+  ssr: false,
+  loading: () => null,
+});
+const JobApplication = dynamic(() => import("./prologue/JobApplication"), {
+  ssr: false,
+  loading: () => null,
+});
+const Sleeping = dynamic(() => import("./prologue/Sleeping"), {
+  ssr: false,
+  loading: () => null,
+});
 
 export default function Home() {
   const router = useRouter();

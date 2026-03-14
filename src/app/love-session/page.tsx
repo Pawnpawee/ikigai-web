@@ -2,6 +2,7 @@
 
 import { useScroll, useTransform } from "framer-motion";
 import { useLenis } from "lenis/react";
+import dynamic from "next/dynamic";
 import { useRouter } from "next/navigation";
 import { useEffect, useLayoutEffect, useRef, useState } from "react";
 import Cover from "@/app/components/reusable/Cover";
@@ -18,8 +19,17 @@ import ProgressBar from "../components/reusable/ProgressBar";
 import ScrollTo from "../components/ScrollTo";
 import { useAudio } from "../contexts/AudioContext";
 import { useUser } from "../contexts/UserContext";
-import S6_1, { type S6_1Data } from "./s6_1";
-import S6_4 from "./s6_4";
+import type { S6_1Data } from "./s6_1";
+
+//? Lazy load below-the-fold sections — reduces initial JS
+const S6_1 = dynamic(() => import("./s6_1"), {
+  ssr: false,
+  loading: () => null,
+});
+const S6_4 = dynamic(() => import("./s6_4"), {
+  ssr: false,
+  loading: () => null,
+});
 
 export default function SessionLovePage() {
   //? Single ref for entire page

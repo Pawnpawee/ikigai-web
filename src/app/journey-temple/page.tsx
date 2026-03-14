@@ -1,6 +1,7 @@
 "use client";
 
 import { useScroll, useTransform } from "framer-motion";
+import dynamic from "next/dynamic";
 import { useRouter } from "next/navigation";
 import { useEffect, useRef, useState } from "react";
 import { getAudioUrl } from "@/utils/cloudinaryUtils";
@@ -11,9 +12,17 @@ import { useAudio } from "../contexts/AudioContext";
 import { useUI } from "../contexts/UIStarContext";
 import { useUser } from "../contexts/UserContext";
 import { useIkigaiProcess } from "../hooks/useIkigaiProcess";
-import HeartWeighingProcess from "./HeartWeighingProcess";
-import TempleArrival from "./TempleArrival";
 import WalkingDesert from "./WalkingDesert";
+
+//? Lazy load below-the-fold sections — reduces initial JS
+const TempleArrival = dynamic(() => import("./TempleArrival"), {
+  ssr: false,
+  loading: () => null,
+});
+const HeartWeighingProcess = dynamic(() => import("./HeartWeighingProcess"), {
+  ssr: false,
+  loading: () => null,
+});
 
 //? Journey Temple Page - รวม Scene 10.1 + 10.2
 //? Scene 10.1: Walking through the desert (200vh)

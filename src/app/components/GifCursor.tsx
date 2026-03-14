@@ -1,7 +1,7 @@
 "use client";
 import { m, useMotionValue } from "framer-motion";
 import Image from "next/image";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useDevice } from "@/app/contexts/DeviceContext";
 
 export default function GifCursor() {
@@ -9,6 +9,7 @@ export default function GifCursor() {
   const mouseX = useMotionValue(-100);
   const mouseY = useMotionValue(-100);
   const [isHover, setIsHover] = useState(false);
+  const isHoverRef = useRef(false);
 
   useEffect(() => {
     if (isMobile) return;
@@ -22,10 +23,16 @@ export default function GifCursor() {
       const isInteractive = target.closest(
         "button, a, input, textarea, [role='button'], .cursor-pointer",
       );
-      setIsHover(!!isInteractive);
+      const nextIsHover = !!isInteractive;
+
+      //? อัปเดต React state เฉพาะตอนค่าเปลี่ยนจริง ลด re-render ทุก mousemove
+      if (nextIsHover !== isHoverRef.current) {
+        isHoverRef.current = nextIsHover;
+        setIsHover(nextIsHover);
+      }
     };
 
-    window.addEventListener("mousemove", moveCursor);
+    window.addEventListener("mousemove", moveCursor, { passive: true });
     return () => window.removeEventListener("mousemove", moveCursor);
   }, [isMobile, mouseX, mouseY]);
 
