@@ -64,7 +64,7 @@ export default function HeartWeighingProcess({
       <div className="absolute inset-0">
         <m.div
           className="absolute inset-0"
-          initial={{ opacity: 0  }} // เทคนิคแถม: เฟดพร้อมกับหดลงนิดๆ ให้ดูลึกมีมิติ
+          initial={{ opacity: 0 }} // เทคนิคแถม: เฟดพร้อมกับหดลงนิดๆ ให้ดูลึกมีมิติ
           animate={{ opacity: 1 }}
           transition={{ duration: 2, delay: 0.5, ease: "easeOut" }} // ให้พื้นหลังมาเต็มก่อน แล้ววิดีโอค่อยๆ โผล่ตาม
         >
@@ -73,7 +73,7 @@ export default function HeartWeighingProcess({
             src={getVideoUrl("Scene/Result/s11.mp4")} // ใส่ URL ของ Video
             className="w-full h-full object-cover" // object-cover ทำให้เต็มจอสวยงาม
             autoPlay
-            muted 
+            muted
             playsInline // สำคัญสำหรับ iOS
             onEnded={() => {
               setShowDialogue(true);
