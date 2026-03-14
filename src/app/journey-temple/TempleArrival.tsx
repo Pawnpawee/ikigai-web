@@ -29,7 +29,7 @@ export default function TempleArrival({ onStartCeremony }: TempleArrivalProps) {
   const [fadeOut, setFadeOut] = useState(false);
 
   const handleStartCeremony = () => {
-    setFadeOut(true); 
+    setFadeOut(true);
 
     setTimeout(() => {
       onStartCeremony();
