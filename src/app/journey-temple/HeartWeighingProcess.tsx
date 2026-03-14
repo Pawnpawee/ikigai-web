@@ -78,7 +78,7 @@ export default function HeartWeighingProcess({
             onEnded={() => {
               setShowDialogue(true);
               if (videoRef.current) {
-                videoRef.current.currentTime = 9.04;
+                videoRef.current.currentTime = 9.03;
                 videoRef.current.play();
               }
             }}
