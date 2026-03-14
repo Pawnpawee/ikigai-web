@@ -58,7 +58,6 @@ const CARD_ASSETS: Record<CardType, CardAsset> = {
   },
 };
 
-
 //? Map MaxSessionPercentage string → CardType
 const MAX_SESSION_TO_CARD: Record<string, CardType> = {
   LovePercentage: "Lover",

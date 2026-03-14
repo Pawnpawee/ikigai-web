@@ -125,7 +125,6 @@ export const TEMPLE_ARRIVAL_ITEMS: SceneItemData[] = [
   },
 ];
 
-
 //? Dialogue texts
 export const TEMPLE_DIALOGUE = {
   deity: `เจ้ามาถึงวิหารแล้ว… โลกและความสามารถของเจ้ากำลังจะถูกชั่งอย่างยุติธรรม

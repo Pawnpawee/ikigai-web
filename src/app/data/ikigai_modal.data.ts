@@ -163,4 +163,3 @@ const IKIGAI_MODAL_CONFIGS: IkigaiModalConfig[] = [
 //? Helper: หา Modal Config จาก key
 export const getModalConfig = (key: keyof IkigaiAnalysis) =>
   IKIGAI_MODAL_CONFIGS.find((c) => c.key === key);
-
