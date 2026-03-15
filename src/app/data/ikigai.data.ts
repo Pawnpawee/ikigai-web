@@ -172,8 +172,6 @@ interface VennCircleConfig {
   desktop: { left: string; top: string; width: string; height: string };
   //? Mobile position (% of 1080x1920)
   mobile: { left: string; top: string; width: string; height: string };
-  //? Gradient circle image
-  circleSrc: string;
 }
 
 export const VENN_CIRCLES: VennCircleConfig[] = [
@@ -181,7 +179,6 @@ export const VENN_CIRCLES: VennCircleConfig[] = [
     key: "what_you_can_be_paid_for",
     label: "What you can\nbe paid for",
     iconSrc: "/assets/icons/paid.webp",
-    circleSrc: getImgPath("Scene/Hero/paid-circle.webp"),
     // Desktop: x=1151, y=515, w=379.68, h=379.68
     desktop: {
       left: "59.95%",
@@ -202,7 +199,6 @@ export const VENN_CIRCLES: VennCircleConfig[] = [
     key: "what_you_good_at",
     label: "What you are\ngood at",
     iconSrc: "/assets/icons/skill.webp",
-    circleSrc: getImgPath("Scene/Hero/skill-circle.webp"),
     // Desktop: x=914.52, y=305, w=379.68, h=379.68
     desktop: {
       left: "47.63%",
@@ -222,7 +218,6 @@ export const VENN_CIRCLES: VennCircleConfig[] = [
     key: "what_the_world_need",
     label: "What the\nworld needs",
     iconSrc: "/assets/icons/world.webp",
-    circleSrc: getImgPath("Scene/Hero/world-circle.webp"),
     // Desktop: x=1385.37, y=305, w=379.68, h=379.68
     desktop: {
       left: "72.15%",
@@ -242,7 +237,6 @@ export const VENN_CIRCLES: VennCircleConfig[] = [
     key: "what_you_love",
     label: "What you\nlove",
     iconSrc: "/assets/icons/love.webp",
-    circleSrc: getImgPath("Scene/Hero/love-circle.webp"),
     // Desktop: x=1151, y=95.7, w=379.68, h=379.68
     desktop: {
       left: "59.95%",

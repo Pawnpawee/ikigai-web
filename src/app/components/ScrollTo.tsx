@@ -1,5 +1,6 @@
 "use client";
 import { type MotionValue, m } from "framer-motion";
+import { usePathname } from "next/navigation";
 import { HiArrowDown, HiCheckCircle, HiLockClosed } from "react-icons/hi";
 import { useDevice } from "@/app/contexts/DeviceContext";
 
@@ -17,6 +18,11 @@ export default function ScrollTo({
   icon = "down",
 }: ScrollToProps) {
   const { isMobile } = useDevice();
+  const pathname = usePathname();
+
+  if (pathname === "/ikigai-result") {
+    return null;
+  }
 
   const toneClasses =
     tone === "success"

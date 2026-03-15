@@ -116,85 +116,20 @@ export default function IkigaiResultDisplay({
   }, []);
 
   const handleSaveResult = useCallback(async () => {
-    if (!captureRef.current || saveStatus === "saving") return;
+    const targetRef = captureRef;
+    if (!targetRef.current || saveStatus === "saving") return;
     setSaveStatus("saving");
 
-    //1. เตรียมตัวแปรสำหรับ DOM Interception เพื่อแก้ปัญหา Next.js Image + Cloudinary จอดำ
-    const captureEl = captureRef.current;
-    const imgElements = captureEl.querySelectorAll("img");
-    const originalAttributes: Array<{
-      src: string;
-      srcset: string | null;
-      crossOrigin: string | null;
-    }> = [];
+    const captureEl = targetRef.current;
 
     //? ใส่ bg-result gradient ชั่วคราว เพราะ parent อยู่นอก captureRef
     const originalBackground = captureEl.style.background;
     captureEl.style.background =
       "linear-gradient(180deg, #09345b 0%, #083054 5%, #062137 29%, #051622 54%, #041015 77%, #040e11 100%)";
 
-    //2. แอบสลับ URL ของ Next.js กลับไปเป็น URL ของ Cloudinary แท้ๆ ชั่วคราว
-    imgElements.forEach((img, index) => {
-      // ✅ เก็บค่าดั้งเดิมของ React/Next.js ไว้ก่อน
-      originalAttributes[index] = {
-        src: img.src,
-        srcset: img.getAttribute("srcset"),
-        crossOrigin: img.getAttribute("crossOrigin"),
-      };
-
-      // ✅ ตรวจสอบว่าเป็นรูปภาพที่ผ่านการ Optimize โดย Next.js หรือไม่
-      if (img.src.includes("/_next/image")) {
-        try {
-          const urlObj = new URL(img.src, window.location.origin);
-          const actualCloudinaryUrl = urlObj.searchParams.get("url");
-
-          if (actualCloudinaryUrl) {
-            // Safari iOS workaround: บังคับให้โหลดภาพใหม่ไม่ผ่าน cache เพื่อล้างปัญหา CORS
-            const separator = actualCloudinaryUrl.includes("?") ? "&" : "?";
-            img.src = `${actualCloudinaryUrl}${separator}t=${Date.now()}`; // ดึงภาพจาก Cloudinary ตรงๆ
-            img.removeAttribute("srcset"); // ลบ srcset ชั่วคราว ป้องกัน Canvas สับสน
-            img.crossOrigin = "anonymous"; // ปลดล็อค CORS Policy
-          }
-        } catch (e) {
-          console.error("ไม่สามารถแกะ URL ของภาพได้:", e);
-        }
-      }
-    });
-
-    //? รอให้รูปทั้งหมดโหลด/ถอดรหัสเสร็จก่อน capture
-    //? โดยเฉพาะบน mobile ที่ network ช้ากว่า ทำให้บางรูป (เช่นวงกลม) ยังไม่พร้อมตอน toPng
-    const waitForImageReady = (img: HTMLImageElement) => {
-      return new Promise<void>((resolve) => {
-        // complete + naturalWidth > 0 = โหลดสำเร็จแล้ว
-        if (img.complete && img.naturalWidth > 0) {
-          if (typeof img.decode === "function") {
-            img
-              .decode()
-              .catch(() => undefined)
-              .finally(() => resolve());
-            return;
-          }
-          resolve();
-          return;
-        }
-
-        const done = () => {
-          img.removeEventListener("load", done);
-          img.removeEventListener("error", done);
-          resolve();
-        };
-
-        img.addEventListener("load", done, { once: true });
-        img.addEventListener("error", done, { once: true });
-      });
-    };
-
-    await Promise.all(Array.from(imgElements).map(waitForImageReady));
-
     try {
       //? Screenshot ทั้ง container ด้วย html-to-image
-      const dataUrl = await toPng(captureRef.current, {
-        // ❌ ลบ cacheBust: true ออกเด็ดขาด เพื่อป้องกัน Next.js HTTP 400 Error
+      const dataUrl = await toPng(captureEl, {
         pixelRatio: 2,
         backgroundColor: "rgba(0,0,0,0)",
         //? ซ่อนปุ่ม save/share/continue ออกจากภาพ
@@ -218,30 +153,9 @@ export default function IkigaiResultDisplay({
       console.error("Error saving screenshot:", error);
       setSaveStatus("idle");
     } finally {
-      //3. สำคัญมาก: ต้องคืนค่า DOM กลับสู่สภาพเดิมเสมอ! ไม่ว่าจะแคปสำเร็จหรือ Error
-      // เพื่อป้องกันไม่ให้ Virtual DOM ของ React ทำงานผิดพลาดในภายหลัง
       captureEl.style.background = originalBackground;
-      imgElements.forEach((img, index) => {
-        img.src = originalAttributes[index].src;
-
-        if (originalAttributes[index].srcset) {
-          img.setAttribute(
-            "srcset",
-            originalAttributes[index].srcset as string,
-          );
-        }
-
-        if (originalAttributes[index].crossOrigin) {
-          img.setAttribute(
-            "crossOrigin",
-            originalAttributes[index].crossOrigin as string,
-          );
-        } else {
-          img.removeAttribute("crossOrigin");
-        }
-      });
     }
-  }, [onSaveSuccess, playerName, saveStatus]); // Dependencies ครบถ้วนตามที่คุณตั้งไว้
+  }, [onSaveSuccess, playerName, saveStatus]);
 
   const handleShareResult = useCallback(async () => {
     const shareText =
@@ -316,52 +230,54 @@ export default function IkigaiResultDisplay({
           shouldAnimate={true}
           containerAspectRatio={isMobile ? "1080 / 1920" : "1920 / 1080"}
         >
-          {/* ─── Card Glow (CSS radial-gradient + mix-blend-mode: screen) ─── */}
-          <m.div
-            className="absolute pointer-events-none mix-blend-screen"
-            style={{
-              ...getPos(CARD_GLOW_POS),
-              background: cardGlowGradient,
-              opacity: 0.7,
-            }}
-            {...fadeInVariant(0.3)}
-          />
-
-          {/* ─── Card Frame (กรอบการ์ด ครอบ Lottie) ─── */}
-          <m.div
-            className="absolute pointer-events-none"
-            style={getPos(CARD_POS)}
-            {...popUpVariant(0.6)}
-          >
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              width="100%"
-              height="100%"
-              viewBox="0 0 443 763"
-              fill="none"
-              preserveAspectRatio="xMidYMid meet"
-              aria-hidden="true"
-            >
-              <path
-                d="M414.006 0H28.0541C12.5603 0 0 12.5603 0 28.0541V734.108C0 749.602 12.5603 762.162 28.0541 762.162H414.006C429.5 762.162 442.06 749.602 442.06 734.108V28.0541C442.06 12.5603 429.5 0 414.006 0Z"
-                fill="#FFD578"
-              />
-            </svg>
-          </m.div>
-
-          {/* ─── Card Lottie (5 การ์ดตาม MaxSessionPercentage) ─── */}
-          <m.div
-            className="absolute z-10"
-            style={getPos(CARD_POS)}
-            {...popUpVariant(0.6)}
-          >
-            <LazyLottie
-              src={cardAssets.cardLottie}
-              className="w-full h-full"
-              loop={true}
-              play={true}
+          <div className="contents">
+            {/* ─── Card Glow (CSS radial-gradient + mix-blend-mode: screen) ─── */}
+            <m.div
+              className="absolute pointer-events-none mix-blend-screen"
+              style={{
+                ...getPos(CARD_GLOW_POS),
+                background: cardGlowGradient,
+                opacity: 0.7,
+              }}
+              {...fadeInVariant(0.3)}
             />
-          </m.div>
+
+            {/* ─── Card Frame (กรอบการ์ด ครอบ Lottie) ─── */}
+            <m.div
+              className="absolute pointer-events-none"
+              style={getPos(CARD_POS)}
+              {...popUpVariant(0.6)}
+            >
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                width="100%"
+                height="100%"
+                viewBox="0 0 443 763"
+                fill="none"
+                preserveAspectRatio="xMidYMid meet"
+                aria-hidden="true"
+              >
+                <path
+                  d="M414.006 0H28.0541C12.5603 0 0 12.5603 0 28.0541V734.108C0 749.602 12.5603 762.162 28.0541 762.162H414.006C429.5 762.162 442.06 749.602 442.06 734.108V28.0541C442.06 12.5603 429.5 0 414.006 0Z"
+                  fill="#FFD578"
+                />
+              </svg>
+            </m.div>
+
+            {/* ─── Card Lottie (5 การ์ดตาม MaxSessionPercentage) ─── */}
+            <m.div
+              className="absolute z-10"
+              style={getPos(CARD_POS)}
+              {...popUpVariant(0.6)}
+            >
+              <LazyLottie
+                src={cardAssets.cardLottie}
+                className="w-full h-full"
+                loop={true}
+                play={true}
+              />
+            </m.div>
+          </div>
 
           {/* ─── Percent Text (PlayersInSessionPct จากผู้เล่นทั้งหมด) ─── */}
           <m.div
@@ -528,6 +444,8 @@ export default function IkigaiResultDisplay({
                       className="object-contain"
                       sizes="48px"
                       crossOrigin="anonymous"
+                      unoptimized={true}
+                      priority={true}
                     />
                   </div>
 
