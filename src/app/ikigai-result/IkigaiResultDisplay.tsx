@@ -149,7 +149,9 @@ export default function IkigaiResultDisplay({
           const actualCloudinaryUrl = urlObj.searchParams.get("url");
 
           if (actualCloudinaryUrl) {
-            img.src = actualCloudinaryUrl; // ดึงภาพจาก Cloudinary ตรงๆ
+            // Safari iOS workaround: บังคับให้โหลดภาพใหม่ไม่ผ่าน cache เพื่อล้างปัญหา CORS
+            const separator = actualCloudinaryUrl.includes("?") ? "&" : "?";
+            img.src = `${actualCloudinaryUrl}${separator}t=${Date.now()}`; // ดึงภาพจาก Cloudinary ตรงๆ
             img.removeAttribute("srcset"); // ลบ srcset ชั่วคราว ป้องกัน Canvas สับสน
             img.crossOrigin = "anonymous"; // ปลดล็อค CORS Policy
           }
