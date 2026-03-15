@@ -134,9 +134,7 @@ export default function IkigaiResultDisplay({
       "linear-gradient(180deg, #09345b 0%, #083054 5%, #062137 29%, #051622 54%, #041015 77%, #040e11 100%)";
 
     //2. แอบสลับ URL ของ Next.js กลับไปเป็น URL ของ Cloudinary แท้ๆ ชั่วคราว
-    // และแปลงเป็น Data URL (Base64) เพื่อแก้ปัญหา Safari บน iOS ที่มีปัญหากับ Cross-Origin ของ SVG/Canvas อย่างเด็ดขาด
-    await Promise.all(
-      Array.from(imgElements).map(async (img, index) => {
+    imgElements.forEach((img, index) => {
         // ✅ เก็บค่าดั้งเดิมของ React/Next.js ไว้ก่อน
         originalAttributes[index] = {
           src: img.src,
@@ -151,28 +149,17 @@ export default function IkigaiResultDisplay({
             const actualCloudinaryUrl = urlObj.searchParams.get("url");
 
             if (actualCloudinaryUrl) {
-              // ดาวน์โหลดรูปมาแปลงเป็น Base64 เลย
-              const res = await fetch(actualCloudinaryUrl);
-              const blob = await res.blob();
-              const base64Data = await new Promise<string>(
-                (resolve, reject) => {
-                  const reader = new FileReader();
-                  reader.onloadend = () => resolve(reader.result as string);
-                  reader.onerror = reject;
-                  reader.readAsDataURL(blob);
-                },
-              );
-
+            // Safari iOS workaround: บังคับให้โหลดภาพใหม่ไม่ผ่าน cache เพื่อล้างปัญหา CORS
+            const separator = actualCloudinaryUrl.includes("?") ? "&" : "?";
+            img.src = `${actualCloudinaryUrl}${separator}t=${Date.now()}`; // ดึงภาพจาก Cloudinary ตรงๆ
               img.removeAttribute("srcset"); // ลบ srcset ชั่วคราว ป้องกัน Canvas สับสน
               img.crossOrigin = "anonymous"; // ปลดล็อค CORS Policy
-              img.src = base64Data; // ยัด Base64 ใส่ src แทน
-            }
-          } catch (e) {
-            console.error("ไม่สามารถแกะ URL หรือแปลงภาพเป็น Base64 ได้:", e);
           }
+        } catch (e) {
+          console.error("ไม่สามารถแกะ URL ของภาพได้:", e);
         }
-      }),
-    );
+      }
+    });
 
     //? รอให้รูปทั้งหมดโหลด/ถอดรหัสเสร็จก่อน capture
     //? โดยเฉพาะบน mobile ที่ network ช้ากว่า ทำให้บางรูป (เช่นวงกลม) ยังไม่พร้อมตอน toPng
