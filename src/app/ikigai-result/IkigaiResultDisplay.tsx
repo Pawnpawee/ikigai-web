@@ -437,15 +437,10 @@ export default function IkigaiResultDisplay({
                 <div className="absolute inset-0 flex flex-col items-center justify-center gap-1 2xl:gap-4  px-[10%]">
                   {/* Icon */}
                   <div className="relative w-[12.57%] aspect-square">
-                    <Image
+                    <img
                       src={circle.iconSrc}
                       alt={`${circle.label} icon`}
-                      fill
-                      className="object-contain"
-                      sizes="48px"
-                      crossOrigin="anonymous"
-                      unoptimized={true}
-                      priority={true}
+                      className="w-full h-full object-contain"
                     />
                   </div>
 
