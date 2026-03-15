@@ -134,32 +134,45 @@ export default function IkigaiResultDisplay({
       "linear-gradient(180deg, #09345b 0%, #083054 5%, #062137 29%, #051622 54%, #041015 77%, #040e11 100%)";
 
     //2. แอบสลับ URL ของ Next.js กลับไปเป็น URL ของ Cloudinary แท้ๆ ชั่วคราว
-    imgElements.forEach((img, index) => {
-      // ✅ เก็บค่าดั้งเดิมของ React/Next.js ไว้ก่อน
-      originalAttributes[index] = {
-        src: img.src,
-        srcset: img.getAttribute("srcset"),
-        crossOrigin: img.getAttribute("crossOrigin"),
-      };
+    // และแปลงเป็น Data URL (Base64) เพื่อแก้ปัญหา Safari บน iOS ที่มีปัญหากับ Cross-Origin ของ SVG/Canvas อย่างเด็ดขาด
+    await Promise.all(
+      Array.from(imgElements).map(async (img, index) => {
+        // ✅ เก็บค่าดั้งเดิมของ React/Next.js ไว้ก่อน
+        originalAttributes[index] = {
+          src: img.src,
+          srcset: img.getAttribute("srcset"),
+          crossOrigin: img.getAttribute("crossOrigin"),
+        };
 
-      // ✅ ตรวจสอบว่าเป็นรูปภาพที่ผ่านการ Optimize โดย Next.js หรือไม่
-      if (img.src.includes("/_next/image")) {
-        try {
-          const urlObj = new URL(img.src, window.location.origin);
-          const actualCloudinaryUrl = urlObj.searchParams.get("url");
+        // ✅ ตรวจสอบว่าเป็นรูปภาพที่ผ่านการ Optimize โดย Next.js หรือไม่
+        if (img.src.includes("/_next/image")) {
+          try {
+            const urlObj = new URL(img.src, window.location.origin);
+            const actualCloudinaryUrl = urlObj.searchParams.get("url");
 
-          if (actualCloudinaryUrl) {
-            // Safari iOS workaround: บังคับให้โหลดภาพใหม่ไม่ผ่าน cache เพื่อล้างปัญหา CORS
-            const separator = actualCloudinaryUrl.includes("?") ? "&" : "?";
-            img.src = `${actualCloudinaryUrl}${separator}t=${Date.now()}`; // ดึงภาพจาก Cloudinary ตรงๆ
-            img.removeAttribute("srcset"); // ลบ srcset ชั่วคราว ป้องกัน Canvas สับสน
-            img.crossOrigin = "anonymous"; // ปลดล็อค CORS Policy
+            if (actualCloudinaryUrl) {
+              // ดาวน์โหลดรูปมาแปลงเป็น Base64 เลย
+              const res = await fetch(actualCloudinaryUrl);
+              const blob = await res.blob();
+              const base64Data = await new Promise<string>(
+                (resolve, reject) => {
+                  const reader = new FileReader();
+                  reader.onloadend = () => resolve(reader.result as string);
+                  reader.onerror = reject;
+                  reader.readAsDataURL(blob);
+                },
+              );
+
+              img.removeAttribute("srcset"); // ลบ srcset ชั่วคราว ป้องกัน Canvas สับสน
+              img.crossOrigin = "anonymous"; // ปลดล็อค CORS Policy
+              img.src = base64Data; // ยัด Base64 ใส่ src แทน
+            }
+          } catch (e) {
+            console.error("ไม่สามารถแกะ URL หรือแปลงภาพเป็น Base64 ได้:", e);
           }
-        } catch (e) {
-          console.error("ไม่สามารถแกะ URL ของภาพได้:", e);
         }
-      }
-    });
+      }),
+    );
 
     //? รอให้รูปทั้งหมดโหลด/ถอดรหัสเสร็จก่อน capture
     //? โดยเฉพาะบน mobile ที่ network ช้ากว่า ทำให้บางรูป (เช่นวงกลม) ยังไม่พร้อมตอน toPng
@@ -396,7 +409,7 @@ export default function IkigaiResultDisplay({
                 />
 
                 {/* Content: icon + label + percent + summary */}
-                <div className="absolute inset-0 flex flex-col items-center justify-center gap-[3.95%] px-[10%]">
+                <div className="absolute inset-0 flex flex-col items-center justify-center gap-1 2xl:gap-4  px-[10%]">
                   {/* Icon */}
                   <div className="relative w-[12.57%] aspect-square">
                     <Image
@@ -462,7 +475,7 @@ export default function IkigaiResultDisplay({
                 whileTap={{ scale: 0.95 }}
                 onClick={() => handleSectionClick(label.key)}
               >
-                <p className="text-white font-semibold text-xs min-[376px]:text-sm md:text-lg xl:text-2xl text-center py-[2.6%] px-[7.8%] whitespace-nowrap">
+                <p className="text-white font-semibold text-[10px] min-[376px]:text-xs md:text-lg xl:text-2xl text-center py-[2.6%] px-[7.8%] whitespace-nowrap">
                   {label.label}
                 </p>
               </m.button>
