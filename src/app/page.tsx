@@ -1,26 +1,39 @@
 "use client";
 
+import dynamic from "next/dynamic";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
+import { getAudioUrl } from "@/utils/cloudinaryUtils";
 import WelcomeSoundModal from "./components/modal/WelcomeSoundModal";
 import DecisionSection from "./components/reusable/DecisionSection";
 import EyelidOverlay from "./components/reusable/EyeLidOverlay";
 import { useAudio } from "./contexts/AudioContext";
 import Hero from "./prologue/Hero";
-import Intro from "./prologue/Intro";
-import JobApplication from "./prologue/JobApplication";
-import Sleeping from "./prologue/Sleeping";
+
+//? Lazy load below-the-fold sections — reduces initial JS
+const Intro = dynamic(() => import("./prologue/Intro"), {
+  ssr: false,
+  loading: () => null,
+});
+const JobApplication = dynamic(() => import("./prologue/JobApplication"), {
+  ssr: false,
+  loading: () => null,
+});
+const Sleeping = dynamic(() => import("./prologue/Sleeping"), {
+  ssr: false,
+  loading: () => null,
+});
 
 export default function Home() {
   const router = useRouter();
   const [showWelcomeModal, setShowWelcomeModal] = useState(false);
-  const { start, stop } = useAudio();
+  const { start, stop, setBgMusic } = useAudio();
 
   const [shouldAnimate, setShouldAnimate] = useState(false);
 
   //? ควบคุม Modal
   useEffect(() => {
-    const hasSettings = localStorage.getItem("audioSettings");
+    const hasSettings = sessionStorage.getItem("audioSettings");
 
     if (!hasSettings) {
       setShowWelcomeModal(true);
@@ -28,6 +41,13 @@ export default function Home() {
       setShouldAnimate(true);
     }
   }, []);
+
+  //? กลับมาหน้า main ให้ใช้เพลงหลักเสมอ
+  useEffect(() => {
+    setBgMusic(getAudioUrl("Sound/bg-music.mp3"), {
+      immediate: true,
+    });
+  }, [setBgMusic]);
 
   const handleAcceptSoundModal = () => {
     setShowWelcomeModal(false);
@@ -43,9 +63,7 @@ export default function Home() {
 
   const sleepyTexts = [
     "งั้นอีก 5 นาทีนะ...",
-    "ฝันนี้ยังดีอยู่เลยหรอ...",
-    "โลกความจริงมันเหนื่อยสินะ...",
-    "ZZZzzz...",
+    "ถึงเวลาที่ต้อง 'ตื่น' แล้วล่ะ...",
   ];
   const [snoozeCount, setSnoozeCount] = useState(0);
   const [secondaryBtnText, setSecondaryBtnText] = useState<string | null>(
@@ -63,13 +81,12 @@ export default function Home() {
     setTimeout(() => {
       const nextIndex = snoozeCount;
 
-      //? เช็คว่ายังมีข้อความเหลือไหม?
-      if (nextIndex < sleepyTexts.length) {
-        setDecisionText(sleepyTexts[nextIndex]);
-        setSnoozeCount((prev) => prev + 1);
-      } else {
-        //? ข้อความหมดแล้ว บังคับตื่น
-        setDecisionText("ถึงเวลาที่ต้อง 'ตื่น' แล้วล่ะ...");
+      const text = sleepyTexts[nextIndex];
+      setDecisionText(text);
+      setSnoozeCount((prev) => prev + 1);
+
+      //? คลิกครั้งที่ 2 = ข้อความสุดท้าย → ซ่อนปุ่ม บังคับตื่น
+      if (nextIndex >= sleepyTexts.length - 1) {
         setSecondaryBtnText(null);
       }
 

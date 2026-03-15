@@ -182,7 +182,7 @@ const SceneItem = ({
 
   return (
     <m.div
-      className={`absolute ${item.className || ""}`}
+      className={`absolute pointer-events-none ${item.className || ""}`}
       initial={{ opacity: 0 }}
       animate={animateAnim}
       transition={transitionAnim}

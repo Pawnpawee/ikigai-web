@@ -5,6 +5,8 @@ import { useLenis } from "lenis/react";
 import { useRouter } from "next/navigation";
 import { useEffect, useRef, useState } from "react";
 import ErrorModal from "@/app/components/modal/ErrorModal";
+import LoadingScreen from "@/app/components/reusable/LoadingScreen";
+import ProgressBar from "@/app/components/reusable/ProgressBar";
 import { useUser } from "@/app/contexts/UserContext";
 import { useStarsVisibility } from "@/app/hooks/useStarsVisibility";
 import { API_BASE_URL } from "@/utils/appConfig";
@@ -203,6 +205,9 @@ export default function IntoDark() {
 
   return (
     <div ref={ref} className="w-full relative bg-black">
+      {/* Loading Screen */}
+      <LoadingScreen isLoading={isLoading} />
+
       {/* Error Modal */}
       <ErrorModal
         isOpen={showErrorModal}
@@ -253,6 +258,11 @@ export default function IntoDark() {
           isLoading={isLoading}
           handleSubmit={handleSubmit}
         />
+      </div>
+
+      {/* ProgressBar: scrollYProgress ของหน้านี้ */}
+      <div className="pointer-events-none">
+        <ProgressBar scrollYProgress={scrollYProgress} />
       </div>
     </div>
   );

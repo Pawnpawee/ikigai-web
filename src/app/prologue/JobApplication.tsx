@@ -1,6 +1,5 @@
 "use client";
 import { m, useInView, useScroll, useTransform } from "framer-motion";
-import { Howl } from "howler";
 import { useEffect, useRef } from "react";
 import { useAudio } from "@/app/contexts/AudioContext";
 import { useStarsVisibility } from "@/app/hooks/useStarsVisibility";
@@ -11,10 +10,11 @@ import JobApplication2 from "./JobApplication_2";
 export default function JobApplication() {
   const ref = useRef<HTMLDivElement>(null);
   const isInView = useInView(ref, { once: false, amount: 0.1 });
-  const { playSfx, stopAllSfx, sfxVolume, isMuted } = useAudio();
+  const { playSfx, isMuted } = useAudio();
 
   //? Ref for looping clock sound
-  const clockSoundRef = useRef<Howl | null>(null);
+  const clockSoundRef = useRef<ReturnType<typeof playSfx> | null>(null);
+  const alternatingSoundRef = useRef<ReturnType<typeof playSfx> | null>(null);
 
   const { scrollYProgress } = useScroll({
     target: ref,
@@ -26,45 +26,47 @@ export default function JobApplication() {
     shouldShow: () => false,
   });
 
-  //? Initialize clock sound (looping)
-  useEffect(() => {
-    clockSoundRef.current = new Howl({
-      src: [getAudioUrl("Sound/1-2/clock-ticking.mp3")],
-      loop: true,
-      volume: sfxVolume / 100,
-    });
-
-    return () => {
-      clockSoundRef.current?.unload();
-    };
-  }, [sfxVolume]);
-
   //? Play/stop clock sound based on view and mute state
   useEffect(() => {
     const clockSound = clockSoundRef.current;
-    if (!clockSound) return;
 
     //! ถ้าไม่อยู่ใน view หรือถูก mute ให้หยุดเสียงทันที
     if (!isInView || isMuted) {
-      if (clockSound.playing()) {
+      if (clockSound?.playing()) {
         clockSound.fade(clockSound.volume(), 0, 500);
-        setTimeout(() => clockSound.stop(), 500);
+        setTimeout(() => {
+          clockSound.stop();
+          clockSound.unload();
+        }, 500);
       }
+      clockSoundRef.current = null;
     }
     //? ถ้าอยู่ใน view และไม่ถูก mute ให้เล่นเสียง
     else {
-      if (!clockSound.playing()) {
-        clockSound.fade(0, sfxVolume / 100, 500);
-        clockSound.play();
+      if (!clockSound?.playing()) {
+        const newClockSound = playSfx(
+          getAudioUrl("Sound/1-2/clock-ticking.mp3"),
+          {
+            loop: true,
+          },
+        );
+        if (newClockSound) {
+          const targetVolume = newClockSound.volume();
+          newClockSound.volume(0);
+          newClockSound.fade(0, targetVolume, 500);
+          clockSoundRef.current = newClockSound;
+        }
       }
     }
-  }, [isInView, isMuted, sfxVolume]);
+  }, [isInView, isMuted, playSfx]);
 
   //? Alternating page-flip and typing sounds (play 1 time, pause 5 sec, alternate)
   useEffect(() => {
     //! หยุดเสียง SFX ทั้งหมดถ้าไม่อยู่ใน view หรือถูก mute
     if (!isInView || isMuted) {
-      stopAllSfx();
+      alternatingSoundRef.current?.stop();
+      alternatingSoundRef.current?.unload();
+      alternatingSoundRef.current = null;
       return;
     }
 
@@ -72,10 +74,17 @@ export default function JobApplication() {
     let timeoutId: NodeJS.Timeout;
 
     const playAlternatingSound = () => {
+      alternatingSoundRef.current?.stop();
+      alternatingSoundRef.current?.unload();
+
       if (isPageFlip) {
-        playSfx(getAudioUrl("Sound/1-2/page-flip.mp3"));
+        alternatingSoundRef.current = playSfx(
+          getAudioUrl("Sound/1-2/page-flip.mp3"),
+        );
       } else {
-        playSfx(getAudioUrl("Sound/1-2/typing-on-laptop.mp3"));
+        alternatingSoundRef.current = playSfx(
+          getAudioUrl("Sound/1-2/typing-on-laptop.mp3"),
+        );
       }
       isPageFlip = !isPageFlip;
 
@@ -87,9 +96,11 @@ export default function JobApplication() {
 
     return () => {
       if (timeoutId) clearTimeout(timeoutId);
-      stopAllSfx(); //? หยุดเสียงที่เหลือตอน cleanup
+      alternatingSoundRef.current?.stop();
+      alternatingSoundRef.current?.unload();
+      alternatingSoundRef.current = null;
     };
-  }, [isInView, isMuted, playSfx, stopAllSfx]);
+  }, [isInView, isMuted, playSfx]);
 
   const opacity = useTransform(
     scrollYProgress,
@@ -103,10 +114,6 @@ export default function JobApplication() {
     [0, 0, 1, 1, 0],
   );
 
-  useStarsVisibility(scrollYProgress, {
-    shouldShow: () => false,
-  });
-
   return (
     <m.div
       ref={ref}
@@ -115,7 +122,7 @@ export default function JobApplication() {
     >
       {/* bg */}
       <m.div
-        className="absolute w-screen inset-0 bg-s1"
+        className="absolute w-screen inset-0 bg-[linear-gradient(180deg,#000_0%,#0a121b_8%,#132232_17%,#192e43_26%,#1d344d_37%,#1f3751_50%,#1d344d_66%,#132232_79%,#0a121b_91%,#000_100%)]"
         style={{
           opacity: opacity_bg,
         }}

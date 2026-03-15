@@ -8,7 +8,7 @@ const getApiBaseUrl = (): string => {
 
   if (nodeEnv === "production") {
     throw new Error(
-      "❌ NEXT_PUBLIC_API_BASE_URL is not set in production environment.",
+      "NEXT_PUBLIC_API_BASE_URL is not set in production environment.",
     );
   }
 
@@ -16,3 +16,9 @@ const getApiBaseUrl = (): string => {
 };
 
 export const API_BASE_URL = getApiBaseUrl();
+
+const getFeedbackFormUrl = (): string => {
+  return process.env.NEXT_PUBLIC_FEEDBACK_FORM_URL || "#";
+};
+
+export const FEEDBACK_FORM_URL = getFeedbackFormUrl();

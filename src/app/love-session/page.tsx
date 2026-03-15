@@ -2,6 +2,7 @@
 
 import { useScroll, useTransform } from "framer-motion";
 import { useLenis } from "lenis/react";
+import dynamic from "next/dynamic";
 import { useRouter } from "next/navigation";
 import { useEffect, useLayoutEffect, useRef, useState } from "react";
 import Cover from "@/app/components/reusable/Cover";
@@ -13,15 +14,27 @@ import { useStarsVisibility } from "@/app/hooks/useStarsVisibility";
 import { API_BASE_URL } from "@/utils/appConfig";
 import { getAudioUrl } from "@/utils/cloudinaryUtils";
 import ErrorModal from "../components/modal/ErrorModal";
+import LoadingScreen from "../components/reusable/LoadingScreen";
+import ProgressBar from "../components/reusable/ProgressBar";
+import ScrollTo from "../components/ScrollTo";
 import { useAudio } from "../contexts/AudioContext";
 import { useUser } from "../contexts/UserContext";
-import S6_1, { type S6_1Data } from "./s6_1";
-import S6_4 from "./s6_4";
+import type { S6_1Data } from "./s6_1";
+
+//? Lazy load below-the-fold sections — reduces initial JS
+const S6_1 = dynamic(() => import("./s6_1"), {
+  ssr: false,
+  loading: () => null,
+});
+const S6_4 = dynamic(() => import("./s6_4"), {
+  ssr: false,
+  loading: () => null,
+});
 
 export default function SessionLovePage() {
   //? Single ref for entire page
   const ref = useRef<HTMLDivElement>(null);
-  const { setBgMusic, isMuted } = useAudio();
+  const { setBgMusic } = useAudio();
   const { userId, isLoading } = useUser();
   const lenis = useLenis();
   const router = useRouter();
@@ -29,6 +42,9 @@ export default function SessionLovePage() {
   const [isS6_1Completed, setIsS6_1Completed] = useState(false);
   const [s6_1Data, setS6_1Data] = useState<S6_1Data | null>(null);
   const [showErrorModal, setShowErrorModal] = useState(false);
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [isScrollLockedByGate, setIsScrollLockedByGate] = useState(false);
+  const isScrollLockedByGateRef = useRef(false);
 
   //? Single scrollYProgress for entire page (0-1 for 1500vh)
   const { scrollYProgress } = useScroll({
@@ -43,6 +59,11 @@ export default function SessionLovePage() {
   const s6_1Progress = useTransform(scrollYProgress, [0.133, 0.533], [0, 1]);
   // S6_4: 0.533-1.0 → 0-1
   const s6_4Progress = useTransform(scrollYProgress, [0.533, 1.0], [0, 1]);
+  const scrollToOpacity = useTransform(
+    scrollYProgress,
+    [0, 0.9, 0.98, 1],
+    [1, 1, 0, 0],
+  );
 
   useLayoutEffect(() => {
     if (typeof window !== "undefined") {
@@ -51,11 +72,10 @@ export default function SessionLovePage() {
     }
   }, []);
 
+  //? ตั้งเพลง bg ทุกครั้งที่เข้าหน้า ไม่ว่าจะ mute หรือไม่ เพื่อให้ soundRef ตรงกับหน้าปัจจุบัน
   useEffect(() => {
-    if (!isMuted) {
-      setBgMusic(getAudioUrl("Sound/6/majestic-sky.mp3"));
-    }
-  }, [setBgMusic, isMuted]);
+    setBgMusic(getAudioUrl("Sound/6/majestic-sky.mp3"));
+  }, [setBgMusic]);
 
   const isResettingScroll = useRef(false);
 
@@ -63,12 +83,27 @@ export default function SessionLovePage() {
   useEffect(() => {
     if (!lenis || !ref.current) return;
 
+    const setLockHint = (locked: boolean) => {
+      if (isScrollLockedByGateRef.current === locked) return;
+      isScrollLockedByGateRef.current = locked;
+      setIsScrollLockedByGate(locked);
+    };
+
     const handleScroll = (e: {
       scroll: number;
       animatedScroll: number;
       velocity: number;
     }) => {
-      if (isS6_1Completed || !ref.current || isResettingScroll.current) return;
+      if (isS6_1Completed || !ref.current) {
+        setLockHint(false);
+        return;
+      }
+
+      if (isResettingScroll.current) {
+        //? ระหว่างเด้งกลับจาก lock ให้คงสถานะ lock ไว้ เพื่อไม่ให้ข้อความสลับกลับ
+        setLockHint(true);
+        return;
+      }
 
       const scrollStart = ref.current.offsetTop;
       const sectionHeight = ref.current.scrollHeight;
@@ -82,7 +117,13 @@ export default function SessionLovePage() {
 
       const tolerance = 2;
 
-      if (e.animatedScroll > lockThreshold + tolerance && e.velocity > 0) {
+      if (e.animatedScroll >= lockThreshold - tolerance) {
+        setLockHint(true);
+      } else {
+        setLockHint(false);
+      }
+
+      if (e.animatedScroll > lockThreshold + tolerance) {
         isResettingScroll.current = true;
 
         lenis.scrollTo(lockThreshold, {
@@ -113,24 +154,30 @@ export default function SessionLovePage() {
     }
   }, [userId, isLoading, router]);
 
-  //? Handler: Auto-scroll to s6_4 เมื่อ s6_1 completed
-  const handleS6_1Completed = (data: S6_1Data) => {
-    //? เก็บข้อมูล hobbies ที่ user เลือก
-    setS6_1Data(data);
+  //? Handler: S6_1 status change (hobbies selected/unselected)
+  const handleS6_1Completed = (data: S6_1Data | null) => {
+    if (data) {
+      //? เก็บข้อมูล hobbies ที่ user เลือก
+      setS6_1Data(data);
+      setIsS6_1Completed(true);
 
-    setIsS6_1Completed(true);
-
-    if (ref.current && lenis) {
-      const scrollStart = ref.current.offsetTop;
-      const scrollableDistance = ref.current.scrollHeight - window.innerHeight;
-      //? Scroll to start of S6_4 section (at 0.55 = 800vh / 1500vh)
-      const scrollTarget = scrollStart + scrollableDistance * 0.56;
-      lenis.scrollTo(scrollTarget, { duration: 1.5 });
+      if (ref.current && lenis) {
+        const scrollStart = ref.current.offsetTop;
+        const scrollableDistance =
+          ref.current.scrollHeight - window.innerHeight;
+        //? Scroll to start of S6_4 section (at 0.55 = 800vh / 1500vh)
+        const scrollTarget = scrollStart + scrollableDistance * 0.56;
+        lenis.scrollTo(scrollTarget, { duration: 1.5 });
+      }
+    } else {
+      //! Unselect ต่ำกว่า threshold → ล็อค scroll กลับ
+      setIsS6_1Completed(false);
     }
   };
 
   //? Handler: Navigate to next session after s6_4 completed
   const handleS6_4Continue = async (selectedChoice: string) => {
+    setIsSubmitting(true);
     try {
       const response = await fetch(`${API_BASE_URL}/api/user/progress/love`, {
         method: "POST",
@@ -145,6 +192,7 @@ export default function SessionLovePage() {
       });
 
       if (!response.ok) {
+        setIsSubmitting(false);
         setShowErrorModal(true);
         return;
       }
@@ -152,6 +200,7 @@ export default function SessionLovePage() {
       router.push("/skill-session");
     } catch (error) {
       console.error("Error submitting data:", error);
+      setIsSubmitting(false);
       setShowErrorModal(true);
     }
   };
@@ -163,6 +212,20 @@ export default function SessionLovePage() {
 
   return (
     <div ref={ref} className="h-[1500vh] w-full relative bg-black">
+      <ScrollTo
+        opacity={scrollToOpacity}
+        message={
+          !isS6_1Completed && isScrollLockedByGate
+            ? "ยังเลื่อนไปต่อไม่ได้ เลือกอย่างน้อย 1 ข้อ"
+            : "เลื่อนต่อเพื่อดำเนินเรื่อง..."
+        }
+        tone={!isS6_1Completed && isScrollLockedByGate ? "warning" : "default"}
+        icon={!isS6_1Completed && isScrollLockedByGate ? "lock" : "down"}
+      />
+
+      {/* Loading Screen */}
+      <LoadingScreen isLoading={isSubmitting} />
+
       {/* Error Modal */}
       <ErrorModal
         isOpen={showErrorModal}
@@ -193,6 +256,11 @@ export default function SessionLovePage() {
       {/* S6_4 Section - 700vh (800-1500vh, progress: 0.533-1.0) */}
       <div className="h-[700vh] w-full">
         <S6_4 scrollYProgress={s6_4Progress} onContinue={handleS6_4Continue} />
+      </div>
+
+      {/* ProgressBar: scrollYProgress ของหน้านี้ */}
+      <div className="pointer-events-none">
+        <ProgressBar scrollYProgress={scrollYProgress} />
       </div>
     </div>
   );

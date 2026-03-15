@@ -44,14 +44,14 @@ export default function WelcomeSoundModal({
                 initial={{ scale: 0 }}
                 animate={{ scale: 1 }}
                 transition={{ delay: 0.2, type: "spring", stiffness: 200 }}
-                className="bg-[#515c64] rounded-full px-2.5 md:px-5 py-3 md:py-6 flex items-center justify-center"
+                className="bg-[#515c64] rounded-full flex items-center justify-center"
               >
                 <Image
-                  src={getImgPath("Icon/unmute_icon.webp")}
-                  alt="Sound icon"
-                  width={52}
-                  height={43}
-                  className="h-5 md:h-10 w-auto"
+                  src={getImgPath("Icon/cat_icon.webp")}
+                  alt="cat icon"
+                  width={94}
+                  height={93}
+                  className="h-10 md:h-20 w-auto"
                 />
               </m.div>
 
@@ -62,7 +62,7 @@ export default function WelcomeSoundModal({
                 transition={{ delay: 0.3 }}
                 className="text-2xl md:text-4xl text-white text-center whitespace-pre-line"
               >
-                {"ประสบการณ์เสียง\nประกอบ"}
+                {"ประสบการณ์เสียง\nการใช้งาน"}
               </m.h2>
 
               {/* Description */}
@@ -73,7 +73,7 @@ export default function WelcomeSoundModal({
                 className="text-base md:text-xl text-white text-center whitespace-pre-line"
               >
                 {
-                  "เว็บไซต์นี้มีเสียงประกอบและเอฟเฟกต์เสียง\nคุณต้องการเปิดเสียงหรือไม่?"
+                  "เว็บไซต์นี้มีเหมาะแก่การเปิดใช้งานใน Desktop\nและมีเสียงประกอบและเอฟเฟกต์เสียง\nคุณต้องการเปิดเสียงหรือไม่?"
                 }
               </m.p>
 

@@ -57,9 +57,9 @@ export default function IntoDarkHeard({
   );
 
   return (
-    <div className="sticky top-0 h-screen w-screen flex justify-center items-center overflow-hidden bg-s5-3">
+    <div className="sticky top-0 h-screen w-screen flex justify-center items-center overflow-hidden bg-[linear-gradient(180deg,#23566f_5%,#1f4b60_20%,#14242c_50%,#101518_100%)]">
       <m.div
-        className="relative flex justify-start items-center w-screen portrait:w-auto h-full"
+        className="relative flex justify-start items-center w-screen portrait:w-auto h-full "
         style={{ zIndex }}
       >
         <SceneLayer
@@ -147,7 +147,7 @@ export default function IntoDarkHeard({
                 opacity: set3Opacity,
               }}
             >
-              <div className="text-white leading-relaxed select-none text-lg md:text-3xl">
+              <div className="text-white leading-relaxed select-none text-lg md:text-2xl 2xl:text-3xl">
                 <div className="mb-2">
                   <MysteriousText
                     text={
@@ -178,8 +178,8 @@ export default function IntoDarkHeard({
                   <MysteriousText
                     text={
                       isMobile
-                        ? `— สายหนึ่งคือสิ่งที่โลกภายนอก \n กำลังรอคอยจากเจ้า`
-                        : `— สายหนึ่งคือสิ่งที่โลกภายนอก กำลังรอคอยจากเจ้า`
+                        ? `— สายหนึ่งคือสิ่งที่โลกภายนอก \n กำลังรอคอยจากเจ้า \n (What the world needs )`
+                        : `— สายหนึ่งคือสิ่งที่โลกภายนอก กำลังรอคอยจากเจ้า (What the world needs )`
                     }
                     scrollYProgress={scrollYProgress}
                     startProgress={0.59}
@@ -188,19 +188,7 @@ export default function IntoDarkHeard({
                 </div>
                 <div className="mb-2">
                   <MysteriousText
-                    text="(What the world needs )"
-                    scrollYProgress={scrollYProgress}
-                    startProgress={0.61}
-                    endProgress={0.63}
-                  />
-                </div>
-                <div className="mb-2">
-                  <MysteriousText
-                    text={
-                      isMobile
-                        ? `และอีกสิ่งคือสิ่งที่โลกยอมจ่ายให้ \n (What you can be paid for)`
-                        : `— และอีกสิ่งคือสิ่งที่โลกยอมจ่ายให้ \n (What you can be paid for)`
-                    }
+                    text={`— และอีกสิ่งคือสิ่งที่โลกยอมจ่ายให้ \n (What you can be paid for)`}
                     scrollYProgress={scrollYProgress}
                     startProgress={0.63}
                     endProgress={0.65}

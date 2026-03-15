@@ -38,7 +38,7 @@ export default function IntoDarkNameInput({
   isConfirmed,
 }: NameInputProps) {
   const { isMobile } = useDevice();
-  const { playSfx } = useAudio();
+  const { playSfx, stopAllSfx } = useAudio();
   const { playerName: savedPlayerName } = useUser();
   const hasPlayedCatSound = useRef(false);
 
@@ -48,6 +48,13 @@ export default function IntoDarkNameInput({
       setPlayerName(savedPlayerName);
     }
   }, [savedPlayerName, setPlayerName]);
+
+  //? ทำลายเสียง SFX ที่เล่นค้างอยู่ตอนเปลี่ยนหน้า
+  useEffect(() => {
+    return () => {
+      stopAllSfx();
+    };
+  }, [stopAllSfx]);
 
   // Total height: 300vh (0-0.167 ของ 1800vh รวม)
   // ชุด 1: 0-25vh (0-0.014) - bg gradient + little star 2
@@ -133,11 +140,13 @@ export default function IntoDarkNameInput({
     [bgOpacity, set2Opacity, set3Opacity, set4Opacity, catY, textOpacity],
   );
 
-  //? เล่นเสียงแมวเมื่อแมวโผล่มา (set4Opacity > 0.5)
-  useMotionValueEvent(set4Opacity, "change", (latest) => {
-    if (latest >= 0.5 && !hasPlayedCatSound.current) {
+  //? เล่นเสียงแมวเมื่อแมวโผล่มา (set4Opacity > 0.5 ≈ scrollYProgress 0.046)
+  useMotionValueEvent(scrollYProgress, "change", (latest) => {
+    if (latest >= 0.046 && !hasPlayedCatSound.current) {
       playSfx(getAudioUrl("Sound/3-4/cat-meow.mp3"));
       hasPlayedCatSound.current = true;
+    } else if (latest < 0.04 && hasPlayedCatSound.current) {
+      hasPlayedCatSound.current = false;
     }
   });
 
@@ -153,7 +162,7 @@ export default function IntoDarkNameInput({
       style={{ opacity, zIndex }}
     >
       <m.div
-        className={`flex items-center h-screen w-screen portrait:w-auto ${
+        className={`flex items-center h-screen w-screen  portrait:w-auto ${
           isMobile ? "justify-center" : "justify-end"
         }`}
       >

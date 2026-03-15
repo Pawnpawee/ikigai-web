@@ -1,6 +1,6 @@
 "use client";
 
-import { type MotionValue, motion, useTransform } from "framer-motion";
+import { type MotionValue, m, useTransform } from "framer-motion";
 import { useMemo } from "react";
 
 interface MysteriousTextProps {
@@ -35,7 +35,7 @@ function AnimatedChar({
   const y = useTransform(scrollYProgress, [charStart, extendedEnd], [30, 0]);
 
   return (
-    <motion.span
+    <m.span
       style={{
         opacity,
         y,
@@ -48,7 +48,7 @@ function AnimatedChar({
       }}
     >
       {char === " " ? "\u00A0" : char}
-    </motion.span>
+    </m.span>
   );
 }
 

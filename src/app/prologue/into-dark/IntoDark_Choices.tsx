@@ -138,7 +138,7 @@ export default function IntoDarkChoices({
             <div
               className={`flex flex-col items-center justify-center text-center text-white w-full px-0 ${
                 isMobile
-                  ? "pt-10 pb-[30px] lg:pt-[120px] lg:pb-[50px] gap-2"
+                  ? "pt-10 pb-[30px] md:pt-[120px] md:pb-[50px] gap-2"
                   : "py-[100px] 2xl:py-[150px] gap-4"
               }`}
             >
@@ -181,7 +181,7 @@ export default function IntoDarkChoices({
             <m.div
               className={`flex px-[5%] w-screen ${
                 isMobile
-                  ? "flex-col justify-center items-center gap-[15px] lg:gap-[50px]"
+                  ? "flex-col justify-center items-center gap-[15px] md:gap-[50px]"
                   : "items-start justify-between"
               }`}
               style={{
@@ -197,8 +197,8 @@ export default function IntoDarkChoices({
                   onClick={() => handleReasonToggle(REASONS[0].text)}
                   className="max-w-2xs
         min-h-10
-        lg:max-w-md lg:min-w-md
-        lg:min-h-28 px-10"
+        md:max-w-md md:min-w-md
+        md:min-h-28 px-10"
                 />
                 {/* Choice button 3 */}
                 <ChoiceButton
@@ -207,8 +207,8 @@ export default function IntoDarkChoices({
                   onClick={() => handleReasonToggle(REASONS[2].text)}
                   className="max-w-2xs
         min-h-10
-        lg:max-w-md lg:min-w-md
-        lg:min-h-28 px-10"
+        md:max-w-md md:min-w-md
+        md:min-h-28 px-10"
                 />
                 {/* Choice button 6 */}
                 <ChoiceButton
@@ -217,8 +217,8 @@ export default function IntoDarkChoices({
                   onClick={() => handleReasonToggle(REASONS[5].text)}
                   className="max-w-2xs
         min-h-10
-        lg:max-w-md lg:min-w-md
-        lg:min-h-28 px-10"
+        md:max-w-md md:min-w-md
+        md:min-h-28 px-10"
                 />
               </div>
               <div className="flex flex-col gap-[15px] md:gap-[50px] xl:gap-[100px]">
@@ -229,8 +229,8 @@ export default function IntoDarkChoices({
                   onClick={() => handleReasonToggle(REASONS[1].text)}
                   className="max-w-2xs
         min-h-10
-        lg:max-w-md lg:min-w-md
-        lg:min-h-28 px-10"
+        md:max-w-md md:min-w-md
+        md:min-h-28 px-10"
                 />
                 {/* Choice button 5 */}
                 <ChoiceButton
@@ -239,8 +239,8 @@ export default function IntoDarkChoices({
                   onClick={() => handleReasonToggle(REASONS[4].text)}
                   className="max-w-2xs
         min-h-10
-        lg:max-w-md lg:min-w-md
-        lg:min-h-28 px-10"
+        md:max-w-md md:min-w-md
+        md:min-h-28 px-10"
                 />
                 {/* Choice button 4 */}
                 <ChoiceButton
@@ -249,8 +249,8 @@ export default function IntoDarkChoices({
                   onClick={() => handleReasonToggle(REASONS[3].text)}
                   className="max-w-2xs
         min-h-10
-        lg:max-w-md lg:min-w-md
-        lg:min-h-28 px-10"
+        md:max-w-md md:min-w-md
+        md:min-h-28 px-10"
                 />
               </div>
             </m.div>

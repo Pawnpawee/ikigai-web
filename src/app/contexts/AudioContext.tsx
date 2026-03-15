@@ -21,10 +21,13 @@ interface AudioContextType {
   // Actions
   start: () => void;
   stop: () => void;
-  setBgMusic: (src: string | null) => void;
+  setBgMusic: (src: string | null, options?: { immediate?: boolean }) => void;
   setVolume: (vol: number) => void;
   setSfxVolume: (vol: number) => void;
-  playSfx: (src: string, options?: { volumeMultiplier?: number }) => void;
+  playSfx: (
+    src: string,
+    options?: { volumeMultiplier?: number; loop?: boolean },
+  ) => Howl | undefined;
   stopAllSfx: () => void; //? หยุดเสียง SFX ทั้งหมด
 }
 
@@ -36,77 +39,60 @@ export function AudioProvider({ children }: { children: React.ReactNode }) {
   const isMutedRef = useRef(true);
   //? เก็บ SFX Howl instances ที่เล่นอยู่เพื่อให้สามารถ stop ได้
   const sfxSoundsRef = useRef<Set<Howl>>(new Set());
+  const targetBgMusicRef = useRef<string | null>(null);
+  const transitionTimeoutRef = useRef<NodeJS.Timeout | null>(null);
 
   const [isMuted, setIsMuted] = useState(true);
   const [volume, setVolume] = useState(30);
   const [sfxVolume, setSfxVolumeState] = useState(50);
   const [currentBgMusic, setCurrentBgMusic] = useState<string | null>(null);
 
-  // --- Helper: Save to LocalStorage ---
-  const saveSettings = useCallback(
-    (settings: { isMuted?: boolean; volume?: number; sfxVolume?: number }) => {
-      try {
-        const old = JSON.parse(localStorage.getItem("audioSettings") || "{}");
-        const merged = { ...old, ...settings };
-        localStorage.setItem("audioSettings", JSON.stringify(merged));
-      } catch (e) {
-        console.error("Save settings failed", e);
-      }
-    },
-    [],
-  );
+  //? Create bg music Howl with loop fallback for browsers/codecs where loop can be flaky
+  const createBgHowl = useCallback((src: string) => {
+    const bgSound = new Howl({
+      src: [src],
+      loop: true,
+      volume: 0,
+      autoplay: false,
+      onplayerror: (_id, err) => {
+        console.warn("Play Error:", err);
+        bgSound.once("unlock", () => {
+          bgSound.play();
+        });
+      },
+      onend: () => {
+        //! warning Fallback replay if native loop fails on some devices/browsers
+        if (bgSound.loop() && !bgSound.playing()) {
+          bgSound.play();
+        }
+      },
+    });
+
+    return bgSound;
+  }, []);
 
   // --- Initialization ---
   useEffect(() => {
-    const saved = localStorage.getItem("audioSettings");
-    if (saved) {
-      const {
-        isMuted: savedMuted,
-        volume: savedVol,
-        sfxVolume: savedSfxVol,
-      } = JSON.parse(saved);
-
-      // ตั้งค่า Volume เริ่มต้น
-      if (savedVol !== undefined) {
-        setVolume(savedVol);
-        Howler.volume(savedVol / 100);
-      }
-
-      // ตั้งค่า SFX Volume
-      if (savedSfxVol !== undefined) {
-        setSfxVolumeState(savedSfxVol);
-      }
-
-      // ตั้งค่า Mute
-      if (savedMuted === true) {
-        setIsMuted(true);
-        isMutedRef.current = true;
-        Howler.mute(true);
-      }
-    } else {
-      // Default state
-      setIsMuted(false);
-      isMutedRef.current = false;
-      Howler.mute(false);
-    }
+    // Default state
+    setIsMuted(true);
+    isMutedRef.current = true;
+    Howler.mute(true);
 
     const timer = setTimeout(() => {
       const defaultBgMusic = getAudioUrl("Sound/bg-music.mp3");
 
-      const bgSound = new Howl({
-        src: [defaultBgMusic],
-        loop: true,
-      });
+      const bgSound = createBgHowl(defaultBgMusic);
 
       soundRef.current = bgSound;
       setCurrentBgMusic(defaultBgMusic);
+      targetBgMusicRef.current = defaultBgMusic;
     }, 100);
 
     return () => {
       clearTimeout(timer);
       Howler.unload();
     };
-  }, []);
+  }, [createBgHowl]);
 
   // --- Actions ---
 
@@ -115,12 +101,17 @@ export function AudioProvider({ children }: { children: React.ReactNode }) {
     setIsMuted(false);
     isMutedRef.current = false;
     Howler.mute(false);
-    saveSettings({ isMuted: false });
+    //? iOS Safari: resume suspended AudioContext when user explicitly enables audio
+    if (Howler.ctx && Howler.ctx.state === "suspended") {
+      Howler.ctx.resume();
+    }
 
-    // Resume ถ้ามีเพลงค้างอยู่
-    if (soundRef.current && !soundRef.current.playing()) {
-      soundRef.current.play();
-      soundRef.current.fade(0, volume / 100, 100);
+    //? Resume หรือ fade in เพลงที่เล่นอยู่ (อาจเล่นอยู่แล้วที่ volume 0)
+    if (soundRef.current) {
+      if (!soundRef.current.playing()) {
+        soundRef.current.play();
+      }
+      soundRef.current.fade(0, volume / 100, 500);
     }
   };
 
@@ -129,101 +120,112 @@ export function AudioProvider({ children }: { children: React.ReactNode }) {
     setIsMuted(true);
     isMutedRef.current = true;
     Howler.mute(true);
-    saveSettings({ isMuted: true });
   };
 
-  // 3. Set Volume
+  // 3. Set Volume (เฉพาะ Background Music เท่านั้น ไม่กระทบ SFX)
   const updateVolume = (vol: number) => {
     setVolume(vol);
-    Howler.volume(vol / 100);
-    saveSettings({ volume: vol });
+    //? ตั้งค่า volume เฉพาะ bg music instance แทน Howler.volume() ที่เป็น global
+    if (soundRef.current) {
+      soundRef.current.volume(vol / 100);
+    }
   };
 
-  // 3.5. Set SFX Volume
-  const setSfxVolume = (vol: number) => {
+  // 4. Set SFX Volume
+  const updateSfxVolume = (vol: number) => {
     setSfxVolumeState(vol);
-    saveSettings({ sfxVolume: vol });
   };
 
   // 4. Set Background Music (with Fade In/Out)
-  const setBgMusic = (src: string | null) => {
-    if (currentBgMusic === src) return;
+  const setBgMusic = (
+    src: string | null,
+    options?: { immediate?: boolean },
+  ) => {
+    const immediate = options?.immediate ?? false;
+    //? Use ref to track target to prevent race condition when routing rapidly
+    if (targetBgMusicRef.current === src) return;
+
+    targetBgMusicRef.current = src;
+    setCurrentBgMusic(src);
+
+    //? Clear pending timeout to prevent overlapping song starts
+    if (transitionTimeoutRef.current) {
+      clearTimeout(transitionTimeoutRef.current);
+      transitionTimeoutRef.current = null;
+    }
 
     const prevSound = soundRef.current;
-
-    // Step A: Fade out เพลงเก่าก่อน
-    if (prevSound?.playing()) {
-      prevSound.fade(prevSound.volume(), 0, 500);
-
-      //? รอให้ fade out เสร็จก่อน stop และ unload
-      setTimeout(() => {
-        prevSound.stop();
-        prevSound.unload();
-      }, 500);
-    } else if (prevSound) {
-      //? ถ้าไม่ได้เล่นอยู่ก็ unload ทันที
-      prevSound.unload();
-    }
 
     // Step B: เล่นตัวใหม่ (หลัง fade out ของเก่าจบ)
     const playNewSound = () => {
       if (src) {
-        setCurrentBgMusic(src);
-
-        const newSound = new Howl({
-          src: [src],
-          loop: true,
-          volume: 0,
-          autoplay: false,
-          onplayerror: (_id, err) => {
-            console.warn("Play Error:", err);
-            soundRef.current?.once("unlock", () => {
-              soundRef.current?.play();
-            });
-          },
-        });
-
+        const newSound = createBgHowl(src);
         soundRef.current = newSound;
-        newSound.play();
 
-        //? Fade in เพลงใหม่
-        if (!isMuted) {
-          newSound.fade(0, volume / 100, 1000);
+        if (!isMutedRef.current) {
+          if (Howler.ctx && Howler.ctx.state === "suspended") {
+            Howler.ctx.resume();
+          }
+
+          newSound.play();
+          newSound.fade(0, Math.max(0.001, volume / 100), 1000);
         }
       } else {
-        setCurrentBgMusic(null);
         soundRef.current = null;
       }
     };
 
-    //? เริ่มเล่นเพลงใหม่หลังจากเพลงเก่า fade out เสร็จ (หรือทันทีถ้าไม่มีเพลงเก่า)
-    if (prevSound?.playing()) {
-      setTimeout(playNewSound, 500);
+    // Step A: Fade out เพลงเก่าก่อน
+    if (prevSound) {
+      if (immediate) {
+        prevSound.stop();
+        prevSound.unload();
+        playNewSound();
+      } else {
+        if (prevSound.playing()) {
+          prevSound.fade(prevSound.volume(), 0, 500);
+        }
+
+        //? รอให้ fade out เสร็จก่อน stop และ unload แล้วเล่นอันใหม่
+        transitionTimeoutRef.current = setTimeout(() => {
+          prevSound.stop();
+          prevSound.unload();
+          playNewSound();
+        }, 500);
+      }
     } else {
       playNewSound();
     }
   };
 
   const playSfx = useCallback(
-    (src: string, options?: { volumeMultiplier?: number }) => {
-      if (isMutedRef.current) return;
+    (
+      src: string,
+      options?: { volumeMultiplier?: number; loop?: boolean },
+    ): Howl | undefined => {
+      if (isMutedRef.current) return undefined;
 
       try {
+        const isLoop = options?.loop ?? false;
         const sound = new Howl({
           src: [src],
-          loop: false,
+          loop: isLoop,
           volume: (sfxVolume / 100) * (options?.volumeMultiplier ?? 1.0),
           autoplay: true,
-          onend: () => {
-            //? เมื่อเล่นจบให้ลบออกจาก Set และ unload
-            sfxSoundsRef.current.delete(sound);
-            sound.unload();
-          },
+          onend: isLoop
+            ? undefined
+            : () => {
+                //? เมื่อเล่นจบให้ลบออกจาก Set และ unload (เฉพาะ non-loop)
+                sfxSoundsRef.current.delete(sound);
+                sound.unload();
+              },
         });
         //? เก็บ reference ไว้เพื่อให้สามารถ stop ได้ภายหลัง
         sfxSoundsRef.current.add(sound);
+        return sound;
       } catch (error) {
         console.error("Failed to play SFX:", error);
+        return undefined;
       }
     },
     [sfxVolume],
@@ -249,7 +251,7 @@ export function AudioProvider({ children }: { children: React.ReactNode }) {
         stop,
         setBgMusic,
         setVolume: updateVolume,
-        setSfxVolume,
+        setSfxVolume: updateSfxVolume,
         playSfx,
         stopAllSfx,
       }}

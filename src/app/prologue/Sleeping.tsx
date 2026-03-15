@@ -1,7 +1,6 @@
 "use client";
 
 import { m, useInView, useScroll, useTransform } from "framer-motion";
-import { Howl } from "howler";
 import { useEffect, useMemo, useRef } from "react";
 
 import { useAudio } from "@/app/contexts/AudioContext";
@@ -21,61 +20,78 @@ export default function Sleeping() {
 
   // ตรวจสอบ orientation โดยใช้ custom hook
   const { isMobile } = useDevice();
-  const { sfxVolume, isMuted } = useAudio();
+  const { isMuted, playSfx } = useAudio();
 
   //? Refs for looping sounds
-  const clockSoundRef = useRef<Howl | null>(null);
-  const heartBeatSoundRef = useRef<Howl | null>(null);
-
-  //? Initialize looping sounds
-  useEffect(() => {
-    clockSoundRef.current = new Howl({
-      src: [getAudioUrl("Sound/1-2/clock-ticking.mp3")],
-      loop: true,
-      volume: sfxVolume / 100,
-    });
-
-    heartBeatSoundRef.current = new Howl({
-      src: [getAudioUrl("Sound/1-2/heart-beat.mp3")],
-      loop: true,
-      volume: sfxVolume / 100,
-    });
-
-    return () => {
-      clockSoundRef.current?.unload();
-      heartBeatSoundRef.current?.unload();
-    };
-  }, [sfxVolume]);
+  const clockSoundRef = useRef<ReturnType<typeof playSfx> | null>(null);
+  const heartBeatSoundRef = useRef<ReturnType<typeof playSfx> | null>(null);
 
   //? Play/stop sounds based on view and mute state
   useEffect(() => {
     const clockSound = clockSoundRef.current;
     const heartBeatSound = heartBeatSoundRef.current;
-    if (!clockSound || !heartBeatSound) return;
 
     //! ถ้าไม่อยู่ใน view หรือถูก mute ให้หยุดเสียงทันที
     if (!isInView || isMuted) {
-      if (clockSound.playing()) {
+      if (clockSound?.playing()) {
         clockSound.fade(clockSound.volume(), 0, 500);
-        setTimeout(() => clockSound.stop(), 500);
+        setTimeout(() => {
+          clockSound.stop();
+          clockSound.unload();
+        }, 500);
       }
-      if (heartBeatSound.playing()) {
+      if (heartBeatSound?.playing()) {
         heartBeatSound.fade(heartBeatSound.volume(), 0, 500);
-        setTimeout(() => heartBeatSound.stop(), 500);
+        setTimeout(() => {
+          heartBeatSound.stop();
+          heartBeatSound.unload();
+        }, 500);
       }
+      clockSoundRef.current = null;
+      heartBeatSoundRef.current = null;
     }
     //? ถ้าอยู่ใน view และไม่ถูก mute ให้เล่นเสียง
     else {
-      if (!clockSound.playing()) {
-        clockSound.fade(0, sfxVolume / 100, 500);
-        clockSound.play();
+      if (!clockSound?.playing()) {
+        const newClockSound = playSfx(
+          getAudioUrl("Sound/1-2/clock-ticking.mp3"),
+          {
+            loop: true,
+          },
+        );
+        if (newClockSound) {
+          const targetVolume = newClockSound.volume();
+          newClockSound.volume(0);
+          newClockSound.fade(0, targetVolume, 500);
+          clockSoundRef.current = newClockSound;
+        }
       }
-      if (!heartBeatSound.playing()) {
-        heartBeatSound.fade(0, sfxVolume / 100, 500);
-        heartBeatSound.play();
+      if (!heartBeatSound?.playing()) {
+        const newHeartBeatSound = playSfx(
+          getAudioUrl("Sound/1-2/heart-beat.mp3"),
+          {
+            loop: true,
+          },
+        );
+        if (newHeartBeatSound) {
+          const targetVolume = newHeartBeatSound.volume();
+          newHeartBeatSound.volume(0);
+          newHeartBeatSound.fade(0, targetVolume, 500);
+          heartBeatSoundRef.current = newHeartBeatSound;
+        }
       }
     }
-  }, [isInView, isMuted, sfxVolume]);
+  }, [isInView, isMuted, playSfx]);
+
+  useEffect(
+    () => () => {
+      clockSoundRef.current?.stop();
+      clockSoundRef.current?.unload();
+      heartBeatSoundRef.current?.stop();
+      heartBeatSoundRef.current?.unload();
+    },
+    [],
+  );
 
   const { scrollYProgress } = useScroll({
     target: ref,

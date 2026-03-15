@@ -55,102 +55,13 @@
   }
 }
 /* Gradient utilities */
-@utility bg-s1 {
-  background: linear-gradient(
-    180deg,
-    #000 0%,
-    #0a121b 8%,
-    #132232 17%,
-    #192e43 26%,
-    #1d344d 37%,
-    #1f3751 50%,
-    #1d344d 66%,
-    #132232 79%,
-    #0a121b 91%,
-    #000 100%
-  );
-}
-@utility bg-s2 {
-  background: linear-gradient(
-    180deg,
-    #1f3751 5%,
-    #1d344d 35%,
-    #132232 60%,
-    #0a121b 80%,
-    #000 100%
-  );
-}
-@utility bg-s3 {
-  background: linear-gradient(
-    180deg,
-    #e79f66 7%,
-    #e69a64 20%,
-    #e38d5f 30%,
-    #de7756 43%,
-    #d7594a 55%,
-    #d65147 58%
-  );
-}
-@utility bg-s4 {
-  background: linear-gradient(
-    0deg,
-    #3473c3 2%,
-    #316cb7 7%,
-    #25548a 27%,
-    #1b4165 47%,
-    #143148 69%,
-    #0f2633 89%,
-    #0c2027 109%,
-    #0b1e23 128%
-  );
-}
-@utility bg-s5 {
-  background: linear-gradient(180deg, #101518 1%, #0c1b1f 77%, #0b1e23 100%);
-}
 
-@utility bg-s5-3 {
-  background: linear-gradient(
-    180deg,
-    #23566f 5%,
-    #1f4b60 20%,
-    #14242c 50%,
-    #101518 100%
-  );
-}
-
-@utility bg-s6 {
-  background: linear-gradient(
-    0deg,
-    #d6a5b8 0%,
-    #485b83 34%,
-    #364560 61%,
-    #192435 85%,
-    #0b1521 100%
-  );
-}
-
-@utility bg-cover {
-  background: linear-gradient(
-    180deg,
-    #0b1e23 0%,
-    #091a1f 48%,
-    #051115 89%,
-    #040e11 100%
-  );
-}
-
-@utility bg-s6-4 {
-  background: linear-gradient(
-    180deg,
-    #485b83 0%,
-    #4b5c84 18%,
-    #566288 35%,
-    #696c8f 51%,
-    #837a99 67%,
-    #a58ba6 82%,
-    #cea1b5 97%,
-    #d6a5b8 100%
-  );
+/*? Desktop device ที่ ratio ไม่ตรง 16:9 (เช่น MacBook 16:10)
+    ให้ SceneLayer เต็มจอแนวตั้ง โดย width เกินออกไปแล้ว clip ด้วย parent overflow-hidden */
+@utility scene-fit {
+  @media (orientation: landscape) {
+    min-width: calc(100vh * 16 / 9);
+  }
 }
 
 body {
@@ -181,4 +92,24 @@ p {
 * {
   -ms-overflow-style: none;
   scrollbar-width: none;
+}
+
+/* ─── Modal Scrollbar ─── */
+.modal-scrollbar {
+  scrollbar-width: thin;
+  scrollbar-color: rgba(255, 255, 255, 0.3) transparent;
+}
+.modal-scrollbar::-webkit-scrollbar {
+  display: block;
+  width: 6px;
+}
+.modal-scrollbar::-webkit-scrollbar-track {
+  background: transparent;
+}
+.modal-scrollbar::-webkit-scrollbar-thumb {
+  background: rgba(255, 255, 255, 0.3);
+  border-radius: 9999px;
+}
+.modal-scrollbar::-webkit-scrollbar-thumb:hover {
+  background: rgba(255, 255, 255, 0.5);
 }

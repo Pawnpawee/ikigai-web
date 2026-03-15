@@ -178,40 +178,6 @@ export default function MenuModal({ isOpen, onClose }: MenuModalProps) {
                 {/* Divider */}
                 <div className="w-full h-px bg-[#4a5157]" />
 
-                {/* Privacy Policy */}
-                <Link href="/privacy-policy" onClick={onClose}>
-                  <m.div
-                    whileHover={{ scale: 1.01 }}
-                    whileTap={{ scale: 0.99 }}
-                    className="bg-[#363e43] hover:bg-[#404a50] rounded-2xl p-4 md:p-8 flex items-center justify-between transition-colors "
-                  >
-                    <div className="flex items-center gap-5 md:gap-[45px]">
-                      <Image
-                        src={getImgPath("Icon/privacy_icon.webp")}
-                        alt="Privacy"
-                        width={46}
-                        height={56}
-                        className="h-[25px] md:h-14 w-auto"
-                      />
-                      <div className="flex flex-col px-2.5">
-                        <p className="text-base md:text-xl text-white">
-                          นโยบายความเป็นส่วนตัว
-                        </p>
-                        <p className="text-sm md:text-lg text-white">
-                          ข้อมูลและความปลอดภัย
-                        </p>
-                      </div>
-                    </div>
-                    <Image
-                      src={getImgPath("Icon/next_btn.webp")}
-                      alt="Next"
-                      width={19}
-                      height={25}
-                      className="h-[13px] md:h-[25px] w-auto"
-                    />
-                  </m.div>
-                </Link>
-
                 {/* About */}
                 <Link href="/about" onClick={onClose}>
                   <m.div
