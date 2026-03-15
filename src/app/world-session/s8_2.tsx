@@ -32,6 +32,8 @@ import { useDevice } from "../contexts/DeviceContext";
 //  Types
 // ────────────────────────────────────────────────────
 
+const MAX_GIFT_SELECTIONS = 5;
+
 export interface S8_2Data {
   selectedGifts: string[];
   customGifts: string[];
@@ -201,6 +203,9 @@ export default function S8_2({ scrollYProgress, onCompleted }: S8_2Props) {
   const [currentPage, setCurrentPage] = useState(0);
   const [selectedGifts, setSelectedGifts] = useState<string[]>([]);
   const [slideDirection, setSlideDirection] = useState<1 | -1>(1);
+  const [validationMessage, setValidationMessage] = useState<string | null>(
+    null,
+  );
 
   const totalPages = Math.ceil(GIFT_CARDS.length / ITEMS_PER_PAGE);
 
@@ -269,10 +274,32 @@ export default function S8_2({ scrollYProgress, onCompleted }: S8_2Props) {
   const handleCardToggle = useCallback(
     (label: string) => {
       playSfx(getAudioUrl("Sound/Pop_Select_Button.mp3"));
+      setValidationMessage(null);
       setSelectedGifts((prev) => {
-        const next = prev.includes(label)
-          ? prev.filter((g) => g !== label)
-          : [...prev, label];
+        if (prev.includes(label)) {
+          const next = prev.filter((g) => g !== label);
+
+          if (next.length >= MIN_GIFT_SELECTIONS) {
+            queueMicrotask(() => {
+              onCompletedRef.current?.({
+                selectedGifts: next,
+                customGifts: [],
+              });
+            });
+          } else {
+            queueMicrotask(() => {
+              onCompletedRef.current?.(null);
+            });
+          }
+          return next;
+        }
+
+        if (prev.length >= MAX_GIFT_SELECTIONS) {
+          setValidationMessage(`เลือกได้สูงสุด ${MAX_GIFT_SELECTIONS} อย่าง`);
+          return prev;
+        }
+
+        const next = [...prev, label];
 
         //? เมื่อเลือกครบตาม MIN_GIFT_SELECTIONS → เรียก onCompleted ทันที
         if (next.length >= MIN_GIFT_SELECTIONS) {
@@ -351,14 +378,22 @@ export default function S8_2({ scrollYProgress, onCompleted }: S8_2Props) {
                 endProgress={0.2}
                 className="text-white text-xs min-[376px]:text-sm md:text-lg 2xl:text-2xl leading-normal text-center"
               />
-              {/*? Selection Counter */}
-              <m.p
-                className="text-center mt-1 sm:mt-2 select-none text-[10px] min-[376px]:text-xs md:text-base xl:text-lg text-gray-300"
+              {/*? Selection Counter / Validation Message */}
+              <m.div
+                className={`text-center mt-1 sm:mt-2 select-none text-[10px] min-[376px]:text-xs md:text-base xl:text-lg transition-colors duration-300 ${
+                  validationMessage ? "text-rose-400" : "text-gray-300"
+                }`}
                 style={{ opacity: carouselOpacity }}
               >
-                เลือกแล้ว {selectedGifts.length} (ตอบได้หลายข้อ ขั้นต่ำ{" "}
-                {MIN_GIFT_SELECTIONS} อย่าง)
-              </m.p>
+                {validationMessage ? (
+                  validationMessage
+                ) : (
+                  <>
+                    เลือกแล้ว {selectedGifts.length}/{MAX_GIFT_SELECTIONS}{" "}
+                    (ขั้นต่ำ {MIN_GIFT_SELECTIONS} อย่าง)
+                  </>
+                )}
+              </m.div>
             </m.div>
 
             {/*? Carousel Area: Arrows + Cards + Dots */}

@@ -39,6 +39,7 @@ interface S7_2Props {
 // ────────────────────────────────────────────────────
 
 const MIN_SELECTIONS = 1;
+const MAX_SELECTIONS = 3;
 
 // ────────────────────────────────────────────────────
 //  Main Component: S7_2 (Soft Skills - ChoiceButton Grid)
@@ -120,9 +121,34 @@ export default function S7_2({ scrollYProgress, onCompleted }: S7_2Props) {
   const handleSkillToggle = useCallback((skill: string) => {
     setError("");
     setSelectedSoftSkills((prev) => {
-      const next = prev.includes(skill)
-        ? prev.filter((s) => s !== skill)
-        : [...prev, skill];
+      if (prev.includes(skill)) {
+        const next = prev.filter((s) => s !== skill);
+        //? แจ้ง parent ทุกครั้งที่สถานะเปลี่ยน (ครบ/ไม่ครบ)
+        if (
+          next.length + customSoftSkillsRef.current.length >=
+          MIN_SELECTIONS
+        ) {
+          queueMicrotask(() => {
+            onCompletedRef.current?.({
+              selectedSoftSkills: next,
+              customSoftSkills: customSoftSkillsRef.current,
+            });
+          });
+        } else {
+          //! Unselect ต่ำกว่า threshold → แจ้ง parent ให้ล็อค scroll กลับ
+          queueMicrotask(() => {
+            onCompletedRef.current?.(null);
+          });
+        }
+        return next;
+      }
+
+      if (prev.length + customSoftSkillsRef.current.length >= MAX_SELECTIONS) {
+        setError(`เลือกได้สูงสุด ${MAX_SELECTIONS} อย่าง`);
+        return prev;
+      }
+
+      const next = [...prev, skill];
 
       //? แจ้ง parent ทุกครั้งที่สถานะเปลี่ยน (ครบ/ไม่ครบ)
       if (next.length + customSoftSkillsRef.current.length >= MIN_SELECTIONS) {
@@ -132,11 +158,6 @@ export default function S7_2({ scrollYProgress, onCompleted }: S7_2Props) {
             customSoftSkills: customSoftSkillsRef.current,
           });
         });
-      } else {
-        //! Unselect ต่ำกว่า threshold → แจ้ง parent ให้ล็อค scroll กลับ
-        queueMicrotask(() => {
-          onCompletedRef.current?.(null);
-        });
       }
 
       return next;
@@ -144,6 +165,14 @@ export default function S7_2({ scrollYProgress, onCompleted }: S7_2Props) {
   }, []);
 
   const handleAddCustom = useCallback(() => {
+    if (
+      selectedSoftSkillsRef.current.length +
+        customSoftSkillsRef.current.length >=
+      MAX_SELECTIONS
+    ) {
+      setError(`เลือกได้สูงสุด ${MAX_SELECTIONS} อย่าง`);
+      return;
+    }
     setShowInput(true);
   }, []);
 
@@ -169,6 +198,14 @@ export default function S7_2({ scrollYProgress, onCompleted }: S7_2Props) {
 
     if (SOFT_SKILLS_OPTIONS.some((s) => s.toLowerCase() === lowerTrimmed)) {
       setError("ทักษะนี้มีอยู่ในตัวเลือกแล้ว");
+      return;
+    }
+
+    if (
+      selectedSoftSkillsRef.current.length + customSoftSkills.length >=
+      MAX_SELECTIONS
+    ) {
+      setError(`เลือกได้สูงสุด ${MAX_SELECTIONS} อย่าง`);
       return;
     }
 
@@ -277,16 +314,22 @@ export default function S7_2({ scrollYProgress, onCompleted }: S7_2Props) {
                       endProgress={0.25}
                       className="text-white text-sm md:text-lg 2xl:text-2xl  leading-normal text-center"
                     />
-                    {/*? Counter */}
-                    <m.p
-                      className={`text-center mt-1 sm:mt-2 select-none text-xs md:text-base xl:text-lg  ${
-                        error ? "text-red-400 font-bold" : "text-gray-300"
+                    {/*? Counter / Validation Message */}
+                    <m.div
+                      className={`text-center mt-1 sm:mt-2 select-none text-xs md:text-base xl:text-lg transition-colors duration-300 ${
+                        error ? "text-rose-400" : "text-gray-300"
                       }`}
                       style={{ opacity: choicesOpacity }}
                     >
-                      {error ||
-                        `เลือกแล้ว ${totalSelected} (ขั้นต่ำ ${MIN_SELECTIONS} อย่าง)`}
-                    </m.p>
+                      {error ? (
+                        error
+                      ) : (
+                        <>
+                          เลือกแล้ว {totalSelected}/{MAX_SELECTIONS} (ขั้นต่ำ{" "}
+                          {MIN_SELECTIONS} อย่าง)
+                        </>
+                      )}
+                    </m.div>
                   </m.div>
 
                   {/*? Choice grid */}
@@ -379,16 +422,22 @@ export default function S7_2({ scrollYProgress, onCompleted }: S7_2Props) {
                       className="text-white text-sm md:text-lg 2xl:text-2xl  leading-normal text-center"
                     />
 
-                    {/*? Counter (functional, not in Figma — sits inside question block) */}
-                    <m.p
-                      className={`text-center mt-1 sm:mt-2 select-none text-xs md:text-base xl:text-lg ${
-                        error ? "text-red-400 font-bold" : "text-gray-300"
+                    {/*? Counter / Validation Message (functional, not in Figma — sits inside question block) */}
+                    <m.div
+                      className={`text-center mt-1 sm:mt-2 select-none text-xs md:text-base xl:text-lg transition-colors duration-300 ${
+                        error ? "text-rose-400" : "text-gray-300"
                       }`}
                       style={{ opacity: choicesOpacity }}
                     >
-                      {error ||
-                        `เลือกแล้ว ${totalSelected} (ขั้นต่ำ ${MIN_SELECTIONS} อย่าง)`}
-                    </m.p>
+                      {error ? (
+                        error
+                      ) : (
+                        <>
+                          เลือกแล้ว {totalSelected}/{MAX_SELECTIONS} (ขั้นต่ำ{" "}
+                          {MIN_SELECTIONS} อย่าง)
+                        </>
+                      )}
+                    </m.div>
                   </m.div>
 
                   {/*? Choice grid — Figma 810:9131 */}

@@ -678,14 +678,22 @@ export default function S7_1({ scrollYProgress, onCompleted }: S7_1Props) {
                 endProgress={0.25}
                 className="text-white text-xs min-[376px]:text-sm md:text-lg 2xl:text-2xl leading-normal text-center"
               />
-              {/*? Selection Counter */}
-              <m.p
-                className="text-center mt-1 sm:mt-2 select-none text-[10px] min-[376px]:text-xs md:text-base xl:text-lg text-gray-300"
+              {/*? Selection Counter / Validation Message */}
+              <m.div
+                className={`text-center mt-1 sm:mt-2 select-none text-[10px] min-[376px]:text-xs md:text-base xl:text-lg transition-colors duration-300 ${
+                  validationMessage ? "text-rose-400" : "text-gray-300"
+                }`}
                 style={{ opacity: carouselOpacity }}
               >
-                เลือกแล้ว {totalSelections}/{MAX_SELECTIONS} (ขั้นต่ำ{" "}
-                {MIN_SELECTIONS} อย่าง)
-              </m.p>
+                {validationMessage ? (
+                  validationMessage
+                ) : (
+                  <>
+                    เลือกแล้ว {totalSelections}/{MAX_SELECTIONS} (ขั้นต่ำ{" "}
+                    {MIN_SELECTIONS} อย่าง)
+                  </>
+                )}
+              </m.div>
             </m.div>
 
             {/*? Carousel Area: Arrows + Cards + Dots */}
@@ -761,12 +769,6 @@ export default function S7_1({ scrollYProgress, onCompleted }: S7_1Props) {
                   onPageChange={goToPage}
                 />
               </div>
-
-              {validationMessage && (
-                <p className="mt-2 text-center text-xs md:text-sm text-rose-300 pointer-events-none">
-                  {validationMessage}
-                </p>
-              )}
             </m.div>
           </div>
         </SceneLayer>

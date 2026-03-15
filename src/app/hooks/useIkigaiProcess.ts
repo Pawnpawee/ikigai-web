@@ -37,7 +37,7 @@ export const useIkigaiProcess = () => {
 
     if (displayProgress < fakeTarget) {
       // กำหนดความเร็วในการขยับแต่ละ 1%
-      let speed = 800; // ตอนเปอร์เซ็นต์วิ่งนำ backend ไปแล้ว ให้ค่อยๆ เดินช้าๆ คั่นเวลา
+      let speed = 500; // ตอนเปอร์เซ็นต์วิ่งนำ backend ไปแล้ว ให้ค่อยๆ เดินช้าๆ คั่นเวลา
 
       if (displayProgress < targetProgress) {
         speed = 150; // เร่งเครื่องตอนวิ่งตามของจริงให้ทัน

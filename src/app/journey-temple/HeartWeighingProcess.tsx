@@ -71,7 +71,7 @@ export default function HeartWeighingProcess({
 
       <div className="absolute inset-0">
         <m.div
-          className="absolute inset-0 bg-black" //ทริค: ใส่ bg-black เพื่อป้องกันจอดำชั่วขณะตอนสลับวิดีโอ
+          className="absolute inset-0 bg-black" 
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           transition={{ duration: 2, delay: 0.5, ease: "easeOut" }}
@@ -79,7 +79,7 @@ export default function HeartWeighingProcess({
           {/* วิดีโอที่ 1: Intro (s11-1) เล่นรอบเดียว */}
           <video
             src={introVideoSrc}
-            className={`absolute inset-0 h-full w-full object-cover transition-opacity duration-500 ${isPlayingLoop ? "opacity-0" : "opacity-100 z-10"}`}
+            className="absolute inset-0 h-full w-full object-cover transition-opacity duration-500"
             autoPlay
             muted
             playsInline
@@ -90,7 +90,7 @@ export default function HeartWeighingProcess({
           {/* วิดีโอที่ 2: Loop (s11-2) เล่นวนซ้ำ */}
           <video
             src={loopVideoSrc}
-            className={`absolute inset-0 h-full w-full object-cover transition-opacity duration-500 ${isPlayingLoop ? "opacity-100 z-10" : "opacity-0"}`}
+            className="absolute inset-0 h-full w-full object-cover transition-opacity duration-500"
             autoPlay
             muted
             loop
