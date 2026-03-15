@@ -59,7 +59,7 @@ export default function GifCursor() {
         width={60}
         height={60}
         priority={true}
-        unoptimized={true}
+        quality={50}
         className="pointer-events-none select-none -translate-x-[15px] -translate-y-[15px]"
       />
     </m.div>

@@ -3,7 +3,7 @@ import { m } from "framer-motion";
 import Image from "next/image";
 import { useEffect } from "react";
 import { useAudio } from "@/app/contexts/AudioContext";
-import { getAudioUrl, getImgPath } from "@/utils/cloudinaryUtils";
+import { getAudioUrl } from "@/utils/cloudinaryUtils";
 
 interface ErrorModalProps {
   isOpen: boolean;
@@ -65,7 +65,7 @@ export default function ErrorModal({
               className="bg-[#515c64] rounded-full p-3 md:p-6 flex items-center justify-center"
             >
               <Image
-                src={getImgPath("Icon/cross_icon.webp")}
+                src="/assets/icons/cross_icon.webp"
                 alt="Error icon"
                 width={48}
                 height={48}

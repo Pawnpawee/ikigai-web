@@ -2,7 +2,6 @@
 import { m, useScroll, useTransform } from "framer-motion";
 import Image from "next/image";
 import { useRef } from "react";
-import { getImgPath } from "@/utils/cloudinaryUtils";
 import WordByWordAnimation from "../components/text/WordByWordAnimation";
 import { useStarsVisibility } from "../hooks/useStarsVisibility";
 
@@ -84,7 +83,7 @@ export default function Intro() {
             >
               <div className="relative w-10 h-10">
                 <Image
-                  src={getImgPath("Icon/star.svg")}
+                  src="/assets/icons/star.svg"
                   alt="star"
                   fill
                   className="object-contain"

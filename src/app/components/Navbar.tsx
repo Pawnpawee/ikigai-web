@@ -2,7 +2,6 @@
 import { useState } from "react";
 import { useAudio } from "@/app/contexts/AudioContext";
 import { useDevice } from "@/app/contexts/DeviceContext";
-import { getImgPath } from "@/utils/cloudinaryUtils";
 import MenuModal from "./modal/MenuModal";
 import Icon from "./reusable/Icon";
 
@@ -14,8 +13,8 @@ export default function Navbar() {
   const { isMobile } = useDevice();
 
   const musicIcon = isMuted
-    ? getImgPath("Icon/mute.svg")
-    : getImgPath("Icon/music.svg");
+    ? "/assets/icons/mute.svg"
+    : "/assets/icons/music.svg";
 
   const handleMusicClick = () => {
     if (isMuted) {
@@ -31,7 +30,7 @@ export default function Navbar() {
 
   return (
     <>
-      <div className="box-border flex items-center justify-between px-8 md:px-14 py-0 fixed top-0 z-50 w-screen h-[70px] md:h-[100px] pointer-events-none">
+      <div className="box-border flex items-center justify-between px-8 md:px-14 py-0 fixed top-0 z-99 w-screen h-[70px] md:h-[100px] pointer-events-none">
         <div className="pointer-events-auto">
           <Icon
             src={musicIcon}
@@ -45,7 +44,7 @@ export default function Navbar() {
         {/* Menu Button */}
         <div className="pointer-events-auto">
           <Icon
-            src={getImgPath("Icon/menu.svg")}
+            src="/assets/icons/menu.svg"
             label="Open menu"
             size={isMobile ? 40 : 50}
             onClick={handleMenuClick}

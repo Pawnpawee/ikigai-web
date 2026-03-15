@@ -1,6 +1,5 @@
 import { useCallback, useEffect, useRef, useState } from "react";
 import { API_BASE_URL } from "@/utils/appConfig";
-import { getImgPath } from "@/utils/cloudinaryUtils";
 import { saveSessionResult } from "@/utils/storage";
 
 export const useIkigaiProcess = () => {
@@ -77,17 +76,17 @@ export const useIkigaiProcess = () => {
 
         // แสดงทันที
         setStatusText("กำลังวิเคราะห์สิ่งที่คุณถนัด...");
-        setStatusIcon({ src: getImgPath("Icon/skill.webp"), alt: "Skill" });
+        setStatusIcon({ src: "/assets/icons/skill.webp", alt: "Skill" });
 
         // ผ่านไป 10 วิ
         midPhaseTimer1Ref.current = setTimeout(() => {
           setStatusText("กำลังวิเคราะห์สิ่งที่โลกต้องการ...");
-          setStatusIcon({ src: getImgPath("Icon/world.webp"), alt: "World" });
+          setStatusIcon({ src: "/assets/icons/world.webp", alt: "World" });
 
           // ผ่านไปอีก 10 วิ
           midPhaseTimer2Ref.current = setTimeout(() => {
             setStatusText("กำลังวิเคราะห์สิ่งที่คุณสามารถสร้างรายได้ได้...");
-            setStatusIcon({ src: getImgPath("Icon/paid.webp"), alt: "Paid" });
+            setStatusIcon({ src: "/assets/icons/paid.webp", alt: "Paid" });
           }, 10000);
         }, 10000);
       }
@@ -95,7 +94,7 @@ export const useIkigaiProcess = () => {
       clearMidPhaseTimers();
       isMidPhaseStartedRef.current = false;
       setStatusText("กำลังวิเคราะห์สิ่งที่คุณรัก...");
-      setStatusIcon({ src: getImgPath("Icon/love.webp"), alt: "Love" });
+      setStatusIcon({ src: "/assets/icons/love.webp", alt: "Love" });
     } else if (targetProgress > 0) {
       clearMidPhaseTimers();
       isMidPhaseStartedRef.current = false;

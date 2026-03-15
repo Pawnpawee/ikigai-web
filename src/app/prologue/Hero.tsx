@@ -188,7 +188,7 @@ export default function Hero({ shouldAnimate }: HeroProps) {
       <IkigaiCircle
         className="scale-50 md:scale-100"
         imageSrc={getImgPath("Scene/Hero/world-circle.webp")}
-        iconSrc={getImgPath("Icon/world.webp")}
+        iconSrc="/assets/icons/world.webp"
         text="สิ่งที่โลกต้องการ"
         rotateValue={circle4_rotate}
         initialAnimation={circleAnimations.circle4}
@@ -203,7 +203,7 @@ export default function Hero({ shouldAnimate }: HeroProps) {
       <IkigaiCircle
         className="scale-50 md:scale-100"
         imageSrc={getImgPath("Scene/Hero/paid-circle.webp")}
-        iconSrc={getImgPath("Icon/paid.webp")}
+        iconSrc="/assets/icons/paid.webp"
         text="สิ่งที่สร้างรายได้"
         rotateValue={circle3_rotate}
         initialAnimation={circleAnimations.circle3}
@@ -218,7 +218,7 @@ export default function Hero({ shouldAnimate }: HeroProps) {
       <IkigaiCircle
         className="scale-50 md:scale-100"
         imageSrc={getImgPath("Scene/Hero/skill-circle.webp")}
-        iconSrc={getImgPath("Icon/skill.webp")}
+        iconSrc="/assets/icons/skill.webp"
         text="สิ่งที่ถนัด"
         rotateValue={circle2_rotate}
         initialAnimation={circleAnimations.circle2}
@@ -233,7 +233,7 @@ export default function Hero({ shouldAnimate }: HeroProps) {
       <IkigaiCircle
         className="scale-50 md:scale-100"
         imageSrc={getImgPath("Scene/Hero/love-circle.webp")}
-        iconSrc={getImgPath("Icon/love.webp")}
+        iconSrc="/assets/icons/love.webp"
         text="สิ่งที่รัก"
         rotateValue={circle1_rotate}
         initialAnimation={circleAnimations.circle1}

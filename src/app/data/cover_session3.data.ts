@@ -10,7 +10,7 @@ interface CoverDataConfig {
 //? Cover Session 3 Config: "What the world needs" (Session 3 - World)
 export const COVER_SESSION3_CONFIG: CoverDataConfig = {
   titleImage: getImgPath("Scene/Scene8/00/what_the_world_needs.webp"),
-  iconImage: getImgPath("Icon/world.webp"),
+  iconImage: "/assets/icons/world.webp",
   sessionText: "session 3",
 };
 

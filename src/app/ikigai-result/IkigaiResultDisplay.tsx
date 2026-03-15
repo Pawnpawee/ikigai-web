@@ -25,7 +25,6 @@ import {
   SHARE_BTN_POS,
   VENN_CIRCLES,
 } from "@/app/data/ikigai.data";
-import { getImgPath } from "@/utils/cloudinaryUtils";
 import SectionDetailModal from "./SectionDetailModal";
 
 // ─────────────────────────────────────────────────────────────
@@ -496,7 +495,7 @@ export default function IkigaiResultDisplay({
             aria-label="บันทึกผลลัพธ์"
           >
             <Image
-              src={getImgPath("Scene/Result/save_btn.webp")}
+              src="/assets/icons/save_btn.webp"
               alt="Save result"
               fill
               className="object-contain"
@@ -518,7 +517,7 @@ export default function IkigaiResultDisplay({
             aria-label="แชร์ผลลัพธ์"
           >
             <Image
-              src={getImgPath("Scene/Result/share_btn.webp")}
+              src="/assets/icons/share_btn.webp"
               alt="Share result"
               fill
               className="object-contain"
@@ -540,7 +539,7 @@ export default function IkigaiResultDisplay({
             aria-label="ไปต่อ"
           >
             <Image
-              src={getImgPath("Icon/continue_btn.webp")}
+              src="/assets/icons/continue_btn.webp"
               alt="Continue to closing"
               fill
               className="object-contain"

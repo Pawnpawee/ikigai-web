@@ -3,7 +3,6 @@ import Image from "next/image";
 import Link from "next/link";
 import type { ChangeEvent } from "react";
 import { useAudio } from "@/app/contexts/AudioContext";
-import { getImgPath } from "@/utils/cloudinaryUtils";
 
 interface MenuModalProps {
   isOpen: boolean;
@@ -58,11 +57,12 @@ export default function MenuModal({ isOpen, onClose }: MenuModalProps) {
                   aria-label="ปิดเมนู"
                 >
                   <Image
-                    src={getImgPath("Icon/close.webp")}
+                    src="/assets/icons/close.webp"
                     alt="Close"
                     width={27}
                     height={27}
                     className="h-4 md:h-[27px] w-auto"
+                    style={{ width: "auto" }}
                   />
                 </button>
               </div>
@@ -76,11 +76,12 @@ export default function MenuModal({ isOpen, onClose }: MenuModalProps) {
                   </p>
                   <div className="flex items-center gap-7.5">
                     <Image
-                      src={getImgPath("Icon/mute_icon.webp")}
+                      src="/assets/icons/mute_icon.webp"
                       alt="Mute"
                       width={27}
                       height={37}
                       className="h-5 md:h-[37px] w-auto"
+                      style={{ width: "auto" }}
                     />
                     <input
                       type="range"
@@ -113,11 +114,12 @@ export default function MenuModal({ isOpen, onClose }: MenuModalProps) {
                       }}
                     />
                     <Image
-                      src={getImgPath("Icon/unmute_icon.webp")}
+                      src="/assets/icons/unmute_icon.webp"
                       alt="Unmute"
                       width={43}
                       height={37}
                       className="h-5 md:h-[37px] w-auto"
+                      style={{ width: "auto" }}
                     />
                   </div>
                 </div>
@@ -129,11 +131,12 @@ export default function MenuModal({ isOpen, onClose }: MenuModalProps) {
                   </p>
                   <div className="flex items-center gap-7.5">
                     <Image
-                      src={getImgPath("Icon/mute_icon.webp")}
+                      src="/assets/icons/mute_icon.webp"
                       alt="Mute"
                       width={27}
                       height={37}
                       className="h-5 md:h-[37px] w-auto"
+                      style={{ width: "auto" }}
                     />
                     <input
                       type="range"
@@ -166,11 +169,12 @@ export default function MenuModal({ isOpen, onClose }: MenuModalProps) {
                       }}
                     />
                     <Image
-                      src={getImgPath("Icon/unmute_icon.webp")}
+                      src="/assets/icons/unmute_icon.webp"
                       alt="Unmute"
                       width={43}
                       height={37}
                       className="h-5 md:h-[37px] w-auto"
+                      style={{ width: "auto" }}
                     />
                   </div>
                 </div>
@@ -187,11 +191,12 @@ export default function MenuModal({ isOpen, onClose }: MenuModalProps) {
                   >
                     <div className="flex items-center gap-5 md:gap-[45px]">
                       <Image
-                        src={getImgPath("Icon/person_icon.webp")}
+                        src="/assets/icons/person_icon.webp"
                         alt="About"
                         width={47}
                         height={47}
                         className="h-[25px] md:h-14 w-auto"
+                        style={{ width: "auto" }}
                       />
                       <div className="flex flex-col px-2.5">
                         <p className="text-base md:text-xl text-white">
@@ -203,11 +208,12 @@ export default function MenuModal({ isOpen, onClose }: MenuModalProps) {
                       </div>
                     </div>
                     <Image
-                      src={getImgPath("Icon/next_btn.webp")}
+                      src="/assets/icons/next_btn.webp"
                       alt="Next"
                       width={19}
                       height={25}
                       className="h-[13px] md:h-[25px] w-auto"
+                      style={{ width: "auto" }}
                     />
                   </m.div>
                 </Link>

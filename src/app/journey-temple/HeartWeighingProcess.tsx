@@ -79,7 +79,7 @@ export default function HeartWeighingProcess({
           {/* วิดีโอที่ 1: Intro (s11-1) เล่นรอบเดียว */}
           <video
             src={introVideoSrc}
-            className="absolute inset-0 h-full w-full object-cover"
+            className={`absolute inset-0 h-full w-full object-cover transition-opacity duration-500 ${isPlayingLoop ? "opacity-0" : "opacity-100 z-10"}`}
             autoPlay
             muted
             playsInline
@@ -90,7 +90,7 @@ export default function HeartWeighingProcess({
           {/* วิดีโอที่ 2: Loop (s11-2) เล่นวนซ้ำ */}
           <video
             src={loopVideoSrc}
-            className="absolute inset-0 h-full w-full object-cover"
+            className={`absolute inset-0 h-full w-full object-cover transition-opacity duration-500 ${isPlayingLoop ? "opacity-100 z-10" : "opacity-0"}`}
             autoPlay
             muted
             loop
@@ -115,7 +115,7 @@ export default function HeartWeighingProcess({
 
       {/* ส่วนแสดงสถานะ (Text + Icon) */}
       <m.div
-        className="absolute bottom-[15%] w-[90%] md:w-[60%] flex flex-col items-center text-center"
+        className="absolute bottom-[15%] w-[90%] md:w-[60%] flex flex-col items-center text-center z-10"
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.8 }}

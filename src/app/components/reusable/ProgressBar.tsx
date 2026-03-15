@@ -1,13 +1,12 @@
 import { type MotionValue, m, useTransform } from "framer-motion";
 import { usePathname } from "next/navigation";
-import { getImgPath } from "@/utils/cloudinaryUtils";
 import Icon from "./Icon";
 
 const ICONS = [
-  { src: getImgPath("Icon/love.webp"), alt: "Love" },
-  { src: getImgPath("Icon/skill.webp"), alt: "Skill" },
-  { src: getImgPath("Icon/world.webp"), alt: "World" },
-  { src: getImgPath("Icon/paid.webp"), alt: "Paid" },
+  { src: "/assets/icons/love.webp", alt: "Love" },
+  { src: "/assets/icons/skill.webp", alt: "Skill" },
+  { src: "/assets/icons/world.webp", alt: "World" },
+  { src: "/assets/icons/paid.webp", alt: "Paid" },
 ];
 
 const STEPS = [

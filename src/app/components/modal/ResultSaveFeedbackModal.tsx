@@ -2,7 +2,6 @@
 
 import { m } from "framer-motion";
 import Image from "next/image";
-import { getImgPath } from "@/utils/cloudinaryUtils";
 
 interface ResultSaveFeedbackModalProps {
   isOpen: boolean;
@@ -45,7 +44,7 @@ export default function ResultSaveFeedbackModal({
                 className="bg-[#515c64] rounded-full flex items-center justify-center"
               >
                 <Image
-                  src={getImgPath("Icon/cat_icon.webp")}
+                  src="/assets/icons/cat_icon.webp"
                   alt="cat icon"
                   width={94}
                   height={93}

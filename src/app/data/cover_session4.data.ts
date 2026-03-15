@@ -10,7 +10,7 @@ interface CoverDataConfig {
 //? Cover Session 4 Config: "What you can be paid for" (Session 4 - Paid)
 export const COVER_SESSION4_CONFIG: CoverDataConfig = {
   titleImage: getImgPath("Scene/Scene9/00/what_you_can_be_paid_for.webp"),
-  iconImage: getImgPath("Icon/paid.webp"),
+  iconImage: "/assets/icons/paid.webp",
   sessionText: "session 4",
 };
 

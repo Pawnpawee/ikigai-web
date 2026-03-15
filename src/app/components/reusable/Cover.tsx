@@ -127,6 +127,7 @@ export default function Cover({
                   className="w-2xs md:w-[500px] xl:w-[700px] h-auto"
                   style={{
                     opacity: titleOpacity,
+                    height: "auto",
                   }}
                   priority
                 />
@@ -141,6 +142,7 @@ export default function Cover({
                 className="w-32 md:w-[200px] xl:w-[250px] h-auto"
                 style={{
                   opacity: titleOpacity,
+                  height: "auto",
                 }}
                 priority
               />

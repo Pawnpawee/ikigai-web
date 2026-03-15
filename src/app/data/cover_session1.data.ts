@@ -9,7 +9,7 @@ interface CoverDataConfig {
 
 export const COVER_SESSION1_CONFIG: CoverDataConfig = {
   titleImage: getImgPath("Scene/Scene6/01/what_you_love.webp"),
-  iconImage: getImgPath("Icon/love.webp"),
+  iconImage: "/assets/icons/love.webp",
   sessionText: "session 1",
 };
 

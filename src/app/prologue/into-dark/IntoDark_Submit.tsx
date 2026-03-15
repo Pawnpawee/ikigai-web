@@ -197,7 +197,7 @@ export default function IntoDarkSubmit({
               <IkigaiCircle
                 className="scale-50 md:scale-80 2xl:scale-100"
                 imageSrc={getImgPath("Scene/Hero/world-circle.webp")}
-                iconSrc={getImgPath("Icon/world.webp")}
+                iconSrc="/assets/icons/world.webp"
                 text={"สิ่งที่\nโลกต้องการ"}
                 rotateValue={circle4_rotate}
                 initialAnimation={{
@@ -215,7 +215,7 @@ export default function IntoDarkSubmit({
               <IkigaiCircle
                 className="scale-50 md:scale-80 2xl:scale-100"
                 imageSrc={getImgPath("Scene/Hero/paid-circle.webp")}
-                iconSrc={getImgPath("Icon/paid.webp")}
+                iconSrc="/assets/icons/paid.webp"
                 text="สิ่งที่ทำให้เกิดรายได้"
                 rotateValue={circle3_rotate}
                 initialAnimation={{
@@ -233,7 +233,7 @@ export default function IntoDarkSubmit({
               <IkigaiCircle
                 className="scale-50 md:scale-80 2xl:scale-100"
                 imageSrc={getImgPath("Scene/Hero/skill-circle.webp")}
-                iconSrc={getImgPath("Icon/skill.webp")}
+                iconSrc="/assets/icons/skill.webp"
                 text={"สิ่งที่\nเราถนัด"}
                 rotateValue={circle2_rotate}
                 initialAnimation={{
@@ -251,7 +251,7 @@ export default function IntoDarkSubmit({
               <IkigaiCircle
                 className="scale-50 md:scale-80 2xl:scale-100"
                 imageSrc={getImgPath("Scene/Hero/love-circle.webp")}
-                iconSrc={getImgPath("Icon/love.webp")}
+                iconSrc="/assets/icons/love.webp"
                 text="สิ่งที่เรารัก"
                 rotateValue={circle1_rotate}
                 initialAnimation={{

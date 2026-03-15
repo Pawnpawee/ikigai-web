@@ -65,8 +65,8 @@ export default function Icon({
       sizes={
         typeof size === "number" ? `${size}px` : size || `${numericSize}px`
       }
-      quality={85}
-      style={{ width: size, height: size, color, ...style }}
+      quality={50}
+      style={{ width: size, height: "auto", color, ...style }}
       draggable={false}
       onClick={onClick}
       aria-label={label || alt}
