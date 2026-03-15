@@ -50,12 +50,14 @@ export default function Home() {
   }, [setBgMusic]);
 
   const handleAcceptSoundModal = () => {
+    sessionStorage.setItem("audioSettings", "true");
     setShowWelcomeModal(false);
     start();
     setShouldAnimate(true);
   };
 
   const handleDeclineSoundModal = () => {
+    sessionStorage.setItem("audioSettings", "false");
     setShowWelcomeModal(false);
     stop();
     setShouldAnimate(true);
