@@ -10,7 +10,6 @@ import Image from "next/image";
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { HiCheck, HiOutlineX } from "react-icons/hi";
 import GradientButton from "@/app/components/button/GradientButton";
-import InputButton from "@/app/components/button/InputButton";
 import MysteriousText from "@/app/components/reusable/MysteriousText";
 import SceneLayer, {
   type AnimationMap,
@@ -238,25 +237,34 @@ function AddSkillCard({
           sizes="25vw"
           className="w-full z-10 pointer-events-none"
         />
-        <div className="absolute inset-[15%] z-20 flex flex-col items-center justify-center gap-2 px-2">
-          <div className="flex flex-col w-full items-center gap-5">
-            <InputButton
-              value={inputValue}
-              onChange={(value) => {
-                setInputValue(value);
-                setErrorMsg(null);
+        <div className="absolute inset-[10%] z-20 flex flex-col items-center justify-center gap-2 px-2">
+          <div className="flex flex-col w-full items-center gap-2 xl:gap-5">
+            <div
+              className="w-full px-2 md:px-4 py-2 flex justify-center items-center shadow-[0_0_60px_-20px_var(--tw-shadow-color)] shadow-slate-100 rounded-2xl select-none"
+              style={{
+                border: "4px solid var(--white-radial)",
+                background: "var(--white-linear)",
               }}
-              onKeyDown={(e) => {
-                if (e.key === "Enter") {
-                  e.preventDefault();
-                  handleConfirm();
-                }
-                if (e.key === "Escape") handleCancel();
-              }}
-              placeholder="ระบุทักษะ"
-              maxLength={30}
-              className="w-full px-2! md:px-6! py-2! text-xs md:text-base 2xl:text-xl"
-            />
+            >
+              <textarea
+                value={inputValue}
+                onChange={(e) => {
+                  setInputValue(e.target.value);
+                  setErrorMsg(null);
+                }}
+                onKeyDown={(e) => {
+                  if (e.key === "Enter" && !e.shiftKey) {
+                    e.preventDefault();
+                    handleConfirm();
+                  }
+                  if (e.key === "Escape") handleCancel();
+                }}
+                placeholder="ระบุทักษะ"
+                maxLength={25}
+                rows={2}
+                className="w-full text-xs md:text-base 2xl:text-xl text-center text-black bg-transparent border-none outline-none p-0 resize-none overflow-hidden wrap-break-words placeholder:text-gray-500"
+              />
+            </div>
             <div className="flex gap-3">
               <GradientButton
                 text=""
@@ -325,7 +333,7 @@ function CustomSkillCard({
           className="w-full z-10 pointer-events-none"
         />
         <div className="absolute inset-[15%] z-20 flex flex-col items-center justify-center gap-2 px-2">
-          <div className="w-full px-3 md:px-5 py-2 md:py-3 text-[10px] min-[376px]:text-xs md:text-lg 2xl:text-2xl text-white transition-colors truncate">
+          <div className="w-full px-3 md:px-5 py-2 md:py-3 text-[10px] min-[376px]:text-xs md:text-lg 2xl:text-2xl text-white transition-colors text-center wrap-break-words">
             {skill}
           </div>
         </div>

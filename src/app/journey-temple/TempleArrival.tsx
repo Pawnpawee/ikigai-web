@@ -192,7 +192,7 @@ export default function TempleArrival({ onStartCeremony }: TempleArrivalProps) {
         style={{ opacity: textOpacity }}
       >
         <WordByWordAnimation
-          text={TEMPLE_DIALOGUE.deity}
+          text={isMobile ? TEMPLE_DIALOGUE.deity_mb : TEMPLE_DIALOGUE.deity}
           scrollYProgress={textProgress}
           as="p"
           className="text-lg md:text-2xl text-white leading-relaxed

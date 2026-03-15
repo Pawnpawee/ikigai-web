@@ -71,7 +71,7 @@ export default function HeartWeighingProcess({
 
       <div className="absolute inset-0">
         <m.div
-          className="absolute inset-0 bg-black" // ⭐ ทริค: ใส่ bg-black เพื่อป้องกันจอดำชั่วขณะตอนสลับวิดีโอ
+          className="absolute inset-0 bg-black" //ทริค: ใส่ bg-black เพื่อป้องกันจอดำชั่วขณะตอนสลับวิดีโอ
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           transition={{ duration: 2, delay: 0.5, ease: "easeOut" }}
@@ -93,7 +93,7 @@ export default function HeartWeighingProcess({
             className="absolute inset-0 h-full w-full object-cover"
             autoPlay
             muted
-            loop 
+            loop
             playsInline
             preload="auto"
           />

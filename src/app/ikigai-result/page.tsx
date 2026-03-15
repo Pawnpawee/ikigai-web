@@ -143,6 +143,7 @@ export default function IkigaiResultPage() {
   const [errorMessage, setErrorMessage] = useState("");
   const [isResultFeedbackModalOpen, setIsResultFeedbackModalOpen] =
     useState(false);
+  const [pendingRoute, setPendingRoute] = useState<string | null>(null);
 
   //? ตั้งเพลง bg ทุกครั้งที่เข้าหน้า
   useEffect(() => {
@@ -163,7 +164,7 @@ export default function IkigaiResultPage() {
       try {
         setIsLoading(true);
 
-        // ⭐ Step 1: ลองอ่านจาก Session ก่อน (มาแบบท่อ SSE ปกติ)
+        //Step 1: ลองอ่านจาก Session ก่อน (มาแบบท่อ SSE ปกติ)
         const cachedResult = getSessionResult();
 
         // ถ้ามีข้อมูล (ก้อน DTO ใหม่ที่เราส่งมาจาก C# จะมี summaries และ scores)
@@ -182,7 +183,7 @@ export default function IkigaiResultPage() {
           return;
         }
 
-        // ⭐ Step 2: แผนสำรอง ถ้ารีเฟรชแล้ว Session หาย หรือไม่มีข้อมูล
+        //Step 2: แผนสำรอง ถ้ารีเฟรชแล้ว Session หาย หรือไม่มีข้อมูล
         const processId =
           sessionStorage.getItem("ikigaiProcessId") || searchParams.get("id");
         if (!processId) throw new Error("ไม่พบรหัสการประมวลผล");
@@ -197,7 +198,7 @@ export default function IkigaiResultPage() {
 
         const data = await response.json();
 
-        // ⭐ ใช้ saveSessionResult เก็บข้อมูลลง Storage
+        //ใช้ saveSessionResult เก็บข้อมูลลง Storage
         saveSessionResult(data);
 
         setIkigaiAnalysis(transformDtoToAnalysis(data));
@@ -224,11 +225,20 @@ export default function IkigaiResultPage() {
   };
 
   const handleOpenResultFeedbackModal = () => {
+    setPendingRoute(null);
+    setIsResultFeedbackModalOpen(true);
+  };
+
+  const handleContinueClick = () => {
+    setPendingRoute("/closing");
     setIsResultFeedbackModalOpen(true);
   };
 
   const handleCloseResultFeedbackModal = () => {
     setIsResultFeedbackModalOpen(false);
+    if (pendingRoute) {
+      router.push(pendingRoute);
+    }
   };
 
   // if (userLoading || isLoading) return <LoadingScreen isLoading={true} />;
@@ -260,6 +270,7 @@ export default function IkigaiResultPage() {
         maxSessionPercentage={maxSessionPercentage}
         playerName={playerName || undefined}
         onSaveSuccess={handleOpenResultFeedbackModal}
+        onContinue={handleContinueClick}
       />
 
       <ResultSaveFeedbackModal

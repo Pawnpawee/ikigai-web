@@ -38,7 +38,7 @@ export default function IntoDarkNameInput({
   isConfirmed,
 }: NameInputProps) {
   const { isMobile } = useDevice();
-  const { playSfx } = useAudio();
+  const { playSfx, stopAllSfx } = useAudio();
   const { playerName: savedPlayerName } = useUser();
   const hasPlayedCatSound = useRef(false);
 
@@ -48,6 +48,13 @@ export default function IntoDarkNameInput({
       setPlayerName(savedPlayerName);
     }
   }, [savedPlayerName, setPlayerName]);
+
+  //? ทำลายเสียง SFX ที่เล่นค้างอยู่ตอนเปลี่ยนหน้า
+  useEffect(() => {
+    return () => {
+      stopAllSfx();
+    };
+  }, [stopAllSfx]);
 
   // Total height: 300vh (0-0.167 ของ 1800vh รวม)
   // ชุด 1: 0-25vh (0-0.014) - bg gradient + little star 2

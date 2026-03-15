@@ -17,7 +17,7 @@ const Weighing = dynamic(() => import("./Weighing"), {
 
 export default function DreamingPage() {
   const router = useRouter();
-  const { playSfx, isMuted, setBgMusic } = useAudio(); //? isMuted ยังใช้สำหรับเสียง SFX แมวเมี่ยว
+  const { playSfx, isMuted, setBgMusic, stopAllSfx } = useAudio(); //? isMuted ยังใช้สำหรับเสียง SFX แมวเมี่ยว
 
   useLayoutEffect(() => {
     if (typeof window !== "undefined") {
@@ -25,6 +25,13 @@ export default function DreamingPage() {
       window.scrollTo(0, 0);
     }
   }, []);
+
+  //? ทำลายเสียง SFX ที่เล่นค้างอยู่ตอนเปลี่ยนหน้า
+  useEffect(() => {
+    return () => {
+      stopAllSfx();
+    };
+  }, [stopAllSfx]);
 
   const notLookTexts = [
     "ไม่อยากดูหรอกหรอ?...",

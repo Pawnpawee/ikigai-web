@@ -74,6 +74,7 @@ interface IkigaiResultDisplayProps {
   maxSessionPercentage?: string;
   playerName?: string;
   onSaveSuccess?: () => void;
+  onContinue?: () => void;
 }
 
 export default function IkigaiResultDisplay({
@@ -83,6 +84,7 @@ export default function IkigaiResultDisplay({
   maxSessionPercentage,
   playerName,
   onSaveSuccess,
+  onContinue,
 }: IkigaiResultDisplayProps) {
   const { isMobile } = useDevice();
   const router = useRouter();
@@ -99,8 +101,12 @@ export default function IkigaiResultDisplay({
   // ─────────────────────────────────────────────────────────
 
   const handleContinue = useCallback(() => {
-    router.push("/closing");
-  }, [router]);
+    if (onContinue) {
+      onContinue();
+    } else {
+      router.push("/closing");
+    }
+  }, [onContinue, router]);
 
   const handleSectionClick = useCallback((section: keyof IkigaiAnalysis) => {
     setSelectedSection(section);
@@ -114,7 +120,7 @@ export default function IkigaiResultDisplay({
     if (!captureRef.current || saveStatus === "saving") return;
     setSaveStatus("saving");
 
-    // ⭐ 1. เตรียมตัวแปรสำหรับ DOM Interception เพื่อแก้ปัญหา Next.js Image + Cloudinary จอดำ
+    //1. เตรียมตัวแปรสำหรับ DOM Interception เพื่อแก้ปัญหา Next.js Image + Cloudinary จอดำ
     const captureEl = captureRef.current;
     const imgElements = captureEl.querySelectorAll("img");
     const originalAttributes: Array<{
@@ -128,7 +134,7 @@ export default function IkigaiResultDisplay({
     captureEl.style.background =
       "linear-gradient(180deg, #09345b 0%, #083054 5%, #062137 29%, #051622 54%, #041015 77%, #040e11 100%)";
 
-    // ⭐ 2. แอบสลับ URL ของ Next.js กลับไปเป็น URL ของ Cloudinary แท้ๆ ชั่วคราว
+    //2. แอบสลับ URL ของ Next.js กลับไปเป็น URL ของ Cloudinary แท้ๆ ชั่วคราว
     imgElements.forEach((img, index) => {
       // ✅ เก็บค่าดั้งเดิมของ React/Next.js ไว้ก่อน
       originalAttributes[index] = {
@@ -211,7 +217,7 @@ export default function IkigaiResultDisplay({
       console.error("Error saving screenshot:", error);
       setSaveStatus("idle");
     } finally {
-      // ⭐ 3. สำคัญมาก: ต้องคืนค่า DOM กลับสู่สภาพเดิมเสมอ! ไม่ว่าจะแคปสำเร็จหรือ Error
+      //3. สำคัญมาก: ต้องคืนค่า DOM กลับสู่สภาพเดิมเสมอ! ไม่ว่าจะแคปสำเร็จหรือ Error
       // เพื่อป้องกันไม่ให้ Virtual DOM ของ React ทำงานผิดพลาดในภายหลัง
       captureEl.style.background = originalBackground;
       imgElements.forEach((img, index) => {

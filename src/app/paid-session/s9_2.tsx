@@ -88,70 +88,90 @@ function JobAvatarCard({
   jobs,
   isSelected,
   onClick,
+  onViewMore,
 }: {
   avatarSrc: string;
   category: string;
   jobs: string[];
   isSelected: boolean;
   onClick: () => void;
+  onViewMore: () => void;
 }) {
   return (
-    <m.button
-      type="button"
-      onClick={onClick}
-      //? Desktop: 450.40/1680 = 26.81%, Mobile: 389.35/1080 = 36.05%
-      className="flex flex-col items-center justify-center cursor-pointer
-        w-[26.81%] portrait:w-[65%] gap-0"
-      whileHover={{ scale: 1.03 }}
-      whileTap={{ scale: 0.97 }}
-      transition={{ type: "spring", stiffness: 300, damping: 20 }}
-    >
-      {/*? Card Frame — aspect 450.40/520.11 ≈ aspect-450/520 */}
-      <div className="relative w-full aspect-450/520 transition-all duration-300">
-        {/*? Frame border image — switches to selected_frame when selected */}
-        <Image
-          src={isSelected ? SELECTED_FRAME_SRC : CARD_FRAME_SRC}
-          alt=""
-          fill
-          sizes="25vw"
-          className="w-full pointer-events-none"
-        />
+    <div className="flex flex-col items-center justify-center w-[26.81%] portrait:w-[65%] gap-1 md:gap-2 relative z-20">
+      <m.button
+        type="button"
+        onClick={onClick}
+        //? Desktop: 450.40/1680 = 26.81%, Mobile: 389.35/1080 = 36.05% (Parent handles width now)
+        className="flex flex-col items-center justify-center cursor-pointer w-full gap-0"
+        whileHover={{ scale: 1.03 }}
+        whileTap={{ scale: 0.97 }}
+        transition={{ type: "spring", stiffness: 300, damping: 20 }}
+      >
+        {/*? Card Frame — aspect 450.40/520.11 ≈ aspect-450/520 */}
+        <div className="relative w-full aspect-450/520 transition-all duration-300">
+          {/*? Frame border image — switches to selected_frame when selected */}
+          <Image
+            src={isSelected ? SELECTED_FRAME_SRC : CARD_FRAME_SRC}
+            alt=""
+            fill
+            sizes="25vw"
+            className="w-full pointer-events-none"
+          />
 
-        {/*? Inner content: Avatar + labels */}
-        <div
-          className="absolute flex flex-col items-center
-          inset-x-[15.12%] top-[7.30%] bottom-[3%] gap-[3.90%]"
-        >
-          {/*? Avatar illustration — 314.16/450.40 = 69.75% width, aspect 314/280 */}
-          <div className="relative w-full aspect-314/280 overflow-hidden shrink-0 portrait:w-[80%]">
-            <Image
-              src={avatarSrc}
-              alt={category}
-              fill
-              sizes="20vw"
-              className="object-contain"
-            />
-          </div>
+          {/*? Inner content: Avatar + labels */}
+          <div
+            className="absolute flex flex-col items-center
+            inset-x-[15.12%] top-[7.30%] bottom-[3%] gap-[3.90%]"
+          >
+            {/*? Avatar illustration — 314.16/450.40 = 69.75% width, aspect 314/280 */}
+            <div className="relative w-full aspect-314/280 overflow-hidden shrink-0 portrait:w-[80%]">
+              <Image
+                src={avatarSrc}
+                alt={category}
+                fill
+                sizes="20vw"
+                className="object-contain"
+              />
+            </div>
 
-          {/*? Text labels — category + top 3 jobs */}
-          <div className="flex flex-col items-center w-full gap-[4%] h-full">
-            <p
-              className={`
-                flex items-center justify-center text-center text-[10px] min-[376px]:text-xs md:text-base 2xl:text-xl select-none w-[140%] min-h-[50%] align-middle whitespace-pre-line
-                 transition-colors duration-300
-                ${isSelected ? "text-yellow-300 font-semibold" : "text-white/90"}
-              `}
-            >
-              {category}
-            </p>
-            <p className="text-center text-[9px] min-[376px]:text-xs md:text-sm text-black line-clamp-2 select-none">
-              {jobs.slice(0, 3).join(" · ")}
-              {jobs.length > 3 && ` +${jobs.length - 3}`}
-            </p>
+            {/*? Text labels — category + top 3 jobs */}
+            <div className="flex flex-col items-center w-full gap-[4%] h-full">
+              <p
+                className={`
+                  flex items-center justify-center text-center text-[10px] min-[376px]:text-xs md:text-base 2xl:text-xl select-none w-[140%] min-h-[50%] align-middle whitespace-pre-line
+                  transition-colors duration-300
+                  ${isSelected ? "text-yellow-300 font-semibold" : "text-white/90"}
+                `}
+              >
+                {category}
+              </p>
+              <p className="text-center text-[9px] min-[376px]:text-[10px] md:text-sm text-black line-clamp-2 select-none px-4">
+                {jobs.slice(0, 3).join(" · ")}
+                {jobs.length > 3 && ` +${jobs.length - 3}`}
+              </p>
+            </div>
           </div>
         </div>
-      </div>
-    </m.button>
+      </m.button>
+
+      {/* Button below card for Desktop */}
+      {/* Show "ดูเพิ่มเติม" if jobs > 3 OR the string length of the first 3 jobs is too long (causing line-clamp "...") */}
+      {(jobs.length > 3 || jobs.slice(0, 3).join(" · ").length > 35) && (
+        <div className="hidden md:block relative z-50">
+          <button
+            type="button"
+            className="text-white text-[10px] md:text-xs xl:text-sm underline opacity-80 hover:opacity-100 cursor-pointer px-2 py-1"
+            onClick={(e) => {
+              e.stopPropagation();
+              onViewMore();
+            }}
+          >
+            ดูเพิ่มเติม
+          </button>
+        </div>
+      )}
+    </div>
   );
 }
 
@@ -209,6 +229,10 @@ export default function S9_2({ scrollYProgress, onCompleted }: S9_2Props) {
   const [currentPage, setCurrentPage] = useState(0);
   const [selectedCards, setSelectedCards] = useState<string[]>([]);
   const [slideDirection, setSlideDirection] = useState<1 | -1>(1);
+  const [viewMoreJobs, setViewMoreJobs] = useState<{
+    category: string;
+    jobs: string[];
+  } | null>(null);
 
   const totalPages = Math.ceil(JOB_CARDS.length / ITEMS_PER_PAGE);
 
@@ -341,7 +365,7 @@ export default function S9_2({ scrollYProgress, onCompleted }: S9_2Props) {
           <div className="absolute inset-0 flex flex-col items-center justify-start p-[8%] portrait:p-[3%] portrait:pt-[13%]">
             {/*? Question Text — Desktop: (120,130) = 6.25%, 12.04% */}
             <m.div
-              className="flex flex-col items-center justify-center w-full select-none py-[4.6%] portrait:py-0"
+              className="flex flex-col items-center justify-center w-full select-none py-[2%] portrait:py-0"
               style={{ opacity: questionOpacity, y: questionY }}
             >
               <MysteriousText
@@ -353,7 +377,7 @@ export default function S9_2({ scrollYProgress, onCompleted }: S9_2Props) {
               />
               {/*? Selection Counter */}
               <m.p
-                className="text-center mt-1 sm:mt-2 select-none text-[10px] min-[376px]:text-xs md:text-base xl:text-lg text-gray-300"
+                className="text-center mt-1 sm:mt-2 select-none text-[10px] min-[376px]:text-xs md:text-base xl:text-lg text-white"
                 style={{ opacity: carouselOpacity }}
               >
                 {selectedCards.length > 0
@@ -395,7 +419,7 @@ export default function S9_2({ scrollYProgress, onCompleted }: S9_2Props) {
                         x: { type: "spring", stiffness: 300, damping: 30 },
                         opacity: { duration: 0.2 },
                       }}
-                      className="flex justify-center items-center portrait:flex-col w-full h-full gap-[5%] portrait:gap-[1.56%]"
+                      className="flex justify-center items-start portrait:items-center portrait:flex-col w-full h-full gap-[5%] portrait:gap-[1.56%]"
                     >
                       {currentCards.map((card) => (
                         <JobAvatarCard
@@ -405,6 +429,12 @@ export default function S9_2({ scrollYProgress, onCompleted }: S9_2Props) {
                           jobs={card.jobs}
                           isSelected={selectedCards.includes(card.category)}
                           onClick={() => handleCardToggle(card.category)}
+                          onViewMore={() =>
+                            setViewMoreJobs({
+                              category: card.category,
+                              jobs: card.jobs,
+                            })
+                          }
                         />
                       ))}
                     </m.div>
@@ -431,6 +461,52 @@ export default function S9_2({ scrollYProgress, onCompleted }: S9_2Props) {
           </div>
         </SceneLayer>
       </m.div>
+
+      {/* Jobs Preview Modal */}
+      <AnimatePresence>
+        {viewMoreJobs && (
+          <m.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            className="fixed inset-0 z-99 flex items-center justify-center bg-black/60 p-4"
+            onClick={() => setViewMoreJobs(null)}
+          >
+            <m.div
+              initial={{ scale: 0.9, y: 20 }}
+              animate={{ scale: 1, y: 0 }}
+              exit={{ scale: 0.9, y: 20 }}
+              onClick={(e) => e.stopPropagation()}
+              className="relative bg-white text-black w-full max-w-2xl rounded-2xl p-6 md:p-10 shadow-2xl overflow-hidden"
+            >
+              <button
+                type="button"
+                onClick={() => setViewMoreJobs(null)}
+                className="absolute top-4 right-4 text-gray-500 hover:text-black w-8 h-8 flex items-center justify-center rounded-full bg-gray-100 hover:bg-gray-200 transition-colors z-10"
+              >
+                ✕
+              </button>
+
+              <div className="flex flex-col items-center">
+                <h3 className="text-xl md:text-2xl font-bold mb-6 text-center text-[#8e471e] pr-6 w-full">
+                  {viewMoreJobs.category}
+                </h3>
+
+                <div className="flex flex-wrap justify-center gap-2 md:gap-3 max-h-[60vh] overflow-y-auto w-full custom-scrollbar pr-2">
+                  {viewMoreJobs.jobs.map((job) => (
+                    <span
+                      key={job}
+                      className="bg-yellow-50 border border-yellow-700/20 text-[#8e471e] px-3 md:px-4 py-1.5 md:py-2 rounded-full text-xs md:text-sm shadow-sm"
+                    >
+                      {job}
+                    </span>
+                  ))}
+                </div>
+              </div>
+            </m.div>
+          </m.div>
+        )}
+      </AnimatePresence>
     </m.div>
   );
 }

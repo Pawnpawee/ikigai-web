@@ -90,12 +90,12 @@ export default function ResultSaveFeedbackModal({
               >
                 {"แชร์ความประทับใจผ่าน IG Story \n แล้ว Tag มาคุยกับเราที่ "}
                 <a
-                  href="https://www.instagram.com/find_yourikigai/"
+                  href="https://www.instagram.com/"
                   target="_blank"
                   rel="noopener noreferrer"
                   className="text-[#8ec3ff] underline underline-offset-4 hover:text-[#a8d3ff]"
                 >
-                  @find_yourikigai
+                  @IG ของเรา
                 </a>
               </m.p>
 

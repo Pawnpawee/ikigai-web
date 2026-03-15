@@ -31,25 +31,33 @@ export const useIkigaiProcess = () => {
     }
   }, []);
 
-  // 🌟 1. Effect สำหรับช่วงปกติ (วิ่งเนียนๆ ทีละ 1%)
+  //1. Effect สำหรับวิ่งเปอร์เซ็นต์ให้ค่อยๆ ขึ้นตลอดเวลาอย่างเป็นธรรมชาติ
   useEffect(() => {
-    // 🛑 บล็อกไว้: ถ้า Backend ส่งเลข 40 มา เราจะหยุดการบวกทีละ 1 ทันที
-    // เพื่อปล่อยให้ Effect ตัวที่ 2 (สไลด์โชว์) จัดการตัวเลขแทน
-    if (targetProgress >= 40 && targetProgress < 80) return;
+    // ตั้งเป้าหมายหลอกที่ 80% เพื่อให้เปอร์เซ็นต์ค่อยๆ ขยับขึ้นไม่หยุดนิ่ง แม้ว่า backend จะยังประมวลผลไม่ส่งมา
+    const fakeTarget = targetProgress === 100 ? 100 : 80;
 
-    if (displayProgress < targetProgress) {
-      const timer = setInterval(() => {
-        setDisplayProgress((prev) => {
-          if (prev < targetProgress) return prev + 1;
-          clearInterval(timer);
-          return prev;
-        });
-      }, 30);
-      return () => clearInterval(timer);
+    if (displayProgress < fakeTarget) {
+      // กำหนดความเร็วในการขยับแต่ละ 1%
+      let speed = 800; // ตอนเปอร์เซ็นต์วิ่งนำ backend ไปแล้ว ให้ค่อยๆ เดินช้าๆ คั่นเวลา
+
+      if (displayProgress < targetProgress) {
+        speed = 150; // เร่งเครื่องตอนวิ่งตามของจริงให้ทัน
+      }
+
+      if (targetProgress >= 80) {
+        speed = 40; // โค้งสุดท้ายตอน backend ส่ง 80-100% มาแล้ว -> พุ่งให้จบไวๆ
+      }
+
+      const timer = setTimeout(() => {
+        setDisplayProgress((prev) => (prev < fakeTarget ? prev + 1 : prev));
+      }, speed);
+
+      // คืนค่าฟังก์ชั่นทำความสะอาด
+      return () => clearTimeout(timer);
     }
   }, [displayProgress, targetProgress]);
 
-  // 🌟 2. Effect เปลี่ยนข้อความและเลขสถานะ
+  //2. Effect เปลี่ยนข้อความและเลขสถานะ
   useEffect(() => {
     if (targetProgress >= 100) {
       clearMidPhaseTimers();
@@ -67,22 +75,19 @@ export const useIkigaiProcess = () => {
         isMidPhaseStartedRef.current = true;
         clearMidPhaseTimers();
 
-        // แสดง 40% ทันที
+        // แสดงทันที
         setStatusText("กำลังวิเคราะห์สิ่งที่คุณถนัด...");
         setStatusIcon({ src: getImgPath("Icon/skill.webp"), alt: "Skill" });
-        setDisplayProgress(40);
 
-        // ผ่านไป 10 วิ -> 50%
+        // ผ่านไป 10 วิ
         midPhaseTimer1Ref.current = setTimeout(() => {
           setStatusText("กำลังวิเคราะห์สิ่งที่โลกต้องการ...");
           setStatusIcon({ src: getImgPath("Icon/world.webp"), alt: "World" });
-          setDisplayProgress(50);
 
-          // ผ่านไปอีก 10 วิ -> 60% แล้วค้างจนกว่า targetProgress >= 80
+          // ผ่านไปอีก 10 วิ
           midPhaseTimer2Ref.current = setTimeout(() => {
             setStatusText("กำลังวิเคราะห์สิ่งที่คุณสามารถสร้างรายได้ได้...");
             setStatusIcon({ src: getImgPath("Icon/paid.webp"), alt: "Paid" });
-            setDisplayProgress(60);
           }, 10000);
         }, 10000);
       }
@@ -150,7 +155,7 @@ export const useIkigaiProcess = () => {
             return;
           }
 
-          // ⭐ รับเลขมา แต่ใส่ไว้ใน Target แล้วให้ Effect ข้างบนค่อยๆ วิ่งตามไปเอง
+          //รับเลขมา แต่ใส่ไว้ใน Target แล้วให้ Effect ข้างบนค่อยๆ วิ่งตามไปเอง
           setTargetProgress(sseData.progress);
 
           if (sseData.progress === 100) {
@@ -179,7 +184,7 @@ export const useIkigaiProcess = () => {
     [clearMidPhaseTimers],
   );
 
-  // ⭐ ส่ง displayProgress กลับไปให้ Component เพื่อให้เลข/หลอด ค่อยๆ วิ่ง
+  //ส่ง displayProgress กลับไปให้ Component เพื่อให้เลข/หลอด ค่อยๆ วิ่ง
   return {
     progress: displayProgress,
     statusText,
