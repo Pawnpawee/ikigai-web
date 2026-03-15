@@ -33,7 +33,7 @@ export default function Home() {
 
   //? ควบคุม Modal
   useEffect(() => {
-    const hasSettings = localStorage.getItem("audioSettings");
+    const hasSettings = sessionStorage.getItem("audioSettings");
 
     if (!hasSettings) {
       setShowWelcomeModal(true);

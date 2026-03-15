@@ -34,12 +34,14 @@ export default function ScrollTo({
 
   return (
     <m.div
-      className="box-border flex flex-col gap-2 items-center justify-center px-8 md:px-14 py-0 fixed bottom-[env(safe-area-inset-bottom)] z-50 w-screen h-[70px] md:h-[100px] pointer-events-none"
+      className="box-border flex flex-col gap-2 items-center justify-center px-8 md:px-14 py-3 fixed bottom-[env(safe-area-inset-bottom)] z-50 w-screen pointer-events-none"
       style={{ opacity }}
     >
       <div className="flex flex-col gap-0 items-center animate-fade-loop">
         <div className="flex gap-2 items-center relative shrink-0">
-          <p className={`text-xs sm:text-sm md:text-base ${toneClasses}`}>
+          <p
+            className={`text-[10px] min-[376px]:text-xs sm:text-sm md:text-base ${toneClasses}`}
+          >
             {message}
           </p>
         </div>

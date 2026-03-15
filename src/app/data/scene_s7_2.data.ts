@@ -69,6 +69,7 @@ export const SCENE_S7_2_ITEMS: SceneItemData[] = [
       top: "47.07%", // 903.83 / 1920
     },
     animGroup: 3,
+    className: "portrait:opacity-30! portrait:xl:opacity-100!",
   },
 ];
 

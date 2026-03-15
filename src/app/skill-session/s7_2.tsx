@@ -285,7 +285,7 @@ export default function S7_2({ scrollYProgress, onCompleted }: S7_2Props) {
                       style={{ opacity: choicesOpacity }}
                     >
                       {error ||
-                        `เลือกแล้ว ${totalSelected} (ขั้นต่ำ ${MIN_SELECTIONS} อย่าง เพื่อเลื่อนไปยังส่วนถัดไป)`}
+                        `เลือกแล้ว ${totalSelected} (ขั้นต่ำ ${MIN_SELECTIONS} อย่าง)`}
                     </m.p>
                   </m.div>
 
@@ -387,7 +387,7 @@ export default function S7_2({ scrollYProgress, onCompleted }: S7_2Props) {
                       style={{ opacity: choicesOpacity }}
                     >
                       {error ||
-                        `เลือกแล้ว ${totalSelected} (ขั้นต่ำ ${MIN_SELECTIONS} อย่าง เพื่อเลื่อนไปยังส่วนถัดไป)`}
+                        `เลือกแล้ว ${totalSelected} (ขั้นต่ำ ${MIN_SELECTIONS} อย่าง)`}
                     </m.p>
                   </m.div>
 

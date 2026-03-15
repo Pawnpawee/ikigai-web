@@ -143,8 +143,8 @@ function SkillCard({
         {/*? Card label below the frame */}
         <p
           className={`
-          text-white text-center text-xs md:text-base 2xl:text-xl
-          leading-tight select-none px-1 text-nowrap
+          text-white text-center text-[10px] min-[376px]:text-xs md:text-base 2xl:text-xl
+          leading-tight select-none px-1 
           transition-colors duration-300
           ${isSelected ? "text-yellow-300 font-semibold" : "text-white/90"}
         `}
@@ -325,12 +325,12 @@ function CustomSkillCard({
           className="w-full z-10 pointer-events-none"
         />
         <div className="absolute inset-[15%] z-20 flex flex-col items-center justify-center gap-2 px-2">
-          <div className="w-full px-3 md:px-5 py-2 md:py-3 text-xs md:text-lg 2xl:text-2xl text-white transition-colors truncate">
+          <div className="w-full px-3 md:px-5 py-2 md:py-3 text-[10px] min-[376px]:text-xs md:text-lg 2xl:text-2xl text-white transition-colors truncate">
             {skill}
           </div>
         </div>
       </div>
-      <p className="text-yellow-200 text-center text-xs md:text-base 2xl:text-xl leading-tight select-none px-1 text-nowrap">
+      <p className="text-yellow-200 text-center text-[10px] min-[376px]:text-xs md:text-base 2xl:text-xl leading-tight select-none px-1 text-nowrap">
         ทักษะที่เพิ่มเอง
       </p>
     </m.button>
@@ -652,7 +652,7 @@ export default function S7_1({ scrollYProgress, onCompleted }: S7_1Props) {
           )}
 
           {/* Content Layer */}
-          <div className="absolute inset-0 flex flex-col items-center justify-start p-[6.7%] portrait:p-0 portrait:pt-[15.74%] portrait:gap-[2%]">
+          <div className="absolute inset-0 flex flex-col items-center justify-start p-[8%] portrait:p-[3%] portrait:pt-[13%]">
             {/*? Question Text */}
             <m.div
               className="flex flex-col items-center justify-center w-full select-none py-[4.6%] portrait:py-0"
@@ -663,26 +663,26 @@ export default function S7_1({ scrollYProgress, onCompleted }: S7_1Props) {
             >
               <MysteriousText
                 text={
-                  "จงเลือกสิ่งที่เจ้าถนัดมากที่สุด อย่างน้อย 1 อย่าง และไม่เกิน 3 อย่าง \n ถ้าไม่แน่ใจ ให้เลือกสิ่งที่คิดว่าทำได้ดี ณ ตอนนี้ ? (Hard Skills)"
+                  "จงเลือกสิ่งที่เจ้าถนัดมากที่สุด 1-3 อย่าง \n ถ้าไม่แน่ใจ ให้เลือกสิ่งที่คิดว่าทำได้ดี ณ ตอนนี้ ? (Hard Skills)"
                 }
                 scrollYProgress={scrollYProgress}
                 startProgress={0.15}
                 endProgress={0.25}
-                className="text-white text-sm md:text-lg 2xl:text-2xl leading-normal text-center"
+                className="text-white text-xs min-[376px]:text-sm md:text-lg 2xl:text-2xl leading-normal text-center"
               />
               {/*? Selection Counter */}
               <m.p
-                className="text-center mt-1 sm:mt-2 select-none text-xs md:text-base xl:text-lg text-gray-300"
+                className="text-center mt-1 sm:mt-2 select-none text-[10px] min-[376px]:text-xs md:text-base xl:text-lg text-gray-300"
                 style={{ opacity: carouselOpacity }}
               >
                 เลือกแล้ว {totalSelections}/{MAX_SELECTIONS} (ขั้นต่ำ{" "}
-                {MIN_SELECTIONS} อย่าง เพื่อเลื่อนไปยังส่วนถัดไป)
+                {MIN_SELECTIONS} อย่าง)
               </m.p>
             </m.div>
 
             {/*? Carousel Area: Arrows + Cards + Dots */}
             <m.div
-              className="flex flex-col items-center justify-center w-full h-full"
+              className="flex flex-col items-center justify-center w-full h-full mb-5"
               style={{ opacity: carouselOpacity, y: carouselY }}
             >
               {/* Carousel Row: Arrow + Cards + Arrow */}
@@ -708,7 +708,7 @@ export default function S7_1({ scrollYProgress, onCompleted }: S7_1Props) {
                         x: { type: "spring", stiffness: 300, damping: 30 },
                         opacity: { duration: 0.2 },
                       }}
-                      className="flex justify-center items-center gap-[5%] portrait:flex-col portrait:gap-[1.56%] w-full h-full"
+                      className="flex justify-center items-start portrait:items-center gap-[5%] portrait:flex-col portrait:gap-[1.56%] w-full h-full"
                     >
                       {currentCards.map((card) =>
                         card.isCustomSkillCard && card.customSkillValue ? (
@@ -746,7 +746,7 @@ export default function S7_1({ scrollYProgress, onCompleted }: S7_1Props) {
               </div>
 
               {/* Dot Navigation */}
-              <div className="mt-3 sm:mt-5 md:mt-10 pointer-events-auto relative z-10">
+              <div className="mt-2 portrait:mt-4 pointer-events-auto relative z-10">
                 <DotNavigation
                   totalPages={totalPages}
                   currentPage={currentPage}

@@ -131,7 +131,7 @@ function GiftCard({
         {/*? Card label below the frame */}
         <p
           className={`
-					text-white text-center text-xs md:text-base 2xl:text-xl
+					text-white text-center text-[10px] min-[376px]:text-xs md:text-base 2xl:text-xl
 					leading-tight select-none px-1 whitespace-pre-line min-w-max
 					transition-colors duration-300
 					${isSelected ? "text-yellow-300 font-semibold" : "text-white/90"}
@@ -335,7 +335,7 @@ export default function S8_2({ scrollYProgress, onCompleted }: S8_2Props) {
           containerAspectRatio={isMobile ? "1080 / 1920" : "1920 / 1080"}
         >
           {/* Content Layer */}
-          <div className="absolute inset-0 flex flex-col items-center justify-start p-[6.7%] portrait:p-0 portrait:pt-[15.74%] portrait:gap-[2%]">
+          <div className="absolute inset-0 flex flex-col items-center justify-start p-[8%] portrait:p-[3%] portrait:pt-[13%]">
             {/*? Question Text */}
             <m.div
               className="flex flex-col items-center justify-center w-full select-none py-[4.6%] portrait:py-0"
@@ -349,21 +349,21 @@ export default function S8_2({ scrollYProgress, onCompleted }: S8_2Props) {
                 scrollYProgress={scrollYProgress}
                 startProgress={0.1}
                 endProgress={0.2}
-                className="text-white text-sm md:text-lg 2xl:text-2xl leading-normal text-center"
+                className="text-white text-xs min-[376px]:text-sm md:text-lg 2xl:text-2xl leading-normal text-center"
               />
               {/*? Selection Counter */}
               <m.p
-                className="text-center mt-1 sm:mt-2 select-none text-xs md:text-base xl:text-lg text-gray-300"
+                className="text-center mt-1 sm:mt-2 select-none text-[10px] min-[376px]:text-xs md:text-base xl:text-lg text-gray-300"
                 style={{ opacity: carouselOpacity }}
               >
                 เลือกแล้ว {selectedGifts.length} (ตอบได้หลายข้อ ขั้นต่ำ{" "}
-                {MIN_GIFT_SELECTIONS} อย่าง เพื่อเลื่อนไปยังส่วนถัดไป)
+                {MIN_GIFT_SELECTIONS} อย่าง)
               </m.p>
             </m.div>
 
             {/*? Carousel Area: Arrows + Cards + Dots */}
             <m.div
-              className="flex flex-col items-center justify-center w-full h-full"
+              className="flex flex-col items-center justify-center w-full h-full mb-5"
               style={{ opacity: carouselOpacity, y: carouselY }}
             >
               {/* Carousel Row: Arrow + Cards + Arrow */}
@@ -389,7 +389,7 @@ export default function S8_2({ scrollYProgress, onCompleted }: S8_2Props) {
                         x: { type: "spring", stiffness: 300, damping: 30 },
                         opacity: { duration: 0.2 },
                       }}
-                      className="flex justify-center items-center gap-[5%] portrait:flex-col portrait:gap-[1.56%] w-full h-full"
+                      className="flex justify-center items-start  portrait:items-center gap-[5%] portrait:flex-col portrait:gap-[1.56%] w-full h-full"
                     >
                       {currentCards.map((card) => (
                         <GiftCard
@@ -413,7 +413,7 @@ export default function S8_2({ scrollYProgress, onCompleted }: S8_2Props) {
               </div>
 
               {/* Dot Navigation */}
-              <div className="mt-3 sm:mt-5 md:mt-10 pointer-events-auto relative z-10">
+              <div className="pointer-events-auto relative z-10 mt-2 portrait:mt-4">
                 <DotNavigation
                   totalPages={totalPages}
                   currentPage={currentPage}

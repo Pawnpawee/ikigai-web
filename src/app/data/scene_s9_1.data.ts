@@ -128,7 +128,7 @@ export const SCENE_S9_1_ITEMS: SceneItemData[] = [
     mobileStyle: {
       width: "35.00%",
       height: "24.74%",
-      left: "25.77%",
+      left: "23.5%",
       top: "46.21%",
     },
     animGroup: 7,

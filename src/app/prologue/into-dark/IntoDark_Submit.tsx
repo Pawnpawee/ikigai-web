@@ -83,11 +83,19 @@ export default function IntoDarkSubmit({
 
   // Text opacity animations - appear sequentially
   const text1_opacity = useTransform(scrollYProgress, [0.67, 0.68], [0, 1]); // "ถ้าเจ้าหาจุด..."
-  const text2_opacity = useTransform(scrollYProgress, [0.7, 0.8], [0, 1]); // Description
+  const text2_opacity = useTransform(scrollYProgress, isMobile ? [0.6, 0.75] : [0.7, 0.8], [0, 1]); // Description
 
-  const text3_opacity = useTransform(scrollYProgress, [0.87, 0.92], [0, 1]); // "แต่เจ้าไม่ต้องกังวล..."
+  const text3_opacity = useTransform(
+    scrollYProgress,
+    isMobile ? [0.8, 0.85] : [0.87, 0.92],
+    [0, 1],
+  ); // "แต่เจ้าไม่ต้องกังวล..."
 
-  const text4_opacity = useTransform(scrollYProgress, [0.93, 0.98], [0, 1]); // "เจ้าอยากจะลองไปตามหา..."
+  const text4_opacity = useTransform(
+    scrollYProgress,
+    isMobile ? [0.85, 0.9] : [0.93, 0.98],
+    [0, 1],
+  ); // "เจ้าอยากจะลองไปตามหา..."
 
   // Local animation config for IkigaiCircle reuse
   const circleTransition = {
@@ -308,8 +316,8 @@ export default function IntoDarkSubmit({
                       : `พื้นที่ของ "ความหมาย" ในชีวิตและงานของแต่ละบุคคล \n ใช้เพื่อเตรียมความพร้อมและส่งเสริมการปรับตัวเข้าสู่สังคมการทำงาน \n หากได้ศึกษาหรือเข้าใจอิคิไก ก่อนที่จะเลือกเรียนหรือเลือกประกอบอาชีพ\n ก็จะมีประโยชน์มากยิ่งขึ้น และอาจพาเจ้าออกจากความมัวมืดในคืนนี้ได้`
                   }
                   scrollYProgress={scrollYProgress}
-                  startProgress={0.7}
-                  endProgress={0.85}
+                  startProgress={isMobile ? 0.65 : 0.7}
+                  endProgress={isMobile ? 0.7 : 0.85}
                 />
               </m.div>
             </div>
@@ -336,8 +344,8 @@ export default function IntoDarkSubmit({
                       : `แต่เจ้าไม่ต้องกังวลไปการที่เจ้ายัง ไม่ค้นพบตัวเองตอนนี้ \n ไม่ใช่เรื่องที่แปลกประหลาด`
                   }
                   scrollYProgress={scrollYProgress}
-                  startProgress={0.87}
-                  endProgress={0.92}
+                  startProgress={isMobile ? 0.8 : 0.87}
+                  endProgress={isMobile ? 0.85 : 0.92}
                 />
               </m.div>
             </div>
@@ -351,8 +359,8 @@ export default function IntoDarkSubmit({
                 <MysteriousText
                   text={`เจ้าอยากจะลองไปตามหาอิคิไก \n ของเจ้าดูบ้างไหมล่ะ`}
                   scrollYProgress={scrollYProgress}
-                  startProgress={0.93}
-                  endProgress={0.98}
+                  startProgress={isMobile ? 0.85 : 0.93}
+                  endProgress={isMobile ? 0.9 : 0.98}
                 />
               </m.div>
 

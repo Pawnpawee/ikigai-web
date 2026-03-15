@@ -101,7 +101,7 @@ function JobAvatarCard({
       onClick={onClick}
       //? Desktop: 450.40/1680 = 26.81%, Mobile: 389.35/1080 = 36.05%
       className="flex flex-col items-center justify-center cursor-pointer
-        w-[26.81%] portrait:w-[68%] gap-0"
+        w-[26.81%] portrait:w-[65%] gap-0"
       whileHover={{ scale: 1.03 }}
       whileTap={{ scale: 0.97 }}
       transition={{ type: "spring", stiffness: 300, damping: 20 }}
@@ -338,14 +338,10 @@ export default function S9_2({ scrollYProgress, onCompleted }: S9_2Props) {
           containerAspectRatio={isMobile ? "1080 / 1920" : "1920 / 1080"}
         >
           {/* Content Layer */}
-          <div
-            className="absolute inset-0 flex flex-col items-center justify-start
-            p-[6.25%] portrait:p-0 portrait:pt-[6.97%] portrait:gap-[2%]"
-          >
+          <div className="absolute inset-0 flex flex-col items-center justify-start p-[8%] portrait:p-[3%] portrait:pt-[13%]">
             {/*? Question Text — Desktop: (120,130) = 6.25%, 12.04% */}
             <m.div
-              className="flex flex-col items-center justify-center w-full select-none
-                py-[3%] portrait:py-0"
+              className="flex flex-col items-center justify-center w-full select-none py-[4.6%] portrait:py-0"
               style={{ opacity: questionOpacity, y: questionY }}
             >
               <MysteriousText
@@ -353,11 +349,11 @@ export default function S9_2({ scrollYProgress, onCompleted }: S9_2Props) {
                 scrollYProgress={scrollYProgress}
                 startProgress={0.15}
                 endProgress={0.25}
-                className="text-white text-sm md:text-2xl 2xl:text-3xl leading-normal text-center"
+                className="text-white text-xs min-[376px]:text-sm md:text-lg 2xl:text-2xl leading-normal text-center"
               />
               {/*? Selection Counter */}
               <m.p
-                className="text-center mt-1 sm:mt-2 select-none text-xs md:text-base xl:text-lg text-white whitespace-pre-line md:whitespace-normal"
+                className="text-center mt-1 sm:mt-2 select-none text-[10px] min-[376px]:text-xs md:text-base xl:text-lg text-gray-300"
                 style={{ opacity: carouselOpacity }}
               >
                 {selectedCards.length > 0
@@ -368,7 +364,7 @@ export default function S9_2({ scrollYProgress, onCompleted }: S9_2Props) {
 
             {/*? Carousel Area: Arrows + Cards + Dots */}
             <m.div
-              className="flex flex-col items-center justify-center w-full h-full"
+              className="flex flex-col items-center justify-center w-full h-full mb-5"
               style={{ opacity: carouselOpacity, y: carouselY }}
             >
               {/*? Carousel Row: Arrow + Cards + Arrow */}
@@ -376,7 +372,7 @@ export default function S9_2({ scrollYProgress, onCompleted }: S9_2Props) {
               {/*? Mobile: 706.73/1080 = 65.44%, aspect 706/1428 */}
               <div
                 className="flex items-center justify-center
-                w-[87.5%] aspect-1680/520 portrait:w-[65.44%] portrait:aspect-706/1428"
+                w-[87.5%] aspect-1680/520 portrait:w-[68%] portrait:aspect-706/1428"
               >
                 {/* Left Arrow */}
                 <CarouselArrow
@@ -399,9 +395,7 @@ export default function S9_2({ scrollYProgress, onCompleted }: S9_2Props) {
                         x: { type: "spring", stiffness: 300, damping: 30 },
                         opacity: { duration: 0.2 },
                       }}
-                      className="flex justify-center items-center
-                        gap-[2.38%] portrait:flex-col portrai:gap-4
-                        w-full h-full"
+                      className="flex justify-center items-center portrait:flex-col w-full h-full gap-[5%] portrait:gap-[1.56%]"
                     >
                       {currentCards.map((card) => (
                         <JobAvatarCard
@@ -426,7 +420,7 @@ export default function S9_2({ scrollYProgress, onCompleted }: S9_2Props) {
               </div>
 
               {/* Dot Navigation */}
-              <div className="mt-5 xl:mt-10 pointer-events-auto relative z-10">
+              <div className="pointer-events-auto relative z-10 mt-2 portrait:mt-4">
                 <DotNavigation
                   totalPages={totalPages}
                   currentPage={currentPage}
