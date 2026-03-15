@@ -135,25 +135,25 @@ export default function IkigaiResultDisplay({
 
     //2. แอบสลับ URL ของ Next.js กลับไปเป็น URL ของ Cloudinary แท้ๆ ชั่วคราว
     imgElements.forEach((img, index) => {
-        // ✅ เก็บค่าดั้งเดิมของ React/Next.js ไว้ก่อน
-        originalAttributes[index] = {
-          src: img.src,
-          srcset: img.getAttribute("srcset"),
-          crossOrigin: img.getAttribute("crossOrigin"),
-        };
+      // ✅ เก็บค่าดั้งเดิมของ React/Next.js ไว้ก่อน
+      originalAttributes[index] = {
+        src: img.src,
+        srcset: img.getAttribute("srcset"),
+        crossOrigin: img.getAttribute("crossOrigin"),
+      };
 
-        // ✅ ตรวจสอบว่าเป็นรูปภาพที่ผ่านการ Optimize โดย Next.js หรือไม่
-        if (img.src.includes("/_next/image")) {
-          try {
-            const urlObj = new URL(img.src, window.location.origin);
-            const actualCloudinaryUrl = urlObj.searchParams.get("url");
+      // ✅ ตรวจสอบว่าเป็นรูปภาพที่ผ่านการ Optimize โดย Next.js หรือไม่
+      if (img.src.includes("/_next/image")) {
+        try {
+          const urlObj = new URL(img.src, window.location.origin);
+          const actualCloudinaryUrl = urlObj.searchParams.get("url");
 
-            if (actualCloudinaryUrl) {
+          if (actualCloudinaryUrl) {
             // Safari iOS workaround: บังคับให้โหลดภาพใหม่ไม่ผ่าน cache เพื่อล้างปัญหา CORS
             const separator = actualCloudinaryUrl.includes("?") ? "&" : "?";
             img.src = `${actualCloudinaryUrl}${separator}t=${Date.now()}`; // ดึงภาพจาก Cloudinary ตรงๆ
-              img.removeAttribute("srcset"); // ลบ srcset ชั่วคราว ป้องกัน Canvas สับสน
-              img.crossOrigin = "anonymous"; // ปลดล็อค CORS Policy
+            img.removeAttribute("srcset"); // ลบ srcset ชั่วคราว ป้องกัน Canvas สับสน
+            img.crossOrigin = "anonymous"; // ปลดล็อค CORS Policy
           }
         } catch (e) {
           console.error("ไม่สามารถแกะ URL ของภาพได้:", e);
@@ -333,14 +333,20 @@ export default function IkigaiResultDisplay({
             style={getPos(CARD_POS)}
             {...popUpVariant(0.6)}
           >
-            <Image
-              src={cardAssets.cardFrame}
-              alt="Card frame"
-              fill
-              className="object-contain"
-              sizes="(max-width: 768px) 50vw, 30vw"
-              crossOrigin="anonymous"
-            />
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              width="100%"
+              height="100%"
+              viewBox="0 0 443 763"
+              fill="none"
+              preserveAspectRatio="xMidYMid meet"
+              aria-hidden="true"
+            >
+              <path
+                d="M414.006 0H28.0541C12.5603 0 0 12.5603 0 28.0541V734.108C0 749.602 12.5603 762.162 28.0541 762.162H414.006C429.5 762.162 442.06 749.602 442.06 734.108V28.0541C442.06 12.5603 429.5 0 414.006 0Z"
+                fill="#FFD578"
+              />
+            </svg>
           </m.div>
 
           {/* ─── Card Lottie (5 การ์ดตาม MaxSessionPercentage) ─── */}
@@ -386,14 +392,130 @@ export default function IkigaiResultDisplay({
                 onClick={() => handleSectionClick(circle.key)}
               >
                 {/* วงกลม Gradient Background */}
-                <Image
-                  src={circle.circleSrc}
-                  alt={circle.label}
-                  fill
-                  className="object-contain"
-                  sizes={isMobile ? "32vw" : "20vw"}
-                  crossOrigin="anonymous"
-                />
+                {circle.key === "what_you_love" && (
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    width="100%"
+                    height="100%"
+                    viewBox="0 0 346 346"
+                    fill="none"
+                    aria-hidden="true"
+                    className="absolute inset-0"
+                    preserveAspectRatio="xMidYMid meet"
+                  >
+                    <path
+                      opacity="0.7"
+                      d="M172.57 345.14C267.878 345.14 345.14 267.878 345.14 172.57C345.14 77.2622 267.878 0 172.57 0C77.2622 0 0 77.2622 0 172.57C0 267.878 77.2622 345.14 172.57 345.14Z"
+                      fill="url(#paint0_radial_930_11695)"
+                    />
+                    <defs>
+                      <radialGradient
+                        id="paint0_radial_930_11695"
+                        cx="0"
+                        cy="0"
+                        r="1"
+                        gradientUnits="userSpaceOnUse"
+                        gradientTransform="translate(172.568 172.575) rotate(45) scale(172.57)"
+                      >
+                        <stop stopColor="#601126" />
+                        <stop offset="1" stopColor="#EC4151" />
+                      </radialGradient>
+                    </defs>
+                  </svg>
+                )}
+                {circle.key === "what_the_world_need" && (
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    width="100%"
+                    height="100%"
+                    viewBox="0 0 346 346"
+                    fill="none"
+                    aria-hidden="true"
+                    className="absolute inset-0"
+                    preserveAspectRatio="xMidYMid meet"
+                  >
+                    <path
+                      opacity="0.7"
+                      d="M172.57 345.14C267.878 345.14 345.14 267.878 345.14 172.57C345.14 77.2622 267.878 0 172.57 0C77.2622 0 0 77.2622 0 172.57C0 267.878 77.2622 345.14 172.57 345.14Z"
+                      fill="url(#paint0_radial_930_11658)"
+                    />
+                    <defs>
+                      <radialGradient
+                        id="paint0_radial_930_11658"
+                        cx="0"
+                        cy="0"
+                        r="1"
+                        gradientUnits="userSpaceOnUse"
+                        gradientTransform="translate(172.569 172.575) rotate(-45) scale(172.57)"
+                      >
+                        <stop stopColor="#38804D" />
+                        <stop offset="1" stopColor="#E1ED30" />
+                      </radialGradient>
+                    </defs>
+                  </svg>
+                )}
+                {circle.key === "what_you_good_at" && (
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    width="100%"
+                    height="100%"
+                    viewBox="0 0 346 346"
+                    fill="none"
+                    aria-hidden="true"
+                    className="absolute inset-0"
+                    preserveAspectRatio="xMidYMid meet"
+                  >
+                    <path
+                      opacity="0.7"
+                      d="M172.57 345.14C267.878 345.14 345.14 267.878 345.14 172.57C345.14 77.2622 267.878 0 172.57 0C77.2622 0 0 77.2622 0 172.57C0 267.878 77.2622 345.14 172.57 345.14Z"
+                      fill="url(#paint0_radial_930_11732)"
+                    />
+                    <defs>
+                      <radialGradient
+                        id="paint0_radial_930_11732"
+                        cx="0"
+                        cy="0"
+                        r="1"
+                        gradientUnits="userSpaceOnUse"
+                        gradientTransform="translate(172.565 172.568) rotate(-45) scale(172.57)"
+                      >
+                        <stop stopColor="#0700A6" />
+                        <stop offset="1" stopColor="#927CFB" />
+                      </radialGradient>
+                    </defs>
+                  </svg>
+                )}
+                {circle.key === "what_you_can_be_paid_for" && (
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    width="100%"
+                    height="100%"
+                    viewBox="0 0 346 346"
+                    fill="none"
+                    aria-hidden="true"
+                    className="absolute inset-0"
+                    preserveAspectRatio="xMidYMid meet"
+                  >
+                    <path
+                      opacity="0.7"
+                      d="M172.57 345.14C267.878 345.14 345.14 267.878 345.14 172.57C345.14 77.2622 267.878 0 172.57 0C77.2622 0 0 77.2622 0 172.57C0 267.878 77.2622 345.14 172.57 345.14Z"
+                      fill="url(#paint0_radial_930_11769)"
+                    />
+                    <defs>
+                      <radialGradient
+                        id="paint0_radial_930_11769"
+                        cx="0"
+                        cy="0"
+                        r="1"
+                        gradientUnits="userSpaceOnUse"
+                        gradientTransform="translate(172.571 172.561) rotate(45) scale(172.57)"
+                      >
+                        <stop stopColor="#C24F0E" />
+                        <stop offset="1" stopColor="#F4C13E" />
+                      </radialGradient>
+                    </defs>
+                  </svg>
+                )}
 
                 {/* Content: icon + label + percent + summary */}
                 <div className="absolute inset-0 flex flex-col items-center justify-center gap-1 2xl:gap-4  px-[10%]">
