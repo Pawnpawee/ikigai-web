@@ -83,7 +83,11 @@ export default function IntoDarkSubmit({
 
   // Text opacity animations - appear sequentially
   const text1_opacity = useTransform(scrollYProgress, [0.67, 0.68], [0, 1]); // "ถ้าเจ้าหาจุด..."
-  const text2_opacity = useTransform(scrollYProgress, isMobile ? [0.6, 0.75] : [0.7, 0.8], [0, 1]); // Description
+  const text2_opacity = useTransform(
+    scrollYProgress,
+    isMobile ? [0.6, 0.75] : [0.7, 0.8],
+    [0, 1],
+  ); // Description
 
   const text3_opacity = useTransform(
     scrollYProgress,

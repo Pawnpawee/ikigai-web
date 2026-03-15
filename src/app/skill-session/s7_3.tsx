@@ -85,40 +85,40 @@ export default function S7_3({ scrollYProgress, onCompleted }: S7_3Props) {
 
   // ─── Sticky top offset (scrolls scene from Q1→Q2) ───
   const [scrollOffsets, setScrollOffsets] = useState({
-     mid: "0vh",
-     final: "0vh",
-   });
- 
-   useEffect(() => {
-     const calculateScroll = () => {
-       // คำนวณสัดส่วนความสูงของ SceneLayer (อิงตาม containerAspectRatio)
-       const aspectMultiplier = isMobile ? 3840 / 1080 : 2160 / 1920;
- 
-       // คำนวณว่า Content สูงกี่ px
-       const containerHeight = window.innerWidth * aspectMultiplier;
- 
-       // หาความยาวส่วนที่ล้นหน้าจอลงไปข้างล่าง
-       const overflowPx = Math.max(0, containerHeight - window.innerHeight);
- 
-       // แปลง px กลับมาเป็นหน่วย vh ที่พอดีเป๊ะกับขอบล่าง
-       const finalVh = -(overflowPx / window.innerHeight) * 100;
- 
-       setScrollOffsets({
-         mid: `${finalVh / 2}vh`, // จุดกึ่งกลาง
-         final: `${finalVh}vh`, // จุดสิ้นสุด
-       });
-     };
- 
-     calculateScroll();
-     window.addEventListener("resize", calculateScroll);
-     return () => window.removeEventListener("resize", calculateScroll);
-   }, [isMobile]);
- 
-   const top = useTransform(
-     scrollYProgress,
-     [0.35, 0.9, 1],
-     ["0vh", scrollOffsets.mid, scrollOffsets.final],
-   );
+    mid: "0vh",
+    final: "0vh",
+  });
+
+  useEffect(() => {
+    const calculateScroll = () => {
+      // คำนวณสัดส่วนความสูงของ SceneLayer (อิงตาม containerAspectRatio)
+      const aspectMultiplier = isMobile ? 3840 / 1080 : 2160 / 1920;
+
+      // คำนวณว่า Content สูงกี่ px
+      const containerHeight = window.innerWidth * aspectMultiplier;
+
+      // หาความยาวส่วนที่ล้นหน้าจอลงไปข้างล่าง
+      const overflowPx = Math.max(0, containerHeight - window.innerHeight);
+
+      // แปลง px กลับมาเป็นหน่วย vh ที่พอดีเป๊ะกับขอบล่าง
+      const finalVh = -(overflowPx / window.innerHeight) * 100;
+
+      setScrollOffsets({
+        mid: `${finalVh / 2}vh`, // จุดกึ่งกลาง
+        final: `${finalVh}vh`, // จุดสิ้นสุด
+      });
+    };
+
+    calculateScroll();
+    window.addEventListener("resize", calculateScroll);
+    return () => window.removeEventListener("resize", calculateScroll);
+  }, [isMobile]);
+
+  const top = useTransform(
+    scrollYProgress,
+    [0.35, 0.9, 1],
+    ["0vh", scrollOffsets.mid, scrollOffsets.final],
+  );
 
   // ─── Background Item Animations ───
 
