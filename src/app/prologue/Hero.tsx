@@ -25,11 +25,16 @@ export default function Hero({ shouldAnimate }: HeroProps) {
   const logoParallaxX = useTransform(smoothMouseX, [0, 1], [15, -15]);
   const logoParallaxY = useTransform(smoothMouseY, [0, 1], [5, -5]);
 
+  const hasPlayedLogoSound = useRef(false);
+
   useEffect(() => {
-    if (shouldAnimate) {
+    if (shouldAnimate && !hasPlayedLogoSound.current) {
       const timer = setTimeout(() => {
         setShouldPlayLottie(true);
-        playSfx(getAudioUrl("Sound/1-2/logo.mp3"));
+        if (!hasPlayedLogoSound.current) {
+          playSfx(getAudioUrl("Sound/1-2/logo.mp3"));
+          hasPlayedLogoSound.current = true;
+        }
       }, 2000);
 
       return () => clearTimeout(timer);

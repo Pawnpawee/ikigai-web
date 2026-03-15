@@ -3,14 +3,9 @@ import { AnimatePresence, m } from "framer-motion";
 import type { Howl } from "howler";
 import Image from "next/image";
 import { useEffect, useRef, useState } from "react";
-import { useSeamlessVideoLoop } from "@/app/hooks/useSeamlessVideoLoop";
 import { getAudioUrl, getVideoUrl } from "@/utils/cloudinaryUtils";
 import { useAudio } from "../contexts/AudioContext";
 import { TEMPLE_DIALOGUE } from "../data/scene_temple.data";
-
-const VIDEO_FPS = 25;
-const LOOP_START_FRAME = 226;
-const LOOP_END_FRAME = 304;
 
 interface HeartWeighingProcessProps {
   isProcessing: boolean;
@@ -25,27 +20,21 @@ export default function HeartWeighingProcess({
   statusText,
   statusIcon,
 }: HeartWeighingProcessProps) {
+  const [isPlayingLoop, setIsPlayingLoop] = useState(false);
   const [showDialogue, setShowDialogue] = useState(false);
   const { playSfx } = useAudio();
-  const videoSrc = getVideoUrl("Scene/Result/s11.mp4");
-  const {
-    activeVideoIndex,
-    handleVideoLoadedMetadata,
-    hasLoopStarted,
-    primaryVideoRef,
-    secondaryVideoRef,
-  } = useSeamlessVideoLoop({
-    enabled: isProcessing,
-    loopStartTime: LOOP_START_FRAME / VIDEO_FPS,
-    loopEndTime: LOOP_END_FRAME / VIDEO_FPS,
-  });
+
+  const introVideoSrc = getVideoUrl("Scene/Result/s11-1.mp4");
+  const loopVideoSrc = getVideoUrl("Scene/Result/s11-2.mp4");
 
   const sparklingSoundRef = useRef<Howl | null>(null);
   const shimmeringSoundRef = useRef<Howl | null>(null);
 
   useEffect(() => {
-    setShowDialogue(hasLoopStarted);
-  }, [hasLoopStarted]);
+    if (isPlayingLoop) {
+      setShowDialogue(true);
+    }
+  }, [isPlayingLoop]);
 
   useEffect(() => {
     if (isProcessing) {
@@ -82,34 +71,31 @@ export default function HeartWeighingProcess({
 
       <div className="absolute inset-0">
         <m.div
-          className="absolute inset-0"
-          initial={{ opacity: 0 }} // เทคนิคแถม: เฟดพร้อมกับหดลงนิดๆ ให้ดูลึกมีมิติ
+          className="absolute inset-0 bg-black" // ⭐ ทริค: ใส่ bg-black เพื่อป้องกันจอดำชั่วขณะตอนสลับวิดีโอ
+          initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
-          transition={{ duration: 2, delay: 0.5, ease: "easeOut" }} // ให้พื้นหลังมาเต็มก่อน แล้ววิดีโอค่อยๆ โผล่ตาม
+          transition={{ duration: 2, delay: 0.5, ease: "easeOut" }}
         >
+          {/* วิดีโอที่ 1: Intro (s11-1) เล่นรอบเดียว */}
           <video
-            ref={primaryVideoRef}
-            src={videoSrc} // ใส่ URL ของ Video
-            className={`absolute inset-0 h-full w-full object-cover ${
-              activeVideoIndex === 0 ? "opacity-100" : "opacity-0"
-            }`} // object-cover ทำให้เต็มจอสวยงาม
+            src={introVideoSrc}
+            className="absolute inset-0 h-full w-full object-cover"
             autoPlay
             muted
+            playsInline
             preload="auto"
-            playsInline // สำคัญสำหรับ iOS
-            onLoadedMetadata={() => handleVideoLoadedMetadata(0)}
+            onEnded={() => setIsPlayingLoop(true)}
           />
 
+          {/* วิดีโอที่ 2: Loop (s11-2) เล่นวนซ้ำ */}
           <video
-            ref={secondaryVideoRef}
-            src={videoSrc}
-            className={`absolute inset-0 h-full w-full object-cover ${
-              activeVideoIndex === 1 ? "opacity-100" : "opacity-0"
-            }`}
+            src={loopVideoSrc}
+            className="absolute inset-0 h-full w-full object-cover"
+            autoPlay
             muted
-            preload="auto"
+            loop 
             playsInline
-            onLoadedMetadata={() => handleVideoLoadedMetadata(1)}
+            preload="auto"
           />
         </m.div>
       </div>
@@ -127,7 +113,7 @@ export default function HeartWeighingProcess({
         </m.div>
       )}
 
-      {/* ⭐ ส่วนแสดงสถานะ (Text + Icon) */}
+      {/* ส่วนแสดงสถานะ (Text + Icon) */}
       <m.div
         className="absolute bottom-[15%] w-[90%] md:w-[60%] flex flex-col items-center text-center"
         initial={{ opacity: 0, y: 20 }}
