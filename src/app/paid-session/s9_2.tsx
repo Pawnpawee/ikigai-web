@@ -98,34 +98,31 @@ function JobAvatarCard({
   onViewMore: () => void;
 }) {
   return (
-    <div className="flex flex-col items-center justify-center w-[26.81%] portrait:w-[65%] gap-1 md:gap-2 relative z-20">
+    <div className="flex flex-col  w-[26.81%] portrait:w-[62%] gap-1 md:gap-2 relative z-20">
       <m.button
         type="button"
         onClick={onClick}
         //? Desktop: 450.40/1680 = 26.81%, Mobile: 389.35/1080 = 36.05% (Parent handles width now)
-        className="flex flex-col items-center justify-center cursor-pointer w-full gap-0"
+        className="flex flex-col  cursor-pointer w-full gap-0"
         whileHover={{ scale: 1.03 }}
         whileTap={{ scale: 0.97 }}
         transition={{ type: "spring", stiffness: 300, damping: 20 }}
       >
         {/*? Card Frame — aspect 450.40/520.11 ≈ aspect-450/520 */}
-        <div className="relative w-full aspect-450/520 transition-all duration-300">
+        <div className="relative w-full aspect-450/520 transition-all duration-300 flex items-center justify-start">
           {/*? Frame border image — switches to selected_frame when selected */}
           <Image
             src={isSelected ? SELECTED_FRAME_SRC : CARD_FRAME_SRC}
             alt=""
             fill
             sizes="25vw"
-            className="w-full pointer-events-none"
+            className="w-full pointer-events-none z-0"
           />
 
           {/*? Inner content: Avatar + labels */}
-          <div
-            className="absolute flex flex-col items-center
-            inset-x-[15.12%] top-[7.30%] bottom-[3%] gap-[3.90%]"
-          >
+          <div className="relative z-10 flex flex-col items-center w-full p-[3%] md:p-[5%]">
             {/*? Avatar illustration — 314.16/450.40 = 69.75% width, aspect 314/280 */}
-            <div className="relative w-full aspect-314/280 overflow-hidden shrink-0 portrait:w-[80%]">
+            <div className="relative aspect-314/280 overflow-hidden w-[65%]">
               <Image
                 src={avatarSrc}
                 alt={category}
@@ -136,41 +133,41 @@ function JobAvatarCard({
             </div>
 
             {/*? Text labels — category + top 3 jobs */}
-            <div className="flex flex-col items-center w-full gap-[4%] h-full">
+            <div className="flex flex-col items-center w-full gap-1 xl:gap-2 h-full mt-[5%]">
               <p
                 className={`
-                  flex items-center justify-center text-center text-[10px] min-[376px]:text-xs md:text-base 2xl:text-xl select-none w-[140%] min-h-[50%] align-middle whitespace-pre-line
-                  transition-colors duration-300
+                  flex items-center justify-center text-center text-[10px] min-[376px]:text-xs md:text-base 2xl:text-xl select-none w-full align-middle whitespace-pre-line
+                  transition-colors duration-300 h-[2.5em] leading-tight
                   ${isSelected ? "text-yellow-300 font-semibold" : "text-white/90"}
                 `}
               >
                 {category}
               </p>
-              <p className="text-center text-[9px] min-[376px]:text-[10px] md:text-sm text-black line-clamp-2 select-none px-4">
+              <p className="text-center text-[9px] min-[376px]:text-[10px] md:text-sm text-black line-clamp-2 select-none px-4 h-[2.5em] leading-tight">
                 {jobs.slice(0, 3).join(" · ")}
                 {jobs.length > 3 && ` +${jobs.length - 3}`}
               </p>
+              {/* Button below card for Desktop */}
+              {/* Show "ดูเพิ่มเติม" if jobs > 3 OR the string length of the first 3 jobs is too long (causing line-clamp "...") */}
+              {(jobs.length > 3 ||
+                jobs.slice(0, 3).join(" · ").length > 35) && (
+                <div className="hidden md:block relative z-25 ">
+                  <button
+                    type="button"
+                    className="text-white text-[10px] md:text-xs xl:text-sm underline opacity-80 hover:opacity-100 cursor-pointer"
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      onViewMore();
+                    }}
+                  >
+                    ดูเพิ่มเติม
+                  </button>
+                </div>
+              )}
             </div>
           </div>
         </div>
       </m.button>
-
-      {/* Button below card for Desktop */}
-      {/* Show "ดูเพิ่มเติม" if jobs > 3 OR the string length of the first 3 jobs is too long (causing line-clamp "...") */}
-      {(jobs.length > 3 || jobs.slice(0, 3).join(" · ").length > 35) && (
-        <div className="hidden md:block relative z-50">
-          <button
-            type="button"
-            className="text-white text-[10px] md:text-xs xl:text-sm underline opacity-80 hover:opacity-100 cursor-pointer px-2 py-1"
-            onClick={(e) => {
-              e.stopPropagation();
-              onViewMore();
-            }}
-          >
-            ดูเพิ่มเติม
-          </button>
-        </div>
-      )}
     </div>
   );
 }
@@ -388,7 +385,7 @@ export default function S9_2({ scrollYProgress, onCompleted }: S9_2Props) {
 
             {/*? Carousel Area: Arrows + Cards + Dots */}
             <m.div
-              className="flex flex-col items-center justify-center w-full h-full mb-5"
+              className="flex flex-col items-center justify-center w-full mb-5"
               style={{ opacity: carouselOpacity, y: carouselY }}
             >
               {/*? Carousel Row: Arrow + Cards + Arrow */}
@@ -406,7 +403,7 @@ export default function S9_2({ scrollYProgress, onCompleted }: S9_2Props) {
                 />
 
                 {/* Cards Container */}
-                <div className="flex w-full h-full">
+                <div className="flex w-full h-full mt-[3%]">
                   <AnimatePresence mode="wait" custom={slideDirection}>
                     <m.div
                       key={`page-${currentPage}`}
@@ -419,7 +416,7 @@ export default function S9_2({ scrollYProgress, onCompleted }: S9_2Props) {
                         x: { type: "spring", stiffness: 300, damping: 30 },
                         opacity: { duration: 0.2 },
                       }}
-                      className="flex justify-center items-start portrait:items-center portrait:flex-col w-full h-full gap-[5%] portrait:gap-[1.56%]"
+                      className="flex justify-center items-start portrait:items-center portrait:flex-col w-full h-full gap-3 md:gap-5"
                     >
                       {currentCards.map((card) => (
                         <JobAvatarCard
