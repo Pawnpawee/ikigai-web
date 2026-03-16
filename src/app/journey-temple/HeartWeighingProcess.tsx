@@ -72,12 +72,14 @@ export default function HeartWeighingProcess({
 
       <div className="absolute inset-0">
         <m.div className="absolute inset-0 bg-black">
-          {/* วิดีโอที่ 2: Loop (s11-2) เล่นวนซ้ำ - รออยู่ข้างหลัง */}
-          <video
+          {/* วิดีโอที่ 2: Loop (s11-2) เล่นวนซ้ำ */}
+          <m.video
             ref={loopVideoRef}
             src={loopVideoSrc}
             className="absolute inset-0 h-full w-full object-cover"
-            style={{ opacity: isPlayingLoop ? 1 : 0 }}
+            initial={{ opacity: 0 }}
+            animate={{ opacity: isPlayingLoop ? 1 : 0 }}
+            transition={{ duration: 0.5 }}
             autoPlay={false}
             muted
             loop
@@ -85,27 +87,29 @@ export default function HeartWeighingProcess({
             preload="auto"
           />
 
-          {!isPlayingLoop && (
-            /* วิดีโอที่ 1: Intro (s11-1) เล่นรอบเดียว */
-            <m.video
-              src={introVideoSrc}
-              className="absolute inset-0 h-full w-full object-cover z-10"
-              autoPlay
-              muted
-              playsInline
-              preload="auto"
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              transition={{ duration: 2, delay: 0.5, ease: "easeOut" }}
-              onEnded={() => {
-                if (loopVideoRef.current) {
-                  loopVideoRef.current.currentTime = 0;
-                  loopVideoRef.current.play().catch((e) => console.error(e));
-                }
-                setIsPlayingLoop(true);
-              }}
-            />
-          )}
+          {/* วิดีโอที่ 1: Intro (s11-1) เล่นรอบเดียว */}
+          <m.video
+            src={introVideoSrc}
+            className="absolute inset-0 h-full w-full object-cover z-10"
+            autoPlay
+            muted
+            playsInline
+            preload="auto"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: isPlayingLoop ? 0 : 1 }}
+            transition={{
+              duration: isPlayingLoop ? 0.5 : 2,
+              delay: isPlayingLoop ? 0 : 0.5,
+              ease: "easeOut",
+            }}
+            onEnded={() => {
+              if (loopVideoRef.current) {
+                loopVideoRef.current.currentTime = 0;
+                loopVideoRef.current.play().catch((e) => console.error(e));
+              }
+              setIsPlayingLoop(true);
+            }}
+          />
         </m.div>
       </div>
 
