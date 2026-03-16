@@ -29,6 +29,7 @@ export default function HeartWeighingProcess({
 
   const sparklingSoundRef = useRef<Howl | null>(null);
   const shimmeringSoundRef = useRef<Howl | null>(null);
+  const loopVideoRef = useRef<HTMLVideoElement>(null);
 
   useEffect(() => {
     if (isPlayingLoop) {
@@ -71,11 +72,24 @@ export default function HeartWeighingProcess({
 
       <div className="absolute inset-0">
         <m.div className="absolute inset-0 bg-black">
-          {!isPlayingLoop ? (
+          {/* วิดีโอที่ 2: Loop (s11-2) เล่นวนซ้ำ - รออยู่ข้างหลัง */}
+          <video
+            ref={loopVideoRef}
+            src={loopVideoSrc}
+            className="absolute inset-0 h-full w-full object-cover"
+            style={{ opacity: isPlayingLoop ? 1 : 0 }}
+            autoPlay={false}
+            muted
+            loop
+            playsInline
+            preload="auto"
+          />
+
+          {!isPlayingLoop && (
             /* วิดีโอที่ 1: Intro (s11-1) เล่นรอบเดียว */
             <m.video
               src={introVideoSrc}
-              className="absolute inset-0 h-full w-full object-cover"
+              className="absolute inset-0 h-full w-full object-cover z-10"
               autoPlay
               muted
               playsInline
@@ -83,18 +97,13 @@ export default function HeartWeighingProcess({
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               transition={{ duration: 2, delay: 0.5, ease: "easeOut" }}
-              onEnded={() => setIsPlayingLoop(true)}
-            />
-          ) : (
-            /* วิดีโอที่ 2: Loop (s11-2) เล่นวนซ้ำ */
-            <video
-              src={loopVideoSrc}
-              className="absolute inset-0 h-full w-full object-cover"
-              autoPlay
-              muted
-              loop
-              playsInline
-              preload="auto"
+              onEnded={() => {
+                if (loopVideoRef.current) {
+                  loopVideoRef.current.currentTime = 0;
+                  loopVideoRef.current.play().catch((e) => console.error(e));
+                }
+                setIsPlayingLoop(true);
+              }}
             />
           )}
         </m.div>

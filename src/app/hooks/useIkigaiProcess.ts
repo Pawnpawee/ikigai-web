@@ -19,6 +19,9 @@ export const useIkigaiProcess = () => {
   const midPhaseTimer1Ref = useRef<NodeJS.Timeout | null>(null);
   const midPhaseTimer2Ref = useRef<NodeJS.Timeout | null>(null);
 
+  // Ref to track active connection for proper cleanup
+  const activeEventSourceRef = useRef<EventSource | null>(null);
+
   const clearMidPhaseTimers = useCallback(() => {
     if (midPhaseTimer1Ref.current) {
       clearTimeout(midPhaseTimer1Ref.current);
@@ -117,13 +120,20 @@ export const useIkigaiProcess = () => {
 
   const startProcess = useCallback(
     async (userId: string) => {
+      // 1. Reset state
       setIsProcessing(true);
       setErrorMsg("");
       setTargetProgress(0);
-      setDisplayProgress(0); // รีเซ็ตหลอดกลับเป็น 0
+      setDisplayProgress(0);
       setStatusIcon(null);
       isMidPhaseStartedRef.current = false;
       clearMidPhaseTimers();
+
+      // 2. Clear any existing active source
+      if (activeEventSourceRef.current) {
+        activeEventSourceRef.current.close();
+        activeEventSourceRef.current = null;
+      }
 
       let eventSource: EventSource | null = null;
 
@@ -143,6 +153,7 @@ export const useIkigaiProcess = () => {
         eventSource = new EventSource(
           `${API_BASE_URL}/api/ikigai/stream/${processId}`,
         );
+        activeEventSourceRef.current = eventSource;
 
         eventSource.onmessage = (event) => {
           const sseData = JSON.parse(event.data);
@@ -151,6 +162,7 @@ export const useIkigaiProcess = () => {
             setErrorMsg(`เกิดข้อผิดพลาด: ${sseData.error}`);
             setIsProcessing(false);
             eventSource?.close();
+            activeEventSourceRef.current = null;
             return;
           }
 
@@ -160,15 +172,16 @@ export const useIkigaiProcess = () => {
           if (sseData.progress === 100) {
             saveSessionResult(sseData.result);
             eventSource?.close();
+            activeEventSourceRef.current = null;
           }
         };
 
         eventSource.onerror = (err) => {
           console.error("SSE Error:", err);
-          setErrorMsg(
-            "การเชื่อมต่อขาดหาย ระบบกำลังพยายามทำงานต่อเบื้องหลัง...",
-          );
+          setErrorMsg("การเชื่อมต่อขัดข้อง กรุณาลองใหม่อีกครั้ง");
+          setIsProcessing(false);
           eventSource?.close();
+          activeEventSourceRef.current = null;
         };
       } catch (error: unknown) {
         console.error(error);
@@ -177,7 +190,10 @@ export const useIkigaiProcess = () => {
       }
 
       return () => {
-        if (eventSource) eventSource.close();
+        if (activeEventSourceRef.current) {
+          activeEventSourceRef.current.close();
+          activeEventSourceRef.current = null;
+        }
       };
     },
     [clearMidPhaseTimers],
