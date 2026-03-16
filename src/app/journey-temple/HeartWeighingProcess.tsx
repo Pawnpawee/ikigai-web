@@ -70,33 +70,33 @@ export default function HeartWeighingProcess({
       />
 
       <div className="absolute inset-0">
-        <m.div
-          className="absolute inset-0 bg-black" 
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          transition={{ duration: 2, delay: 0.5, ease: "easeOut" }}
-        >
-          {/* วิดีโอที่ 1: Intro (s11-1) เล่นรอบเดียว */}
-          <video
-            src={introVideoSrc}
-            className="absolute inset-0 h-full w-full object-cover transition-opacity duration-500"
-            autoPlay
-            muted
-            playsInline
-            preload="auto"
-            onEnded={() => setIsPlayingLoop(true)}
-          />
-
-          {/* วิดีโอที่ 2: Loop (s11-2) เล่นวนซ้ำ */}
-          <video
-            src={loopVideoSrc}
-            className="absolute inset-0 h-full w-full object-cover transition-opacity duration-500"
-            autoPlay
-            muted
-            loop
-            playsInline
-            preload="auto"
-          />
+        <m.div className="absolute inset-0 bg-black">
+          {!isPlayingLoop ? (
+            /* วิดีโอที่ 1: Intro (s11-1) เล่นรอบเดียว */
+            <m.video
+              src={introVideoSrc}
+              className="absolute inset-0 h-full w-full object-cover"
+              autoPlay
+              muted
+              playsInline
+              preload="auto"
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              transition={{ duration: 2, delay: 0.5, ease: "easeOut" }}
+              onEnded={() => setIsPlayingLoop(true)}
+            />
+          ) : (
+            /* วิดีโอที่ 2: Loop (s11-2) เล่นวนซ้ำ */
+            <video
+              src={loopVideoSrc}
+              className="absolute inset-0 h-full w-full object-cover"
+              autoPlay
+              muted
+              loop
+              playsInline
+              preload="auto"
+            />
+          )}
         </m.div>
       </div>
 

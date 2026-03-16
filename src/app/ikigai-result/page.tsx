@@ -44,6 +44,8 @@ interface IkigaiScoresDto {
   paidForScore?: ScoreEntry;
 }
 
+const RESULT_FEEDBACK_MODAL_SHOWN_KEY = "resultFeedbackModalShown";
+
 // ---------------------------------------------------------------------------
 //? HELPER FUNCTIONS (Move outside component to avoid dependency issues)
 // ---------------------------------------------------------------------------
@@ -143,7 +145,20 @@ export default function IkigaiResultPage() {
   const [errorMessage, setErrorMessage] = useState("");
   const [isResultFeedbackModalOpen, setIsResultFeedbackModalOpen] =
     useState(false);
+  const [hasShownResultFeedbackModal, setHasShownResultFeedbackModal] =
+    useState(false);
   const [pendingRoute, setPendingRoute] = useState<string | null>(null);
+
+  useEffect(() => {
+    const hasShown =
+      sessionStorage.getItem(RESULT_FEEDBACK_MODAL_SHOWN_KEY) === "true";
+    setHasShownResultFeedbackModal(hasShown);
+  }, []);
+
+  const markResultFeedbackModalAsShown = () => {
+    setHasShownResultFeedbackModal(true);
+    sessionStorage.setItem(RESULT_FEEDBACK_MODAL_SHOWN_KEY, "true");
+  };
 
   //? ตั้งเพลง bg ทุกครั้งที่เข้าหน้า
   useEffect(() => {
@@ -225,13 +240,20 @@ export default function IkigaiResultPage() {
   };
 
   const handleOpenResultFeedbackModal = () => {
+    if (hasShownResultFeedbackModal) return;
     setPendingRoute(null);
     setIsResultFeedbackModalOpen(true);
+    markResultFeedbackModalAsShown();
   };
 
   const handleContinueClick = () => {
+    if (hasShownResultFeedbackModal) {
+      router.push("/closing");
+      return;
+    }
     setPendingRoute("/closing");
     setIsResultFeedbackModalOpen(true);
+    markResultFeedbackModalAsShown();
   };
 
   const handleCloseResultFeedbackModal = () => {
