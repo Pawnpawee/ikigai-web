@@ -436,7 +436,10 @@ export default function IkigaiResultDisplay({
                 {/* Content: icon + label + percent + summary */}
                 <div className="absolute inset-0 flex flex-col items-center justify-center gap-1 2xl:gap-4  px-[10%]">
                   {/* Icon */}
-                  <div className="relative w-[12.57%] aspect-square">
+                  <div
+                    className="relative w-[12.57%] aspect-square"
+                    data-hide-capture={isMobile ? "true" : undefined}
+                  >
                     <Image
                       src={circle.iconSrc}
                       alt={`${circle.label} icon`}
