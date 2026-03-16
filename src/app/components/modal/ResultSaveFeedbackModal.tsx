@@ -41,14 +41,17 @@ export default function ResultSaveFeedbackModal({
                 initial={{ scale: 0 }}
                 animate={{ scale: 1 }}
                 transition={{ delay: 0.2, type: "spring", stiffness: 200 }}
-                className="bg-[#515c64] rounded-full flex items-center justify-center"
+                className="relative h-12 w-12 md:h-24 md:w-24 bg-[#515c64] rounded-full flex items-center justify-center overflow-hidden"
               >
                 <Image
                   src="/assets/icons/cat_icon.webp"
                   alt="cat icon"
-                  width={94}
-                  height={93}
-                  className="h-10 md:h-20 w-auto"
+                  fill
+                  sizes="(max-width: 768px) 48px, 96px"
+                  priority
+                  loading="eager"
+                  fetchPriority="high"
+                  className="object-contain"
                 />
               </m.div>
 

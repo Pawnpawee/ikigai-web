@@ -44,8 +44,6 @@ interface IkigaiScoresDto {
   paidForScore?: ScoreEntry;
 }
 
-const RESULT_FEEDBACK_MODAL_SHOWN_KEY = "resultFeedbackModalShown";
-
 // ---------------------------------------------------------------------------
 //? HELPER FUNCTIONS (Move outside component to avoid dependency issues)
 // ---------------------------------------------------------------------------
@@ -149,17 +147,6 @@ export default function IkigaiResultPage() {
     useState(false);
   const [pendingRoute, setPendingRoute] = useState<string | null>(null);
 
-  useEffect(() => {
-    const hasShown =
-      sessionStorage.getItem(RESULT_FEEDBACK_MODAL_SHOWN_KEY) === "true";
-    setHasShownResultFeedbackModal(hasShown);
-  }, []);
-
-  const markResultFeedbackModalAsShown = () => {
-    setHasShownResultFeedbackModal(true);
-    sessionStorage.setItem(RESULT_FEEDBACK_MODAL_SHOWN_KEY, "true");
-  };
-
   //? ตั้งเพลง bg ทุกครั้งที่เข้าหน้า
   useEffect(() => {
     setBgMusic(getAudioUrl("Sound/12/magical-sparkling.mp3"));
@@ -243,7 +230,7 @@ export default function IkigaiResultPage() {
     if (hasShownResultFeedbackModal) return;
     setPendingRoute(null);
     setIsResultFeedbackModalOpen(true);
-    markResultFeedbackModalAsShown();
+    setHasShownResultFeedbackModal(true);
   };
 
   const handleContinueClick = () => {
@@ -253,7 +240,7 @@ export default function IkigaiResultPage() {
     }
     setPendingRoute("/closing");
     setIsResultFeedbackModalOpen(true);
-    markResultFeedbackModalAsShown();
+    setHasShownResultFeedbackModal(true);
   };
 
   const handleCloseResultFeedbackModal = () => {
