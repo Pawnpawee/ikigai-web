@@ -75,7 +75,7 @@ export default function S7_2({ scrollYProgress, onCompleted }: S7_2Props) {
   const starOpacity = useTransform(scrollYProgress, [0.05, 0.15], [0, 1]);
 
   //? 3. painting (animGroup 3)
-  const paintingOpacity = useTransform(scrollYProgress, [0.15, 0.25], [0, 1]);
+  const paintingOpacity = useTransform(scrollYProgress, [0.15, 0.25], isMobile ? [0, 0.3] : [0, 1]);
 
   //? 4. Question text
   const questionOpacity = useTransform(scrollYProgress, [0.15, 0.25], [0, 1]);
