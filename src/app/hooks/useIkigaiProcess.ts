@@ -36,7 +36,7 @@ export const useIkigaiProcess = () => {
   //1. Effect สำหรับวิ่งเปอร์เซ็นต์ให้ค่อยๆ ขึ้นตลอดเวลาอย่างเป็นธรรมชาติ
   useEffect(() => {
     // ตั้งเป้าหมายหลอกที่ 80% เพื่อให้เปอร์เซ็นต์ค่อยๆ ขยับขึ้นไม่หยุดนิ่ง แม้ว่า backend จะยังประมวลผลไม่ส่งมา
-    const fakeTarget = targetProgress === 100 ? 100 : 80;
+    const fakeTarget = targetProgress === 100 ? 100 : 90;
 
     if (displayProgress < fakeTarget) {
       // กำหนดความเร็วในการขยับแต่ละ 1%
