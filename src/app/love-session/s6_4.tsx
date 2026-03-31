@@ -109,6 +109,12 @@ export default function S6_4({ scrollYProgress, onContinue }: S6_4Props) {
     [0, 1, 1],
   );
 
+   const ChoiceOpacity = useTransform(
+     scrollYProgress,
+     [0.75, 0.85, 0.9],
+     [0, 1, 1],
+   );
+
   //? Continue button opacity (appears after choice selected)
   const continueButtonOpacity = useTransform(() => {
     if (showContinueButton) {
@@ -237,7 +243,7 @@ export default function S6_4({ scrollYProgress, onContinue }: S6_4Props) {
                     text="ดูเหมือนจะเป็นงานอดิเรกที่ดีเลยนะ"
                     scrollYProgress={scrollYProgress}
                     startProgress={0.6}
-                    endProgress={0.75}
+                    endProgress={0.7}
                   />
                   <br />
                   <MysteriousText
@@ -247,14 +253,19 @@ export default function S6_4({ scrollYProgress, onContinue }: S6_4Props) {
                         : "แล้วสิ่งที่เจ้ารักนี้ช่วยให้เจ้าเดินตามความฝันได้รึเปล่า?"
                     }
                     scrollYProgress={scrollYProgress}
-                    startProgress={0.76}
-                    endProgress={0.9}
+                    startProgress={0.7}
+                    endProgress={0.8}
                   />
                 </div>
               </div>
 
               {/* Choice Buttons */}
-              <div className="flex flex-wrap justify-center items-center gap-5 md:gap-10 w-full">
+              <m.div
+                className="flex flex-wrap justify-center items-center gap-5 md:gap-10 w-full"
+                style={{
+                  opacity: ChoiceOpacity,
+                }}
+              >
                 {choices.map((choice) => (
                   <ChoiceButton
                     key={choice.id}
@@ -264,7 +275,7 @@ export default function S6_4({ scrollYProgress, onContinue }: S6_4Props) {
                     className="px-8 py-2 md:px-16 md:py-4 text-sm md:text-2xl 2xl:text-3xl"
                   />
                 ))}
-              </div>
+              </m.div>
             </m.div>
 
             {/* Continue Button */}
