@@ -1,5 +1,6 @@
 "use client";
 
+import Link from "next/link";
 import { useMemo } from "react";
 
 import LazyLottie from "@/app/components/reusable/LazyLottie";
@@ -35,6 +36,13 @@ export default function About() {
       className="relative mx-auto w-full min-h-screen"
       style={containerStyle}
     >
+      <Link
+        href="/"
+        className="absolute left-5 top-[12%] portrait:top-[7.86%] md:left-10 z-20 rounded-full border border-white/35 bg-black/35 px-4 py-2 text-sm md:text-base text-white transition hover:bg-black/50"
+      >
+        ย้อนกลับ
+      </Link>
+
       {/* Title: เกี่ยวกับ */}
       <h1 className="absolute top-[8.74%] portrait:top-[7.86%] left-1/2 -translate-x-1/2 text-xl md:text-3xl text-white z-10">
         เกี่ยวกับ
