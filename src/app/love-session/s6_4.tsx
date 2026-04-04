@@ -280,7 +280,7 @@ export default function S6_4({ scrollYProgress, onContinue }: S6_4Props) {
 
             {/* Continue Button */}
             <m.div
-              className="flex w-full justify-end portrait:justify-center px-25 2xl:px-50  pb-18 min-[376px]:pb-25 2xl:pb-35"
+              className="flex w-full justify-end portrait:justify-center px-25 2xl:px-50 pb-25 min-[376px]:pb-35"
               style={{ opacity: continueButtonOpacity }}
               initial={{ y: 20 }}
               animate={{ y: showContinueButton ? 0 : 20 }}

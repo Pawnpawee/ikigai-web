@@ -34,7 +34,8 @@ function AppLogic({ children }: { children: React.ReactNode }) {
       !pathname.startsWith("/skill-session") &&
       !pathname.startsWith("/world-session") &&
       !pathname.startsWith("/paid-session") &&
-      !pathname.startsWith("/journey-temple") ? (
+      !pathname.startsWith("/journey-temple") &&
+      !pathname.startsWith("/about") ? (
         <ScrollTo opacity={scrollToOpacity} />
       ) : null}
       <main className="relative w-full">{children}</main>
